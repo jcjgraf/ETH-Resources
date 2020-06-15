@@ -1,0 +1,80 @@
+\documentclass[a4paper, 11pt, landscape]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+\usepackage[english,ngerman]{babel}
+
+\usepackage{multicol}
+\setlength{\columnseprule}{0.4pt}
+
+\usepackage[left=4.5mm, right=4.5mm, top=4.5mm, bottom=6mm, landscape, nohead, nofoot]{geometry}
+
+\usepackage{amsmath, amssymb}
+\newcommand\N{\ensuremath{\mathbb{N}}}
+\newcommand\R{\ensuremath{\mathbb{R}}}
+\newcommand\Z{\ensuremath{\mathbb{Z}}}
+\newcommand\Q{\ensuremath{\mathbb{Q}}}
+\newcommand\C{\ensuremath{\mathbb{C}}}
+\renewcommand\O{\ensuremath{\emptyset}}
+
+\usepackage{enumitem}
+\usepackage{paralist}
+\usepackage{xcolor}
+\newcommand{\todo}[1]{\textcolor{red}{TODO: #1}\PackageWarning{TODO:}{#1!}}
+\usepackage{parskip}
+\usepackage{tcolorbox}
+
+\newtcolorbox{satz}[2][]
+{
+  colframe = red!10,
+  colback  = white,
+  coltitle = red!10!black,  
+  title    = \textbf{#2},
+  #1,
+}
+
+\newtcolorbox{definition}[2][]
+{
+  colframe = blue!10,
+  colback  = white,
+  coltitle = blue!10!black,  
+  title    = \textbf{#2},
+  #1,
+}
+
+\usepackage[small,compact]{titlesec}
+% coloured section headings for easier read
+\titleformat{name=\section}[block]
+  {\sffamily}
+  {}
+  {0pt}
+  {\colorsection}
+\newcommand{\colorsection}[1]{%
+	\colorbox{red!10}{\parbox[t][0em]{\dimexpr\columnwidth-2\fboxsep}{\thesection\ #1}}}
+
+
+\titleformat{name=\subsection}[block]
+  {\sffamily}
+  {}
+  {0pt}
+  {\subcolorsection}
+\newcommand{\subcolorsection}[1]{%
+	\colorbox{orange!10}{\parbox[t][0em]{\dimexpr\columnwidth-2\fboxsep}{\thesubsection\ #1}}}
+
+
+\titleformat{name=\subsubsection}[block]
+  {\sffamily}
+  {}
+  {0pt}
+  {\subsubcolorsection}
+\newcommand{\subsubcolorsection}[1]{%
+	\colorbox{blue!10}{\parbox[t][0em]{\dimexpr\columnwidth-2\fboxsep}{\thesubsubsection\ #1}}}
+
+\begin{document}
+\begin{multicols}{3}
+    \include{general}
+    \include{zahlenUndVektoren}
+    \include{reihenUndFolgen}
+\end{multicols}
+\end{document}

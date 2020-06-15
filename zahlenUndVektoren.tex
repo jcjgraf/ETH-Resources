@@ -1,0 +1,135 @@
+%! TEX root  = ./main.tex
+
+\section{Zahlen und Mengen}
+
+\subsection{Körper}
+\begin{compactdesc}
+    \item[Addition:] $\R \times \R \overset{+}{\to} \R, \quad (x, y) \mapsto x + y$
+        \begin{compactenum}[{A}.1]
+            \item \textbf{Assoziativität:} $x + \left( y + z \right) = \left( x + y \right) + z  \quad \forall x,y,z \in \R$
+            \item \textbf{Neurales Element:} $x + 0 = x \quad \forall x \in \R$
+            \item \textbf{Inverse Element:} $x + y = 0 \quad  \forall x \in \R \quad \exists y \in \R$
+            \item \textbf{Kommunikativität:} $x + y = y + x \quad \forall x,y \in  \R$
+        \end{compactenum}
+     Werden alle Axiome erfüllt $\implies \R$ ist abelisch.
+ \item[Multiplikation:] $\R \times \R \overset{\cdot}{\to} \R, \quad (x, y) \mapsto x \cdot y$
+        \begin{compactenum}[{M}.1]
+            \item \textbf{Assoziativität:} $x \cdot \left( y \cdot z \right) = \left( x \cdot y \right) \cdot z \quad \forall x,y,z \in \R$
+            \item \textbf{Neurales Element:} $x \cdot  1 = x \quad \forall x \in \R$
+            \item \textbf{Inverses Element:} $x \cdot y = 1 \quad \forall  x \in \R \quad \exists y \in \R$
+            \item \textbf{Kommunikativität:} $x \cdot z = z \cdot y \quad \forall x,y \in \R$
+        \end{compactenum}
+    Werden alle Axiome erfüllt $\implies R^* = \R \setminus 0$ ist abelisch.
+    \item[Distributivität:] Macht \textbf{Addition} und \textbf{Multiplikation} verträglich
+        \begin{compactenum}[{D}.1]
+            \item \textbf{Distributivität:} $x \cdot \left( y + z \right) = x \cdot y + x \cdot z \quad \forall x,y,z \in \R$
+        \end{compactenum}
+    \item[Ordnung ($\le $):] gibt es auf $\R$
+        \begin{compactenum}[{O}.1]
+        \item \textbf{Reflexivität:} $x \le x \quad \forall x \in \R$
+        \item \textbf{Transitivität:} $x \le y \wedge y \le z \implies x \le z$
+        \item \textbf{Antisymmetrie/Identität:} $x \le y \wedge y \le x \implies x = z$
+        \item \textbf{Total:} $x \le y \vee y \le x \quad \forall x,y \in \R$
+        \end{compactenum}
+    \item[Kompatibilität:] Ordnung ist mit Körperaxiome kompatibel
+        \begin{compactenum}[{K}.1]
+            \item $x \le y \implies x + z \le y + z \quad \forall x,y,z \in \R$
+            \item $x \cdot  y \ge 0 \quad \forall x \ge 0, y \ge 0$
+        \end{compactenum}
+    \item[Ordnungsvollständigkeit ($V$):] Existiert für $\R$
+        \begin{compactenum}
+            \item $A, B \subset \R, \quad A, B \neq \O$
+            \item $a \le  b \quad \forall  a \in  A,b \in B$
+        \end{compactenum}
+        $\implies \exists c \in  \R, \forall a \in  A, b \in  B, \quad a \le c \wedge c \le b$
+\end{compactdesc}
+
+\todo{Axioms}
+\begin{compactenum}
+    \item $\forall x \in \R: (-1) \cdot x = -x$  
+    \item $(-1) \cdot  (-1) = 1$
+    \item $\forall x \in  \R: x^2 \ge 0$
+    \item $0 < 1 < 2 < \ldots$
+    \item $\forall x > 0: \frac{1}{x} > 0$
+    \item $item$
+\end{compactenum}
+
+\subsection{Archimedisches Prinzip}
+\begin{compactenum} \item $\forall x,y \in \R, x > 0, \exists n \in \N: y \le n \cdot x$ 
+    \item $\forall x \in \R, \exists n \in \Z: n \le x < n + 1$
+\end{compactenum}
+
+\subsection{Min, Max, Abs}
+\begin{compactdesc}
+    \item[Max:] $\max \{x,y\} = \max(x, y) \ \forall x,y \in \R$
+    \item[Min:] $\min \{x,y\} = \min(x, y) \ \forall x,y \in \R$
+    \item[Absolutbetrag:] $\forall x \in \R: |x| = \max \{-x, x\} $
+    \begin{compactenum}
+        \item $|x| \ge 0 \ \forall x \in \R$
+        \item $|x \cdot y| = |x| \cdot |y| \ \forall x \in \R$
+        \item $|x + y| \le |x| + |y| \ \forall x \in \R$
+        \item $|x + y| \ge ||x| + |y|| \ \forall x \in \R$
+    \end{compactenum} 
+\end{compactdesc}
+
+\subsection{Yung'sche Ungleichung}
+$\forall x,y \in \R \ \forall \epsilon > 0: \quad 2|x \cdot  y| \le \epsilon \cdot  x^2 + \frac{1}{\epsilon} \cdot y^2$
+
+\subsection{Intervall}
+Teilmenge von $\R$
+\begin{compactenum}
+    \item $\forall a,b \in R, a \le b$
+        \begin{compactenum}
+            \item $[a,b] = [a, b] = \{x \in \R | a \le  x \le b\} $
+            \item $[a,b) = [a, b[ = \{x \in \R | a \le  x < b\} $ 
+            \item $(a,b] = ]a, b] = \{x \in \R | a <  x \le b\} $
+            \item $(a,b) = ]a, b[ = \{x \in \R | a <  x < b\} $
+        \end{compactenum}
+    \item $\forall  a \in \R$
+        \begin{compactenum}
+            \item $[a, +\infty[ = \{x \in \R | x \geq a\} $
+            \item $]a, +\infty[ = \{x \in \R | x > a\} $
+            \item $]-\infty, a] = \{x \in \R | x \le a\} $
+            \item $]-\infty, a[ = \{x \in \R | x < a\} $
+        \end{compactenum}
+    \item $\R = ]-\infty, +\infty[$
+\end{compactenum}
+
+\subsection{Schranken}
+\begin{compactdesc}
+    \item[Teilmenge:] $A \subset \R, A \neq \O$
+    \item[Obere Schranke:] $c \in R$ von $A$ falls  $\forall a \in A: a \le c$
+    \item[Nach Oben Beschränkt:] $A$ hat eine obere Schranke
+    \item[Untere Schranke:] $c \in \R$ von $A$ falls $\forall a in A: a \ge c$
+    \item[Nach Unten Beschränkt:] $A$ hat eine untere Schranke
+    \item[Supremum:] $c:= \sup A$ ist die kleinste obere Schranke von $A$
+    \item[Infimum] $c:= \inf A$ ist die grösste untere Schranke von $A$
+\end{compactdesc}
+
+\begin{compactenum}
+    \item $A \subset \R$ nach oben beschränkt $\implies$ Menge der oberen Schranken ist  im Intervall $[\sup A, +\infty[$
+    \item $A \subset \R$ nach unten beschränkt $\implies$ Menge der unteren Schranken ist  im Intervall $]-\infty, \inf A]$
+\end{compactenum}
+
+$A \subset  B \subset  \R$:
+\begin{compactenum}
+    \item $B$ nach oben beschränkt $\implies \sup A \le \sup B$
+    \item $B$ nach unten beschränkt $\implies \inf A \le \inf B$
+\end{compactenum}
+
+\begin{compactenum}
+    \item $A$ nach oben unbeschränkt $\implies \sup A = +\infty$
+    \item $A$ nach unten unbeschränkt $\implies \inf A = -\infty$
+\end{compactenum}
+
+\subsection{Kardinalität}
+\begin{compactdesc}
+    \item[Gleichmächtig:] $X,Y \subset \R \exists$ Bijektion $f : X \to Y$
+    \item[Endlich:] falls $X = \O$ oder $\exists n \in \N: \{1, 2, \ldots, n\}$ gleichmächtig
+    \item[Abzählbar:] falls $X$ endlich oder gleichmächtig wie $\N$
+\end{compactdesc}
+
+\section{Euklidischer Raum}
+\todo{Euklidischer Raum}
+\section{Komplexe Zahlen}
+\todo{Komplexe Zahlen}
