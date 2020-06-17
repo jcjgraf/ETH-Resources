@@ -68,7 +68,7 @@
         \item $|x| \ge 0 \ \forall x \in \R$
         \item $|x \cdot y| = |x| \cdot |y| \ \forall x \in \R$
         \item $|x + y| \le |x| + |y| \ \forall x \in \R$
-        \item $|x + y| \ge ||x| + |y|| \ \forall x \in \R$
+        \item $|x + y| \ge ||x| - |y|| \ \forall x \in \R$
     \end{compactenum} 
 \end{compactdesc}
 
@@ -103,8 +103,25 @@ Teilmenge von $\R$
     \item[Untere Schranke:] $c \in \R$ von $A$ falls $\forall a in A: a \ge c$
     \item[Nach Unten Beschränkt:] $A$ hat eine untere Schranke
     \item[Supremum:] $c:= \sup A$ ist die kleinste obere Schranke von $A$
+    \item $\underbrace{\left( \forall a \in  A | a \ge  s \right)}_{s \text{ist eine obere Schranke von } A} \wedge \underbrace{\left( \forall  \epsilon > 0 \ \exists a \in A | a > s - \epsilon \right)}_{s \text{ ist die kleinste obere Schranke von } A}  $
     \item[Infimum] $c:= \inf A$ ist die grösste untere Schranke von $A$
+    \item $\underbrace{\left( \forall a \in  A | a \ge  l \right)}_{l \text{ist eine untere Schranke von } A} \wedge \underbrace{\left( \forall  \epsilon > 0 \ \exists a \in A | a > l + \epsilon \right)}_{l \text{ ist die grösste untere Schranke von } A}  $
 \end{compactdesc}
+
+\begin{compactitem}
+    \item $a \le b \ \forall a \in A, b \in B \implies \sup A \le \inf B$
+    \item $A, B \subseteq \R, c \in \R$
+        \begin{compactitem}
+            \item $c \cdot A := \{c \cdot  a | a \in  A\} $
+            \item $A + B := \{a + b | a \in A, b \in B\} $
+        \end{compactitem}
+    \item $\sup \{A \cup B\} = \max \{\sup A, \sup B\}  $
+    \item $\sup \left( A + B \right) = \sup A + \sup b $
+    \item $\sup \left( c \cdot A \right) = \begin{cases}
+        c \cdot \sup A & \text{if } c > 0\\
+        c \cdot \inf A & \text{if } c < 0
+    \end{cases} $
+\end{compactitem}
 
 \begin{compactenum}
     \item $A \subset \R$ nach oben beschränkt $\implies$ Menge der oberen Schranken ist  im Intervall $[\sup A, +\infty[$

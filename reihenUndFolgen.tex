@@ -3,12 +3,18 @@
 \section{Folgen}
 
 \begin{compactdesc}
-    \item[Folge:] $\left( a_n \right)_{n \ge a  > 0}$ ist Function $a:\N^* \to \mathbb{A}, n \mapsto a_n, \mathbb{A}$ st beliebiges Set.
-    \item[Konvergent:] $(a_n)_{n \in \N}$ ist \textbf{konvergent} falls $\exists l \in R: \quad \forall \epsilon > 0$ das Set $\left\{ n \in \N | a_n \not\in  ] l - \epsilon, l + \epsilon[ \right\} = \left\{ n \in N^* | \left| a_n - l \right| \ge \epsilon  \right\} $ endlich ist
-    \item Jede konvergente Folge ist beschränkt
-    \item Nicht konvergente Folgen sind divergent
-    \item Es gibt $2$ Arten von divergenten Folgen
+    \item[Folge:] $\left( a_n \right)_{n \ge a  > 0}$ ist Funktion $a:\N^* \to \mathbb{A}, n \mapsto a_n, \mathbb{A}$ ist beliebiges Set.
+    \item[Konvergent:] ist $(a_n)_{n \in \N}$ falls $\exists l \in R: \quad \forall \epsilon > 0$ das Set $\left\{ n \in \N | a_n \not\in  ] l - \epsilon, l + \epsilon[ \right\} = \left\{ n \in N^* | \left| a_n - l \right| \ge \epsilon  \right\} $ endlich ist
+        \begin{compactitem}
+            \item $\forall  \epsilon > 0 \ \exists  N \ge 1: \quad |a_n - l| < \epsilon \ \forall n \ge N$
+            \item Jede konvergente Folge ist beschränkt
+            \item Nicht konvergente Folgen sind divergent
+            \item Es gibt $2$ Arten von divergenten Folgen
+        \end{compactitem}
     \item[Grenzwert:] $(a_n)_{n \in \N}$ konvergiert gegen $a \iff \lim_{n \to \infty} a_n = a \iff \forall \epsilon > 0, \exists n_0 \in N, \forall n \ge n_0: \left| a_n - a \right| < \epsilon$
+        \begin{compactitem}
+            \item $\lim_{n \to \infty} a_n = \lim_{n \to \infty} a_{n+k} \forall k \in \N $
+        \end{compactitem}
 \end{compactdesc}
 
 $\forall (a_n)_{n \in \N}, (b_n)_{n \in \N}$ konvergent, mit $\lim_{n \to \infty} a_n = a, \lim_{n \to \infty} b_n = b$
@@ -21,35 +27,54 @@ $\forall (a_n)_{n \in \N}, (b_n)_{n \in \N}$ konvergent, mit $\lim_{n \to \infty
 
 \begin{compactdesc}
     \item[Monoton Wachsend:] $a_n \le a_{n+1} \quad \forall n \in \N$
-    \item[Strict Monoton Wachsend:] $a_n < a_{n+1} \quad \forall n \in \N$
+    \item[Strikt Monoton Wachsend:] $a_n < a_{n+1} \quad \forall n \in \N$
     \item[Monoton Fallend:] $a_n \ge a_{n+1} \quad \forall n \in \N$
-    \item[Strict Monoton Fallend:] $a_n > a_{n+1} \quad \forall n \in \N$
+    \item[Strikt Monoton Fallend:] $a_n > a_{n+1} \quad \forall n \in \N$
 \end{compactdesc}
 
-\subsection{Weierstrass}
+\subsection{Einschliessungskriterium}
+    $\lim_{n \to \infty} a_n = \lim_{n \to \infty} b_n = \alpha \in \R \ \exists K \in \N \ \exists \left( c_n \right)_{n \in \N}: a_n \le  c_n \le b_n \ \forall n \ge K \implies \lim_{n \to \infty} c_n = \alpha$
+
+\subsection{Weierstrass / Monoton Konvergenz Satz}
 \begin{compactitem}
    \item $(a_n)_{n \in \N}$ monoton wachend und nach oben beschränkt $\implies (a_n)_{n \in \N}$ konvergiert und $\lim_{n \to \infty} a_n = \sup \left\{ a_n : n \ge 1 \right\}$
    \item $(a_n)_{n \in \N}$ monoton fallend und nach unten beschränkt $\implies (a_n)_{n \in \N}$ konvergiert und $\lim_{n \to \infty} a_n = \inf \left\{ a_n : n \ge 1 \right\}$
 \end{compactitem} 
 
-\subsection{Einschliessungskriterium}
-    $\lim_{n \to \infty} a_n = \lim_{n \to \infty} b_n = \alpha \in \R \ \exists K \in \N \ \exists \left( c_n \right)_{n \in \N}: a_n \le  c_n \le b_n \ \forall n \ge K \implies \lim_{n \to \infty} c_n = \alpha$
+\todo{Bekannte Funktionen und deren Grenzwert}
+
+\subsection{Bernoulli Ungleichung}
+$\left( 1 + x \right)^{n} \ge  1 + n \cdot x \ \forall n \in N, x > -1 $
 
 \subsection{Limes Superior und Limes Inferior}
 Jede beschränkte Folge $(a_n)_{n \in \N}$ kann in zwei monotone Folgen $(b_n)_{n \in \N}$ und $(c_n)_{n \in \N}$ geteilt werden.
 \begin{compactenum}
     \item $\forall n \ge 1: b_n = \inf \{a_k | k \ge n\}$ und $c_n = \sup \{a_k | k \ge n\} $
-    \item $b_n \le b_{n+1}$ und $c_n \ge c_{n+1}$
-    \item $b_n$ und $c_n$ sind beschränkt und konvergent
+    \item $b_n \le b_{n+1}$ und $c_n \ge c_{n+1} \quad \forall n \in \N$
+    \item $(b_n)_{n \in \N}$ monoton wachsend, $(c_n)_{n \in \N}$ monoton fallend
+    \item $b_n$ und $c_n$ sind beschränkt $\implies$ konvergent
     \item \textbf{Limes Inferior:} $\liminf_{n \to \infty} a_n := \lim_{n \to \infty} b_n $
     \item \textbf{Limes Superior:} $\limsup_{n \to \infty} a_n := \lim_{n \to \infty} c_n $
     \item $b_n \le  c_n \implies \liminf_{n \to \infty} a_n \le  \limsup_{n \to \infty} a_n $
 \end{compactenum}
 
-\subsection{Cauchy Kriterium}
 \begin{compactitem}
     \item $(a_n)_{n \in \N}$ konvergiert $\iff \ (a_n)_{n \in \N}$ beschränkt und $\liminf_{n \to \infty} a_n = \limsup_{n \to \infty} a_n$
-    \item $(a_n)_{n \in \N}$ konvergiert $\iff \ \forall \epsilon > 0 \ \exists \N \ge 1: \underset{|a_n - a_m|_{\text{Cauchy-Folge}}} < \epsilon \quad \forall n,m \ge \N$
+\end{compactitem}
+
+\subsection{Cauchy Kriterium}
+\begin{compactdesc}
+    \item[Cauchy-Folge:] $(a_n)_{n \in \N}$ falls $\forall \epsilon > 0 \ \exists N \in \N: \quad \forall m,n \ge N \ |a_n - a_m| < \epsilon$
+        \begin{compactitem}
+            \item Abstand zwischen Folgegliedern wird mit wachsendem Index beliebig klein
+        \end{compactitem}
+\end{compactdesc}
+
+\begin{compactitem}
+    \item $a_n$ Cauchy-Folge $\implies a_n$ beschränkt
+    \item $a_n$ konvergent $\iff a_n$ Cauchy-Folge
+    \item $(a_n)_{n \in \N}$ konvergiert $\iff \ \forall \epsilon > 0 \ \exists \N \ge 1: |a_n - a_m| < \epsilon \quad \forall n,m \ge \N$
+    \item $a_n$ nicht Cauchy-Folge $\implies a_n$ divergent
 \end{compactitem}
 
 \subsection{Abgeschlossener Teilintervall}
@@ -62,18 +87,31 @@ Teilmenge $I \subset \R$
 \end{compactenum}
 
 \begin{compactitem}
-    \item $I \subset \R \ \iff \text{L}(I) < + \infty$
+    \item $I \subset \R beschränkt \ \iff \text{L}(I) < + \infty$
     \item $I \subset \R$ ist abgeschlossen $\iff $ für jede konvergierende $(a_n)_{n \in \N}$ aus Elementen in $I$ muss $\lim_{n \to \infty} a_n \in I$
     \item $I=[a, b], J=[c, d], a \le b, c \le d, \ a,b,c,d \in \R$, falls $c \le a$ und $b \le d \implies I \subset J$
         \begin{compactitem}
-        \item $\text{L}(I) = b - a \le  d - c = \text{L}(J)$
+            \item $\text{L}(I) = b - a \le  d - c = \text{L}(J)$
         \end{compactitem}
+    \item Monoton fallende Folge von Teilmengen von $\R$ ist eine Folge $(X_n)_{n \in \N}, X_n \subset \R$ mit $X_1 \supseteq X_2, \supseteq \dots \supseteq X_n \supseteq \dots $
+\end{compactitem}
+
+\subsection{Cauchy-Cantor}
+Für absteigende Folge geschlossener Intervalle $I_1 \supseteq \dots  \supseteq I_n \supseteq \dots $ mit $\text{L}(I_1) < + \infty$ gilt $\bigcap_{n \ge 1} I_n \neq \O $. Falls $\lim_{n \to \infty} \text{L}(I_n) = 0 \implies \bigcap_{n \ge  1} I_n =\{x\} \ x \in \R $.
+
+\subsection{Teilfolge}
+Teilfolge von $(a_n)_{n \in \N}$ ist $(b_n)_{n \in \N}$ wobei $b_n = a_{\text{l}(n)}$ für $l:\N^* \to \N^*$ mit der Eigenschaft $\text{l}(n) < l(n + 1) \forall n \ge 1$
+\begin{compactitem}
+    \item Entsteht durch weglassen von Folgengliedern.
+    \item $(a_n)_{n \in \N}$ konvergent $\implies (a_{\text{l}(n)})_{n \in \N}$ konvergent für alle Teilfolgen.
 \end{compactitem}
 
 \subsection{Bolzano-Weierstrass}
+Jede beschränkte Folge besitzt eine konvergente Teilfolge.
+\begin{compactitem}
+    \item $(a_n)_{n \in \N}$ beschränkt $\implies$ für jede beschränkte Teilfolge $(b_n)_{n \in \N}$ gilt $\liminf_{n \to \infty} a_n \le \lim_{n \to \infty} b_n \le  \limsup_{n \to \infty} a_n$
+    \item Es gibt je eine Teilfolgen von $(a_n)_{n \in \N}$ die $\liminf_{n \to \infty} a_n$ resp. $\limsup_{n \to \infty} a_n$ als Limes annehmen.
+\end{compactitem}
 
 
-
-
-Jede beschränkte Folge besitzte eine konvergente Teilfolge
 \section{Reihen}
