@@ -150,6 +150,7 @@ Jede beschränkte Folge besitzt eine konvergente Teilfolge.
     \item[Harmonische Reihe:] $\sum_{k=1}^{\infty} \frac{1}{n} = \infty$
     \item[Alternierende Harmon. Reihe:] $\sum_{k=1}^{\infty} \frac{(-1)^{k+1}}{k} = \ln 2$
     \item[Teleskopreihe:] $\sum_{k=1}^{\infty} \frac{1}{k(k+1)} = 1$
+    \item[Exponentialfunktion:] $\exp(z) = \sum_{n=1}^{\infty} \frac{z^n}{n!} = 1 + z + \frac{z^2}{2!} + \frac{z^3}{3!} + \dots \ z \in \C,$ konvergiert absolut.
 \end{compactdesc}
 
 \subsection{Rechenregeln}
@@ -186,6 +187,9 @@ $\sum_{k=1}^{\infty} a_k$ absolut konvergent falls $\sum_{k=1}^{\infty} |a_k|$ k
             \item $\left| \sum_{k=1}^{\infty} a_k \right| \le \sum_{k=1}^{\infty} \left| a_k \right|$.
         \end{compactitem}
 \end{compactitem}
+\begin{compactdesc}
+    \item[Bedingt Konvergent:] $\sum_{k=1}^{\infty} a_k$ ist konvergent aber nicht absolut konvergent.
+\end{compactdesc}
 
 \subsection{Leibniz}
 $(a_n)_{n \in \N}, a_n \ge 0 \ \forall n \in \N$ monoton fallend und $\lim_{n \to \infty} a_n = 0 \implies S:= \sum_{k=1}^{\infty} \left( -1 \right)^{k+1} a_k$ konvergiert.
@@ -193,3 +197,121 @@ $(a_n)_{n \in \N}, a_n \ge 0 \ \forall n \in \N$ monoton fallend und $\lim_{n \t
     \item $a_1 - a_2 \le S \le a_1$
     \item $(s_n)_{n \in \N}$ beschränkt, $\lim_{n \to \infty} s_{2n} = \lim_{n \to \infty} s_{2n + 1} = s \implies \lim_{n \to \infty} s_n = s$.
 \end{compactitem}
+
+\subsection{Umordnung}
+$\sum_{k=1}^{\infty} a'_k$ ist eine Umordnung von $\sum_{k=1}^{\infty} a_k$ falls es eine Bijektion $\phi : \N^* \to \N^*$ gibt so dass $a'_n = a_{\phi(n)}$
+
+\subsection{Dirichlet}
+$\sum_{k=1}^{\infty} a_k$ absolute konvergent $\implies$ jede Umordnung ist konvergent mit demselben Grenzwert.
+\begin{compactdesc}
+\item[Riemann:] $\sum_{k=1}^{\infty} a_k$ konvergent aber nicht absolut konvergent $\implies \exists $ Umordnung $\forall A \in \R \cup \{\pm \infty\}: \sum_{k=1}^{\infty} a_{\phi(n)} = A $.
+\end{compactdesc}
+
+\subsection{Quotientenkriterium}
+Für $(a_n)_{n \in \N}, a_n \neq 0 \ \forall n \ge 1$:
+\begin{compactenum}
+    \item $\limsup_{k \to \infty} \frac{\left| a_{n+1} |}{\left| a_n \right| } < 1 \implies \sum_{k=1}^{\infty} a_k$ konvergiert absolut.
+    \item $\liminf_{k \to \infty} \frac{\left| a_n + 1 \right|}{\left| a_n \right| } > 1 \implies \sum_{k=1}^{\infty} a_k$ divergiert.
+\end{compactenum}
+\begin{compactitem}
+    \item $\exists \lim_{k \to \infty} \left| \frac{a_n + 1}{a_n} \right| =  L \implies$
+        \[
+        \begin{cases}
+            \sum_{k=1}^{\infty} a_k \text{ absolut konvergent} & \text{ if } L < 1\\
+            \sum_{k=1}^{\infty} a_k \text{ konvergent} & \text{ if } L > 1\\
+            \sum_{k=1}^{\infty} a_k \text{ versagt Kriterium} & \text{ if } L = 1
+        \end{cases}
+        \] 
+    \item Nützlich für $n!, a^n$ und Polynom.
+    \item Versagt wenn unendlich viele Glieder $a_n$ der Reihe verschwinden.
+\end{compactitem}
+
+\subsection{Wurzelkriterium}
+Für $(a_n)_{n \in \N}$:
+\begin{compactenum}
+    \item $\limsup_{n \to \infty} \sqrt[^n]{\left| a_n \right| } < 1 \implies \sum_{k=1}^{\infty} a_k$ konvergiert absolut.
+    \item $\limsup_{n \to \infty} \sqrt[^n]{\left| a_n \right| } > 1 \implies \sum_{k=1}^{\infty} a_k$ und $\sum_{k=1}^{\infty} |a_k|$ divergieren.
+\end{compactenum}
+\begin{compactitem}
+    \item $\exists \lim_{k \to \infty} \sqrt[^n]{ \left| a_n \right| }  = L \implies$
+        \[
+        \begin{cases}
+            \sum_{k=1}^{\infty} a_k \text{ absolut konvergent} & \text{ if } L < 1\\
+            \sum_{k=1}^{\infty} a_k \text{und }\sum_{k=1}^{\infty} |a_k| \text{ konvergent} & \text{ if } L > 1\\
+        \end{cases}
+        \] 
+\end{compactitem}
+
+\subsection{Potenzreihe}
+$\text{P}(z) := c_0 + c_1 \cdot z + c_2 * z^2 + \dots = \sum_{k=0}^{\infty} c_k z^k, \ (c_n)_{n \in \N}, z \in \C$.
+\begin{compactitem}
+    \item Ist absolute konvergent $\forall |z| < p$ und divergiert $\forall |z| > p$.
+    \item $
+        p:= \begin{cases}
+            +\infty & \text{ if } \limsup_{k \to \infty} \sqrt[^k]{\left| c_k \right| }  = 0\\
+            \frac{1}{\limsup_{k \to \infty} \sqrt[^k]{|c_k|}} & \text{ if } \limsup_{k \to \infty} \sqrt[^k]{|c_k|} > 0
+        \end{cases} 
+    $
+    \item Funktioniert nur wenn $\limsup_{k \to \infty} \sqrt[^k]{|c_k|}$ existiert.
+    \item Konvergenzbereich von Potenzreihe ist ein Kreis.
+\end{compactitem}
+Konvention:
+\begin{compactenum}
+\item $\{\sqrt[^n]{ \left| a_k \right| } \}$ unbeschränkt $\implies$ wir setzen $p=0 \ (\implies |z| < 0)$.
+\item $\{\sqrt[^n]{ \left| a_k \right| } \}$ beschränkt und $\limsup_{k \to \infty} \sqrt[^k]{c_k}=0 \implies$ wir setzen $p=\infty$ ($\implies p(z)$ konvergiert $\forall c \in \C$).
+\item $\{\sqrt[^n]{ \left| a_k \right| } \}$ beschränkt und $\limsup_{k \to \infty} \sqrt[^k]{c_k}\neq 0 \implies$ wir setzen $p= \frac{1}{\limsup_{k \to \infty} \sqrt[^k]{c_k}} \ (\implies p(z)$ konvergiert $\forall |z| < p)$.
+\end{compactenum}
+
+\subsection{Riemann Zeta Funktion}
+$\zeta(s) := 1 + \frac{1}{2^s} + \frac{1}{3^s} + \dots = \sum_{n=1}^{\infty} \frac{1}{n^s}, \ s > 0$.
+\begin{compactitem}
+    \item $\zeta(s), 0 < s \le 1 \implies \zeta(s)$ konvergiert.
+    \item $\zeta(s), s > 1 \implies \zeta(s) < \sum_{k=0}^{\infty} \left( \frac{1}{2^{s-1}} \right)^n $ divergent.
+\end{compactitem}
+
+\subsection{Doppelfolgen und -reihen}
+\begin{compactdesc}
+    \item[Doppelfolge:] $(c_{kl})_{k,l \in \N} := a_k \cdot b_l$
+    \item[Doppelreihe:] $\sum_{k,l\ge1} c_{kl}$
+        \begin{compactitem}
+            \item $\sum_{k=0}^{\infty} \sum_{l=0}^{\infty}c_{kl}$ und $\sum_{k=0}^{\infty} \sum_{l=0}^{\infty}c_{kl}$ können mit unterschiedlichem Grenzwert konvergieren.
+        \end{compactitem}
+    \item[Lineare Anordnung:] von $\sum_{k,l \ge 1} a_{kl}$ ist $\sum_{k=0}^{\infty} b_k$ falls $\exists$ Bijektion $\phi N \to N \times N$ mit $b_k = a_{\phi(k)}$.
+\end{compactdesc}
+
+\subsection{Cauchy}
+$\exists B \ge 0: \ \sum_{i=0}^{m} \sum_{j=0}^{m} \left| a_{ij} \right| \le B \ \forall \ge 0 \implies$
+\begin{compactitem}
+    \item Folgende Reihen konvergieren absolut: 
+        \begin{compactitem}
+            \item $S_i := \sum_{j=0}^{\infty} a_{ij} \forall i \ge 0$
+            \item $U_j := \sum_{i=0}^{\infty} a_{ij} \forall j \ge 0$
+            \item $\sum_{i=0}^{\infty} S_i$
+            \item $\sum_{j=0}^{\infty} U_j$
+        \end{compactitem}
+    \item Es gilt $\sum_{i=0}^{\infty} S_i = \sum_{j=0}^{\infty} U_j$
+    \item Es konvergiert jede lineare Anordnung der Doppelreihe absolut und hat demselben Grenzwert.
+\end{compactitem}
+
+\subsection{Cauchy Produkt}
+Produkt von $\sum_{i=1}^{\infty} a_i, \sum_{j=1}^{\infty} b_j$ ist $\sum_{n=0}^{\infty} \left( \sum_{j=0}^{\infty} a_{n-j}b_j \right) = a_0b_0 + (a_0b_1 + a_1b_0) + (a_0b_2 + a_1b_1 + a_2b_0) + \dots$
+\begin{compactitem}
+    \item Muss nicht immer konvergiere.
+    \item Falls $\sum_{i=1}^{\infty} a_i$ und $\sum_{j=1}^{\infty} b_j$ absolut konvergieren $\implies \sum_{n=0}^{\infty} \left( \sum_{j=0}^{\infty} a_{n-j}b_j \right) = \left( \sum_{i=0}^{\infty} a_i \right) \left( \sum_{i=0}^{\infty} b_j \right) $ konvergiert.
+\end{compactitem}
+
+\subsection{Folgen Funktionen}
+$\forall n$ sein $f_n : \N \to \R$ eine Folge. Wir nehmen an:
+\begin{compactenum}
+    \item $f(j) := \lim_{n \to \infty} f_n(j)$ existiert $\forall j \in \N$.
+    \item $\exists$ Funktion $g: \N \to [0, \infty[$ so dass:
+        \begin{compactenum}[{2}.1]
+            \item $\left| f_n(j) \right| \le g(j) \ \forall j \ge, \foral\ln \ge 0 $.
+            \item $\sum_{j=0}^{\infty} g(j)$ konvergiert.
+        \end{compactenum}
+\end{compactenum}
+dann folgt $\sum_{j=0}^{\infty} f(j) = \lim_{n \to \infty} \sum_{j=0}^{\infty} f_n(j)$.
+\begin{compactitem}
+\item $\forall z \in \C$ konvergiert die Folge $\left( \left( 1 + \frac{z}{n} \right)^n  \right)_{n \in \N} $ und $\lim_{n \to \infty} \left( 1 + \frac{z}{n} \right)^n = \exp(z)$.
+\end{compactitem}
+
