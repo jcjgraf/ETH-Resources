@@ -17,14 +17,16 @@
         \end{compactitem}
 \end{compactdesc}
 
+\subsection{Rechenregeln}
 $\forall (a_n)_{n \in \N}, (b_n)_{n \in \N}$ konvergent, mit $\lim_{n \to \infty} a_n = a, \lim_{n \to \infty} b_n = b$
 \begin{compactenum}
-   \item $(a_n + b_n)_{n \in \N}$ ist konvergent mit $\lim_{n \to \infty} (a_n + b_n) = a + b$
-   \item $(a_n \cdot  b_n)_{n \in \N}$ ist konvergent mit $\lim_{n \to \infty} (a_n \cdot  b_n) = a + b$
-   \item $\left( \frac{a_n}{b_n} \right) _{n \in \N}$ ist konvergent mit $\lim_{n \to \infty} \left( \frac{a_n}{b_n} \right) = \left( \frac{a}{b} \right)$ if $b_n \neq 0 \ \forall n \in N \wedge  b \neq 0$
+    \item $(a_n + b_n)_{n \in \N}$ ist konvergent mit $\lim_{n \to \infty} (a_n + b_n) = a + b$
+    \item $(a_n \cdot  b_n)_{n \in \N}$ ist konvergent mit $\lim_{n \to \infty} (a_n \cdot  b_n) = a + b$
+    \item $\left( \frac{a_n}{b_n} \right) _{n \in \N}$ ist konvergent mit $\lim_{n \to \infty} \left( \frac{a_n}{b_n} \right) = \left( \frac{a}{b} \right)$ if $b_n \neq 0 \ \forall n \in N \wedge  b \neq 0$
     \item Falls $\exists K \ge 1, a_n \le  b_n \ \forall n \ge K \implies a \le b$
 \end{compactenum}
 
+\subsection{Monotonie}
 \begin{compactdesc}
     \item[Monoton Wachsend:] $a_n \le a_{n+1} \quad \forall n \in \N$
     \item[Strikt Monoton Wachsend:] $a_n < a_{n+1} \quad \forall n \in \N$
@@ -87,7 +89,7 @@ Teilmenge $I \subset \R$
 \end{compactenum}
 
 \begin{compactitem}
-    \item $I \subset \R beschränkt \ \iff \text{L}(I) < + \infty$
+    \item $I \subset \R$ beschränkt$ \ \iff \text{L}(I) < + \infty$
     \item $I \subset \R$ ist abgeschlossen $\iff $ für jede konvergierende $(a_n)_{n \in \N}$ aus Elementen in $I$ muss $\lim_{n \to \infty} a_n \in I$
     \item $I=[a, b], J=[c, d], a \le b, c \le d, \ a,b,c,d \in \R$, falls $c \le a$ und $b \le d \implies I \subset J$
         \begin{compactitem}
@@ -113,5 +115,81 @@ Jede beschränkte Folge besitzt eine konvergente Teilfolge.
     \item Es gibt je eine Teilfolgen von $(a_n)_{n \in \N}$ die $\liminf_{n \to \infty} a_n$ resp. $\limsup_{n \to \infty} a_n$ als Limes annehmen.
 \end{compactitem}
 
+\subsection{Folgen in $\R^{d}$ und $\C$}
+\todo{Folgen in $\R^d$ und $\C$}
 
 \section{Reihen}
+\begin{compactdesc}
+    \item[Folge der Partialsummen:] $(S_n)_{n \in \N} := a_1 + a_2 + \dots + a_n = \sum_{k=1}^{n} a_k$ einer Folge $(a_n)_{n \in \N}$.
+        \begin{compactitem}
+            \item Ist monoton steigend.
+        \end{compactitem}
+    \item[Reihe:] Unendliche Summe $\sum_{k=1}^{\infty} a_k$ einer Folge $(a_n)_{n \in \N}$.
+        \begin{compactitem}
+            \item Für divergierende Reihen ist die Summe ein Symbol nicht konvergente Folge $(s_n)_{n \in \N}$.
+            \item Für konvergente Reihe ist die Summe ein Symbol für den Grenzwert der Folge $(s_n)_{n \in \N}$.
+        \end{compactitem}
+    \item[Konvergent:] ist $\sum_{k=1}^{\infty} a_k$ falls die Folge $(S_n)_{n \in \N}$ von $(a_n)_{n \in \N}$ konvergiert.
+        \begin{compactitem}
+            \item $\sum_{k=1}^{\infty} a_k$ konvergiert $\implies \lim_{k \to \infty} a_k = 0 $.
+            \item $\lim_{k \to \infty} a_k \neq  0 \implies \sum_{k=1}^{\infty} a_k$ divergent.
+        \end{compactitem}
+    \item[Grenzwert:] $\sum_{k=1}^{\infty} a_k := \lim_{n \to \infty} S_n$.
+    \item Weglassen von Anfangsgliedern verändert die Konvergenz nicht, verändert ggf. jedoch den Grenzwert.
+\end{compactdesc}
+
+\subsection{Bekannte Reihen}
+\begin{compactdesc}
+    \item[Geometrische Reihe:] $\sum_{k=0}^{\infty} q^k = 1 + q + q^2 + \dots = \frac{1}{1-q} =  
+        \begin{cases}
+            \text{divergent} & \text{ if } |q| \ge 1\\
+            \text{konvergent} & \text{ if } |g| < 1
+        \end{cases}
+    \ , q \in \C
+        $
+    \item[Harmonische Reihe:] $\sum_{k=1}^{\infty} \frac{1}{n} = \infty$
+    \item[Alternierende Harmon. Reihe:] $\sum_{k=1}^{\infty} \frac{(-1)^{k+1}}{k} = \ln 2$
+    \item[Teleskopreihe:] $\sum_{k=1}^{\infty} \frac{1}{k(k+1)} = 1$
+\end{compactdesc}
+
+\subsection{Rechenregeln}
+$\forall \sum_{k=1}^{\infty} a_k, \sum_{k=1}^{\infty} b_k$ konvergent, $\alpha \in \C$ 
+\begin{compactenum}
+    \item $\sum_{k=1}^{\infty} (a_k + b_k) = \left( \sum_{k=1}^{\infty} a_k \right) + \left( \sum_{k=1}^{\infty} b_k \right)$ konvergent.
+    \item $\sum_{k=1}^{\infty} \alpha \cdot a_k = \alpha \cdot \sum_{k=1}^{\infty} a_k$ konvergent.
+\end{compactenum}
+
+\subsection{Cauchy Kriterium}
+$\sum_{k=1}^{\infty} a_k$ konvergent $\iff \forall \epsilon > 0 \ \exists N \ge 1: \ \left| \sum_{k=n}^{m} a_k \right| < \epsilon \ \forall m \ge  n \ge N$.
+\begin{compactitem}
+    \item $\sum_{k=1}^{\infty} a_k$ konvergent $\iff \lim_{k \to \infty} \left| \sum_{k=n}^{m} a_k \right| = 0 \ m \ge n$.
+    \item $\sum_{k=1}^{\infty} a_k$ konvergent $\implies \lim_{k \to \infty} a_k = 0 $.
+    \item $\lim_{k \to \infty} a_k \neq  0 \implies \sum_{k=1}^{\infty} a_k$ divergent.
+\end{compactitem}
+
+\subsection{Anwendung Weierstrass}
+$\sum_{k=1}^{\infty} a_k, a_k \ge 0 \ \forall k \in \N^*$ konvergiert $\iff (S_n)_{n \in \N}$ nach oben beschränkt.
+
+\subsection{Vergleichssatz}
+Für $\sum_{k=1}^{\infty} a_k$ $\sum_{k=1}^{\infty} b_k, 0 \le a_k \le b_k \ \forall k \ge K$:
+\begin{compactdesc}
+    \item[Majoranten Kriterium:] $\sum_{k=1}^{\infty} b_k$ konvergiert $\implies \sum_{k=1}^{\infty} a_k$ konvergiert.
+    \item[Minoranten Kriterium:] $\sum_{k=1}^{\infty} k_k$ divergiert $\implies \sum_{k=1}^{\infty} b_k$ divergiert.
+\end{compactdesc}
+
+\subsection{Absolute Konvergenz}
+$\sum_{k=1}^{\infty} a_k$ absolut konvergent falls $\sum_{k=1}^{\infty} |a_k|$ konvergent. 
+\begin{compactitem}
+    \item Falls divergent, kann sie nur gegen $+\infty$ divergieren.
+    \item $\sum_{k=1}^{\infty}| a_k|$ convergent $\implies \sum_{k=1}^{\infty} a_k$ konvergent
+        \begin{compactitem}
+            \item $\left| \sum_{k=1}^{\infty} a_k \right| \le \sum_{k=1}^{\infty} \left| a_k \right|$.
+        \end{compactitem}
+\end{compactitem}
+
+\subsection{Leibniz}
+$(a_n)_{n \in \N}, a_n \ge 0 \ \forall n \in \N$ monoton fallend und $\lim_{n \to \infty} a_n = 0 \implies S:= \sum_{k=1}^{\infty} \left( -1 \right)^{k+1} a_k$ konvergiert.
+\begin{compactitem}
+    \item $a_1 - a_2 \le S \le a_1$
+    \item $(s_n)_{n \in \N}$ beschränkt, $\lim_{n \to \infty} s_{2n} = \lim_{n \to \infty} s_{2n + 1} = s \implies \lim_{n \to \infty} s_n = s$.
+\end{compactitem}
