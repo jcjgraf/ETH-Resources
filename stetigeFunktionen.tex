@@ -1,0 +1,134 @@
+%! TEX root = ./main.tex
+
+\section{Stetige Funktionen}
+\subsection{Reellwertige Funktionen}
+Für beliebige Menge $D$ ist $\R^D = \{f : D \to \R | f \text{ eine Abbildung}\}$ die Menge alle reellwertigen Funktionen die auf $D$ definiert sind.\\
+Addition und skalare Multiplikation bilden mit $\R^D$ einen Vektorraum. Für $f, g \in \R^D, x \in D, \alpha \in \R$:
+\begin{compactdesc}
+    \item[Addition:] $(f + g)(x) = f(x) + g(x)$
+    \item[Skalare Multiplikation:] $\left( \alpha \cdot f \right) (x) = \alpha \cdot f(x)$
+    \item[Nullfunktion:] Entspricht dem Nullvektor in $\R^D$ und $\zeta(x) = 0$
+    \item[Constate Funkton:]  Entspricht dem Einheitsvektor in $\R^D$ und $\zeta(x) = 1$
+    \item[Produkt zweier Funktionen:] $(f \cdot g)(x) := f(x) \cdot g(x)$
+    \item[Quotient:] $\frac{f}{g} := D' \to \R, x \mapsto \frac{f(x)}{g(x)}, \ D'= \{x \in D | g(x) \neq 0\} $
+    \item[Komposition von Funktionen:] $f: D \to \R$ und $f: E \to \R, f(D) \subset E$ dann $g \circ f: D \to \R, x \mapsto g\left( f(x) \right)$
+\end{compactdesc}
+
+\subsection{Beschränktheit}
+$f : D \to \R$ ist:
+\begin{compactdesc}
+    \item[nach oben beschränkt:] falls $f(D) \subset \R$ nach oben beschränkt ist.
+    \item[nach unten beschänkt:] falls $f(D) \subset \R$ nach unten beschränkt ist.
+    \item[beschränkt:] falls $f(D) \subset \R$ beschränkt ist.
+\end{compactdesc}
+
+\subsection{Monotonie}
+$f : D \to \R, D \subset R, \ \forall x,y \in D$ ist:
+\begin{compactdesc}
+    \item[monoton wachsend:] falls $x \le y \implies f(x) \le f(y)$.
+    \item[streng monoton wachsend:] falls $x < y \implies f(x) < f(y)$.
+    \item[monoton fallend:] falls $x \ge y \implies f(x) \ge f(y)$.
+    \item[streng monoton fallend:] falls $x > y \implies f(x) > f(y)$.
+    \item[monoton:] falls monoton wachsend oder monoton fallend.
+    \item[streng monoton:] falls streng monoton wachsend oder streng monoton fallend.
+\end{compactdesc}
+\todo{Show monotony}
+
+\subsection{Stetigkeit}
+\begin{compactdesc}
+    \item[$\mathbf{x_0}$ stetig:] $f: D \to \R$ für $D \subset \R, x_o \in D$  falls  $\forall \epsilon > 0 \ \exists \delta > 0: \left| x - x_0 \right| < \delta \implies \left| f(x) - f_0(x) \right| < \epsilon \ \forall x \in D $.
+    \item[stetig:] $f: D \to \R$ falls sie in jedem Punkt von $D$ stetig ist.
+\end{compactdesc}
+
+\begin{compactitem}
+    \item $f$ ist in $x_0$ stetig $\iff \forall (a_n)_{n \in \N}$ in $D: \ \lim_{n \to \infty} a_n = x_0 \implies \lim_{n \to \infty} f(a_n) = f(x_0)$.
+        \begin{compactitem}
+            \item $f$ ist in $x_0$ stetig $\iff \lim_{n \to \infty} f(a_n) = f( \lim_{n \to \infty} a_n) \ \forall (a_n)_{n \in \N}$ in $D$.
+        \end{compactitem}
+\end{compactitem}
+
+\subsection{Rechenregeln}
+Für $x_0 \in D \subset \R, \lambda \in \R, f: D \to \R, g: D \to \R$ und $f$ und $g$ stetig in $x_0 \implies$
+\begin{compactenum}
+    \item $f + g, \lambda \cdot f, f \cdot g$ stetig in $x_0$.
+    \item $\frac{f}{g}: D' \to \R, x \mapsto \frac{f(x)}{g(x)}, \ D' = \{x \in D | g(x) \neq 0\}, g(x_0) \neq 0$ ist stetig in $x_0$.
+\end{compactenum}
+Für $D_1, d_2 \subset \R, f: D_1 \to D_2, g: D_2 \to \R, x_0 \in D_1$. Falls $f$ in $x_0$ und $g$ in $f(x_0)$ stetig $\implies g \circ f : D_1 \to \R$ ist in $x_0$ stetig.
+\begin{compactitem}
+    \item Falls $f$ auf $D_1$ und $g$ auf $D_2$ stetig $\implies g \circ f$ auf $D_1$ stetig.
+\end{compactitem}
+
+\subsection{Polynom}
+Funktion $P: \R \to \R, P(x)= a_nx^n + \dots + a_0, a_n, \dots a_0 \in \R$.
+\begin{compactdesc}
+    \item[Grad:] ist $n$ falls $a_n \neq 0$.
+\end{compactdesc}
+\begin{compactitem}
+    \item Sind auf ganz $\R$ stetig.
+    \item $\frac{P}{Q}: R \setminus \{x_1, \dots x_m\}  \to \R, \ x \mapsto \frac{P(x)}{Q(x)}$ ist stetig für $P,Q$ auf $\R$ wobei $ Q \neq 0$  und Nullstellen $x_1, \dots, x_m$ von $Q$.
+\end{compactitem}
+
+\subsection{Zwischerwertsatz}
+Für Intervall $I \subset R$, stetige Funktion $f: I \to \R$ und $a, b \in I \implies \forall c$ zwischen $f(a)$ und $f(b) \ \exists z$ zwischen $a$ und $b$ mit $f(z) = c$.
+\begin{compactitem}
+    \item $x, y \in R, x \le y$, $c$ liegt \textbf{zwischen} $x$ und $y$ falls $c \in [x, y]$.
+    \item Ein Polynom $P$ mit ungeradem Grad $n$ besitzt mindestens eine Nullstelle in $\R$.
+    \item Für $f: [a,b] \to \R$ stetig und $f(a) \cdot f(b) < 0 \implies \exists c \in ]a,b[: f(c) = 0$.
+\end{compactitem}
+
+\subsection{Min, Max, Abs}
+Für menge $D$ und $f,g: D \to \R$:
+\begin{compactdesc}
+    \item[Abs:] $|f|(x) := |f(x)|, \ \forall x \in D$
+    \item[Max:] $\max(f,g)(x) := \max(f(x), g(x)), \ \forall x \in D$
+    \item[Min:] $\min(f,g)(x) := \min(f(x), g(x)), \ \forall x \in D$
+\end{compactdesc}
+\begin{compactitem}
+    \item Für $D \subset R, x_0 \in D, f,g: D \to \R$ stetig in $x_0 \implies |f|, \max(f,g), \min(f,g)$ stetig in $x_0$.
+\end{compactitem}
+
+\subsection{Min-Max Satz}
+Für $f:I = [a, b] \to \R$ stetig auf kompaktem Intervall $I \implies \exists u,v \in [a,b], f(u) \le f(x) \le f(v) \ \forall x in [a,b] \iff f$ ist beschränkt.
+
+\begin{inparaitem}
+    \item $f(u) = \inf \{f(x) | x \in I\}$
+    \item $f(v) = \sup \{f(x) | x \in I\}$.
+\end{inparaitem}
+\begin{compactdesc}
+    \item[Kompakt Intervall:] Ist ein Intervall $I \subset \R$ falls $I = [a, b], a \le b$.
+        \begin{compactitem}
+        \item Für $(x_n)_{n \in \N}, \lim_{n \to \infty}x_n \in \R, a \le b$. Falls $\{x_n | n \ge 1\} \subset [a, b] \implies \lim_{n \to \infty}x_n \in [a, b]$.
+        \end{compactitem}
+\end{compactdesc}
+
+\subsection{Umkehrabbildung}
+Für $I \subset \R, f: I \to \R$ stetig und streng monoton $\implies J:=f(I) \subset \R, f^{-1}:  J \to I$ stetig und streng monoton.
+
+\subsection{Reelle Exponentialfunktion}
+$\exp: R \to ]o, +\infty[$ ist streng monoton wachsend, stetig und surjektiv.
+\begin{compactitem}
+    \item $\exp(x) = 1 + x + \frac{x^2}{2!} + \dots \ge 1$
+    \item $\exp(x + y ) = \exp(x) \cdot \exp(y) \ \forall x,y \in \C$.
+    \item $\exp(0) = 1$.
+    \item $\exp(x) > 0 \ \forall x \in \R$
+    \item $\exp(x) > 1 \ \forall x > 0$
+    \item $\exp(x) > \exp(y) \ \forall x > y$
+    \item $\exp(x) > 1 + x \ \exists x \in \R$
+\end{compactitem}
+
+\subsection{Natürliche Logarithmus}
+Die Umkehrabbildung von $\exp$ ist $\ln: ]o, +\infty[ \to \R$ streng monoton wachsend, stetig und bijektiv.
+\begin{compactitem}
+    \item $\ln(1) = 0$
+    \item $\ln(a \cdot b) = \ln(a) + \ln(b) \ \forall a,b \in ]o, +\infty[$
+\end{compactitem}
+
+\subsection{Allgemeine Potenzen}
+Für $x > 0, a \in \R \ x^a := \exp(a \ln(x))$
+\begin{compactitem}
+    \item Für $a > 0$ ist $x \mapsto x^a$ stetig, streng monoton wachsend und bijektiv.
+    \item Für $a < 0$ ist $x \mapsto x^a$ stetig, streng monoton und bijektiv.
+    \item $\ln(x^a) = a \ln(x) \ \forall a \in R, \ \forall x > 0$
+    \item $x^a \cdot x ^b = x^{a + b} \ \forall a,b \in R, \ \forall x > 0$
+    \item $(x^a)^b = x^{a \cdot b} \ \forall a,b \in R, \ \forall x > 0$
+\end{compactitem}

@@ -210,7 +210,7 @@ $\sum_{k=1}^{\infty} a_k$ absolute konvergent $\implies$ jede Umordnung ist konv
 \subsection{Quotientenkriterium}
 Für $(a_n)_{n \in \N}, a_n \neq 0 \ \forall n \ge 1$:
 \begin{compactenum}
-    \item $\limsup_{k \to \infty} \frac{\left| a_{n+1} |}{\left| a_n \right| } < 1 \implies \sum_{k=1}^{\infty} a_k$ konvergiert absolut.
+    \item $\limsup_{k \to \infty} \frac{\left| a_{n+1} \right|}{\left| a_n \right| } < 1 \implies \sum_{k=1}^{\infty} a_k$ konvergiert absolut.
     \item $\liminf_{k \to \infty} \frac{\left| a_n + 1 \right|}{\left| a_n \right| } > 1 \implies \sum_{k=1}^{\infty} a_k$ divergiert.
 \end{compactenum}
 \begin{compactitem}
@@ -306,7 +306,7 @@ $\forall n$ sein $f_n : \N \to \R$ eine Folge. Wir nehmen an:
     \item $f(j) := \lim_{n \to \infty} f_n(j)$ existiert $\forall j \in \N$.
     \item $\exists$ Funktion $g: \N \to [0, \infty[$ so dass:
         \begin{compactenum}[{2}.1]
-            \item $\left| f_n(j) \right| \le g(j) \ \forall j \ge, \foral\ln \ge 0 $.
+            \item $\left| f_n(j) \right| \le g(j) \ \forall j,n \ge 0$.
             \item $\sum_{j=0}^{\infty} g(j)$ konvergiert.
         \end{compactenum}
 \end{compactenum}
@@ -315,3 +315,4 @@ dann folgt $\sum_{j=0}^{\infty} f(j) = \lim_{n \to \infty} \sum_{j=0}^{\infty} f
 \item $\forall z \in \C$ konvergiert die Folge $\left( \left( 1 + \frac{z}{n} \right)^n  \right)_{n \in \N} $ und $\lim_{n \to \infty} \left( 1 + \frac{z}{n} \right)^n = \exp(z)$.
 \end{compactitem}
 
+\todo{Konvergenz Divergent Flowchart}
