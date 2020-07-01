@@ -1,0 +1,226 @@
+%! TEX root = ./main.tex
+
+\section{Differenzierbare Funktionen}
+\subsection{Differenzierbarkeit}
+\begin{compactdesc}
+    \item[In $\mathbf{x_0}$ differenzierbar:] Ist $f: \mathbb{D} \to \R, \mathbb{D} \subset \R$ und  Häufigkeitspunkt $x_0 \in \mathbb{D}$ falls $\lim_{x \to x_0} \frac{f(x) - f(x_0)}{x - x_0} = \lim_{h \to 0} \frac{f(x_0 + h) - f(x_0)}{h} = f'(x_0)$ existiert.
+        \begin{compactitem}
+            \item Lässt sich linear durch die Tangente annähern.
+            \item $f$ differenzierbar in $x_0 \implies f$ stetig in $x_0$.
+        \end{compactitem}
+    \item[Auf $\mathbb{D}$ differenzierbar:] Falls $f : \mathbb{D} \to \R$ für alle Häufigkeitspunkte $x_0 \in \mathbb{D}$ in $x_0$ differenzierbar sind.
+\end{compactdesc}
+
+\subsubsection{Weierstrass}
+Für $f: \mathbb{D} \to \R, x_0$ Häufigkeitspunkt von $D \implies$ folgendes ist $quivalent$:
+\begin{compactenum}
+    \item $f$ ist ins $x_0$ differenzierbar.
+    \item $\exists c (=f(x_0)) \in \R$ und $r: \mathbb{D} \to \R$ so dass:
+        \begin{compactenum}
+            \item $f(x) = f(x_0) + c(x - x_0) + r(x)(x - x_0)$
+            \item $r(x_0) = 0$ und $r$ ist stetig in $x_0$.
+        \end{compactenum}
+\end{compactenum}
+
+Alternative ohne limes mit $\Phi(x) = f'(x_o) + r(x)$:
+\begin{compactitem}
+    \item $f: \mathbb{D} \to \R$ ist in $x_0$ differenzierbar $\iff \exists \Phi: \mathbb{D} \to \R$ welche
+        \begin{inparaenum}
+            \item In $x_0$ stetig ist
+            \item $f(x) = f(x_0) + \Phi(x)(x - x_0) \ \forall c \in D$.
+        \end{inparaenum}
+        \begin{compactitem}
+        \item In diesem Fall $\Phi(x_0) = f'(x_0)$
+        \end{compactitem}
+\end{compactitem}
+\begin{compactitem}
+    \item Für $f: \mathbb{D} \to \R$ und $x_0 \in \mathbb{D}$ Häufigkeitspunkt von $\mathbb{D}$. $f$ in $x_0$ differenzierbar $\implies f$ ist in $x_0$ stetig.
+\end{compactitem}
+
+
+\subsubsection{Rechenregeln Ableitung}
+Für $\mathbb{D} \subset \R$, Häufigkeitspunkt $x_0 \in \mathbb{D}$ von $\mathbb{D}$ und $f,g: \mathbb{D} \to \R$ in $x_0$ differenzierbar:
+\begin{compactdesc}
+    \item[$\mathbf{f + g}$:] $(f + g)'(x_0) = f'(x_0) + g'(x_0)$.
+    \item[$\mathbf{f \cdot g}$:] $(f \cdot g)'(x_0) = f'(x_0)g(x_0) + f(x_0)g'(x_0)$.
+    \item[$\mathbf{\frac{f}{g}}$:] $\left( \frac{f}{g} \right)' (x_0) = \frac{f'(x_0)g(x_0) - f(x_0)g'(x_0)}{g(x_0)^2}, \ g(x_0) \neq 0$.
+    \item[$\mathbf{g \circ f}$:] Für $f: \mathbb{D} \to E, g: E \to \R, \mathbb{D}, E \subset \R$, Häufigkeitspunkt $x_0 \in D$ und $f$ differenzierbar in $x_0$ und $g$ differenzierbar in $f(x_0)$ dann $(g \circ f)'(x_0) = g'(f(x_0)) \cdot f'(x_0)$
+    \item[$\mathbf{f^{-1}}$:] Für $f:\mathbb{D} \to E$ bijektiv, $x_0$ Häufigkeitspunkt, $f$ in $x_0$ differenzierbar, $f'(x_0) \neq 0$, $f^{-1}$ in $y_0 = f(x_0)$ stetig $\implies y_0$ ist ein Häufungspunkt von $E$ und $f^{-1}$ ist in $y_0$ differenzierbar: $(f^{-1})'(y_0) = \frac{1}{f'(x_0)}$.
+\end{compactdesc}
+
+\subsection{Erste Ableitung}
+\subsubsection{Extremaltstellen}
+Für $f:\mathbb{D} \to \R, D \subset \R, x_0 \in D$. $f$ besitzt:
+\begin{compactdesc}
+    \item[Lokales Maximum:] in $x_0$ falls $\exists \delta > 0: f(x) \le f(x_0) \ \forall x \in ]x_0 - \delta, x_0 + \delta[ \cap \mathbb{D}$.
+    \item[Lokales Minimum:] in $x_0$ falls $\exists \delta > 0: f(x) \ge f(x_0) \ \forall x \in ]x_0 - \delta, x_0 + \delta[ \cap \mathbb{D}$.
+    \item[Lokales Extremum:] in $x_0$ falls es ein lokales Minimum oder Maximum von $f$ ist.
+\end{compactdesc}
+Für $f:] a, b[ \to \R, x_0 \in ]a, b[, f$ in $x_0$ differenzierbar:
+\begin{compactenum}
+    \item $f'(x_0) > 0 \implies \exists \delta > 0:$
+        \begin{inparaitem}
+            \item $f(x) > f(x_0) \ \forall x \in ]x_0, x_0 + \delta[$
+            \item $f(x) < f(x_0) \ \forall x \in ]x_0 - \delta, x_0[$
+        \end{inparaitem}
+    \item $f'(x_0) < 0 \implies \exists \delta > 0:$
+        \begin{inparaitem}
+            \item $f(x) < f(x_0) \ \forall x \in ]x_0, x_0 + \delta[$
+            \item $f(x) > f(x_0) \ \forall x \in ]x_0 - \delta, x_0[$
+        \end{inparaitem}
+    \item $f$ in $x_0$ ein lokales Extremum $\implies f'(x_0) = 0$.
+\end{compactenum}
+\begin{compactdesc}
+\item[Kritischer Punkt:] Stelle $x_0$ wo $f(x_0) = 0$ oder undefiniert ist.
+\end{compactdesc}
+
+\subsubsection{Rolle - Spezialfall des Mittelwertsatz}
+Für $f:[a,b] \to \R$ stetig und in $]a, b[$ differenzierbar. Falls $f(a) = f(b) \implies \exists \xi \in ]a, b[, f'(\xi) = 0$.
+
+\subsubsection{Lagrange - Mittelwertsatz}
+Für $f:[a,b] \to \R$ stetig und in $]a,b[$ differenzierbar $\implies \exists \xi \in ]a,b[, \ f(b) - f(a) = f'(\xi)(b - a) \Rightarrow f'(\xi) = \frac{f(b) - f(a)}{b - a}$.
+
+\subsubsection{Qualitatives Verhalten $f$}
+Für $f,g: [a,b] \to \R$ stetig und in $]a, b[$ differenzierbar:
+\begin{compactenum}
+    \item $f'(\xi) = 0 \ \forall \xi \in ]a, b[ \implies f$ konstant.
+    \item $f'(\xi) = g'(\xi) \ \forall \xi \in ]a, b[ \implies \exists c \in \R, f(x) = g(x) + c \ \forall x \in [a,b]$.
+    \item $f'(\xi) \ge 0 \ \forall \xi \in ]a, b[ \implies f$ ist auf $[a,b]$ monoton wachsend.
+    \item $f'(\xi) > 0 \ \forall \xi \in ]a, b[ \implies f$ ist auf $[a,b]$ strikt monoton wachsend.
+    \item $f'(\xi) \le 0 \ \forall \xi \in ]a, b[ \implies f$ ist auf $[a,b]$ monoton fallend.
+    \item $f'(\xi) < 0 \ \forall \xi \in ]a, b[ \implies f$ ist auf $[a,b]$ strikt monoton fallend.
+    \item $\exists M \ge 0, |f'(\xi)| \le M \ \forall \xi \in ]a,b[ \implies \forall x_1, x_2 \in [a,b] : |f(x_1) - f(x_2)| \le M|x_1 - x_2|$.
+\end{compactenum}
+
+\subsubsection{Trigonometrische Funktionen}
+\begin{tabular}{c | c | c | c | c}
+    $\sin$       &                                   & $[-\frac{\pi}{2}, \frac{\pi}{2}]$ & $[-1, 1]$                          & $\cos$\\\hline
+    $\arcsin$    &                                   & $[-1, 1]$                         & $[-\frac{\pi}{2}, \frac{\pi}{2}]$  & $\frac{1}{\sqrt{1-y^2} }$\\\hline
+    $\cos$       &                                   & $[0, \pi]$                        & $[-1, 1]$                          & $-\sin$\\\hline
+    $\arccos$    &                                   & $[-1, 1]$                         & $[0, \pi]$                         & $\frac{-1}{\sqrt{1-y^2} }$\\\hline
+    $\tan$       &                                   & $]-\frac{\pi}{2}, \frac{\pi}{2}[$ & $ \R$                              & $\frac{1}{\cos^2x}$\\
+                 &                                   &                                   &                                    & $1 + \tan^x$\\\hline
+    $\arctan$    &                                   & $ \R$                             & $]- \frac{\pi}{2}, \frac{\pi}{2}[$ & $\frac{1}{1+y^2}$\\\hline
+    $\sinh$      & $\frac{e^x - e^{-x}}{e}$          & $\R$                              & $\R$                               & $\cosh$\\\hline
+    $\arcsinh$   &                       & $\R$                              & $\R$                               & $\frac{1}{\sqrt{1+y^2} }$\\\hline
+    $\cosh$      & $\frac{e^x+e^{-x}}{2}$            & $\R$                              & $[1,\infty]$                       & $\sinh$\\\hline
+    $\arccosh$ & & $]1,\infty[$ & $\R$ & $\frac{1}{\sqrt{x^2-1}}$\\\hline
+    $\tanh$      & $\frac{e^x-e^{-x}}{e^x + e^{-x}}$ & $\R$                              & $]-1,1[$                           & $\frac{1}{\cosh^2x}$\\
+                 &                                   &                                   &                                    & $1 - \tanh^2x$\\\hline
+    $\arctanh$ & & $]-1.1[$ & $\R$ & $\frac{1}{1-x^2}$\\\hline
+\end{tabular}
+
+\begin{compactenum}
+\item $\cosh^2(x) - \sinh^2(x) = 1$
+\end{compactenum}
+
+\subsubsection{Cauchy}
+Für $f, g: [a,b] \to \R$ stetig und in $]a,b[$ differenzierbar. $\exists \xi \in ]a,b[, g'(\xi)(f(b) - f(a)) = f'(\xi)(g(b)-g(a))$.
+\begin{compactitem}
+\item Falls $g'(x) \neq 0 \ \forall x \in ]a,b[ \implies g(a) \neq g(b)$ und $\frac{f(b) - f(a)}{g(b) - g(a)} = \frac{f'(\xi)}{g'(\ni)}$.
+\end{compactitem}
+
+\subsubsection{L'Hospital - Bernoulli}
+Für $f,g: ]a,b[ \to \R$ differenzierbar und $g'(x) \neq 0 \ \forall x \in ]a,b[$. Falls $\lim_{x \to b^-} f(x) = 0, \lim_{x \to b^-} g(x) = 0$ und $\lambda := \lim_{x \to b^-} \frac{f'(x)}{g'(x)}$ existiert $\implies \lim_{x \to b^-} \frac{f(x)}{g(x)} = \lim_{x \to b^-} \frac{f'(x)}{g'(x)}$.\newline
+Gilt auch für:
+\begin{inparaitem}
+    \item $b= +\infty$
+    \item $x \to a^+$
+    \item $\lambda = +\infty$
+    \item $\lim_{n \to \infty} f(x) = \lim_{n \to \infty} g(x) = \infty$
+\end{inparaitem}
+
+\subsection{Konvexität}
+Für Intervall $I \subset \R$ und $f:I \to \R, I$. $f$ ist
+\begin{compactdesc}
+    \item[Konvex:] auf $I$ falls $\forall x, y \in I, x \le y, \lambda \in [0, 1], \quad f(\lambda x + (1- \lambda)y) \le \lambda f(x) + (1 - \lambda) f(y)$.
+    \item[Streng Konvex:] falls $\forall x, y \in I, x < y, \lambda \in ]0, 1[, \quad f(\lambda x + (1 - \lambda)y) < \lambda f(x) + (1 - \lambda)f(y)$.
+    \item[Konkav:] auf $I$ falls $\forall x, y \in I, x \le y, \lambda \in [0, 1], \quad f(\lambda x + (1- \lambda)y) \ge \lambda f(x) + (1 - \lambda) f(y)$.
+\end{compactdesc}
+\begin{compactitem}
+\item $f:I \to \R$ ist konvex $\iff \forall x_0 < x < x_1 \in I, \frac{f(x) - f(x_0)}{x-x_0} \le \frac{f(x_1) - f(x)}{x_1 - x_0}$
+    \item Summe von zwei konvexen(/konkaven) Funktionen ist konvex(/konkav).
+    \item Für $f:]a,b[ \to \R$ in $]a,b[$ differenzierbar. $f$ ist (streng) konvex $\iff f'$ (streng) monoton wachsend ist.
+    \item Für $f:]a,b[ \to \R$ zwei mal differenzierbar. Falls $f'' \ge 0 \implies f$ ist konvex.
+\end{compactitem}
+
+\subsection{Höhere Ableitungen}
+Für $f: \mathbb{D} \to \R$ differenzierbar:
+\begin{compactdesc}
+    \item[$\mathbf{n}$-mal differenzirebar in $\mathbb{D}$:] für $n\ge 2$ falls $f^{(n-1)}$ in $\mathbb{D}$ differenzierbar ist. Dann ist die n-te Ableitung von $f \ f^{(n)} := (f^{(n-1)})'$.
+    \item[$\mathbf{n}$-mal stetig differenzierbar in $\mathbb{D}$:] falls $f$ n-mal differenzierbar ist und $f^{(n)}$ in $\mathbb{D}$ stetig ist.
+        \begin{compactitem}
+            \item $C^n(\mathbb{D}) = \{f:\mathbb{D} \to \R | f \text{ n-mal stetig diff.}\}$.
+        \end{compactitem}
+    \item[glatt:] falls $\forall n \ge 1 \ f$ n-mal differenzierbar ist.
+        \begin{compactitem}
+        \item $C^\infty(\mathbb{D}) = \{f:\mathbb{D} \to R | f \text{ glatt}\}$.
+        \end{compactitem}
+\end{compactdesc}
+\begin{compactitem}
+    \item $n$ mal differenzierbare Funktion is $n-1$ mal stetig differenzierbar.
+\end{compactitem}
+Für $f,g: \mathbb{D} \to \R \ n$-mal differenzierbar:
+\begin{compactdesc}
+    \item[$\mathbf{f + g}$:] ist $n$-mal diff. und $(f + g)^{(n)} = f^{(n)} + g^{(n)}$.
+    \item[$\mathbf{f \cdot g}$:] ist $n$-mal diff. und $(f \cdot g)^{(n)} = \sum_{k=0}^{n} \binom{n}{k}f^{(k)} g^{(n-k)}$.
+    \item[$\mathbf{f / g}$:] ist $n$-mal diff. falls $g(x) \neq 0 \ \forall x \in \mathbb{D}$.
+    \item[$\mathbf{g \circ f}$:] ist $n$-mal diff. und $(g \circ f)^{(n)}(x) =  \sum_{k=1}^{n} A_{n,k}(x)\left( g^{(k)} \circ f \right) (x), A_{n,k}$ ist ein Polynom.
+\end{compactdesc}
+\todo{Ableitung Summary Bedeutung}
+
+\subsection{Potenzreihen}
+\begin{compactitem}
+    \item Für Folge $(f_n) \in C^1, f_n \overset{\text{glm.}}{\to} f, f'_n \overset{\text{glm.}}{\to} g, f,g: ]a,b[ \to \R$. Dann $f \in C^1$ und $f'=g$. Weiter ist
+        \begin{inparaitem}
+            \item $f$ auf $]x_0 - \rho, x_0 + \rho[$ glatt
+            \item $f^{(j)} (x) = \sum_{k=1}^{\infty} c_k \frac{k!}{((k-j)!} (x - x_0)^{k-j}$
+            \item $c_j = \frac{f^{(j)}(x_0)}{j!}$
+        \end{inparaitem}
+    \item Für Potenzreihe $\sum_{k=0}^{\infty} c_kx^k$ mit $\rho > 0$, dann ist
+        \begin{inparaitem}
+            \item $f(x) = \sum_{k=0}^{\infty} c_k (x - x_0)^k$ auf $]x_0 - \rho, x_o + \rho[$ differenzierbar
+            \item $f'(x) = \sum_{k=1}^{\infty} kc_k ( x - x_0)^{k-1} \ \forall x \in ]x_0 - \rho, x_0 + \rho[$
+        \end{inparaitem}
+    \item Falls glatte Funktion $f$ in einem Intervall $]-\rho, \rho[$ die Summe iner Potenzreihe $\sum_{k=0}^{\infty} c_kx^k$ mit Konvergenzbereich $\rho$ ist $\implies c_k=\frac{f^{(k)}(0)}{k!}$.
+    \item Potenzreihen $\implies$ glatte Funktion auf ihrem Konvergenzbereich.
+\end{compactitem}
+
+\subsection{Taylor Approximation}
+\subsubsection{Approximation von glatten Funktionen}
+Für $f:[a,b] \to \R$ stetig und in $]a,b[ (n + 1)$-mal differenzierbar. $\forall x, a < x \le b \ \exists \xi \in ]a, x[$, $f(x)= T_n(f,x,a) + R_n(f,x,a)$
+\begin{inparaitem}
+\item $T_n(f,x,a) = \sum_{k=0}^{n} \frac{f^{(k)}(a)}{k!} (x-a)^k$
+    \item $R_N(f,x,a) = \frac{f^{(n+1)}(\xi)}{(n+1)!}(x-a)^{n+1}$
+\end{inparaitem}
+
+\subsubsection{Taylor Approximation}
+Für $f:[c,d] _> \R$ stetig und in $]c, d[ \ (n+1)$-mal differenzierbar. Für $c < a < d$, $\forall x \in [c, d] \ \exists \xi$ zwischen $x$ und $a: f(x) = \sum_{k=0}^{n} \frac{f^{(k)}(a)}{k!}(x-a)^k + \frac{f^{(n+1)}(\xi)}{(n+1)!}(x-a)^{n+1}$.
+
+\subsection{Sattelpunkt und Wendepunkt}
+Stelle $x_0$ wo $f'(x_0)=0$ aber kein Extremum.
+\begin{compactdesc}
+    \item[Wendepunkt:]
+        \begin{inparaitem}
+            \item $f''(x_0)=0$
+            \item $f'(x_0)\neq_0$
+        \end{inparaitem}
+    \item[Sattelpunkt:]
+        \begin{inparaitem}
+            \item $f'(x_0) = 0$ 
+            \item $f''(x_0) = 0$
+        \end{inparaitem}
+\end{compactdesc}
+
+Für $n \ge 0, a < x_0 < b, f:[a,b[ -> \R$ in $]a,b[ \ (n+1)$-mal stetig differenzierbar und $f'(x_0) = f^{(2)}(x_0) = \dots = f^{(n)}(x_0) = 0$. Falls
+\begin{compactenum}
+    \item $n$ gerade und $x_0$ lokales Extremum $\implies f^{(n+1)}(x_0) = 0$
+    \item $n$ ungerade und und $f^{(n+1)}(x_0) > 0 \implies x_0$ ist eine strikte lokale Minimalstelle.
+    \item $n$ ungerade und und $f^{(n+1)}(x_0) < 0 \implies x_0$ ist eine strikte lokale Maximalstelle.
+\end{compactenum}
+
+Für $f:[a,b] _> \R$ stetig und in $]a,b[$ zweimal stetig differenzierbar. Für $a < x_0 < b$ und $f'(x_0) = 0$. Falls
+\begin{compactenum}
+    \item $f^{(2)}(x_0) > 0 \implies x_0$ ist ein strike lokale Minimalstelle.
+    \item $f^{(2)}(x_0) < 0 \implies x_0$ ist ein strike lokale Maximalstelle.
+\end{compactenum}
