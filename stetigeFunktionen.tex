@@ -36,15 +36,18 @@ $f : D \to \R, D \subset R, \ \forall x,y \in D$ ist:
 
 \subsection{Stetigkeit}
 \begin{compactdesc}
-    \item[$\mathbf{x_0}$ stetig:] $f: D \to \R$ für $D \subset \R, x_o \in D$  falls  $\forall \epsilon > 0 \ \exists \delta > 0: \left| x - x_0 \right| < \delta \implies \left| f(x) - f_0(x) \right| < \epsilon \ \forall x \in D $.
-    \item[stetig:] $f: D \to \R$ falls sie in jedem Punkt von $D$ stetig ist.
+    \item[$\mathbf{x_0}$ stetig:] $f: D \to \R$ für $D \subset \R, x_o \in D$  falls  $\forall x \in D, \ \forall \epsilon > 0 \ \exists \delta > 0: \left| x - x_0 \right| < \delta \implies \left| f(x) - f_0(x) \right| < \epsilon$.
+    \item[stetig:] $f: D \to \R$ falls sie in jedem Punkt von $D \ x_0$ stetig ist.
+    \item[gleichmässig stetig:] $f:D \to \R$ falls $\forall \epsilon > 0 \ \exists \delta > 0: \ \forall x, y \in D \left| x -y \right| < \delta \implies \left| f(x) - f(y) \right| < \epsilon$.
 \end{compactdesc}
 
 \begin{compactitem}
+    \item gleichmässig stetig $\implies$ stetig $\implies x_0$ stetig
     \item $f$ ist in $x_0$ stetig $\iff \forall (a_n)_{n \in \N}$ in $D: \ \lim_{n \to \infty} a_n = x_0 \implies \lim_{n \to \infty} f(a_n) = f(x_0)$.
         \begin{compactitem}
             \item $f$ ist in $x_0$ stetig $\iff \lim_{n \to \infty} f(a_n) = f( \lim_{n \to \infty} a_n) \ \forall (a_n)_{n \in \N}$ in $D$.
         \end{compactitem}
+    \item $f: [a, b] \to \R$ stetig im Kompakten Intervall $\implies f$ ist in $[a,b]$ gleichmässig stetig.
 \end{compactitem}
 
 \subsection{Rechenregeln}
@@ -88,7 +91,7 @@ Für menge $D$ und $f,g: D \to \R$:
 \end{compactitem}
 
 \subsection{Min-Max Satz}
-Für $f:I = [a, b] \to \R$ stetig auf kompaktem Intervall $I \implies \exists u,v \in [a,b], f(u) \le f(x) \le f(v) \ \forall x in [a,b] \iff f$ ist beschränkt.
+Für $f:I = [a, b] \to \R$ stetig auf kompaktem Intervall $I \implies \exists u,v \in [a,b], f(u) \le f(x) \le f(v) \ \forall x \in [a,b] \iff f$ ist beschränkt.
 
 \begin{inparaitem}
     \item $f(u) = \inf \{f(x) | x \in I\}$

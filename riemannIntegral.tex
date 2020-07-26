@@ -1,0 +1,131 @@
+%! TEX root  = ./main.tex
+
+\section{Riemann Integral}
+\subsection{Partition}
+$P$ von Interval $I$ ist eine endliche Teilmenge $P \subset [a, b], a < b \in \R$ mit $a \in P, b \in P$.
+\begin{inparaitem}
+    \item $\delta_i := x_i - x_{i - 1}$
+    \item $\mathbb{P}(I)$ Menge aller $P \subset I$.
+    \item $\mathbb{P}_\delta(I)$ Menge aller $P \subset I, \max_{1 \le i \le n} \delta_i \le \delta$.
+\end{inparaitem}
+\begin{compactdesc}
+    \item[Feinheit:] $\delta(P) := max_{1 \le i \le n} \delta_i$.
+    \item[Verfeinerung:] $P'$ von $P$ falls $P' \subset P$.
+    \item[Zwischen Punkte:] $\xi_i \in I_i$.
+\end{compactdesc}
+
+\subsection{Riemannsche Summe}
+\begin{compactdesc}
+\item[Riemannsche Summe:] $S(f, P, \xi) := \sum_{i=1}^{n} f(\xi_i) \delta_i$.
+    \item[Untersumme:] $s(f, P) := \sum_{i=1}^{n} \delta_i \cdot \inf_{x_{i-1} \le x \le x_i} f(x)$.
+    \item[Obersumme:] $S(f, P) := \sum_{i=1}^{n} \delta_i \cdot \sup_{x_{i-1} \le x \le x_i} f(x)$.
+        \begin{compactitem}
+            \item $s(f, P_1) \le s(f, P_2) \ \forall P_1, P_2 \subset I$.
+            \item $s(f, p) \le s(f, P') \le S(f, P') \le S(f, P) \ \forall P' \subset P \subset I$.
+        \end{compactitem}
+    \item[Unteres Integral:] $s(f) := \sup_{P \in \mathbb{P}} s(f, P)$.
+    \item[Oberes Integral:] $S(f) := \inf_{P \in \mathbb{P}} S(f, P)$.
+        \begin{compactitem}
+        \item $s(f) \le S(f)$.
+        \end{compactitem}
+\end{compactdesc}
+
+\subsection{Riemann-integrierbar}
+Beschränkte Funktion $f:[a,b] \to R$ ist integrierbar
+\begin{compactitem}
+    \item falls $s(f) = S(f) =: \int_{a}^{b} f(x) \mathrm{d}x$.
+    \item $\iff \forall \epsilon > 0 \ \exists P \in \mathbb{P}, S(f, P) - s(f, P) < \epsilon$.
+    \item $\iff \forall \epsilon > 0 \ \exists \delta > 0: \ \forall P \in \mathbb{P}_\delta(I), S(f, P) - s(f, P) < \epsilon$.
+    \item mit $A:= \int_{a}^{b} f(x) \mathrm{d}x \iff \forall \epsilon > 0 \ \exists \delta > 0: \ \forall P \in \mathbb{P}_\delta(I), \ \xi_i \in [x_{i-1}, x_i], \ \left| A - \sum_{i=1}^{n} f(\xi_i) \delta_i \right| < \epsilon$.
+    \item $\iff \exists \lim_{\delta{P} \to 0} S(f, P, \xi) =: \int_{a}^{b} f(x) \mathrm{d}x$.
+\end{compactitem}
+
+\subsection{Funkionenverknüpfung}
+\begin{compactitem}
+    \item Für $f,g: [a, b] \to \R$ beschränkt und integrierbar, $\lambda \in \R \implies$
+        \begin{inparaitem}
+            \item $f+g$
+            \item $\lambda * f$
+            \item $f \cdot g$
+            \item $|f|$
+            \item $\max(f, g)$
+            \item $\min(f, g)$
+            \item $f / g$
+        \end{inparaitem} integrierbar.
+    \item Für Polynome $P, Q$ und Intervall $[a, b]$, $G$ hat keine Nullstelle $\implies [a, b] \to \R, x \mapsto P(x) / Q(x)$ integrierbar.
+    \item $f: [a, b] \to \R$ stetig $\implies f$ integrierbar.
+    \item $f: [a, b] \to \R$ monoton $\implies f$ integrierbar.
+    \item $a < b < c, f: [a, c] \to \R$ beschränkt mit $f|_{[a,b]}$ und $f|_{[b,c]}$ integrierbar $\implies f$ integrierbar und $\int_{a}^{c} f(x) \mathrm{d}x = \int_{a}^{b} f(x) \mathrm{d}x + \int_{b}^{c} f(x) \mathrm{d}x$.
+    \item
+        \begin{inparaitem}
+            \item $\int_{a}^{a} f(x)\mathrm{d}x = 0$
+            \item $\int_{a}^{b} f(x)\mathrm{d}x = -\int_{b}^{a} \mathrm{d}x$
+        \end{inparaitem}
+    \item Für kompaktes Intervall $I \subset \R$ mit Endpunkten $a,b$, Funktionen $f, g : I \to \R$ beschränkt, integrierbar und $\alpha, \beta \in \R \implies \int_{a}^{b} (\alpha f(x) + \beta g(x)) \mathrm{d}x = \alpha \int_{a}^{b} f(x) \mathrm{d}x + \beta \int_{a}^{b} g(x)\mathrm{d}x$.
+\end{compactitem}
+
+\subsection{Eigenschaften}
+Für $f, g: [a,b] \to \R$ beschränkt integrierbar:
+\begin{compactitem}
+    \item falls $f(x) \le g(x) \ \forall x \in [a,b] \implies \int_{a}^{b} f(x) \mathrm{d}x \le \int_{a}^{b} g(x) \mathrm{d}x$.
+    \item $\left| \int_{a}^{b} f(x) \mathrm{d}x \right| \le \int_{a}^{b} \left| f(x) \right| \mathrm{d}x$.
+    \item $\left| \int_{a}^{b} f(x)g(x) \mathrm{d}x \right| \le \sqrt{\int_{a}^{b} f^2(x) \mathrm{d}x}\sqrt{\int_{a}^{b} g^2(x) \mathrm{d}x}$.
+    \item Für Intervall $I \subset \R$ und $f: I \to \R$ stetig:
+        \begin{compactitem}
+            \item Für $a,b,c \in \R,$ Intervall $[a+c, b+c] \in I \implies \int_{a+c}^{b+c} f(x) \mathrm{d}x = \int_{a}^{b} f(t + c)\mathrm{d}t$.
+            \item Für $a,b,c \in R, c \neq 0,$ Intervall $[a \cdot c, b \cdot c] \in I \implies \int_{a}^{b} f(c \cdot t) \mathrm{d}t = \frac{1}{c} \int_{ac}^{bc} f(x) \mathrm{d}x$.
+        \end{compactitem}
+\end{compactitem}
+
+\subsection{Mittelwertsatz}
+Für $f:[a,b] \to \R$ stetig. $\implies \exists \xi \in [a,b], \int_{a}^{b} f(x) \mathrm{d}x = f(\xi)(b-a)$.
+\begin{compactitem}
+\item für $f,g :[a,b] \to \R, f$ stetig, $g$ beschränkt integrierbar und $g(x) \ge 0 \ \forall x \in [a,b] \implies \exists \xi \in [a,b], \int_{a}^{b} f(x)g(x) \mathrm{d}x = f(\xi) \int_{a}^{b} g(x)\mathrm{d}x$.
+\end{compactitem}
+
+\subsection{Fundamentalsatz der Differentialrechnung}
+Für $f:[a,b] \to \R$ stetig $\implies \exists$ Stammfunktion $F$ von $f$, welche bis auf eine additive Konstante eindeutig ist und $\int_{a}^{b} f(x) \mathrm{d}x = F(b) - F(a)$.
+\begin{compactitem}
+    \item Für $a < b, \ f:[a,b] \to \R$ stetig $\implies F(x) = \int_{a}^{x} f(t) \mathrm{d}t, \ a \le x \le b$ in $[a, b]$ stetig differenzierbar und $F'(x) = f(x) \ \forall x \in [a, b]$.
+    \item Für $a < b, \ f:[a,b] \to \R$ stetig. Die \textbf{Stammfunktion} $F: [a,b] \to \R$ von $f$ ist differenzierbar in $[a,b]$ und $F'=f$.
+\end{compactitem}
+
+\subsection{Partielle Integration}
+Für $a < b,\ f,g: [a,b] \to \R$ stetig differenzierbar $\implies \int_{a}^{b} f(x)g'(x) \mathrm{d}x = f(b)g(b) - f(a)g(a) - \int_{a}^{b} f'(x)g(x) \mathrm{d}x  = f(x)g(x)|_a^b - \int_{a}^{b} f'(x)g(x) \mathrm{d}x$.
+
+\subsection{Substitution}
+Für $a < b, \ \phi: [a, b] \to \R$ stetig differenzierbar, Intervall $I \subset \R$ mit $\phi([a,b]) \subset I$ und $f: I \to \R$ stetig $\implies \int_{\phi(a)}^{\phi(b)} f(x) \mathrm{d}x = \int_{a}^{b} f(\phi(t)) \phi'(t) \mathrm{d}t$.
+\begin{compactitem}
+    \item Für unbestimmtes integral $\int f(x) \mathrm{d}x |_{x=\phi(t)} = \int f(\phi(t))\phi'(t) \mathrm{d}t + c$.
+    \item Integral in der Form $\int_{t_0}^{t_1} f(\phi(t))\phi'(t)\mathrm{d}t \implies$ Anwendung von links nach rechts.
+    \item Integral in der Form $\int_{\alpha}^{\beta} f(x) \mathrm{d}x \implies$ versuch einer Substitution mittels $x = \phi(t)$, wobei $\phi(t_0) = \alpha$ und $\phi(t_1) = \beta$.
+    \item Für best. Integrale gibt es zwei Methoden für den Umgang mit Grenzwerten:
+        \begin{compactitem}
+            \item Substitution von $x=\phi(t)$, Brechung einer Stammfunktion in $x$ und ersetzten der Variable $x$ mit $t$ und Benutzung des Grenze für $t$.
+            \item Änderung der Grenze während der Substitution.
+        \end{compactitem}
+\end{compactitem}
+
+\subsection{Konvergente Reihen}
+\begin{compactitem}
+    \item Für beschränkte, integrierbare Folge von Funktionen $f_n: [a,b] \to \R$ welche gleichmässig gegen Funktion $f:[a,b] \to R$ konvergieren $\implies f$ ist beschränkt integrierbare und $\lim_{n \to \infty} \int_{a}^{b} f_n(x) \mathrm{d}x = \int_{a}^{b} f(x) \mathrm{d}x$.
+    \item Für Folge $f_n [a,b] \to \R$ beschränkter integrierbarer Funktionen, $\sum_{n=0}^{\infty} f_n$ auf $[a,b]$ gleichmässig konvergiert $\implies \sum_{n=0}^{\infty} \int_{a}^{b} f_n(x) \mathrm{d}x = \int_{a}^{b} \left( \sum_{n=0}^{\infty} f_n(x) \right) \mathrm{d}x$.
+    \item Für Potenzreihe $f(x) = \sum_{n=0}^{\infty} c_kx^k$ mit positiven Konvergenzradius $\rho > 0 \implies \forall 0 \le r < \rho$ ist $f$ auf $[-r, r]$ integrierbar und $\forall x \in ]-\rho, \rho[ \ \int_{0}^{x} f(t) \mathrm{d}t = \sum_{n=0}^{\infty} \frac{c_n}{n + 1} x^{n+1}$.
+        \begin{compactitem}
+            \item Potenzreihen können auf ihrem Konvergenzbereich gliedweise differenziert und integriert werden.
+        \end{compactitem}
+\end{compactitem}
+
+\todo{Approximation von Summen}
+
+\subsection{Uneigentliche Integrale}
+Für $f: [a, \infty] \to \R$ beschränkt und $\forall a < b$ auf $[a,b]$ integrierbar. Falls $\exists \lim_{b \to \infty} \int_{a}^{b} f(x) \mathrm{d}x \implies$ Grenzwert ist $\int_{a}^{\infty} f(x) \mathrm{d}x$ und $f$ ist auf $[a, +\infty[$ differenzierbar.
+\begin{compactitem}
+    \item Fall für $f:[-\infty, b] \to \R$ verläuft analog.
+    \item Für $f:[a, \infty[ \to \R$ beschränkt und $\forall a < b$ auf $[a,b]$ integrierbar:
+        \begin{compactitem}
+            \item falls $|f(x)| \le g(x) \ \forall x \ge a$ und $g(x)$ integrierbar auf $[a, +\infty[ \implies f$ auf $[a, \infty[$ integrierbar.
+            \item falls $0 \le g(x) \le f(x)$ und $\int_{a}^{\infty} g(x) \mathrm{d}x$ divergent $\implies \int_{a}^{\infty} f(x) \mathrm{d}x$ divergent.
+        \end{compactitem}
+    \item Für $f: [1, \infty[ \to [0, \infty[$ monoton fallend. Die Reihe $\sum_{n=1}^{\infty} f(n)$ konvergiert $\iff \int_{1}^{\infty} f(x) \mathrm{d}x$ konvergiert und in diesem Fall ist $0 \le \sum_{k=1}^{\infty} f(k) - \int_{1}^{\infty} f(x) \mathrm{d}x \le f(1)$.
+\end{compactitem}
