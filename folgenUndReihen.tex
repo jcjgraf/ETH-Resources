@@ -21,9 +21,10 @@
 $\forall (a_n)_{n \in \N}, (b_n)_{n \in \N}$ konvergent, mit $\lim_{n \to \infty} a_n = a, \lim_{n \to \infty} b_n = b$
 \begin{compactenum}
     \item $(a_n + b_n)_{n \in \N}$ ist konvergent mit $\lim_{n \to \infty} (a_n + b_n) = a + b$
-    \item $(a_n \cdot  b_n)_{n \in \N}$ ist konvergent mit $\lim_{n \to \infty} (a_n \cdot  b_n) = a + b$
+    \item $(a_n \cdot  b_n)_{n \in \N}$ ist konvergent mit $\lim_{n \to \infty} (a_n \cdot  b_n) = a \cdot b$
     \item $\left( \frac{a_n}{b_n} \right) _{n \in \N}$ ist konvergent mit $\lim_{n \to \infty} \left( \frac{a_n}{b_n} \right) = \left( \frac{a}{b} \right)$ if $b_n \neq 0 \ \forall n \in N \wedge  b \neq 0$
     \item Falls $\exists K \ge 1, a_n \le  b_n \ \forall n \ge K \implies a \le b$
+    \item $\lim_{n \to \infty} \sqrt{a_n} = \sqrt{\lim_{n \to \infty} a_n}$
 \end{compactenum}
 
 \subsection{Monotonie}
@@ -43,7 +44,19 @@ $\forall (a_n)_{n \in \N}, (b_n)_{n \in \N}$ konvergent, mit $\lim_{n \to \infty
    \item $(a_n)_{n \in \N}$ monoton fallend und nach unten beschränkt $\implies (a_n)_{n \in \N}$ konvergiert und $\lim_{n \to \infty} a_n = \inf \left\{ a_n : n \ge 1 \right\}$
 \end{compactitem} 
 
-\todo{Bekannte Funktionen und deren Grenzwert}
+\subsection{Funktionen und deren Grenzwert}
+\begin{compactitem}
+    \item $\lim_{n \to \infty} a^n = 0, \ |a| < 1$
+    \item $\lim_{n \to \infty} \sqrt[^n]{a} = \lim_{n \to \infty} \sqrt[^n]{n^a} = 1, \ a > 0$
+    \item $\lim_{n \to \infty} \sqrt[^n]{n} = 1$
+    \item $\lim_{n \to \infty} \frac{\log_an}{n} = 0, \ a > 1$
+    \item $\lim_{n \to \infty} \frac{n^k}{a^n} = 0, \ a > 1$
+    \item $\lim_{n \to \infty} \frac{a^n}{n!} = 0$
+    \item $\lim_{n \to \infty} \sum_{k=1}^{n} \frac{1}{k} = \infty$
+    \item $\lim_{n \to \infty} \left( 1 + \frac{1}{n} \right)^n = e$
+    \item $\lim_{n \to \infty} \left( 1 - \frac{1}{n} \right)^n = \frac{1}{e}$
+    \item $\lim_{n \to \infty} \left( 1 + \frac{x}{n} \right)^n =e^x$
+\end{compactitem}
 
 \subsection{Bernoulli Ungleichung}
 $\left( 1 + x \right)^{n} \ge  1 + n \cdot x \ \forall n \in N, x > -1 $
@@ -118,6 +131,25 @@ Jede beschränkte Folge besitzt eine konvergente Teilfolge.
 \subsection{Folgen in $\R^{d}$ und $\C$}
 \todo{Folgen in $\R^d$ und $\C$}
 
+\subsection{Rezept: Konvergenz und Grenzwert}
+\begin{compactdesc}
+    \item[Geschlossene Formel:]
+        \begin{inparaitem}
+            \item auf Bruch erweitern
+            \item $n$ ausklammern und kürzen
+            \item $n$ in Nenner bekommen
+        \end{inparaitem}
+    \item[Rekursive Definition:]
+        \begin{inparaitem}
+            \item Geschlossene Formel finden
+            \item 
+                \begin{inparaenum}
+                    \item Monotonie zeigen
+                    \item Beschränktheit zeigen
+                    \item Monoton Konvergenzsatz
+                \end{inparaenum}
+        \end{inparaitem}
+\end{compactdesc}
 \section{Reihen}
 \begin{compactdesc}
     \item[Folge der Partialsummen:] $(S_n)_{n \in \N} := a_1 + a_2 + \dots + a_n = \sum_{k=1}^{n} a_k$ einer Folge $(a_n)_{n \in \N}$.

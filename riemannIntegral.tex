@@ -119,13 +119,40 @@ Für $a < b, \ \phi: [a, b] \to \R$ stetig differenzierbar, Intervall $I \subset
 \todo{Approximation von Summen}
 
 \subsection{Uneigentliche Integrale}
-Für $f: [a, \infty] \to \R$ beschränkt und $\forall a < b$ auf $[a,b]$ integrierbar. Falls $\exists \lim_{b \to \infty} \int_{a}^{b} f(x) \mathrm{d}x \implies$ Grenzwert ist $\int_{a}^{\infty} f(x) \mathrm{d}x$ und $f$ ist auf $[a, +\infty[$ differenzierbar.
 \begin{compactitem}
-    \item Fall für $f:[-\infty, b] \to \R$ verläuft analog.
+    \item Für $f: [a, \infty] \to \R$ beschränkt und $\forall a < b$ auf $[a,b]$ integrierbar. Falls $\exists \lim_{b \to \infty} \int_{a}^{b} f(x) \mathrm{d}x \implies$ Grenzwert ist $\int_{a}^{\infty} f(x) \mathrm{d}x$ und $f$ ist auf $[a, +\infty[$ differenzierbar.
+    \begin{compactitem}
+        \item Fall für $f:[-\infty, b] \to \R$ verläuft analog.
+    \end{compactitem}
     \item Für $f:[a, \infty[ \to \R$ beschränkt und $\forall a < b$ auf $[a,b]$ integrierbar:
         \begin{compactitem}
             \item falls $|f(x)| \le g(x) \ \forall x \ge a$ und $g(x)$ integrierbar auf $[a, +\infty[ \implies f$ auf $[a, \infty[$ integrierbar.
             \item falls $0 \le g(x) \le f(x)$ und $\int_{a}^{\infty} g(x) \mathrm{d}x$ divergent $\implies \int_{a}^{\infty} f(x) \mathrm{d}x$ divergent.
         \end{compactitem}
     \item Für $f: [1, \infty[ \to [0, \infty[$ monoton fallend. Die Reihe $\sum_{n=1}^{\infty} f(n)$ konvergiert $\iff \int_{1}^{\infty} f(x) \mathrm{d}x$ konvergiert und in diesem Fall ist $0 \le \sum_{k=1}^{\infty} f(k) - \int_{1}^{\infty} f(x) \mathrm{d}x \le f(1)$.
+    \item Funktion $f$ auf $[a + \epsilon, b]$ beschränkt und integrierbar. Dann ist $f:]a,b] \to \R$ integrierbar falls $\exists \lim_{\epsilon \to 0^+} \int_{a + \epsilon}^{b} f(x) \mathrm{d}x$. In diesem Fall ist der Grenzwert $\int_{a}^{b} f(x) \mathrm{d}x$.
+    \begin{compactitem}
+        \item Fall für $f:[a, b - \epsilon] \to \R$ verläuft analog.
+    \end{compactitem}
+    \item $\int_{-\infty}^{\infty} f(x) \mathrm{d}x := \int_{-\infty}^{c} f(x) \mathrm{d}x + \int_{c}^{\infty} f(x) \mathrm{d}x$.
+    \item Für beidseitig offene Intervalle müssen mir den Grenzwert unabhängig nehmen: $\int_{-\infty}^{\infty} f(x) \mathrm{d}x = \lim_{a \to -\infty} \lim_{b \to +\infty} \int_{a}^{b} f(x) \mathrm{d}x$.
+\end{compactitem}
+
+\subsubsection{Gamma Funktion}
+$\Gamma(s):= \int_{0}^{\infty} e^{-x}x^{s-1} \mathrm{d}x = (n-1)!$.
+
+Folgende Eigenschaften beschreiben die Gamma Funktion einzigartig.
+\begin{inparaenum}
+    \item $\Gamma(1) = 1$
+    \item $\gamma(s + 1) = s \Gamma(s) \ \forall s > 0$
+    \item $\Gamma(s)$ ist logarithmisch konvex: $\Gamma(\lambda x + (1- \lambda)y) \le \Gamma(x)^\lambda \Gamma(y)^{1-\lambda} \ \forall x,y > 0, \ 0 \le \lambda \le 1$
+\end{inparaenum}
+\begin{compactitem}
+    \item $\int_{-\infty}^{\infty} e^{-t^2}\mathrm{d}t = \Gamma(\frac{1}{2})$
+\end{compactitem}
+
+\subsection{Rationale Funktionen}
+Integration von $R(x) = P(x) / Q(x), \ P(x), Q(x)$ sind Polynome:
+\begin{compactitem}
+    \item 
 \end{compactitem}

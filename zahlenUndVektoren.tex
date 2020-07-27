@@ -17,7 +17,7 @@
             \item \textbf{Assoziativität:} $x \cdot \left( y \cdot z \right) = \left( x \cdot y \right) \cdot z \quad \forall x,y,z \in \R$
             \item \textbf{Neurales Element:} $x \cdot  1 = x \quad \forall x \in \R$
             \item \textbf{Inverses Element:} $x \cdot y = 1 \quad \forall  x \in \R \quad \exists y \in \R$
-            \item \textbf{Kommunikativität:} $x \cdot z = z \cdot y \quad \forall x,y \in \R$
+            \item \textbf{Kommunikativität:} $x \cdot y = y \cdot x \quad \forall x,y \in \R$
         \end{compactenum}
     Werden alle Axiome erfüllt $\implies R^* = \R \setminus 0$ ist abelisch.
     \item[Distributivität:] Macht \textbf{Addition} und \textbf{Multiplikation} verträglich
@@ -28,7 +28,7 @@
         \begin{compactenum}[{O}.1]
         \item \textbf{Reflexivität:} $x \le x \quad \forall x \in \R$
         \item \textbf{Transitivität:} $x \le y \wedge y \le z \implies x \le z$
-        \item \textbf{Antisymmetrie/Identität:} $x \le y \wedge y \le x \implies x = z$
+        \item \textbf{Antisymmetrie/Identität:} $x \le y \wedge y \le x \implies x = y$
         \item \textbf{Total:} $x \le y \vee y \le x \quad \forall x,y \in \R$
         \end{compactenum}
     \item[Kompatibilität:] Ordnung ist mit Körperaxiome kompatibel
@@ -100,12 +100,12 @@ Teilmenge von $\R$
     \item[Teilmenge:] $A \subset \R, A \neq \O$
     \item[Obere Schranke:] $c \in R$ von $A$ falls  $\forall a \in A: a \le c$
     \item[Nach Oben Beschränkt:] $A$ hat eine obere Schranke
-    \item[Untere Schranke:] $c \in \R$ von $A$ falls $\forall a in A: a \ge c$
+    \item[Untere Schranke:] $c \in \R$ von $A$ falls $\forall a \in A: a \ge c$
     \item[Nach Unten Beschränkt:] $A$ hat eine untere Schranke
-    \item[Supremum:] $c:= \sup A$ ist die kleinste obere Schranke von $A$
-    \item $\underbrace{\left( \forall a \in  A | a \ge  s \right)}_{s \text{ist eine obere Schranke von } A} \wedge \underbrace{\left( \forall  \epsilon > 0 \ \exists a \in A | a > s - \epsilon \right)}_{s \text{ ist die kleinste obere Schranke von } A}  $
-    \item[Infimum] $c:= \inf A$ ist die grösste untere Schranke von $A$
-    \item $\underbrace{\left( \forall a \in  A | a \ge  l \right)}_{l \text{ist eine untere Schranke von } A} \wedge \underbrace{\left( \forall  \epsilon > 0 \ \exists a \in A | a > l + \epsilon \right)}_{l \text{ ist die grösste untere Schranke von } A}  $
+    \item[Supremum:] $s:= \sup A$ ist kleinste obere Schranke von $A$
+    \item $\underbrace{\left( \forall a \in  A | a \ge  s \right)}_{s \text{ ist eine obere Schranke von } A} \wedge \underbrace{\left( \forall  \epsilon > 0 \ \exists a \in A | a > s - \epsilon \right)}_{s \text{ ist die kleinste obere Schranke von } A}  $
+    \item[Infimum] $l:= \inf A$ ist grösste untere Schranke von $A$
+    \item $\underbrace{\left( \forall a \in  A | a \ge  l \right)}_{l \text{ ist eine untere Schranke von } A} \wedge \underbrace{\left( \forall  \epsilon > 0 \ \exists a \in A | a > l + \epsilon \right)}_{l \text{ ist die grösste untere Schranke von } A}  $
 \end{compactdesc}
 
 \begin{compactitem}
@@ -116,7 +116,7 @@ Teilmenge von $\R$
             \item $A + B := \{a + b | a \in A, b \in B\} $
         \end{compactitem}
     \item $\sup \{A \cup B\} = \max \{\sup A, \sup B\}  $
-    \item $\sup \left( A + B \right) = \sup A + \sup b $
+    \item $\sup \left( A + B \right) = \sup A + \sup B $
     \item $\sup \left( c \cdot A \right) = \begin{cases}
         c \cdot \sup A & \text{if } c > 0\\
         c \cdot \inf A & \text{if } c < 0
@@ -131,9 +131,10 @@ Teilmenge von $\R$
 $A \subset  B \subset  \R$:
 \begin{compactenum}
     \item $B$ nach oben beschränkt $\implies \sup A \le \sup B$
-    \item $B$ nach unten beschränkt $\implies \inf A \le \inf B$
+    \item $B$ nach unten beschränkt $\implies \inf A \ge \inf B$
 \end{compactenum}
 
+$A \subset \R$:
 \begin{compactenum}
     \item $A$ nach oben unbeschränkt $\implies \sup A = +\infty$
     \item $A$ nach unten unbeschränkt $\implies \inf A = -\infty$
@@ -141,8 +142,8 @@ $A \subset  B \subset  \R$:
 
 \subsection{Kardinalität}
 \begin{compactdesc}
-    \item[Gleichmächtig:] $X,Y \subset \R \exists$ Bijektion $f : X \to Y$
-    \item[Endlich:] falls $X = \O$ oder $\exists n \in \N: \{1, 2, \ldots, n\}$ gleichmächtig
+    \item[Gleichmächtig:] $X,Y \subset \R \ \exists$ Bijektion $f : X \to Y$
+    \item[Endlich:] falls $X = \O$ oder $\exists n \in \N: \{1, 2, \ldots, n\}, X$ gleichmächtig
     \item[Abzählbar:] falls $X$ endlich oder gleichmächtig wie $\N$
 \end{compactdesc}
 
