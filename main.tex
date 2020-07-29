@@ -30,27 +30,8 @@
 \newcommand{\todo}[1]{\textcolor{red}{TODO: #1}\PackageWarning{TODO:}{#1!}}
 \usepackage{parskip}
 \usepackage{tcolorbox}
-
-\newtcolorbox{satz}[2][]
-{
-  colframe = red!10,
-  colback  = white,
-  coltitle = red!10!black,  
-  title    = \textbf{#2},
-  #1,
-}
-
-\newtcolorbox{definition}[2][]
-{
-  colframe = blue!10,
-  colback  = white,
-  coltitle = blue!10!black,  
-  title    = \textbf{#2},
-  #1,
-}
-
 \usepackage[small,compact]{titlesec}
-% coloured section headings for easier read
+
 \titleformat{name=\section}[block]
   {\sffamily}
   {}
@@ -76,6 +57,9 @@
   {\subsubcolorsection}
 \newcommand{\subsubcolorsection}[1]{%
 	\colorbox{blue!10}{\parbox[t][0em]{\dimexpr\columnwidth-2\fboxsep}{\thesubsubsection\ #1}}}
+
+% shrink horizontal padding in table
+\setlength{\tabcolsep}{0.3em}
 
 \begin{document}
 \begin{multicols}{3}
