@@ -15,7 +15,7 @@
 Für $f: \mathbb{D} \to \R, x_0$ Häufigkeitspunkt von $D \implies$ folgendes ist $quivalent$:
 \begin{compactenum}
     \item $f$ ist ins $x_0$ differenzierbar.
-    \item $\exists c (=f(x_0)) \in \R$ und $r: \mathbb{D} \to \R$ so dass:
+    \item $\exists c (=f'(x_0)) \in \R$ und $r: \mathbb{D} \to \R$ so dass:
         \begin{compactenum}
             \item $f(x) = f(x_0) + c(x - x_0) + r(x)(x - x_0)$
             \item $r(x_0) = 0$ und $r$ ist stetig in $x_0$.
@@ -45,7 +45,7 @@ Für $\mathbb{D} \subset \R$, Häufigkeitspunkt $x_0 \in \mathbb{D}$ von $\mathb
     \item[$\mathbf{f \cdot g}$:] $(f \cdot g)'(x_0) = f'(x_0)g(x_0) + f(x_0)g'(x_0)$.
     \item[$\mathbf{\frac{f}{g}}$:] $\left( \frac{f}{g} \right)' (x_0) = \frac{f'(x_0)g(x_0) - f(x_0)g'(x_0)}{g(x_0)^2}, \ g(x_0) \neq 0$.
     \item[$\mathbf{g \circ f}$:] Für $f: \mathbb{D} \to E, g: E \to \R, \mathbb{D}, E \subset \R$, Häufigkeitspunkt $x_0 \in D$ und $f$ differenzierbar in $x_0$ und $g$ differenzierbar in $f(x_0)$ dann $(g \circ f)'(x_0) = g'(f(x_0)) \cdot f'(x_0)$
-    \item[$\mathbf{f^{-1}}$:] Für $f:\mathbb{D} \to E$ bijektiv, $x_0$ Häufigkeitspunkt, $f$ in $x_0$ differenzierbar, $f'(x_0) \neq 0$, $f^{-1}$ in $y_0 = f(x_0)$ stetig $\implies y_0$ ist ein Häufungspunkt von $E$ und $f^{-1}$ ist in $y_0$ differenzierbar: $(f^{-1})'(y_0) = \frac{1}{f'(x_0)}$.
+    \item[$\mathbf{f^{-1}}$:] Für $f:\mathbb{D} \to E$ bijektiv, $x_0$ Häufigkeitspunkt, $f$ in $x_0$ differenzierbar, $f'(x_0) \neq 0$, $f^{-1}$ in $y_0 = f(x_0)$ stetig $\implies y_0$ ist ein Häufungspunkt von $E$ und $f^{-1}$ ist in $y_0$ differenzierbar: $(f^{-1})'(y_0) = \frac{1}{f'(x_0)} \implies (f^{-1})'(y_0) = \frac{1}{f'(f^{-1}(y_0))}$.
 \end{compactdesc}
 
 \subsection{Erste Ableitung}
@@ -92,22 +92,31 @@ Für $f,g: [a,b] \to \R$ stetig und in $]a, b[$ differenzierbar:
     \item $\exists M \ge 0, |f'(\xi)| \le M \ \forall \xi \in ]a,b[ \implies \forall x_1, x_2 \in [a,b] : |f(x_1) - f(x_2)| \le M|x_1 - x_2|$.
 \end{compactenum}
 
+\subsubsection{Bekannte Funktionen und deren Ableitung}
+\begin{tabular}{c | c || c | c || c | c}
+    $f(x)$ & $f'(x)$    & $f(x)$ & $f'(x)$    & $f(x)$        & $f'(x)$\\\hline
+    $c$    & $0$        & $cx$          & $c$              & \\\hline
+    $x^s$  & $sx^{s-1}$ & $\frac{1}{x}$ & $-\frac{1}{x^2}$ & $\sqrt{x}$ & $\frac{1}{2\sqrt{x}}$\\\hline
+    $\ln|x|$ & $\frac{1}{x}$ & $\log_a|x|$ & $(\log_ae) \frac{1}{x} = \frac{1}{x \ln a}$&\\\hline
+    $e^{ax}$ & $ae^x$ & $a^{bx}$ & $(\ln a)b a^{b x}$ & \\\hline
+
+\end{tabular}
+
 \subsubsection{Trigonometrische Funktionen}
 \begin{tabular}{c | c | c | c | c}
-    $\sin$       &                                   & $[-\frac{\pi}{2}, \frac{\pi}{2}]$ & $[-1, 1]$                          & $\cos$\\\hline
-    $\arcsin$    &                                   & $[-1, 1]$                         & $[-\frac{\pi}{2}, \frac{\pi}{2}]$  & $\frac{1}{\sqrt{1-y^2} }$\\\hline
-    $\cos$       &                                   & $[0, \pi]$                        & $[-1, 1]$                          & $-\sin$\\\hline
-    $\arccos$    &                                   & $[-1, 1]$                         & $[0, \pi]$                         & $\frac{-1}{\sqrt{1-y^2} }$\\\hline
-    $\tan$       &                                   & $]-\frac{\pi}{2}, \frac{\pi}{2}[$ & $ \R$                              & $\frac{1}{\cos^2x}$\\
-                 &                                   &                                   &                                    & $1 + \tan^x$\\\hline
-    $\arctan$    &                                   & $ \R$                             & $]- \frac{\pi}{2}, \frac{\pi}{2}[$ & $\frac{1}{1+y^2}$\\\hline
-    $\sinh$      & $\frac{e^x - e^{-x}}{e}$          & $\R$                              & $\R$                               & $\cosh$\\\hline
-    $\arcsinh$   &                       & $\R$                              & $\R$                               & $\frac{1}{\sqrt{1+y^2} }$\\\hline
-    $\cosh$      & $\frac{e^x+e^{-x}}{2}$            & $\R$                              & $[1,\infty]$                       & $\sinh$\\\hline
-    $\arccosh$ & & $]1,\infty[$ & $\R$ & $\frac{1}{\sqrt{x^2-1}}$\\\hline
-    $\tanh$      & $\frac{e^x-e^{-x}}{e^x + e^{-x}}$ & $\R$                              & $]-1,1[$                           & $\frac{1}{\cosh^2x}$\\
-                 &                                   &                                   &                                    & $1 - \tanh^2x$\\\hline
-    $\arctanh$ & & $]-1.1[$ & $\R$ & $\frac{1}{1-x^2}$\\\hline
+    \multicolumn{2}{l|}{Funktion} & Domain                      & Range                             & Ableitung\\\hline
+    $\sin$                        &                             & $[-\frac{\pi}{2}, \frac{\pi}{2}]$ & $[-1, 1]$                          & $\cos$\\\hline
+    $\arcsin$                     &                             & $[-1, 1]$                         & $[-\frac{\pi}{2}, \frac{\pi}{2}]$  & $\frac{1}{\sqrt{1-y^2} }$\\\hline
+    $\cos$                        &                             & $[0, \pi]$                        & $[-1, 1]$                          & $-\sin$\\\hline
+    $\arccos$                     &                             & $[-1, 1]$                         & $[0, \pi]$                         & $\frac{-1}{\sqrt{1-y^2} }$\\\hline
+    $\tan$                        &                             & $]-\frac{\pi}{2}, \frac{\pi}{2}[$ & $ \R$                              & $\frac{1}{\cos^2x} = 1 + \tan^x$\\\hline
+    $\arctan$                     &                             & $ \R$                             & $]- \frac{\pi}{2}, \frac{\pi}{2}[$ & $\frac{1}{1+y^2}$\\\hline
+    $\sinh$                       & $\frac{e^x - e^{-x}}{2}$    & $\R$                              & $\R$                               & $\cosh$\\\hline
+    $\arcsinh$                    &                             & $\R$                              & $\R$                               & $\frac{1}{\sqrt{1+y^2} }$\\\hline
+    $\cosh$                       & $\frac{e^x+e^{-x}}{2}$      & $\R$                              & $[1,\infty]$                       & $\sinh$\\\hline
+    $\arccosh$                    &                             & $]1,\infty[$                      & $\R$                               & $\frac{1}{\sqrt{x^2-1}}$\\\hline
+    $\tanh$                       & $\frac{\sinh(x)}{\cosh(x)}$ & $\R$                              & $]-1,1[$                           & $\frac{1}{\cosh^2x} = 1 - \tanh^2x$\\\hline
+    $\arctanh$                    &                             & $]-1, 1[$                         & $\R$                               & $\frac{1}{1-x^2}$\\\hline
 \end{tabular}
 
 \begin{compactenum}
@@ -121,7 +130,7 @@ Für $f, g: [a,b] \to \R$ stetig und in $]a,b[$ differenzierbar. $\exists \xi \i
 \end{compactitem}
 
 \subsubsection{L'Hospital - Bernoulli}
-Für $f,g: ]a,b[ \to \R$ differenzierbar und $g'(x) \neq 0 \ \forall x \in ]a,b[$. Falls $\lim_{x \to b^-} f(x) = 0, \lim_{x \to b^-} g(x) = 0$ und $\lambda := \lim_{x \to b^-} \frac{f'(x)}{g'(x)}$ existiert $\implies \lim_{x \to b^-} \frac{f(x)}{g(x)} = \lim_{x \to b^-} \frac{f'(x)}{g'(x)}$.\newline
+Für $f,g: ]a,b[ \to \R$ differenzierbar und $g'(x) \neq 0 \ \forall x \in ]a,b[$. Falls $\lim_{x \to b^-} f(x) = 0, \lim_{x \to b^-} g(x) = 0$ und $\exists \lambda := \lim_{x \to b^-} \frac{f'(x)}{g'(x)} \implies \lim_{x \to b^-} \frac{f(x)}{g(x)} = \lim_{x \to b^-} \frac{f'(x)}{g'(x)}$.\newline
 Gilt auch für:
 \begin{inparaitem}
     \item $b= +\infty$
@@ -131,7 +140,7 @@ Gilt auch für:
 \end{inparaitem}
 
 \subsection{Konvexität}
-Für Intervall $I \subset \R$ und $f:I \to \R, I$. $f$ ist
+Für Intervall $I \subset \R$ und $f:I \to \R$. $f$ ist:
 \begin{compactdesc}
     \item[Konvex:] auf $I$ falls $\forall x, y \in I, x \le y, \lambda \in [0, 1], \quad f(\lambda x + (1- \lambda)y) \le \lambda f(x) + (1 - \lambda) f(y)$.
     \item[Streng Konvex:] falls $\forall x, y \in I, x < y, \lambda \in ]0, 1[, \quad f(\lambda x + (1 - \lambda)y) < \lambda f(x) + (1 - \lambda)f(y)$.
@@ -167,7 +176,6 @@ Für $f,g: \mathbb{D} \to \R \ n$-mal differenzierbar:
     \item[$\mathbf{f / g}$:] ist $n$-mal diff. falls $g(x) \neq 0 \ \forall x \in \mathbb{D}$.
     \item[$\mathbf{g \circ f}$:] ist $n$-mal diff. und $(g \circ f)^{(n)}(x) =  \sum_{k=1}^{n} A_{n,k}(x)\left( g^{(k)} \circ f \right) (x), A_{n,k}$ ist ein Polynom.
 \end{compactdesc}
-\todo{Ableitung Summary Bedeutung}
 
 \subsection{Potenzreihen}
 \begin{compactitem}
@@ -207,20 +215,36 @@ Stelle $x_0$ wo $f'(x_0)=0$ aber kein Extremum.
         \end{inparaitem}
     \item[Sattelpunkt:]
         \begin{inparaitem}
-            \item $f'(x_0) = 0$ 
+            \item $f'(x_0) = 0$
             \item $f''(x_0) = 0$
         \end{inparaitem}
 \end{compactdesc}
 
-Für $n \ge 0, a < x_0 < b, f:[a,b[ -> \R$ in $]a,b[ \ (n+1)$-mal stetig differenzierbar und $f'(x_0) = f^{(2)}(x_0) = \dots = f^{(n)}(x_0) = 0$. Falls
+Für $n \ge 0, a < x_0 < b, f:[a,b[ \to \R$ in $]a,b[ \ (n+1)$-mal stetig differenzierbar und $f'(x_0) = f^{(2)}(x_0) = \dots = f^{(n)}(x_0) = 0$. Falls
 \begin{compactenum}
     \item $n$ gerade und $x_0$ lokales Extremum $\implies f^{(n+1)}(x_0) = 0$
     \item $n$ ungerade und und $f^{(n+1)}(x_0) > 0 \implies x_0$ ist eine strikte lokale Minimalstelle.
     \item $n$ ungerade und und $f^{(n+1)}(x_0) < 0 \implies x_0$ ist eine strikte lokale Maximalstelle.
 \end{compactenum}
 
-Für $f:[a,b] _> \R$ stetig und in $]a,b[$ zweimal stetig differenzierbar. Für $a < x_0 < b$ und $f'(x_0) = 0$. Falls
+Für $f:[a,b] \to \R$ stetig und in $]a,b[$ zweimal stetig differenzierbar. Für $a < x_0 < b$ und $f'(x_0) = 0$. Falls
 \begin{compactenum}
     \item $f^{(2)}(x_0) > 0 \implies x_0$ ist ein strike lokale Minimalstelle.
     \item $f^{(2)}(x_0) < 0 \implies x_0$ ist ein strike lokale Maximalstelle.
 \end{compactenum}
+
+\subsection{Eigenschaften Ableitung}
+\begin{tabular}{c | c | c | c | l}
+    $f(x)$           & $f'(x)$  & $f''(x)$ & $ f'''(x)$ & Eigenschaft\\\hline
+    $= 0$            &          &          &            & Nullstelle\\\hline
+                     & $> 0$    &          &            & Strikt Monoton Steigend\\\hline
+                     & $< 0$    &          &            & Strikt Monoton Fallend\\\hline
+                     & $= 0$    & $< 0$    &            & Lokales Maximum\\\hline
+                     & $= 0$    & $> 0$    &            & Lokales Minimum\\\hline
+                     & $\neq 0$ & $= 0$    & $> 0$      & Wendepunkt r $\to$ l\\\hline
+                     & $\neq 0$ & $= 0$    & $< 0$      & Wendepunkt l $\to$ r\\\hline
+                     & $= 0$    & $= 0$    & $> 0$      & Sattelpunkt r $\to$ l\\\hline
+                     & $= 0$    & $= 0$    & $< 0$      & Sattelpunkt l $\to$ r\\\hline
+                     &          & $> 0$    &            & Streng Konvex\\\hline
+                     &          & $< 0$    &            & Streng Konkav\\\hline
+\end{tabular}

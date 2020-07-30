@@ -2,16 +2,17 @@
 
 \section{Stetige Funktionen}
 \subsection{Reellwertige Funktionen}
-Für beliebige Menge $D$ ist $\R^D = \{f : D \to \R | f \text{ eine Abbildung}\}$ die Menge alle reellwertigen Funktionen die auf $D$ definiert sind.\\
-Addition und skalare Multiplikation bilden mit $\R^D$ einen Vektorraum. Für $f, g \in \R^D, x \in D, \alpha \in \R$:
+Für beliebige Menge $D$ ist $\R^D = \{f : D \to \R | f \text{ eine Abbildung}\}$ die Menge alle reellwertigen Funktionen die auf $D$ definiert sind.\\*
+Addition und skalare Multiplikation bilden mit $\R^D$ einen Vektorraum.\\*
+Für $f, g \in \R^D, x \in D, \alpha \in \R$:
 \begin{compactdesc}
     \item[Addition:] $(f + g)(x) = f(x) + g(x)$
     \item[Skalare Multiplikation:] $\left( \alpha \cdot f \right) (x) = \alpha \cdot f(x)$
     \item[Nullfunktion:] Entspricht dem Nullvektor in $\R^D$ und $\zeta(x) = 0$
-    \item[Constate Funkton:]  Entspricht dem Einheitsvektor in $\R^D$ und $\zeta(x) = 1$
+    \item[Konstante Funktion:]  Entspricht dem Einheitsvektor in $\R^D$ und $\zeta(x) = 1$
     \item[Produkt zweier Funktionen:] $(f \cdot g)(x) := f(x) \cdot g(x)$
     \item[Quotient:] $\frac{f}{g} := D' \to \R, x \mapsto \frac{f(x)}{g(x)}, \ D'= \{x \in D | g(x) \neq 0\} $
-    \item[Komposition von Funktionen:] $f: D \to \R$ und $f: E \to \R, f(D) \subset E$ dann $g \circ f: D \to \R, x \mapsto g\left( f(x) \right)$
+    \item[Komposition von Funktionen:] $f: D \to \R$ und $g: E \to \R, f(D) \subset E$ dann $g \circ f: D \to \R, x \mapsto g\left( f(x) \right)$
 \end{compactdesc}
 
 \subsection{Beschränktheit}
@@ -22,14 +23,20 @@ $f : D \to \R$ ist:
     \item[beschränkt:] falls $f(D) \subset \R$ beschränkt ist.
 \end{compactdesc}
 
+\subsection{Kompakt Intervall}
+Ist ein Intervall $I \subset \R$ falls $I = [a, b], a \le b$.
+\begin{compactitem}
+    \item Für $(x_n)_{n \in \N}, \lim_{n \to \infty}x_n \in \R, a \le b$. Falls $\{x_n | n \ge 1\} \subset [a, b] \implies \lim_{n \to \infty}x_n \in [a, b]$.
+\end{compactitem}
+
 \subsection{Monotonie}
 $f : D \to \R, D \subset R, \ \forall x,y \in D$ ist:
 \begin{compactdesc}
     \item[monoton wachsend:] falls $x \le y \implies f(x) \le f(y)$.
-    \item[streng monoton wachsend:] falls $x < y \implies f(x) < f(y)$.
+    \item[streng mono. wachs.:] falls $x < y \implies f(x) < f(y)$.
     \item[monoton fallend:] falls $x \ge y \implies f(x) \ge f(y)$.
-    \item[streng monoton fallend:] falls $x > y \implies f(x) > f(y)$.
-    \item[monoton:] falls monoton wachsend oder monoton fallend.
+    \item[streng mon. fallend:] falls $x > y \implies f(x) > f(y)$.
+    \item[monoton:] falls mono. wachsend oder mono. fallend.
     \item[streng monoton:] falls streng monoton wachsend oder streng monoton fallend.
 \end{compactdesc}
 \todo{Show monotony}
@@ -37,13 +44,13 @@ $f : D \to \R, D \subset R, \ \forall x,y \in D$ ist:
 \subsection{Stetigkeit}
 \begin{compactdesc}
     \item[$\mathbf{x_0}$ stetig:] $f: D \to \R$ für $D \subset \R, x_o \in D$  falls  $\forall x \in D, \ \forall \epsilon > 0 \ \exists \delta > 0: \left| x - x_0 \right| < \delta \implies \left| f(x) - f_0(x) \right| < \epsilon$.
-    \item[stetig:] $f: D \to \R$ falls sie in jedem Punkt von $D \ x_0$ stetig ist.
+    \item[stetig:] $f: D \to \R$ falls sie $\forall x_0 \in D\ x_0$ stetig ist.
     \item[gleichmässig stetig:] $f:D \to \R$ falls $\forall \epsilon > 0 \ \exists \delta > 0: \ \forall x, y \in D \left| x -y \right| < \delta \implies \left| f(x) - f(y) \right| < \epsilon$.
 \end{compactdesc}
 
 \begin{compactitem}
     \item gleichmässig stetig $\implies$ stetig $\implies x_0$ stetig
-    \item $f$ ist in $x_0$ stetig $\iff \forall (a_n)_{n \in \N}$ in $D: \ \lim_{n \to \infty} a_n = x_0 \implies \lim_{n \to \infty} f(a_n) = f(x_0)$.
+    \item $f$ ist in $x_0$ stetig $\iff (\forall (a_n)_{n \in \N}$ in $D: \ \lim_{n \to \infty} a_n = x_0 \implies \lim_{n \to \infty} f(a_n) = f(x_0))$.
         \begin{compactitem}
             \item $f$ ist in $x_0$ stetig $\iff \lim_{n \to \infty} f(a_n) = f( \lim_{n \to \infty} a_n) \ \forall (a_n)_{n \in \N}$ in $D$.
         \end{compactitem}
@@ -56,7 +63,7 @@ Für $x_0 \in D \subset \R, \lambda \in \R, f: D \to \R, g: D \to \R$ und $f$ un
     \item $f + g, \lambda \cdot f, f \cdot g$ stetig in $x_0$.
     \item $\frac{f}{g}: D' \to \R, x \mapsto \frac{f(x)}{g(x)}, \ D' = \{x \in D | g(x) \neq 0\}, g(x_0) \neq 0$ ist stetig in $x_0$.
 \end{compactenum}
-Für $D_1, d_2 \subset \R, f: D_1 \to D_2, g: D_2 \to \R, x_0 \in D_1$. Falls $f$ in $x_0$ und $g$ in $f(x_0)$ stetig $\implies g \circ f : D_1 \to \R$ ist in $x_0$ stetig.
+Für $D_1, D_2 \subset \R, f: D_1 \to D_2, g: D_2 \to \R, x_0 \in D_1$. Falls $f$ in $x_0$ und $g$ in $f(x_0)$ stetig $\implies g \circ f : D_1 \to \R$ ist in $x_0$ stetig.
 \begin{compactitem}
     \item Falls $f$ auf $D_1$ und $g$ auf $D_2$ stetig $\implies g \circ f$ auf $D_1$ stetig.
 \end{compactitem}
@@ -80,7 +87,7 @@ Für Intervall $I \subset R$, stetige Funktion $f: I \to \R$ und $a, b \in I \im
 \end{compactitem}
 
 \subsection{Min, Max, Abs}
-Für menge $D$ und $f,g: D \to \R$:
+Für Menge $D$ und $f,g: D \to \R$:
 \begin{compactdesc}
     \item[Abs:] $|f|(x) := |f(x)|, \ \forall x \in D$
     \item[Max:] $\max(f,g)(x) := \max(f(x), g(x)), \ \forall x \in D$
@@ -97,18 +104,12 @@ Für $f:I = [a, b] \to \R$ stetig auf kompaktem Intervall $I \implies \exists u,
     \item $f(u) = \inf \{f(x) | x \in I\}$
     \item $f(v) = \sup \{f(x) | x \in I\}$.
 \end{inparaitem}
-\begin{compactdesc}
-    \item[Kompakt Intervall:] Ist ein Intervall $I \subset \R$ falls $I = [a, b], a \le b$.
-        \begin{compactitem}
-        \item Für $(x_n)_{n \in \N}, \lim_{n \to \infty}x_n \in \R, a \le b$. Falls $\{x_n | n \ge 1\} \subset [a, b] \implies \lim_{n \to \infty}x_n \in [a, b]$.
-        \end{compactitem}
-\end{compactdesc}
 
 \subsection{Umkehrabbildung}
 Für $I \subset \R, f: I \to \R$ stetig und streng monoton $\implies J:=f(I) \subset \R, f^{-1}:  J \to I$ stetig und streng monoton.
 
 \subsection{Reelle Exponentialfunktion}
-$\exp: R \to ]o, +\infty[$ ist streng monoton wachsend, stetig und surjektiv.
+$\exp: R \to ]0, +\infty[$ ist streng monoton wachsend, stetig und subjektiv ($\implies$ bijektiv).
 \begin{compactitem}
     \item $\exp(x) = 1 + x + \frac{x^2}{2!} + \dots \ge 1$
     \item $\exp(x + y ) = \exp(x) \cdot \exp(y) \ \forall x,y \in \C$.
@@ -120,10 +121,10 @@ $\exp: R \to ]o, +\infty[$ ist streng monoton wachsend, stetig und surjektiv.
 \end{compactitem}
 
 \subsection{Natürliche Logarithmus}
-Die Umkehrabbildung von $\exp$ ist $\ln: ]o, +\infty[ \to \R$ streng monoton wachsend, stetig und bijektiv.
+Die Umkehrabbildung von $\exp$ ist $\ln: ]0, +\infty[ \to \R$ streng monoton wachsend, stetig und bijektiv.
 \begin{compactitem}
     \item $\ln(1) = 0$
-    \item $\ln(a \cdot b) = \ln(a) + \ln(b) \ \forall a,b \in ]o, +\infty[$
+    \item $\ln(a \cdot b) = \ln(a) + \ln(b) \ \forall a,b \in ]0, +\infty[$
 \end{compactitem}
 
 \subsection{Allgemeine Potenzen}
@@ -138,7 +139,7 @@ Für $x > 0, a \in \R \ x^a := \exp(a \ln(x))$
 
 \subsection{Funktionenfolgen}
 \begin{compactdesc}
-    \item[Funktionenfolge:] $\left( f_n \right)_{n \ge 0}$ ist eine Abbildung $\N \to \R^\mathbb{D} = \{f_n = \mathbb{D} \to R\}, n \mapsto f(n) = f_n$.
+    \item[Funktionenfolge:] $\left( f_n \right)_{n \ge 0}$ ist eine Abbildung $\N \to \R^\mathbb{D} = \{f_n : \mathbb{D} \to R\}, n \mapsto f(n) = f_n$.
     \begin{compactitem}
         \item $\forall x \in \mathbb{D} \ \exists$ Folge $\left( f_n(x) \right)_{n \ge 0}$ in $\R$.
     \end{compactitem}
@@ -163,7 +164,7 @@ Für $x > 0, a \in \R \ x^a := \exp(a \ln(x))$
 \subsubsection{Reihe von Funktionenfolgen}
 $\sum_{k=0}^{\infty} f_k(x)$
 \begin{compactdesc}
-    \item[Konvergiert gleichmässig:] in $\mathbb{D}$ falls die Funktionenfolge $S_n(x) := \sum_{k=0}^{\infty} f_k(x)$ gleichmässig konvergiert.
+    \item[Konvergiert gleichmässig:] in $\mathbb{D}$ falls die Funktionenfolge $S_n(x) := \sum_{k=0}^{n} f_k(x)$ gleichmässig konvergiert.
     \item Für $\mathbb{D} \subset \R$, Folge stetiger Funktionen $f_n:\mathbb{D} \to \R$. Falls $\left| f_n(x) \right| \le c_n \ \forall x \in D$ und $\sum_{n=0}^{\infty} c_n$ konvergent $\implies \sum_{n=0}^{\infty} f_n(x)$ gleichmässig konvergent in $\mathbb{D}$ und Grenzwert $f(x) := \sum_{n=0}^{\infty} f_n(x)$ ist in $\mathbb{D}$ stetig.
 \end{compactdesc}
 
@@ -234,7 +235,7 @@ $\sum_{k=0}^{\infty} f_k(x)$
     \item $x \ge \sin(x) \ge x - \frac{x^3}{3!} \ \forall 0 \le x \le \sqrt{6}$
 \end{compactitem}
 
-$\forall x \in \R$
+$\forall x \in \R$:
 \begin{compactenum}
     \item
         \begin{inparaitem}
@@ -246,6 +247,9 @@ $\forall x \in \R$
             \item $\sin(x + \frac{\pi}{2}) = \cos(x)$
             \item $\cos(x + \frac{\pi}{2}) = - \sin(x)$
         \end{inparaitem}
+        \begin{compactenum}
+            \item $\sin(\frac{\pi}{2} - x) = \cos(x)$
+        \end{compactenum}
     \item
         \begin{inparaitem}
             \item $\sin(x + \pi) = - \sin(x)$
@@ -256,6 +260,9 @@ $\forall x \in \R$
             \item $\sin(x + 2 \pi) = \sin(x)$
             \item $\cos(x + 2 \pi) = \cos(x)$
         \end{inparaitem}
+        \begin{compactenum}
+            \item $\sin(\pi - x) = \sin(x)$
+        \end{compactenum}
     \item Nullstellen von:
         \begin{compactitem}
             \item $\sin(x) = \{k \cdot \pi | k \in \Z\}$
@@ -278,15 +285,15 @@ $\forall x \in \R$
 
 
 \subsection{Grenzwert von Funktionen}
-Function $f: \mathbb{D} \to \R, \mathbb{D} \subset \R$. Grenzwert 
+Function $f: \mathbb{D} \to \R, \mathbb{D} \subset \R$:
 \begin{compactdesc}
     \item[Häufigkeitspunkt:] von $\mathbb{D}$ falls $\forall \delta > 0 (]x_0 - \delta, x_0 + \delta[ \setminus \{x_0\} ) \cap \mathbb{D} \neq \O$.
-    \item[Grenzwert:] $A \in \R$ von $f(x)$ für $x \to x_0$ und Funktion $f:\mathbb{D} \to \R$ und Häufigkeitspunkt $x_0 \in \R$ von $\mathbb{D}$. Wird mit $\lim_{n \to \infty} f(x) = A$ bezeichnet falls $\forall \epsilon > 0 \ \exists \delta > 0$ so dass $\forall x \in \mathbb{D} \cap (]x_0 - \delta, x_0 + \delta[ \setminus \{x_0\}) : |f(x) - A| < \epsilon$.
+    \item[Grenzwert:] $A \in \R$ von $f(x)$ für $x \to x_0$ und Häufigkeitspunkt $x_0 \in \R$ von $\mathbb{D}$. Wird mit $\lim_{n \to \infty} f(x) = A$ bezeichnet falls $\forall \epsilon > 0 \ \exists \delta > 0$ so dass $\forall x \in \mathbb{D} \cap (]x_0 - \delta, x_0 + \delta[ \setminus \{x_0\}) : |f(x) - A| < \epsilon$.
 \end{compactdesc}
 \begin{compactitem}
     \item $f$ muss am Grenzwert $x_0$ nicht zwingend definiert sein.
-    \item Für $f$ und Häufigkeitspunkt $x_0$. $\lim_{n \to \infty}f(x) = A \iff \forall (a_n)_{n \ge 1} \in \mathbb{D} \setminus \{x_0\}$ mit $\lim_{n \to \infty} a_n = x_0$ folgt $\lim_{n \to \infty}f(a_n) = A$.
-    \item $f$ ist stetig in $x_0 \in \mathbb{D} \iff \lim_{n \to \infty} f(x) = f(x_0)$.
+    \item Für $f$ und Häufigkeitspunkt $x_0$. $\lim_{n \to x_0}f(x) = A \iff \forall (a_n)_{n \ge 1} \in \mathbb{D} \setminus \{x_0\}$ mit $\lim_{n \to \infty} a_n = x_0$ folgt $\lim_{n \to \infty}f(a_n) = A$.
+    \item $f$ ist stetig in $x_0 \in \mathbb{D} \iff \lim_{n \to x_0} f(x) = f(x_0)$.
     \item Für $f,g: \mathbb{D} \to \R$ und falls $\exists \lim_{n \to \infty} f(x)$ und $\lim_{n \to \infty} g(x) \implies$:
         \begin{inparaitem}
             \item $\lim_{n \to \infty} (f + g)(x) = \lim_{n \to \infty} f(x) + \lim_{n \to \infty} g(x)$
@@ -300,11 +307,11 @@ Function $f: \mathbb{D} \to \R, \mathbb{D} \subset \R$. Grenzwert
 \begin{compactdesc}
     \item[Rechtsseitiger Grenzwert:] $\lim_{x \to x_0^+}$ falls der Grenzwert der eingeschränkten Funktion $f|_{\mathbb{D} \cap [x_0, +\infty[}$ für $x \to x_0$ existiert. Wobei $f:\mathbb{D} \to \R$, $x_0 \in \R$ ein Häufigkeitspunkt von $\mathbb{D} \cap ]x_0, + \infty[$.
     \item[Linksseitiger Grenzwert:] $\lim_{x \to x_0^-}$ falls der Grenzwert der eingeschränkten Funktion $f|_{\mathbb{D} \cap [-\infty, x_0[}$ für $x \to x_0$ existiert. Wobei $f:\mathbb{D} \to \R$, $x_0 \in \R$ ein Häufigkeitspunkt von $\mathbb{D} \cap ]x_0, + \infty[$.
-    \item[Erweitert Rechts:] $\lim_{x \to x_0^+} f(x) = +\infty$ falls $\exists \epsilon > 0, \ \exists \delta > 0, \ \forall x \in ]x_0, x_0 + \delta[ \cap : f(x) > \frac{1}{\epsilon}$.
+    \item[Erweitert Rechts:] $\lim_{x \to x_0^+} f(x) = +\infty$ falls $\exists \epsilon > 0, \ \exists \delta > 0, \ \forall x \in ]x_0, x_0 + \delta[ \cap \mathbb{D} : f(x) > \frac{1}{\epsilon}$.
         \begin{compactitem}
         \item Alternativ: $\forall N > 0, \ \exists \delta > 0 \ \forall x \in D \cap ]x_0, x_0 + \delta[ : f(x) > N$.
         \end{compactitem}
-    \item[Erweitert Links:] $\lim_{x \to x_0^-} f(x) = -\infty$ falls $\exists \epsilon > 0, \ \exists \delta > 0, \ \forall x \in ]x_0, x_0 + \delta[ \cap : f(x) < -\frac{1}{\epsilon}$.
+    \item[Erweitert Links:] $\lim_{x \to x_0^-} f(x) = -\infty$ falls $\exists \epsilon > 0, \ \exists \delta > 0, \ \forall x \in ]x_0, x_0 + \delta[ \cap \mathbb{D} : f(x) < -\frac{1}{\epsilon}$.
         \begin{compactitem}
         \item Alternativ: $\forall N > 0, \ \exists \delta > 0 \ \forall x \in D \cap ]x_0, x_0 + \delta[ : f(x) < -N$.
         \end{compactitem}
