@@ -203,7 +203,7 @@ Für $f:[a,b] \to \R$ stetig und in $]a,b[ (n + 1)$-mal differenzierbar. $\foral
 \end{inparaitem}
 
 \subsubsection{Taylor Approximation}
-Für $f:[c,d] _> \R$ stetig und in $]c, d[ \ (n+1)$-mal differenzierbar. Für $c < a < d$, $\forall x \in [c, d] \ \exists \xi$ zwischen $x$ und $a: f(x) = \sum_{k=0}^{n} \frac{f^{(k)}(a)}{k!}(x-a)^k + \frac{f^{(n+1)}(\xi)}{(n+1)!}(x-a)^{n+1}$.
+Für $f:[c,d] \to \R$ stetig und in $]c, d[ \ (n+1)$-mal differenzierbar. Für $c < a < d$, $\forall x \in [c, d] \ \exists \xi$ zwischen $x$ und $a$ (oder $a$ und $x$)$: f(x) = \sum_{k=0}^{n} \frac{f^{(k)}(a)}{k!}(x-a)^k + \frac{f^{(n+1)}(\xi)}{(n+1)!}(x-a)^{n+1}$.
 
 \subsection{Sattelpunkt und Wendepunkt}
 Stelle $x_0$ wo $f'(x_0)=0$ aber kein Extremum.
@@ -220,7 +220,8 @@ Stelle $x_0$ wo $f'(x_0)=0$ aber kein Extremum.
         \end{inparaitem}
 \end{compactdesc}
 
-Für $n \ge 0, a < x_0 < b, f:[a,b[ \to \R$ in $]a,b[ \ (n+1)$-mal stetig differenzierbar und $f'(x_0) = f^{(2)}(x_0) = \dots = f^{(n)}(x_0) = 0$. Falls
+\subsection{Extremaltstellen}
+Für $n \ge 0, a < x_0 < b, f:[a,b] \to \R$ in $]a,b[ \ (n+1)$-mal stetig differenzierbar und $f'(x_0) = f^{(2)}(x_0) = \dots = f^{(n)}(x_0) = 0$. Falls
 \begin{compactenum}
     \item $n$ gerade und $x_0$ lokales Extremum $\implies f^{(n+1)}(x_0) = 0$
     \item $n$ ungerade und und $f^{(n+1)}(x_0) > 0 \implies x_0$ ist eine strikte lokale Minimalstelle.

@@ -10,7 +10,7 @@ $P$ von Interval $I$ ist eine endliche Teilmenge $P \subset [a, b], a < b \in \R
 \end{inparaitem}
 \begin{compactdesc}
     \item[Feinheit:] $\delta(P) := max_{1 \le i \le n} \delta_i$.
-    \item[Verfeinerung:] $P'$ von $P$ falls $P' \subset P$.
+    \item[Verfeinerung:] $P'$ von $P$ falls $P \subset P'$.
     \item[Zwischen Punkte:] $\xi_i \in I_i$.
 \end{compactdesc}
 
@@ -20,39 +20,28 @@ $P$ von Interval $I$ ist eine endliche Teilmenge $P \subset [a, b], a < b \in \R
     \item[Untersumme:] $s(f, P) := \sum_{i=1}^{n} \delta_i \cdot \inf_{x_{i-1} \le x \le x_i} f(x)$.
     \item[Obersumme:] $S(f, P) := \sum_{i=1}^{n} \delta_i \cdot \sup_{x_{i-1} \le x \le x_i} f(x)$.
         \begin{compactitem}
-            \item $s(f, P_1) \le s(f, P_2) \ \forall P_1, P_2 \subset I$.
-            \item $s(f, p) \le s(f, P') \le S(f, P') \le S(f, P) \ \forall P' \subset P \subset I$.
+            \item $s(f, P_1) \le S(f, P_2) \ \forall P_1, P_2 \subset I$.
+            \item $s(f, P) \le s(f, P') \le S(f, P') \le S(f, P) \ \forall P' \subset P \subset I$.
         \end{compactitem}
-    \item[Unteres Integral:] $s(f) := \sup_{P \in \mathbb{P}} s(f, P)$.
-    \item[Oberes Integral:] $S(f) := \inf_{P \in \mathbb{P}} S(f, P)$.
+    \item[Unteres Integral:] $s(f) := \sup_{P \in \mathbb{P}(I)} s(f, P)$.
+    \item[Oberes Integral:] $S(f) := \inf_{P \in \mathbb{P}(I)} S(f, P)$.
         \begin{compactitem}
         \item $s(f) \le S(f)$.
         \end{compactitem}
 \end{compactdesc}
 
-\subsection{Riemann-integrierbar}
+\subsection{Riemann-Integrierbar}
 Beschränkte Funktion $f:[a,b] \to R$ ist integrierbar
 \begin{compactitem}
     \item falls $s(f) = S(f) =: \int_{a}^{b} f(x) \mathrm{d}x$.
-    \item $\iff \forall \epsilon > 0 \ \exists P \in \mathbb{P}, S(f, P) - s(f, P) < \epsilon$.
+    \item $\iff \forall \epsilon > 0 \ \exists P \in \mathbb{P}(I), S(f, P) - s(f, P) < \epsilon$.
     \item $\iff \forall \epsilon > 0 \ \exists \delta > 0: \ \forall P \in \mathbb{P}_\delta(I), S(f, P) - s(f, P) < \epsilon$.
     \item mit $A:= \int_{a}^{b} f(x) \mathrm{d}x \iff \forall \epsilon > 0 \ \exists \delta > 0: \ \forall P \in \mathbb{P}_\delta(I), \ \xi_i \in [x_{i-1}, x_i], \ \left| A - \sum_{i=1}^{n} f(\xi_i) \delta_i \right| < \epsilon$.
     \item $\iff \exists \lim_{\delta{P} \to 0} S(f, P, \xi) =: \int_{a}^{b} f(x) \mathrm{d}x$.
 \end{compactitem}
 
-\subsection{Funkionenverknüpfung}
+Weitere Kriterien:
 \begin{compactitem}
-    \item Für $f,g: [a, b] \to \R$ beschränkt und integrierbar, $\lambda \in \R \implies$
-        \begin{inparaitem}
-            \item $f+g$
-            \item $\lambda * f$
-            \item $f \cdot g$
-            \item $|f|$
-            \item $\max(f, g)$
-            \item $\min(f, g)$
-            \item $f / g$
-        \end{inparaitem} integrierbar.
-    \item Für Polynome $P, Q$ und Intervall $[a, b]$, $G$ hat keine Nullstelle $\implies [a, b] \to \R, x \mapsto P(x) / Q(x)$ integrierbar.
     \item $f: [a, b] \to \R$ stetig $\implies f$ integrierbar.
     \item $f: [a, b] \to \R$ monoton $\implies f$ integrierbar.
     \item $a < b < c, f: [a, c] \to \R$ beschränkt mit $f|_{[a,b]}$ und $f|_{[b,c]}$ integrierbar $\implies f$ integrierbar und $\int_{a}^{c} f(x) \mathrm{d}x = \int_{a}^{b} f(x) \mathrm{d}x + \int_{b}^{c} f(x) \mathrm{d}x$.
@@ -62,6 +51,22 @@ Beschränkte Funktion $f:[a,b] \to R$ ist integrierbar
             \item $\int_{a}^{b} f(x)\mathrm{d}x = -\int_{b}^{a} \mathrm{d}x$
         \end{inparaitem}
     \item Für kompaktes Intervall $I \subset \R$ mit Endpunkten $a,b$, Funktionen $f, g : I \to \R$ beschränkt, integrierbar und $\alpha, \beta \in \R \implies \int_{a}^{b} (\alpha f(x) + \beta g(x)) \mathrm{d}x = \alpha \int_{a}^{b} f(x) \mathrm{d}x + \beta \int_{a}^{b} g(x)\mathrm{d}x$.
+\end{compactitem}
+
+\subsection{Funktionenverknüpfung}
+\begin{compactitem}
+    \item Für $f,g: [a, b] \to \R$ beschränkt und integrierbar, $\lambda \in \R \implies$
+        \begin{inparaitem}
+            \item $f+g$
+            \item $\lambda * f$
+            \item $f \cdot g$
+            \item $|f|$
+            \item $\max(f, g)$
+            \item $\min(f, g)$
+            \item $f / g, |g(x)| > 0$
+            \item $g(f(x))$
+        \end{inparaitem} integrierbar.
+    \item Für Polynome $P, Q$ und Intervall $[a, b]$, $Q$ hat keine Nullstelle $\implies R: [a, b] \to \R, x \mapsto P(x) / Q(x)$ integrierbar.
 \end{compactitem}
 
 \subsection{Eigenschaften}
@@ -116,11 +121,14 @@ Für $a < b, \ \phi: [a, b] \to \R$ stetig differenzierbar, Intervall $I \subset
         \end{compactitem}
 \end{compactitem}
 
+\begin{compactitem}
+\item $n! \approx (\frac{n}{e})^n$
+\end{compactitem}
 \todo{Approximation von Summen}
 
 \subsection{Uneigentliche Integrale}
 \begin{compactitem}
-    \item Für $f: [a, \infty] \to \R$ beschränkt und $\forall a < b$ auf $[a,b]$ integrierbar. Falls $\exists \lim_{b \to \infty} \int_{a}^{b} f(x) \mathrm{d}x \implies$ Grenzwert ist $\int_{a}^{\infty} f(x) \mathrm{d}x$ und $f$ ist auf $[a, +\infty[$ differenzierbar.
+    \item Für $f: [a, \infty[ \to \R$ beschränkt und $\forall a < b$ auf $[a,b]$ integrierbar. Falls $\exists \lim_{b \to \infty} \int_{a}^{b} f(x) \mathrm{d}x \implies$ Grenzwert ist $\int_{a}^{\infty} f(x) \mathrm{d}x$ und $f$ ist auf $[a, +\infty[$ differenzierbar.
     \begin{compactitem}
         \item Fall für $f:[-\infty, b] \to \R$ verläuft analog.
     \end{compactitem}
@@ -139,9 +147,14 @@ Für $a < b, \ \phi: [a, b] \to \R$ stetig differenzierbar, Intervall $I \subset
 \end{compactitem}
 
 \subsubsection{Gamma Funktion}
-$\Gamma(s):= \int_{0}^{\infty} e^{-x}x^{s-1} \mathrm{d}x = (n-1)!$.
+\begin{compactitem}
+    \item $\Gamma: ]0, \infty[ \to ]0, \infty[$
+    \item $\Gamma(s) := \mapsto \int_{0}^{\infty} e^{-x}x^{n-1} \mathrm{d}x = (n-1)!$
+    \item $\Gamma(s) = \lim_{n \to \infty} \frac{n!n^s}{s(s+1)\dots (s+n)}$.
+    \item $\int_{-\infty}^{\infty} e^{-t^2}\mathrm{d}x = \Gamma(\frac{1}{2})$.
+\end{compactitem}
 
-Folgende Eigenschaften beschreiben die Gamma Funktion einzigartig.
+Folgende Eigenschaften beschreiben die Gamma Funktion eindeutig:
 \begin{inparaenum}
     \item $\Gamma(1) = 1$
     \item $\gamma(s + 1) = s \Gamma(s) \ \forall s > 0$
@@ -152,7 +165,36 @@ Folgende Eigenschaften beschreiben die Gamma Funktion einzigartig.
 \end{compactitem}
 
 \subsection{Rationale Funktionen}
-Integration von $R(x) = P(x) / Q(x), \ P(x), Q(x)$ sind Polynome:
+$R(x) = P(x) / Q(x), \ P(x), Q(x)$ sind Polynome, $x \mapsto \frac{P(x)}{Q(x)}$.
 \begin{compactitem}
     \item
 \end{compactitem}
+
+\subsubsection{Partialbruchzerlegung}
+$\int R(x) \mathrm{d}x, R(x) = \frac{P(x)}{Q(x)}$
+\begin{compactenum}
+    \item \textbf{Reduktion}
+        \begin{compactitem}
+            \item Falls $\text{grad}(P) \ge \text{grad}(Q)$ führe Polynomdivision durch: $P(x) = S(x)Q(X) + \hat{P}(x)$
+            \item $\implies \frac{P(x)}{Q(x)} = S(x) + \frac{\hat{P}(x)}{Q(x)}$
+        \end{compactitem}
+    \item \textbf{}
+\end{compactenum}
+
+\subsection{Gerade und Ungerade Funktionen}
+\begin{compactdesc}
+    \item[Gerade Funktionen:] $f(x) = f(-x)$
+        \begin{compactitem}
+            \item $f$ gerade $\implies f'$ ungerade.
+            \item $f$ gerade, integrierbar $\implies \int_{-A}^{A} f(x) \mathrm{d}x = 0$.
+            \item $f, g$ gerade $\implies f \cdot g$ gerade.
+            \item $f$ gerade, $g$ ungerade $\implies f \cdot g$ ungerade.
+        \end{compactitem}
+    \item[Ungarade Funktionen:] $-f(x) = f(-x)$
+        \begin{compactitem}
+            \item $f$ ungerade $\implies f'$ gerade.
+            \item $f$ ungerade, integrierbar $\implies \int_{-A}^{A} f(x) \mathrm{d}x = 2 \int_{0}^{A} f(x) \mathrm{d}x$.
+            \item $f, g$ ungerade $\implies f \cdot g$ gerade.
+            \item $f$ ungerade, $g$ gerade $\implies f \cdot g$ ungerade.
+        \end{compactitem}
+\end{compactdesc}
