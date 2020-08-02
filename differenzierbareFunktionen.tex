@@ -97,7 +97,7 @@ Für $f,g: [a,b] \to \R$ stetig und in $]a, b[$ differenzierbar:
     $f(x)$ & $f'(x)$    & $f(x)$ & $f'(x)$    & $f(x)$        & $f'(x)$\\\hline
     $c$    & $0$        & $cx$          & $c$              & \\\hline
     $x^s$  & $sx^{s-1}$ & $\frac{1}{x}$ & $-\frac{1}{x^2}$ & $\sqrt{x}$ & $\frac{1}{2\sqrt{x}}$\\\hline
-    $\ln|x|$ & $\frac{1}{x}$ & $\log_a|x|$ & $(\log_ae) \frac{1}{x} = \frac{1}{x \ln a}$&\\\hline
+    $\ln|x|$ & $\frac{1}{x}$ & $\ln(x - a)$ & $\frac{1}{x - a}$ & $\log_a|x|$ & $\frac{1}{x \ln a}$\\\hline
     $e^{ax}$ & $ae^x$ & $a^{bx}$ & $(\ln a)b a^{b x}$ & \\\hline
 
 \end{tabular}
@@ -236,16 +236,17 @@ Für $f:[a,b] \to \R$ stetig und in $]a,b[$ zweimal stetig differenzierbar. Für
 
 \subsection{Eigenschaften Ableitung}
 \begin{tabular}{c | c | c | c | l}
-    $f(x)$           & $f'(x)$  & $f''(x)$ & $ f'''(x)$ & Eigenschaft\\\hline
-    $= 0$            &          &          &            & Nullstelle\\\hline
-                     & $> 0$    &          &            & Strikt Monoton Steigend\\\hline
-                     & $< 0$    &          &            & Strikt Monoton Fallend\\\hline
-                     & $= 0$    & $< 0$    &            & Lokales Maximum\\\hline
-                     & $= 0$    & $> 0$    &            & Lokales Minimum\\\hline
-                     & $\neq 0$ & $= 0$    & $> 0$      & Wendepunkt r $\to$ l\\\hline
-                     & $\neq 0$ & $= 0$    & $< 0$      & Wendepunkt l $\to$ r\\\hline
-                     & $= 0$    & $= 0$    & $> 0$      & Sattelpunkt r $\to$ l\\\hline
-                     & $= 0$    & $= 0$    & $< 0$      & Sattelpunkt l $\to$ r\\\hline
-                     &          & $> 0$    &            & Streng Konvex\\\hline
-                     &          & $< 0$    &            & Streng Konkav\\\hline
+    $f(x)$            & $f'(x)$  & $f''(x)$ & $ f'''(x)$ & Eigenschaft\\\hline
+    $= 0$             &          &          &            & Nullstelle\\\hline
+    $= 0$             & $= 0$    & $\neq 0$ &            & $2$-fache Nullstelle\\\hline
+                      & $> 0$    &          &            & Strikt Monoton Steigend\\\hline
+                      & $< 0$    &          &            & Strikt Monoton Fallend\\\hline
+                      & $= 0$    & $< 0$    &            & Lokales Maximum\\\hline
+                      & $= 0$    & $> 0$    &            & Lokales Minimum\\\hline
+                      & $\neq 0$ & $= 0$    & $> 0$      & Wendepunkt r $\to$ l\\\hline
+                      & $\neq 0$ & $= 0$    & $< 0$      & Wendepunkt l $\to$ r\\\hline
+                      & $= 0$    & $= 0$    & $> 0$      & Sattelpunkt r $\to$ l\\\hline
+                      & $= 0$    & $= 0$    & $< 0$      & Sattelpunkt l $\to$ r\\\hline
+                      &          & $> 0$    &            & Streng Konvex\\\hline
+                      &          & $< 0$    &            & Streng Konkav\\\hline
 \end{tabular}

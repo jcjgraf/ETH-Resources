@@ -42,8 +42,8 @@ Beschränkte Funktion $f:[a,b] \to R$ ist integrierbar
 
 Weitere Kriterien:
 \begin{compactitem}
-    \item $f: [a, b] \to \R$ stetig $\implies f$ integrierbar.
-    \item $f: [a, b] \to \R$ monoton $\implies f$ integrierbar.
+    \item $f: [a, b] \to \R$ stetig $\implies f$ auf $[a,b]$ integrierbar.
+    \item $f: [a, b] \to \R$ monoton $\implies f$ auf $[a,b]$ integrierbar.
     \item $a < b < c, f: [a, c] \to \R$ beschränkt mit $f|_{[a,b]}$ und $f|_{[b,c]}$ integrierbar $\implies f$ integrierbar und $\int_{a}^{c} f(x) \mathrm{d}x = \int_{a}^{b} f(x) \mathrm{d}x + \int_{b}^{c} f(x) \mathrm{d}x$.
     \item
         \begin{inparaitem}
@@ -178,7 +178,15 @@ $\int R(x) \mathrm{d}x, R(x) = \frac{P(x)}{Q(x)}$
             \item Falls $\text{grad}(P) \ge \text{grad}(Q)$ führe Polynomdivision durch: $P(x) = S(x)Q(X) + \hat{P}(x)$
             \item $\implies \frac{P(x)}{Q(x)} = S(x) + \frac{\hat{P}(x)}{Q(x)}$
         \end{compactitem}
-    \item \textbf{}
+    \item \textbf{Zerlegung}
+        \begin{compactitem}
+            \item $n := grad(Q)$
+            \item $\alpha_1 \pm i \beta_1, \dots \alpha_l \pm i \beta_l, \gamma_1, \dots , \gamma_k, \ \alpha, \beta, \gamma \in \R, \beta \neq 0$ paarweise verschiedene Nullstellen.
+            \item $Q(x) = \prod_{j = 1}^l \left( (x - \alpha_j)^2 + \beta_j^2 \right) ^{m_j} \prod_{i=1}^{k} (x - \gamma_i)^{n_i}$
+            \item $\frac{P(x)}{Q(x)} = \left( S(x) + \right) \sum_{i=1}^{l} \sum_{j=1}^{m_i} \frac{A_{ij} + B_{ij} x}{\left( (x - \alpha_i)^2 + \beta_i^2 \right)^j } + \sum_{i=1}^{k} \sum_{j=1}^{n_i} \frac{C_{ij}}{(x - \gamma_i)^j}, \exists A_{ij}, B_{ij}, C_{ij} \in \R$.
+            \item Finde eindeutige $A_{ij}, B_{ij}, C_{ij}$ durch Koeffizientenvergleich.
+        \end{compactitem}
+    \item \textbf{Integration der Partialbrüche}
 \end{compactenum}
 
 \subsection{Gerade und Ungerade Funktionen}
