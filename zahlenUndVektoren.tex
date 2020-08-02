@@ -8,7 +8,7 @@
         \begin{compactenum}[{A}.1]
             \item \textbf{Assoziativität:} $x + \left( y + z \right) = \left( x + y \right) + z  \quad \forall x,y,z \in \R$
             \item \textbf{Neurales Element:} $x + 0 = x \quad \forall x \in \R$
-            \item \textbf{Inverse Element:} $x + y = 0 \quad  \forall x \in \R \quad \exists y \in \R$
+            \item \textbf{Inverse Elem.:} $x + y = 0 \quad  \forall x \in \R \quad \exists y \in \R$
             \item \textbf{Kommunikativität:} $x + y = y + x \quad \forall x,y \in  \R$
         \end{compactenum}
      Werden alle Axiome erfüllt $\implies \R$ ist abelisch.
@@ -16,7 +16,7 @@
         \begin{compactenum}[{M}.1]
             \item \textbf{Assoziativität:} $x \cdot \left( y \cdot z \right) = \left( x \cdot y \right) \cdot z \quad \forall x,y,z \in \R$
             \item \textbf{Neurales Element:} $x \cdot  1 = x \quad \forall x \in \R$
-            \item \textbf{Inverses Element:} $x \cdot y = 1 \quad \forall  x \in \R \quad \exists y \in \R$
+            \item \textbf{Inverses Elem.:} $x \cdot y = 1 \quad \forall  x \in \R \quad \exists y \in \R$
             \item \textbf{Kommunikativität:} $x \cdot y = y \cdot x \quad \forall x,y \in \R$
         \end{compactenum}
     Werden alle Axiome erfüllt $\implies R^* = \R \setminus 0$ ist abelisch.
@@ -43,16 +43,6 @@
         \end{compactenum}
         $\implies \exists c \in  \R, \forall a \in  A, b \in  B, \quad a \le c \wedge c \le b$
 \end{compactdesc}
-
-\todo{Axioms}
-\begin{compactenum}
-    \item $\forall x \in \R: (-1) \cdot x = -x$  
-    \item $(-1) \cdot  (-1) = 1$
-    \item $\forall x \in  \R: x^2 \ge 0$
-    \item $0 < 1 < 2 < \ldots$
-    \item $\forall x > 0: \frac{1}{x} > 0$
-    \item $item$
-\end{compactenum}
 
 \subsection{Archimedisches Prinzip}
 \begin{compactenum} \item $\forall x,y \in \R, x > 0, \exists n \in \N: y \le n \cdot x$ 
@@ -102,10 +92,10 @@ Teilmenge von $\R$
     \item[Nach Oben Beschränkt:] $A$ hat eine obere Schranke
     \item[Untere Schranke:] $c \in \R$ von $A$ falls $\forall a \in A: a \ge c$
     \item[Nach Unten Beschränkt:] $A$ hat eine untere Schranke
-    \item[Supremum:] $s:= \sup A$ ist kleinste obere Schranke von $A$
-    \item $\underbrace{\left( \forall a \in  A | a \ge  s \right)}_{s \text{ ist eine obere Schranke von } A} \wedge \underbrace{\left( \forall  \epsilon > 0 \ \exists a \in A | a > s - \epsilon \right)}_{s \text{ ist die kleinste obere Schranke von } A}  $
+    \item[Supremum:] $s:= \sup A$ ist klein. obere Schranke von $A$
+    \item $\underbrace{\left( \forall a \in  A | a \ge  s \right)}_{s \text{ ist eine obere Schranke von } A} \wedge \underbrace{\left( \forall  \epsilon > 0 \ \exists a \in A | a > s - \epsilon \right)}_{s \text{ ist die klein. obere Schranke von } A}  $
     \item[Infimum] $l:= \inf A$ ist grösste untere Schranke von $A$
-    \item $\underbrace{\left( \forall a \in  A | a \ge  l \right)}_{l \text{ ist eine untere Schranke von } A} \wedge \underbrace{\left( \forall  \epsilon > 0 \ \exists a \in A | a > l + \epsilon \right)}_{l \text{ ist die grösste untere Schranke von } A}  $
+    \item $\underbrace{\left( \forall a \in  A | a \ge  l \right)}_{l \text{ ist eine untere Schranke von } A} \wedge \underbrace{\left( \forall  \epsilon > 0 \ \exists a \in A | a > l + \epsilon \right)}_{l \text{ ist die gröss. unt. Schranke von } A}  $
 \end{compactdesc}
 
 \begin{compactitem}
@@ -147,7 +137,67 @@ $A \subset \R$:
     \item[Abzählbar:] falls $X$ endlich oder gleichmächtig wie $\N$
 \end{compactdesc}
 
-\section{Euklidischer Raum}
-\todo{Euklidischer Raum}
-\section{Komplexe Zahlen}
-\todo{Komplexe Zahlen}
+\subsection{Komplexe Zahlen}
+\begin{compactdesc}
+    \item[Imaginary Number:] $i, i^2 = -1$
+    \item[Complex Number:] $z, z = x + iy, \ x, y \in \R$
+        \begin{compactdesc}
+            \item[Real Part:] $\text{Re} z = x \in \R$
+            \item[Imaginary Part:] $\text{Im} z = y \in \R$
+        \end{compactdesc}
+    \item[Set:] $\C = \{x + iy | x,y \in \R\}$
+        \begin{compactitem}
+            \item $R \subset \C: \R = \{z \in \C | \text{Im} z = 0\}$
+            \item Rein-Imaginär: $0 + yi, y \in \R$
+        \end{compactitem}
+    \item[Konjugate:] $\overline{z} = x - iy, \ z = x + iy$
+        \begin{compactitem}
+            \item $z \cdot \overline{z} = \times^2 \cdot y^2 = |z|^2$
+            \item $\overline{z_1 + z_2} = \overline{z_1} + \overline{z_2}$
+            \item $\overline{z_1 \cdot z_2} = \overline{z_1} \cdot \overline{z_2}$
+        \end{compactitem}
+    \item[Betrag:] $|z|$ Distanz zwischen $z$ und Origin
+        \begin{compactitem}
+            \item $|z| = \sqrt{x^2 + y^2} = \sqrt{z \cdot \overline{z}} $
+            \item $|z| = |\overline{z}|$
+            \item $|z_1 + z_2| \le |z_1| + |z_2|$
+            \item $|z_1 \cdot z_2| = |z_1||z_2|$
+            \item $|\frac{z_1}{z_2}| = \frac{|z_1|}{|z_2|}$
+        \end{compactitem}
+    \item[Euler:] $e^{i\gamma} = \cos \gamma + i \sin \gamma$
+        \begin{compactitem}
+            \item $|e^{i \gamma}| = 1$
+        \end{compactitem}
+\end{compactdesc}
+
+\subsubsection{Arithmetic}
+Für $z_1 = a + ib = re^{i \gamma}, z_2 = b + id = re^{i \delta}$:
+\begin{compactitem}
+    \item $z_1 + z_2 = (a + ib) + (c + id) = (a + c) + i(b + d)$
+    \item $z_1 \cdot z_2 = (a + ib) \cdot (c + id) = (ac - bd) + i(ad + bc)$
+        \begin{compactitem}
+            \item $z_1 z_2 = rse^{i(\gamma + \delta)}$
+        \end{compactitem}
+    \item $\frac{z_1}{z_2} = \frac{z_1 \cdot \overline{z_2}}{z_2 \cdot \overline{z_2}}= \frac{z_1 \cdot \overline{z_2}}{|z_2|}$
+        \begin{compactitem}
+            \item $\frac{z_1}{z_2} = \frac{r}{s}e^{i(\gamma - \delta)}$
+        \end{compactitem}
+        \item $\sqrt[^n]{z_1} = z_2 \implies z_1 = z_2^n = r^ne^{i n \delta} \overset{!}{=} re^{i\gamma}$
+            \begin{compactitem}
+                \item $s = \sqrt[^n]{r}$
+                \item $n \gamma = \gamma + 2 \pi k, k = 0\dots n - 1$
+            \end{compactitem}
+\end{compactitem}
+
+\subsubsection{Polar Coordinates}
+$z = x + iy \iff z = r(\cos \gamma + i \sin \gamma) \overset{Euler}{=} z = r e^{i \gamma}$
+\begin{compactitem}
+    \item 
+        \begin{inparaitem}
+            \item $x = r \cos \gamma$ 
+            \item $y = r \sin \gamma$
+        \end{inparaitem}
+    \item $r = |z|$
+    \item $\gamma = \arccos \frac{x}{r} = \arcsin \frac{y}{r}$
+    \item $\text{arg}z = |z| \in [0, 2\pi[ \implies r$ ist eindeutig bestimmt
+\end{compactitem}

@@ -107,8 +107,7 @@ Für $a < b, \ \phi: [a, b] \to \R$ stetig differenzierbar, Intervall $I \subset
     \item Für best. Integrale gibt es zwei Methoden für den Umgang mit Grenzwerten:
         \begin{compactitem}
             \item Substitution von $x=\phi(t)$, Brechung einer Stammfunktion in $x$ und ersetzten der Variable $x$ mit $t$ und Benutzung des Grenze für $t$.
-            \item Änderung der Grenze während der Substitution.
-        \end{compactitem}
+            \item Änderung der Grenze während der Substitution.  \end{compactitem}
 \end{compactitem}
 
 \subsection{Konvergente Reihen}
@@ -121,29 +120,50 @@ Für $a < b, \ \phi: [a, b] \to \R$ stetig differenzierbar, Intervall $I \subset
         \end{compactitem}
 \end{compactitem}
 
-\begin{compactitem}
-\item $n! \approx (\frac{n}{e})^n$
-\end{compactitem}
-\todo{Approximation von Summen}
+\subsection{Approximation von $n!$}
+\begin{compactdesc}
+    \item[Stirling:] $n! \approx (\frac{x}{e})^n$
+    \item[Besser:] $n! \approx (\frac{n}{e})^n \sqrt{2 \pi n}$
+\end{compactdesc}
 
 \subsection{Uneigentliche Integrale}
+Integral mit unendlicher oder undefinierter Grenze(n).
+\begin{compactdesc}
+    \item[Konvergent:] Falls Integral existiert (Grenzwert $\in \R$)
+    \item[Divergent:] Ansonsten
+\end{compactdesc}
+
 \begin{compactitem}
-    \item Für $f: [a, \infty[ \to \R$ beschränkt und $\forall a < b$ auf $[a,b]$ integrierbar. Falls $\exists \lim_{b \to \infty} \int_{a}^{b} f(x) \mathrm{d}x \implies$ Grenzwert ist $\int_{a}^{\infty} f(x) \mathrm{d}x$ und $f$ ist auf $[a, +\infty[$ differenzierbar.
+    \item Für $f: [a, c[ \to \R$ beschränkt und $\forall a < b < c$ auf $[a,b]$ integrierbar. Falls $\exists \lim_{b \to c} \int_{a}^{b} f(x) \mathrm{d}x =: \int_{a}^{c} f(x) \mathrm{d}x \implies \int_{a}^{c} f(x) \mathrm{d}x$ konvergent.
     \begin{compactitem}
-        \item Fall für $f:[-\infty, b] \to \R$ verläuft analog.
+        \item $c$ kann undefiniert oder auch $\infty$ sein.
+        \item Fall für $f:]a, c] \to \R$ ist analog.
     \end{compactitem}
-    \item Für $f:[a, \infty[ \to \R$ beschränkt und $\forall a < b$ auf $[a,b]$ integrierbar:
-        \begin{compactitem}
-            \item falls $|f(x)| \le g(x) \ \forall x \ge a$ und $g(x)$ integrierbar auf $[a, +\infty[ \implies f$ auf $[a, \infty[$ integrierbar.
-            \item falls $0 \le g(x) \le f(x)$ und $\int_{a}^{\infty} g(x) \mathrm{d}x$ divergent $\implies \int_{a}^{\infty} f(x) \mathrm{d}x$ divergent.
-        \end{compactitem}
-    \item Für $f: [1, \infty[ \to [0, \infty[$ monoton fallend. Die Reihe $\sum_{n=1}^{\infty} f(n)$ konvergiert $\iff \int_{1}^{\infty} f(x) \mathrm{d}x$ konvergiert und in diesem Fall ist $0 \le \sum_{k=1}^{\infty} f(k) - \int_{1}^{\infty} f(x) \mathrm{d}x \le f(1)$.
-    \item Funktion $f$ auf $[a + \epsilon, b]$ beschränkt und integrierbar. Dann ist $f:]a,b] \to \R$ integrierbar falls $\exists \lim_{\epsilon \to 0^+} \int_{a + \epsilon}^{b} f(x) \mathrm{d}x$. In diesem Fall ist der Grenzwert $\int_{a}^{b} f(x) \mathrm{d}x$.
-    \begin{compactitem}
-        \item Fall für $f:[a, b - \epsilon] \to \R$ verläuft analog.
-    \end{compactitem}
-    \item $\int_{-\infty}^{\infty} f(x) \mathrm{d}x := \int_{-\infty}^{c} f(x) \mathrm{d}x + \int_{c}^{\infty} f(x) \mathrm{d}x$.
     \item Für beidseitig offene Intervalle müssen mir den Grenzwert unabhängig nehmen: $\int_{-\infty}^{\infty} f(x) \mathrm{d}x = \lim_{a \to -\infty} \lim_{b \to +\infty} \int_{a}^{b} f(x) \mathrm{d}x$.
+\end{compactitem}
+
+\subsubsection{Überprüfe Konvergenz}
+\begin{compactitem}
+    \item $\int_{1}^{\infty} \frac{1}{x^s} \mathrm{d}x$ konvergiert $\iff s > 1$.
+    \item Für $f,g: ]a,b[ \to \R$ stetig, $f(x) \le g(x) \ \forall x \in ]a, b[$:
+        \begin{compactitem}
+            \item $\int_{a}^{b} g(x)\mathrm{d}x$ konvergent $\implies \int_{a}^{b} f(x) \mathrm{d}x$ konv.
+            \item $\int_{a}^{b} f(x) \mathrm{d}x$ divergent $\implies \int_{a}^{b} g(x) \mathrm{d}x$ div.
+        \end{compactitem}
+    \item $\int_{a}^{b} |f(x)|$ konvergent $\implies \mathrm{d}x\int_{a}^{b} f(x) \mathrm{d}x$ abs. konv.
+    \item Für $f: [1, \infty[ \to [0, \infty[$ monoton fallend. Die Reihe $\sum_{n=1}^{\infty} f(n)$ konvergiert $\iff \int_{1}^{\infty} f(x) \mathrm{d}x$ konvergiert und in diesem Fall ist $0 \le \sum_{k=1}^{\infty} f(k) - \int_{1}^{\infty} f(x) \mathrm{d}x \le f(1)$.
+    \item Für $f(x)$ auf $[a, \infty[$ stetig, monoton fallend und $\lim_{x \to \infty} = 0 \implies$:
+        \begin{inparaitem}
+            \item $\int_{a}^{\infty} \sin x \mathrm{d}x$
+            \item $\int_{a}^{\infty} \cos x \mathrm{d}x$
+        \end{inparaitem}
+        konvergieren.
+    \item Für $f(x)$ auf $]a, b]$ stetig. Falls $f(x)(x-a)^2$ monoton wachsend und $\lim_{x \to a^+} f(x)(x-a)^2 = 0 \implies$:
+        \begin{inparaitem}
+            \item $\int_{a}^{b} f(x) \sin(\frac{1}{x-a}) \mathrm{d}x$
+            \item $\int_{a}^{b} f(x) \cos(\frac{1}{x - a}) \mathrm{d}x$
+        \end{inparaitem}
+        konvergieren.
 \end{compactitem}
 
 \subsubsection{Gamma Funktion}
