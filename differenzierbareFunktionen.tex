@@ -203,7 +203,33 @@ Für $f:[a,b] \to \R$ stetig und in $]a,b[ (n + 1)$-mal differenzierbar. $\foral
 \end{inparaitem}
 
 \subsubsection{Taylor Approximation}
-Für $f:[c,d] \to \R$ stetig und in $]c, d[ \ (n+1)$-mal differenzierbar. Für $c < a < d$, $\forall x \in [c, d] \ \exists \xi$ zwischen $x$ und $a$ (oder $a$ und $x$)$: f(x) = \sum_{k=0}^{n} \frac{f^{(k)}(a)}{k!}(x-a)^k + \frac{f^{(n+1)}(\xi)}{(n+1)!}(x-a)^{n+1}$.
+Für $f:[c,d] \to \R$ stetig und in $]c, d[ \ (n+1)$-mal differenzierbar. Für $c < a < d$, $\forall x \in [c, d] \ \exists \xi$ zwischen $x$ und $a$ (oder $a$ und $x$)$: f(x) = \sum_{k=0}^{n} \frac{f^{(k)}(a)}{k!}(x-a)^k + \frac{f^{(n+1)}(\xi)}{(n+1)!}(x-a)^{n+1}$.\\
+\begin{compactitem}
+    \item Entwicklungspunkt $a$ ist Punkt wo die Annäherung startet.
+    \item $x$ ist der Punkt welchen man annähern möchte.
+    \item $T_n(f, x, a) = f(a) + f'(a)(x - a) + \frac{f''(a)(x - a)^2}{2} + \frac{f'''(a)(x - a)^3}{6} + \frac{f''''(a)(x - a)^4}{24} \dots$
+\end{compactitem}
+
+\subsubsection{Fehler}
+\begin{compactitem}
+    \item Finden eine obere Schranke für den Fehler.
+    \item Finden $\xi \in ]a, x]$ so dass der Fehler maximal ist.
+\end{compactitem}
+
+\subsubsection{Rezept: Approximiere Punkt}
+Approximiere $f$ mit Entwicklungspunkt $a$ an stelle $x$ mit Taylor von Ordnung $n$
+\begin{compactenum}
+    \item Leite $f \ n$ mal ab
+    \item Bilder Taylorpolynom durch einsetzen von $a$ und $x$
+\end{compactenum}
+
+\subsubsection{Rezept: Finde Fehler von Taylorpolynom}
+Gegeben Taylorpolynom $T_n(f, x, a)$ mit $n$. Ordnung.
+\begin{compactenum}
+    \item Leite $f^{(n)}$ ab
+\item Bilde Restpolynom $R_N(f, x, a) = \frac{f^{(n+1)}(\xi)}{(n + 1)!}(x - a)^{n + 1}$
+    \item Select $\xi \in ]a, x]$ so das $R_N(f, x, a)$ maximal ist 
+\end{compactenum}
 
 \subsection{Sattelpunkt und Wendepunkt}
 Stelle $x_0$ wo $f'(x_0)=0$ aber kein Extremum.

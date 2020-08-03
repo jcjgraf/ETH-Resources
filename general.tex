@@ -21,6 +21,7 @@
     \item $(a^m)^n = a^{m n}$
     \item $a^nb^n = (ab)^n$
     \item $\frac{a^n}{b^n} = \left( \frac{a}{b} \right)^n$
+    \item $a^x = e^{x \ln a}$
 \end{compactitem}
 
 \subsection{Logarithmen}
@@ -60,6 +61,13 @@ $y = \log_a x \iff a^x = x$
     \item $1 + \tan^2 a = \frac{1}{\cos^2 a}$
 \end{compactitem}
 
+\subsubsection{Komposition}
+\begin{tabular}{l l | l l}
+    $\sin(\arccos(x)) =$ & $\sqrt{1 - x^2}$ & $\sin(\arctan(x))=$ & $\frac{x}{\sqrt{1 + x^2} }$\\
+    $\cos(\arctan(x)) =$ & $\frac{1}{\sqrt{ 1 + x^2}}$ & $\cos(\arcsin(x))=$ & $\sqrt{1 - x^2}$\\
+    $\tan(\arcsin(x)) =$ & $\frac{x}{\sqrt{1 - x^2}}$ & $\tan(\arccos(x))$ & $\frac{\sqrt{1 - x^2}}{x}$\\
+\end{tabular}
+
 \subsubsection{Hyperbolisch}
 \begin{compactitem}
     \item $\cosh^2(x) - \sinh^2(x) = 1$
@@ -88,6 +96,18 @@ $y = \log_a x \iff a^x = x$
     $330$ & $\frac{11 \pi}{6}$ & $\frac{-1}{2} $        & $\frac{\sqrt{3}}{2}$\\
 \end{tabular}
 
+\begin{tabular}{l | l | l}
+    $\arcsin(0) = 0$                & $\arccos(0) = \frac{\pi}{2}$ & $\arctan(0) = 0$\\
+    $\arcsin(1) = \frac{\pi}{2}$    & $\arccos(0) = 0$             & $\arctan(1) = \frac{\pi}{4}$\\
+    $\arcsin(-1) = -\frac{\pi}{2}$  & $\arccos(0) = \pi$           & $\arctan(-1) = -\frac{\pi}{4}$\\
+                                    &                               & $\arctan(\sqrt{3}) = \frac{\pi}{3}$\\
+\end{tabular}
+
+\begin{compactitem}
+    \item $\arccos(x) = \frac{\pi}{2} - \arcsin(x)$
+    \item $\lim_{n \to \infty} \arctan(n) = \frac{\pi}{2}$
+\end{compactitem}
+
 \subsubsection{Reduktion}
 \resizebox{\columnwidth}{!}{\begin{tabular}{l | l | l}
     $\sin \frac{\pi}{2} - a = \cos a$ & $\cos \frac{\pi}{2} - a = \sin a$ & $\tan \frac{\pi}{2} - a = \frac{1}{\tan a}$\\
@@ -98,3 +118,37 @@ $y = \log_a x \iff a^x = x$
     $\sin -a = -\sin a$ & $\cos - a = \cos a$ & $\tan - a = -\tan a$\\
 \end{tabular}}
 
+\subsection{Sonstiges}
+\begin{compactitem}
+    \item $x_{1 / 2} = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$
+    \item $e^{ix} = \cos(x) + i \sin(x)$
+    \item $\sqrt{i} = \frac{\sqrt{2}}{2} + i \frac{\sqrt{2}}{2}$
+\end{compactitem}
+
+\subsubsection{Substitutionstabelle}
+\begin{tabular}{l | c | c}
+    $\int F(x) \mathrm{d}x, F(x)=$ & $u=$ & $dx=$\\\hline
+    $e^x, \sinh(x), \cosh(x)$ &  
+\end{tabular}
+
+\subsubsection{Bekannte Integrale}
+\begin{tabular}{l | l}
+    $f(x)$                      & $F(x)$\\\hline
+    $\sin^2(x)$                 & $\frac{x - \sin(x) \cos(x)}{2}$\\
+    $\cos^2(x)$                 & $\frac{x + \sin(x) \cos(x)}{2}$\\
+    true?&\\
+    $\sin(kx) \cdot \cos(kx)$   & $\frac{1}{4k}\cos(2kx)$\\
+    $\sin(kx) \cdot \cos(kx)$   & $\frac{-(\cos(x))^2}{2}$\\
+    $\frac{x^2}{x^2 + 1}$       & $x - \arctan(x)$\\
+    $\frac{1}{(1 + x^2)^2}$     & $\frac{\frac{x}{x^2 + 1} + \arctan(x)}{2}$\\
+    true?&\\
+    $\frac{u'(x)}{u(x)}$        & $\ln |u(x)|$\\
+    true?&\\
+    $u'(x) \cdot u(x)$          & $\frac{1}{2}(u(x)^2)$\\
+    $\sqrt{a^2 - x^2}$          & $\frac{a^2 \arcsin(\frac{x}{|a|})}{2} + \frac{x \sqrt{a^2 - x^2}}{2}$\\
+    $\sqrt{a^2 + x^2}$          & $\frac{a^2 \ln(| \sqrt{x^2 + a^2} +x|)}{2} + \frac{x \sqrt{a^2 + x^2}}{2}$\\
+    $a^x \cdot \ln(a), \ a > 0$ & $a^x$\\
+    $x^x (1 + \ln x)$           & $x^x, \ x > 0$\\
+    true?&\\
+    $e^{\ln |x|}(\ln(|x|) + 1)$ & $|x|^x = e^{x \ln x}$\\
+\end{tabular}
