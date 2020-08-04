@@ -109,7 +109,7 @@ Für $f,g: [a,b] \to \R$ stetig und in $]a, b[$ differenzierbar:
     $\arcsin$                     &                             & $[-1, 1]$                         & $[-\frac{\pi}{2}, \frac{\pi}{2}]$  & $\frac{1}{\sqrt{1-y^2} }$\\\hline
     $\cos$                        &                             & $[0, \pi]$                        & $[-1, 1]$                          & $-\sin$\\\hline
     $\arccos$                     &                             & $[-1, 1]$                         & $[0, \pi]$                         & $\frac{-1}{\sqrt{1-y^2} }$\\\hline
-    $\tan$                        &                             & $]-\frac{\pi}{2}, \frac{\pi}{2}[$ & $ \R$                              & $\frac{1}{\cos^2x} = 1 + \tan^x$\\\hline
+    $\tan$                        &                             & $]-\frac{\pi}{2}, \frac{\pi}{2}[$ & $ \R$                              & $\frac{1}{\cos^2x} = 1 + \tan^2x$\\\hline
     $\arctan$                     &                             & $ \R$                             & $]- \frac{\pi}{2}, \frac{\pi}{2}[$ & $\frac{1}{1+y^2}$\\\hline
     $\sinh$                       & $\frac{e^x - e^{-x}}{2}$    & $\R$                              & $\R$                               & $\cosh$\\\hline
     $\arcsinh$                    &                             & $\R$                              & $\R$                               & $\frac{1}{\sqrt{1+y^2} }$\\\hline
@@ -207,13 +207,7 @@ Für $f:[c,d] \to \R$ stetig und in $]c, d[ \ (n+1)$-mal differenzierbar. Für $
 \begin{compactitem}
     \item Entwicklungspunkt $a$ ist Punkt wo die Annäherung startet.
     \item $x$ ist der Punkt welchen man annähern möchte.
-    \item $T_n(f, x, a) = f(a) + f'(a)(x - a) + \frac{f''(a)(x - a)^2}{2} + \frac{f'''(a)(x - a)^3}{6} + \frac{f''''(a)(x - a)^4}{24} \dots$
-\end{compactitem}
-
-\subsubsection{Fehler}
-\begin{compactitem}
-    \item Finden eine obere Schranke für den Fehler.
-    \item Finden $\xi \in ]a, x]$ so dass der Fehler maximal ist.
+    \item $T_n(f, x, a) = f(a) + f'(a)(x - a) + \frac{f''(a)(x - a)^2}{2} + \frac{f'''(a)(x - a)^3}{6} + \frac{f''''(a)(x - a)^4}{24} + \dots \left(+ \frac{f^{(n+1)}(\xi)}{(n+1)!}(x-a)^{n+1} \right)$
 \end{compactitem}
 
 \subsubsection{Rezept: Approximiere Punkt}

@@ -38,7 +38,7 @@
   {0pt}
   {\colorsection}
 \newcommand{\colorsection}[1]{%
-	\colorbox{red!10}{\parbox[t][0em]{\dimexpr\columnwidth-2\fboxsep}{\thesection\ #1}}}
+	\colorbox{red!40}{\parbox[t][0em]{\dimexpr\columnwidth-2\fboxsep}{\thesection\ #1}}}
 
 
 \titleformat{name=\subsection}[block]
@@ -47,7 +47,7 @@
   {0pt}
   {\subcolorsection}
 \newcommand{\subcolorsection}[1]{%
-	\colorbox{orange!10}{\parbox[t][0em]{\dimexpr\columnwidth-2\fboxsep}{\thesubsection\ #1}}}
+	\colorbox{orange!40}{\parbox[t][0em]{\dimexpr\columnwidth-2\fboxsep}{\thesubsection\ #1}}}
 
 
 \titleformat{name=\subsubsection}[block]
@@ -56,7 +56,7 @@
   {0pt}
   {\subsubcolorsection}
 \newcommand{\subsubcolorsection}[1]{%
-	\colorbox{blue!10}{\parbox[t][0em]{\dimexpr\columnwidth-2\fboxsep}{\thesubsubsection\ #1}}}
+	\colorbox{blue!40}{\parbox[t][0em]{\dimexpr\columnwidth-2\fboxsep}{\thesubsubsection\ #1}}}
 
 % shrink horizontal padding in table
 \setlength{\tabcolsep}{0.3em}
@@ -69,7 +69,5 @@
     \input{stetigeFunktionen}
     \input{differenzierbareFunktionen}
     \input{riemannIntegral}
-    \clearpage
-    \mbox{}
 \end{multicols*}
 \end{document}

@@ -20,7 +20,7 @@ $f : D \to \R$ ist:
 \begin{compactdesc}
     \item[nach oben beschränkt:] falls $f(D) \subset \R$ nach oben beschränkt ist.
     \item[nach unten beschänkt:] falls $f(D) \subset \R$ nach unten beschränkt ist.
-    \item[beschränkt:] falls $f(D) \subset \R$ beschränkt ist.
+    \item[beschränkt:] falls $f(D) \subset \R$ nach oben und unten beschränkt ist.
 \end{compactdesc}
 
 \subsection{Kompakt Intervall}
@@ -151,6 +151,7 @@ Für $x > 0, a \in \R \ x^a := \exp(a \ln(x))$
             \item Für $\mathbb{D} \subset \R$ und Funktionenfolge $f_n:\mathbb{D} \to \R$ bestehend aus in $\mathbb{D}$ stetigen Funktionen die gleichmässig gegen Funktion $f: \mathbb{D} \to \R$ konvergieren $\implies f$ ist in $\mathbb{D}$ stetig.
             \item Falls $f_n$ gleichmässig zu $f$ konvergiert $\implies \limsup_{n \to \infty} \left| f_n(x) - f(x) \right| = 0, x \in \mathbb{D}$.
             \item $f_n \overset{\text{glm.}}{\to} f \implies f$ ist stetig
+            \item $f_n \overset{\text{glm.}}{\to} f \notimplies f$ ist differenzierbar
         \end{compactitem}
     \item[Gleichmässig konvergent:] falls $\forall x \in \mathbb{D} \ \exists f(x) = \lim_{n \to \infty} f_n(x)$ und $\left( f_n \right)_{n \ge 0}$ gleichmässig gegen $f$ konvergiert.
         \begin{compactitem}
@@ -287,7 +288,7 @@ $\forall x \in \R$:
 Function $f: \mathbb{D} \to \R, \mathbb{D} \subset \R$:
 \begin{compactdesc}
     \item[Häufigkeitspunkt:] von $\mathbb{D}$ falls $\forall \delta > 0 (]x_0 - \delta, x_0 + \delta[ \setminus \{x_0\} ) \cap \mathbb{D} \neq \O$.
-    \item[Grenzwert:] $A \in \R$ von $f(x)$ für $x \to x_0$ und Häufigkeitspunkt $x_0 \in \R$ von $\mathbb{D}$. Wird mit $\lim_{n \to \infty} f(x) = A$ bezeichnet falls $\forall \epsilon > 0 \ \exists \delta > 0$ so dass $\forall x \in \mathbb{D} \cap (]x_0 - \delta, x_0 + \delta[ \setminus \{x_0\}) : |f(x) - A| < \epsilon$.
+    \item[Grenzwert:] $A \in \R$ von $f(x)$ für $x \to x_0$ und Häufigkeitspunkt $x_0 \in \R$ von $\mathbb{D}$. Wird mit $\lim_{n \to x_0} f(x) = A$ bezeichnet falls $\forall \epsilon > 0 \ \exists \delta > 0$ so dass $\forall x \in \mathbb{D} \cap (]x_0 - \delta, x_0 + \delta[ \setminus \{x_0\}) : |f(x) - A| < \epsilon$.
 \end{compactdesc}
 \begin{compactitem}
     \item $f$ muss am Grenzwert $x_0$ nicht zwingend definiert sein.
