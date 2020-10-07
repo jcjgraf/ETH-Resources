@@ -1,0 +1,117 @@
+%! TEX root = master.tex
+\lecture{2}{Wed 16 Sep 2020 10:15}{}
+
+Header files are external linked files. Ever program has to have \code{main} function which takes a several command line options 
+
+\paragraph{Workflow}
+Programmers write source code \code{.c} files, they are compiled into object files \code{.o}. Object files are linked with their external libraries \code{.a} and we get an executable file. There are also libraries (shared libraries) which are dynamically linked \code{.so} while running the code.\\
+\code{gcc} is the compiler we use in all exercises in this lecure.
+
+\paragraph{Compilation}
+
+\begin{enumerate}
+    \item C source \code{.c, .h}
+    \item Macro substitution, include headers: cpp \code{.c}
+    \item Compile each C file into assembly language: cc1 \code{.s}
+    \item Assemble each file into object code: as \code{.o}
+    \item Link object files into program binary: ld
+    \item Executable
+\end{enumerate}
+We can stop the compilation at each stage.
+
+\paragraph{Conditionals}
+\begin{lstlisting}
+if (Expression) Statement_when_true
+else Statement_when_false
+\end{lstlisting}
+
+\begin{lstlisting}
+switch (Expression) {
+        case Constant_1: Statement; break;
+        case Constant_2: Statement; break;
+        ...
+        default: Statement; break;
+}
+\end{lstlisting}
+Switch is not equivalent to if, else if else if....
+
+\paragraph{Loops}
+\code{for (Initial; Test; Increment) Statement}
+\code{while (Expression) Statement}
+\code{do Statement while (Expression)}
+
+\paragraph{Jumps}
+\code{break} Break out of the current loop/switch
+\code{continue} Stops current iteration of loop
+\code{goto Label} Controversial, but occasionally very useful. Makes code hard to read.
+
+\paragraph{Functions}
+\code{type name(paraType paraName) {}}
+\code{int main(int argc, char *argv[]) {return 0}}
+\code{argc} is the number of parameter and \code{*argv} a list of string parameter.
+\code{return (Expression)}
+\code{*} indicates that a argument is a pointer.
+
+\paragraph{I/O}
+\code{man 3 printf} for docs. Forst argument is format string, remaining arguments are arbitrary but must match the format.
+
+\paragraph{Declarations}
+\code{type name;}
+\code{type name = value;}
+
+\begin{itemize}
+    \item Inside block: Scope in block. When using \code{static} the value persists between function calls.
+    \item Outside block: Scope of entire program. Wen using \code{static} the scope is limited to the file including its headers.
+\end{itemize}
+
+\paragraph{Types and Sizes}
+\begin{table}[H]
+    \centering
+    \begin{tabular}{c | c}
+        C data type & Intel x86-64\\
+        \hline
+        char & 1\\
+        short & 2\\
+        int & 4\\
+        long & 8\\
+        float & 4\\
+        double & 8\\
+        long double & 10/16\\
+    \end{tabular}
+\end{table}
+
+Integers are signed by default. Use \code{signed} or \code{unsigned} to clarify.
+
+\code{<stdint.h>} provides extended integer types:
+\begin{itemize}
+    \item Signed: \code{int8\_t},\code{int16\_t}, \code{int32\_t}, \code{int64\_t}
+    \item Unsigned: \code{uint8\_t}, \code{uint16\_t}, \code{uint32\_t}, \code{uint64\_t}
+\end{itemize}
+
+\paragraph{Integers and Floats}
+Conversion is complicated.
+\begin{itemize}
+    \item Implicit conversation between integer types.
+    \item Implicit conversation between floating point types.
+    \item Explicit conversation between anything.
+\end{itemize}
+Behaviour is determined by hardware.
+
+\paragraph{Booleans}
+Booleans are integers. Zero means false, anything else means true. However, C99 supports real boolean types via \code{<stdbool.h>}. Negating zero gives non-zero, and non-zero return zero.
+Any C statement is also an expression (also counts for loops etc...).
+\begin{lstlisting}
+int rc;
+if (rc = myFunc()) {
+    # error
+} else {
+    // everything good
+}
+\end{lstlisting}
+
+Sometimes we need to invert the return, e.g. of a file open.
+
+\paragraph{void}
+\code{void} is a type which has no value. Pointers have typically a type assigned, void is used for untyped pointers. We also use it for declaring functions without return value.
+
+
