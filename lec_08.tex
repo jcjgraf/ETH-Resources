@@ -107,7 +107,7 @@ We iterate our list and look for a valid block. In order to allocate a choose bl
 In order to free a block simply add it to our list. There are multiple insertion policies which determine were in the list the new block is inserted:
 
 \begin{description}
-    \item[LIFO policy:] We insert the new block at the beginning of the list. This is simple to implement and has constant time. Howver, fragmentation may be worse.
+    \item[LIFO policy:] We insert the new block at the beginning of the list. This is simple to implement and has constant time. However, fragmentation may be worse.
     \item[Address-ordered policy:] We insert the blocks so that the address of the blocks are ordered. This requires search to find the desired location, but in turn, fragmentation should be better.
 \end{description}
 
@@ -125,10 +125,3 @@ We coalesce the block and put in on the appropriate list.
 The advantage of this method is the high throughput as well as the better memory utilisation.
 
 Most allocated blocks are rather small. Segregated list give very good performance. Large blocks are only occasionally assigned. Many systems use this method.
-
-
-mallocs performance depends on teh workload
-
-
-Some techniques add unpredicatble waiting time for soalation.
-
