@@ -1,0 +1,58 @@
+%! TEX root = ./master.tex
+
+\lecture{16}{Week 8}{Optimizing Compilers}
+
+In order to make best of the compiler, it is mandatory to have a good knowledge about what the compiler does, how we can help it it optimize code, and what we should omit to not stop the compiler from optimising.
+
+In practice, not only the asymptotic runtime determines the performance of our code. There are many other very important factors which we have to consider like constants, coding style, algorithm structure, data representation etc.
+
+\paragraph{Optimizing Compilers}
+The compiler can try to optimize our code in four levels, which are set via flags. The compiler does no optimisation when setting \code{-O0} and does full optimisation for \code{-03}. The default is no optimisation, since this provided the highest compilation speed. \code{-03} does not necessarily provide the best optimisation in all cases. These flags do in essence nothing than setting a bunch of underlaying compiler flags.
+
+Also, different compiler optimize in different ways. Using the \code{-march=xxx} flag, we can tell the compiler to optimize code for a very specific architecture.
+
+\paragraph{Compilers Strengths}
+Compilers are good at mapping programs to machines. They know the hardware well and know how code is best adopted to certain hardware. Further they are good at:
+\begin{itemize}
+    \item Register allocation
+    \item Code selection and ordering (scheduling)
+    \item Dead code elimination (code which is not reachable)
+    \item Eliminating minor inefficiencies
+\end{itemize}
+
+\paragraph{Compiler Weaknesses}
+Compilers cannot improve asymptotic efficiently. It is up to the programmer to select the best overall algorithm. Furthermore, there are certain things, which block the compiler from optimizing.
+
+\paragraph{Compiler Optimisation Constraints}
+Compilers are conservative if in doubt. They operate under fundamental constraints and must not change program behaviour under any possible condition. This may also lead to cases where the compiler does not do optimisations which are obvious for the programmer and which we expect the compiler to do. 
+
+\subsubsection{Compiler Optimisation Tricks}
+In the following we will discuss certain compiler optimisations.
+
+\paragraph{Code Motion}
+Compiler may move code to reduce the frequency or cost of certain computations. The is particularly useful in loops which do a computation which does not change during the execution of the loop. The compiler may move this computation outside the for loop.
+
+This is sometimes also called precomputation.
+
+\paragraph{Strength Reduction}
+Compiler may replace costly operation with simpler ones. These optimisations are very hardware specific. An example if for example the replacement of a multiplication by a shift.
+
+\paragraph{Common Subexpressions}
+Compiler may precompute some common subexpression of a larger computation and prevent the re-computation of the same expression.Tough, we must remember that certain operations are not recursive, and especially for floating-point number this technique may easily change a result. Therefore, compilers are not that good at exploiting this property.
+
+\subsubsection{Optimisation Blockers}
+There a certain things which prevent the compiler from making optimisations.
+
+\paragraph{Procedure Calls}
+Procedure calls are treated as black boxes which the compiler does not touch. Even though the input does not change, it does not mean that the return value does not change. Procedure call may also have other side effects about which the compiler has not understanding. Therefore, the compiler cannot move procedure calls. 
+
+When we inline to procedure, the compiler would be able to do more optimisation.
+
+\paragraph{Memory Aliasing}
+In C it is not uncommon to have multiple referenced to the same memory location. Compilers cannot assume that two different points point to different locations and therefore they may interfere each other during access. If we know that pointers do point to different location, we should use local variables, and write these to memory instead of many single accesses.
+
+\paragraph{Clocking and Unrolling}
+This is very relevant for e.g matrix multiplication. All elements are accessed multiple times and we want to make use of the memory locality. A possible solution is blocking (tiling); i.e. compute blocks (/submatrices) at a time. This provides better cache locality. But we need to know the machine well in order to determine the best block size. Another solution is unrolling; this is the reuse of precomputed expressions.
+
+These optimisation we have to do ourself, the compiler cannot do this for us.
+
