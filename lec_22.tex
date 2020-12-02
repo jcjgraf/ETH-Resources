@@ -68,6 +68,10 @@ We can do super scalar execution, branch prediction, specular execution to incre
 \paragraph{Multicore Processors}
 Multicore CPUs have multiple processor cores on a single CPU chip. Most such CPUs have a single physical address space, which is shared among all processors. The cores communicate though shared variables in memory. This is called \textit{shared memory multiprocessors}.
 
+It is also refered to as symmetric multiprocessing (SMP).
+
+\includegraphics[width=0.8\textwidth]{22_Smp.png}
+
 One major difficulty is how we ensure that all processors have the same view on memory even though hall have their own caches. This is called \textit{cache coherence}.
 
 \subsubsection{Coherency and Consistency}
@@ -183,14 +187,16 @@ When in this state, we know that this is the only copy of this address and the a
     \item \textit{Invalid}: (same meaning)
 \end{itemize}
 
-This protocol also introduces the new bus signal \textit{RdX (Read exclusive)}. If we want to read a cache line and others are reading this block already, we are notified that we read it as \textit{shared}. If there are no other readers, we are notified that we are reading it as \textit{exclusive}. If we hear the RdX signal, it means that another bus is trying to write this block and therefore, we have to invalidate it. 
+This protocol also introduces the new bus signal \textit{RdX (Read exclusive)}. If we want to read a cache line and others are reading this block already, we are notified that we read it as \textit{shared}. If there are no other readers, we are notified that we are reading it as \textit{exclusive}. We get this response through the \textit{hit} statement. 
 
-There is also the new signal \textit{hit}. If heard, it means that the remote processor does only try to read the cache block.
+If we hear the RdX signal, it means that another bus is trying to write this block and therefore, we have to invalidate it. 
 
 \paragraph{Invariants}
 The MESI invariants are:
 
 \includegraphics[width=0.8\textwidth]{22_MesiInvariant.png}
+
+The main advantage over MSI is that when we are in exclusive and we want to modify it, we can straight do it without having to notify anyone else.
 
 \paragraph{Transitions}
 We can have the following transitions. Grey are local operations by us, orange remote operations by other processors.
