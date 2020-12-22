@@ -1,61 +1,111 @@
 %! TEX root = ./master.tex
 
-\lecture{Ch. 3 continue}{2020-09-23}{Representing Integers}
+\lecture{4}{Week: 2}{Continue Integers}
 
-\paragraph{Sign extension}
+\subsubsection{Sign extension}
 Given a $w$ bit signed integer $x$, convert it to a $w + k$ bit signed integer with the same value.
-.
+
 We do that by coping the most significant bit of $x$ and copy it to all $k$ new bits
 
-\paragraph{Truncation}
-Throws away the left bits. For unsigned numbers it represents the modulo operator. For signed integers it is also like modulo, but it dies it in a special way (negative number may get positive and vice versa).
+\includegraphics[width=0.8\textwidth]{04_signExtend.png}
 
-\subsubsection{Integer addition and subtraction in C}
+For unsigned numbers, the number is padded with zeros at the beginning.
 
-Convert get negative number of $x$ using $\tilde x + 1 == -x$.
+C does this sign extend automatically for us.
 
-The complement of $x$ is $\tilde x$ and $\tilde x + x == 111 \dots 111 == -1$
+\subsubsection{Truncation}
+Throws away the left bits. For unsigned numbers it represents the modulo operator. For signed integers it is also like modulo, but it does it in a special way (negative number may get positive and vice versa).
+
+Also, only small numbers remain unchanged.
+
+\subsubsection{Addition and Subtraction in C}
+\paragraph{Negation}
+Number $x$ can be negated using $\tilde x + 1 == -x$.
+
+It follows that $\tilde x + x == 111 \dots 111 == -1$
 
 \paragraph{Unsigned addition}
-The function $UAdd_w(u,v)$ ignores the extra bit which would be required if the sum overflows the $w$ bits.
+When adding two unsigned number $u$ and $v$ of length $w$, we get a number of length $w + 1$.
 
-There are certain compilers which provide some possibility to retrieve a possible overflow.
+\includegraphics[width=0.8\textwidth]{04_unsignedAdditionEquation.png}
+
+The function $UAdd_w(u,v)$ ignores the extra bit which would be required if the sum overflows the $w$ bits. This function can also be seen as:
+
+\includegraphics[width=0.8\textwidth]{04_unsignedAdditionFormula.png}
+
+Then the sum overflows, it wraps around.
 
 \includegraphics[width=0.8\textwidth]{04_01_unsignedAddition.png}
+
+The $Uadd_w$ function is the classical unsigned addition operator in C. There are certain compilers which provide some possibility to retrieve a possible overflow.
 
 $UAdd_w(u,v)$ is an Abelian group (Closed, Commutative, Associative, Identity, Inverse)
 
 \paragraph{Two's complement addition}
-$TAdd_w(u,v)$ behaves identical to $UAdd$ in the bit level interpretation. But the overflow behaves differently. Positive overflow gives a negative number, a negative overflow gives a positive number.Positive overflow gives a negative number, a negative overflow gives a positive number.
+When adding two signed number $u$ and $v$ of length $w$, we get a number of length $w + 1$.
+
+\includegraphics[width=0.8\textwidth]{04_signedAdditionEquation.png}
+
+The function $TAdd_w(u,v)$ ignores the extra bit which would be required if the sum overflows the $w$ bits.
+
+$TAdd_w(u,v)$ behaves identical to $UAdd$ in the bit level interpretation. But the overflow behaves differently (are interpreted differently). Positive overflow gives a negative number, a negative overflow gives a positive number.
 
 \includegraphics[width=0.8\textwidth]{04_02_signedAddition.png}
- 
+
+The function can be seen as:
+
+\includegraphics[width=0.8\textwidth]{04_signedAdditionFormula.png}
+
 $TAdd$ is isomorphic to $UAdd$ and $TAdd$ forms a group (closed, commutative, associative, identity, inverse).
 
 \subsubsection{Integer multiplication in C}
 
-\paragraph{Unsigned multiplication}
-The range is $0 \le x \cdot y \le (2^w -1)2$
+\paragraph{Unsigned Multiplication}
+When multiplying two unsigned number $u$ and $v$ of length $w$, we get a number of length $2w$.
 
-The operator $UMult_w(u,v)$ truncates the overflowing bits and it forms a commutative ring with $UAdd$.
+\includegraphics[width=0.8\textwidth]{04_unsignedMultiplyEquation.png}
 
-\paragraph{Two's complement multiplication}
-The lowest number $x \cdot y \ge (-2^{w - 1}) \cdot (2^{w - 1} - 1)$
+The operator $UMult_w(u,v)$ truncates the overflowing bits. The formula can be seen as:
 
-The greatest number $x \cdot y \le (-2^{w -1})^2$
+\includegraphics[width=0.8\textwidth]{04_unsignedMultiplyFormula.png}
+
+In order that the product is exact $x$ and $y$ must satisfy $0 \le x \cdot y \le (2^w -1)^2$
+
+$UMULt_w$ forms a commutative ring with $UAdd$.
+
+\paragraph{Signed Multiplication}
+When multiplying two signed number $u$ and $v$ of length $w$, we get a number of length $2w$.
+
+\includegraphics[width=0.8\textwidth]{04_signedMultiplicationEquation.png}
 
 The operator $TMult_w(u,v)$ ignores the overflowing bits. Some hardware puts overflowing bits into a special register, but they are normally not accessibly in C.
 
+The minimal product which can be represented accurately is $x \cdot y \ge (-2^{w - 1}) \cdot (2^{w - 1} - 1)$. And the greatest number is $x \cdot y \le (-2^{w -1})^2$.
 
-\paragraph{Integer multiplication and division using shifts}
-$u << k$ gives $u \cdot 2^k$ for signed and unsigned numbers.
+\subsubsection{Multiplication and Division Using Shifts}
+\paragraph{Multiplication}
+As we have seen, the shift operator shifts the binary representation of a number. Regarding the interpreted number, $u << k$ results in $u \cdot 2^k$. This is valid for signed and unsigned numbers.
+
+When shifting a signed/unsigned number of length $w$ by $k$, the $k$ over flowing bits are truncated.
+
+\includegraphics[width=0.8\textwidth]{04_powerOfTwo.png}
 
 Multiplication is much more complex than simple shifts. Therefore, to calculate $u \cdot 24$ we may write $(u << 5) - (u << 3)$. But modern compiler do such thinks (and even better optimisations) for us, therefore we should not do it.
 
-$u >> k$ gives $\lFloor \frac{u}{2^k} \rFloor$ (we truncate all digits overflowing on the right) for unsigned and signed numbers. But for signed numbers the results may be wrong for negative numbers because we round down, but actually we would like to round towards $0$. We fix that by computing $\lFloor \frac{(s + 2^k - 1)}{2^k} \rFloor$. In C this is equivalent to $(s + (1 << k) -1) >> k$.
+\paragraph{Division}
+Equally as with multiplication, shifts can be used for division of power of twos. $u >> k$ gives $\lfloor \frac{u}{2^k} \rfloor$. The underflowing $k$ bits get truncated.
 
-If the compiler checks for signed number of the number is negative and does the devision depending on that.
+\includegraphics[width=0.8\textwidth]{04_powerOfTwoDivide.png}
+
+Even though this works for unsigned and signed number, for signed numbers the results may be wrong for negative numbers. 
+This is because we round down, but actually we would like to round towards $0$. We can fix that by computing $\lfloor \frac{(s + 2^k - 1)}{2^k} \rfloor$. In C this is equivalent to $(s + (1 << k) -1) >> k$. This formula works for positive and negative numbers.
+
+\includegraphics[width=0.8\textwidth]{04_powerOfTwoDivideCorrect.png}
+
+
+Again, the compiler can translate divisions into shifts. For unsigned numbers, it applies the first formula, for signed numbers the second one.
 
 \subsubsection{C Integer puzzles}
+In the following are some integer related puzzles to solve.
 
-
+\includegraphics[width=0.8\textwidth]{04_integerPuzzle.png}

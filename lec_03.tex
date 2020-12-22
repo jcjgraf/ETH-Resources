@@ -98,13 +98,12 @@ Viewing data as true and false where $0$ means false and everything else true. E
 
 The behaviour of negative numbers and numbers larger then the vectors is undefined.
 
-\paragraph{Encoding}
-
+\subsubsection{Encoding}
 Unsigned integers are encoded in such a way, that with increasing position (LSB to MSB), the factor of two increases: $\sum_{i=0}^{w-1} x_i \cdot 2^i$.
 
 With two's complements encoding we have to consider that the MSB is the sign bit. If is set, $2^{w-1}$ is subtracted of the number represented by the last $w-2$ bits: $-w_{w - 1} \cdot 2^{w - 1} + \sum_{i=0}^{w - 2} x_i \cdot 2^i$.
 
-\paragraph{Ranges}
+\subsubsection{Ranges}
 \begin{itemize}
     \item UMin $= 0$
     \item UMax $= 2^w -1$
@@ -124,7 +123,7 @@ From this table we can notice two interesting things:
 
 In practice, we can use \code{<limits.h>} which provides \code{ULONG\_MAX}, \code{LONG\_MAX}, \code{LONG\_MIN}... to get these bounds.
 
-\paragraph{Visualisation}
+\subsubsection{Visualisation}
 When comparing the interpreted signed/unsigned number of a certain bit patters, we see that for the lower halve of numbers, the signed and unsigned numbers are equivalent. Fur the other halve of numbers, i.e. all which have MSB of $1$, we have to add $2^{\text{word size}}$ to get from signed to unsigned. 
 
 \includegraphics[width=0.8\textwidth]{03_signedUnsignedMap.png}
@@ -133,15 +132,17 @@ The difference between signed and unsigned can also be seen as a shift of the ra
 
 \includegraphics[width=0.8\textwidth]{03_signedUnsignedRange.png}
 
-\paragraph{Signed vs Unsigned}
+\subsubsection{Signed vs Unsigned}
 By default numbers are considered as signed. In order to get a unsigned number, we have to suffix the number with a \code{U}.
 
-In order to get from one to the other, we have to cast the number. There are two different ways to cast a number:
+In order to get from one to the other, we have to cast the number. During a cast the bit pattern of the number does not change, it is just interpreted differently.
 
-\subparagraph{Explicit}
+There are two different ways to cast a number:
+
+\paragraph{Explicit}
 Given signed number \code{int a;} we can cast it to unsigned number \code{unsigned b} using \code{b = (unsigned) a;}. The other ways around, casting from unsigned \code{unsigned b} to signed number \code{int a} is done using \code{a = (int) b;}.
 
-\subparagraph{Implicit}
+\paragraph{Implicit}
 This kind of conversion happens when we assign a signed/unsigned number to a unsigned/signed. I.e. given \code{int a; unsigned b;} and we assign \code{a = b;} or \code{b = a;}.
 
 Beside assignments, implicit conversion also happens when we mix signed and unsigned numbers in an expression. It that case the signed number is casted implicitly to a unsigned. 
