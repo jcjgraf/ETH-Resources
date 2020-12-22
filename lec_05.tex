@@ -1,9 +1,9 @@
-%! TEX root = ./master.tex
+%! TEX root = ./master.Tex
 
-\lecture{Ch. 4}{2020-09-29}{C Pointers}
+\lecture{5}{Week: 3}{C Pointers}
 
 \subsubsection{Address Space}
-The OS gives each process an address space, which contains the virtual memory. The virtual memory is visible only to the process. Each byte is adresses and there are $2^{64}$ bytes of memory on a $64$ bit machine. The OS maps the virtual memory to the physical memory.
+The OS gives each process an address space, which contains the virtual memory. The virtual memory is visible only to the process. Each byte is addresses and there are $2^{64}$ bytes of memory on a $64$ bit machine. The OS maps the virtual memory to the physical memory.
 When the OS loads a program, the following steps are executed:
 
 \paragraph{Loading a program}
@@ -55,3 +55,8 @@ Arrays cannot be renamed, but we change the pointer.
 
 \subsubsection{Passed by Reference}
 Since C is passed by value, we can pass a reference by passing a pointer. However, this pointer is again passed by value and therefore can be modified in the scope of the functions.
+
+\subsubsection{Examples}
+Here some pointer declaration examples:
+
+\includegraphics[width=0.8\textwidth]{05_pointerDeclarationEx.png}
