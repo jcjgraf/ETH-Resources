@@ -1,9 +1,10 @@
 %! TEX root = ./master.tex
 
-\lecture{06}{Week 3}{Dynamic Memory Allocation}
+\lecture{6}{Week 3}{Dynamic Memory Allocation}
 
 Global variables are allocated statically, meaning that they are allocated when the program is loaded and deallocated when the program exits. Function variables and function parameters are automatically allocated when the function is called and deallocated when the function returns.\\
-Often, we want some data to persist across multiple function calls but not for the whole lifetime of a program. Sometimes, the data is also to big to fit on the stack or a function may return a value whose size us unknown to the caller. All these problems an be solved with explizite memory allocation where the program explicitely requestts new blocks of memory.\\ 
+Often, we want some data to persist across multiple function calls but not for the whole lifetime of a program. Sometimes, the data is also to big to fit on the stack or a function may return a value whose size us unknown to the caller. All these problems an be solved with explizite memory allocation where the program explicitly requests new blocks of memory.
+
 \subsubsection{C Memory API}
 \paragraph{Allocation}
 \code{void *malloc(unsigned long sz)} allocates a lock of size \code{sz} and returns a pointer to the first byte of that memory. Actually, it returns a void pointer, which we then need to convert to our desired type. When null is returns, the memory could not be allocated. Therefore, one should always check if the procedure was successful. 
@@ -52,10 +53,10 @@ if (arr == NULL) {
 }
 \end{lstlisting}
 
-\paragraph{size_t}
+\paragraph{size\_t}
 Is a unsigned int, e.g. \code{unsigned long} is often used to store memory pointers. They are large enough to hold the size of the largest possible array in memory and are therefore often used to store pointers to memory addresses.
 
-\paragraph{ptrdiff_t}
+\paragraph{ptrdiff\_t}
 Is a unsigned integer of some size and the result of subtracting two pointers. They are used for array loops, size calculations etc.
 
 \subsubsection{Managing the Heap}
@@ -78,7 +79,7 @@ Happen when code fails to deallocated memory that is no longer used. For short-l
 
 
 \paragraph{Stuctured Data}
-A \coce{struct} is a C type that contains a set of fields. The tag of the structure is like the name of the structure. To referee to fields of a struct, we use the \code{tag.field} notation, to referee to fields from a pointer to the struct, we can use \code{p_tag->field} which is the shorthand notation for \code{(*p_tag).field}. Stucts can be initialized by either providing all values at the same time, or by assigning value by value.
+A \code{struct} is a C type that contains a set of fields. The tag of the structure is like the name of the structure. To referee to fields of a struct, we use the \code{tag.field} notation, to referee to fields from a pointer to the struct, we can use \code{p\_tag->field} which is the shorthand notation for \code{(*p\_tag).field}. Stucts can be initialized by either providing all values at the same time, or by assigning value by value.
 
 \begin{lstlisting}
 struct Point {

@@ -2,7 +2,7 @@
 
 \lecture{23}{Week 12}{Continue: Coherency Protocols}
 
-\subsection{MOESI}
+\subsection*{MOESI}
 Compared to the MESI, MOESI added an \textit{Owner} state. 
 
 \begin{itemize}
@@ -81,7 +81,7 @@ There are also many other relaxations and different architectures support differ
 \textit{Barriers/fences} provide a way for synchronisation in a weak consistency model. There are two main types:
 
 \paragraph{Compiler Barriers}
-Compiler barriers prevent the compiler from reordering memory loads and stores, but they may still reorder register accesses (since they are private to the compiler). In gcc we would use \code{__asm__ __volatile__("" ::: "memory");} to tell the gcc compiler to use such a barrier. This code is called compiler intrinsic.
+Compiler barriers prevent the compiler from reordering memory loads and stores, but they may still reorder register accesses (since they are private to the compiler). In gcc we would use \code{\_\_asm\_\_ \_\_volatile\_\_("" ::: "memory");} to tell the gcc compiler to use such a barrier. This code is called compiler intrinsic.
 
 \paragraph{Memory Barriers}
 Memory barriers prevent the CPU from reordering load/store instructions before a barrier with load/store instructions after a barrier. They are like a \textit{wall} for instructions. For this the \code{MFENCE} instruction is used.
