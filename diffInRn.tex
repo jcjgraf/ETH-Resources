@@ -18,14 +18,14 @@ Subset $X \subset \R^n$ is:
     \item[Bounded:] if $\{|x| | x \in X\}$ is bounded.
     \item[Closed:] if every sequence $(x_k)$ in $X$ for which $\lim_{k \to a} (x_k) = y, y \in \R^n$ we have $x \in X$.
     \item[Compact:] if closed and bounded.
-    \item[Open:] if its complements $\R^n \setminus X$ is closed.
+    \item[Open:] if $\forall x \in X, \exists r > 0$ s.t. $\{y \in \R^n | |y - x| < r\} \subset X$.
         \begin{compactitem}
-            \item Equivalently, if $\forall x \in X, \exists r > 0$ s.t. $\{y \in \R^n | |y - x| < r\} \subset X$.
+            \item Equivalently, if its complements $\R^n \setminus X$ is closed.
         \end{compactitem}
 \end{compactdesc}
 
 \begin{compactitem}
-    \item If $X \subset \R^n, Y \subset \R^m$ are bounded (or closed or compact), then $X \times Y = \{(x, y) \in \R^{n+m} | x \in X, y \in Y\}$ is bounded (or closed or compact).
+    \item If $X \subset \R^n, Y \subset \R^m$ are bounded (or closed or compact or open), then $X \times Y = \{(x, y) \in \R^{n+m} | x \in X, y \in Y\}$ is bounded (or closed or compact or open).
     \item For $f: \R^n \to \R^m$ continuous, $\forall Y \subset \R^m$ closed, the set $f^{-1}(y) = \{x \in \R^n | f(x) \in Y\} \subset \R^n$ is closed. I.e. the inverse image of a closed set under a continuous map is closed.
 \end{compactitem}
 
@@ -66,3 +66,230 @@ If $f, g, h: \R^n \to \R$, where $f(x) < g(x) < h(x) \quad \forall x \in \R^n$ a
 For $f: \R^2 \to \R$ check if continuous at $0$. Let $f(x, y) = f(r \cos \delta, r \sin \delta)$. If $\lim_{(x, y) \to 0} f(x, y) = \lim_{r \to 0}$ is dependant on $\delta \implies$ limes does not exists $\implies$ not continuous at $0$.
 
 \subsection{Partial Derivatives}
+For $X \subset \R^n$ open, the function $f: X \to \R^m$ has a partial derivative on $X$ with respect to the $1 \le i \le n$-th variable if $\forall x_0 = (x_{0,1}, \dots x_{0,n}) \in X$ the function $g_i(t):= f(x_{0,1}, \dots x_{0, i - 1}, t, x_{0, i + 1}, \dots x_{0, n})$ on the set $I = \{t \in \R | (x_{0,1}, \dots x_{0, i - 1}, t, x_{0, i + 1}, \dots x_{0, n}) \in X\}$ is differentiable at $t = x_{0, i}$. The derivative $g'(x_{0,i})$ is denoted as $\frac{\partial f}{\partial x_i} (x_0) = \partial{x_i}f(x_0) = \partial_i f(x_0)$.
+
+\begin{compactitem}
+\item A partial derivative $\partial_i f$ can be derived again $\partial_{x_j} (\partial_{x_i} f) = \partial_{x_i, x_j} f = \frac{\partial^2 f}{\partial x_i \partial x_j}$. Or for repeated variables $\partial_{x_i} (\partial_{x_i} (f)) = \partial_{x^2_i} f = \frac{\partial^2 f}{\partial x^2_i}$.
+\end{compactitem}
+
+\subsubsection{Properties}
+For $X \subset \R^n$ open and $f, g: X \to \R^m$ and $1 \le i \le n$:
+\begin{compactitem}
+    \item If $\partial_i (f)$ and $\partial_i (g)$ exist, then $\partial_i (f + g) = \partial_i (f) + \partial_i (g)$.
+    \item If $m = 1$ and if $\partial_i (f)$ and $\partial_i (g)$ exist, then $\partial_i (fg) = \partial_i (f)g + f \partial_i (g)$.
+    \item If $m = 1$, if $\partial_i (f)$ and $\partial_i (g)$ exist and if $g(x) \neq 0 \forall x \in X$, then $\partial_i (\frac{f}{g}) = \frac{\partial_i (f)g - f \partial_i (g)}{g^2}$.
+\end{compactitem}
+
+\subsubsection{Jacobi Matrix}
+For $X \subset \R^n$ open and $f: X \to \R^m$ with partial derivatives on $X$, $f(x) = f_1(x), \dots f_m(x))$, the matrix $J_f(x) = (\partial_j f_i(x))_{\substack{1 \le i \le m\\1 \le j \le n}} =
+    \begin{pmatrix}
+        \partial_1 f_1 & \partial_2 f_1 & \dots & \partial_n f_1\\
+        \partial_2 f_2 & \partial_2 f_2 & \dots & \partial_n f_2\\
+        \vdots & \vdots & \ddots & \vdots \\
+        \partial_1 f_m & \partial_2 f_m & \dots & \partial_n f_m
+    \end{pmatrix}
+\quad \forall x \in X$ with $m$ rows and $n$ columns is the Jacobi matrix of $f$ at $x$.
+
+\begin{compactitem}
+    \item $\text{det} J_f(x)$ tells when the linear map $f$ is invertible and when not.
+\end{compactitem}
+
+\subsubsection{Gradient}
+For $X \subset \R^n$ open and $f: X \to \R$ with partial derivatives on $X$, the column vector $
+\begin{pmatrix}
+    \partial_1 f(x_0)\\
+    \vdots\\
+    \partial_n f(x_0)
+\end{pmatrix}
+= (J_f(x_0))^T$ is the gradient of $f$ at $x_0$ denoted as $\bigtriangledown f(x_0)$.
+
+\subsection{Differentiability}
+For $X \subset \R^n$ open, $x_0 \in X$ and $f: X \to \R^m$. $f$ is differentiable at $x_0$ with differential $u: \R^n \to \R^m$ if $\lim_{\substack{x \to x_0\\ x \neq  x_0}} \frac{1}{|x - x_0|}(f(x) - f(x_0) - u(x - x_0)) = \frac{R(x, x_0)}{|x - x_0|} = 0$.
+\begin{compactitem}
+    \item The linear map $u$ is called \textbf{total differential} of $f$ at $x_0$ and is denoted as $df(x_0)$ or $d_{x_0}f$.
+    \item If $f$ is differentiable $\forall x_0 \in X$ then $f$ is differentiable on X.
+    \item The map $df(x_0)$ can be represented as a $m \times n$ matrix.
+    \item $f(x) = f(x_0) + u(x - x_0) + E(f, x, x_0)$, where $\lim_{\substack{x \to x_0 \\ x \neq x_0}} \frac{E(f, x, x_0)}{|x - x_0|} = 0$
+        \begin{compactitem}
+            \item $f(x_0) + u(x - x_0)$ is a linear affine function.
+        \end{compactitem}
+\end{compactitem}
+
+\subsubsection{Properties}
+For $X \subset \R^n$ open and $f: X \to \R^m$. $f$ is differentiable at $x_0$:
+\begin{compactitem}
+    \item $f$ is continuous on $x_0$
+        \begin{compactitem}
+            \item if $f$ is differentiable on $X$, then $f$ is continuous on $X$
+        \end{compactitem}
+    \item $f$ has all partial derivatives at $x_0$
+    \item $df(x_0)$ is given by $A = J_f(x_0)$
+        \begin{compactitem}
+            \item if $m = 1$, then $df(x_0) = J_f(x_0) = (\partial_i f(x_0), \dots \partial_n f(x_0))$
+        \end{compactitem}
+\end{compactitem}
+
+For $X \subset \R^n$ open and $f, g: X \to \R^m$ differentiable on $X$:
+\begin{compactitem}
+    \item $f + g$ is differentiable and $d(f + g)(x_0) = df(x_0) + dg(x_0)$.
+    \item if $m = 1$, then $f \cdot g$ is differentiable
+    \item if $m = 1$ and $f(x) \neq 0 \quad \forall x \in X$, then $\frac{f}{g}$ is differentiable
+\end{compactitem}
+
+\paragraph{Chain Rule}
+For $X \subset \R^n$ open, $Y \subset \R^m$ open and $f: X \to Y$ differentiable on $X$ and $g: Y \to \R^p$ differentiable on $Y$. Then $g \circ f: X \to \R^p$ is differentiable and $d(g \circ f)(x_0) = df(f(x_0)) \circ df(x_0)$.
+
+\begin{compactitem}
+    \item The Jacobi satisfies $J_{g \circ f}(x_0) = J_g(f(x_0))J_f(x_0)$
+\end{compactitem}
+
+\subsubsection{Condition}
+For $X \subset \R^n$ open and $f: X \to \R^m$. If $f$ has all partial derivatives and they are continuous on $X$, then $f$ is differentiable in $X$.
+
+\begin{compactitem}
+    \item $\substack{\text{partial derivatives exist}\\ + \text{partial derivatives are continuous}} \implies f \text{ is differentiable}$.
+    \item $df(x_0) J_f(x_0)$.
+    \item This implies that most functions are differentiable.
+\end{compactitem}
+
+\subsubsection{Tangent Space}
+For $X \subset \R^n$ open, $f: X \to \R^m$ differentiable on $X$ and $x_0 \in X$, the differential $u = df(x_0)$. The graph of the affine linear approximation $g: \R^n \to \R^m, g(x) = f(x_0) + u(x - x_0)$ is the tangent space of $f$.  
+\begin{compactitem}
+    \item The pts of the tangent space are in $\{(x, y) \in \R^n \times \R^m | y = f(x_0) + u(x - x_0) \}$.
+    \item If $m = 1$ then $u(x - x_0) = df(x_0)(x - x_0) = \bigtriangledown f(x_0) \cdot (x - x_0)$.
+\end{compactitem}
+
+\subsubsection{Directional Derivative}
+For $X \subset \R^n$ open, $f: X \to \R^m$, $v \in \R^n$ a non-zero vector and $x_0 \in X$. $f$ has a directional partial derivative $w \in \R^m$ in the direction $v$, if $g(t) = f(x_0 + tv)$, defined on $\{t \in \R | x_0 + tv \in X\}$, holds $g'(0) = w$.
+
+\begin{compactitem}
+    \item I.e. $\lim_{\substack{t \to 0\\ t \neq 0}} \frac{f(x_0 + tv) - f(x_0)}{t} = w$.
+\end{compactitem}
+
+For $X \subset \R^n$ open and $f: X \to \R^m$ differentiable. Then $\forall x \in X$ and $\forall v \in \R^n$ non-zero, $f$ has directional partial derivative at $x_0$ in the direction $v$ and is equal to $df(x_0) (v) = J_f(x_0)(v)$.
+
+\begin{compactitem}
+\item If $m = 1$ and $|v| = 1$, then $df(x_0) (v) = J_f(x_0)(v) = <\bigtriangledown f(x_0), v> = |\bigtriangledown f(x_0)||v|\cos(\theta)$.
+    \begin{compactitem}
+        \item This is maximal if we maximize $\cos \theta$ which is the case for $\theta = 0$.
+    \end{compactitem}
+\end{compactitem}
+
+
+\subsubsection{Special Coordinates}
+\paragraph{Polar Coordinates}
+\begin{inparaitem}
+    \item $f: [0, \infty) \times [0, 2\pi) \to \R^2$
+    \item $(r, \theta) \mapsto (x, y) = (r \cos \theta, r \sin \theta)$
+    \item $J_f(x_0) = 
+        \begin{pmatrix}
+            \frac{\partial f_1}{\partial r} & \frac{\partial f_1}{\partial \theta}\\
+            \frac{\partial f_2}{\partial r} & \frac{\partial f_2}{\partial \theta}
+        \end{pmatrix} = 
+        \begin{pmatrix}
+            \cos \theta & -r \sin \theta\\
+            \sin \theta & r \cos \theta
+        \end{pmatrix}$
+    \item $\text{det }J_f(r, \theta) = r$
+\end{inparaitem}
+
+\paragraph{Cylindrical Coordinates}
+\begin{compactitem}
+    \item $f: [0, \infty) \times [0, 2 \pi) \times \R \to \R^3$
+    \item $(0, \theta, z) \mapsto 
+        \begin{pmatrix}
+            r \cos \theta\\
+            r \sin \theta\\
+            z
+        \end{pmatrix} =
+        \begin{pmatrix}
+            x\\
+            y\\
+            z
+        \end{pmatrix}$
+    \item $J_f(r, \theta) =
+        \begin{pmatrix}
+            \cos \theta & -r \sin \theta & 0\\
+            \sin \theta & r \cos \theta & 0\\
+            0 & 0 & 1
+        \end{pmatrix}$
+    \item $\text{det }J_f = r$
+\end{compactitem}
+
+\paragraph{Spherical Coordinates}
+\begin{compactitem}
+    \item $f: [0, \infty) \times [0, 2 \pi) \times [0, \pi) \to \R^3$
+    \item $(r, \theta, \varnothing) \mapsto
+        \begin{pmatrix}
+            r \cos \theta \sin \varnothing\\
+            r \sin \theta \sin \varnothing\\
+            r \cos \varnothing
+        \end{pmatrix} =
+        \begin{pmatrix}
+            x\\
+            y\\
+            z
+        \end{pmatrix}$
+    \item $J_f(r, \theta, \varnothing) =
+        \begin{pmatrix}
+            \cos \theta \sin \varnothing & -r \sin \theta \sin \varnothing & r \cos \theta \cos \theta\\
+            \sin \theta \sin \varnothing & r \cos \theta \sin \varnothing & r \sin \theta \cos \varnothing\\
+            \cos \varnothing & 0 & -r \sin \varnothing
+        \end{pmatrix}$
+    \item $\text{det } J_f = -r^2 \sin \varnothing$
+\end{compactitem}
+
+\subsection{Change of Variable}
+For $X \subset \R^n$ open, $f: X \to \R^m$ differentiable and $x_0 \in X$. $f$ is a change of variable around $x_0$ if $\exists$ radius $r > 0$ s.t. the restaction of $f$ to the ball $B = \{x \in \R^n | |x - x_0| < r\}$ of radius $r$ and center $x_0$ has the property that the image $Y = f(B)$ is open in $\R^n$ and $\exists$ differentiable $f: Y \to B$ s.t. $f \circ g = \text{Id}_Y$ and $g \circ f = \text{Id}_B$.
+
+\begin{compactitem}
+    \item I.e. $f|_{B_r(x_0)}$ is a bijection to the image with a inverse $f$ is is also differentiable.
+\end{compactitem}
+
+\subsubsection{Inverse Function Theorem}
+For $X \subset \R^n$ open and $f: X \to \R^m$ differentiable. If $\exists x_0 \in X$ s.t. $J_f(x_0) \neq 0$ the $f$ is a change of variable around $x_0$.
+
+\begin{compactitem}
+    \item The Jacobi of $g$ at $x_0$ is $J_g(f(x_0)) O J_f(x_0)^{-1}$.
+    \item $\text{det }J_f(x_0) \neq 0 \iff$ Jacobi matrix of $f$ at $x_0$ is invertible.
+    \item If $f \in C^k$ then $g \in C^k$.
+\end{compactitem}
+
+\subsection{Higher Derivatives}
+For $X \subset \R^n$ open and $f: X \to \R^m$
+\begin{compactitem}
+    \item $f \in C^1$ if $f$ is differentiable on $X$ and all its partial derivatives are continuous.
+    \item For $k \ge 2$, $f \in C^k$ is $f$ is differentiable and each $\partial_i f: X \to \R^m \in C^{k-1}$.
+    \item If $f \in C^k \quad \forall k \ge 1$ then $f \in C^\infty$ is smooth.
+    \item The set of function $g: X \to \R^m \in C^k$ is $C^k(X; R^m)$.
+\end{compactitem}
+
+\subsubsection{Notation}
+For derivative $\frac{\partial^{k}}{\partial x_1^{m_1} \dots \partial x_n^{m_n}}$ of order $k \le n$ of $f: \R^n \to \R$, we write $\frac{\partial^{|m|}}{\partial x^{m}} f$, with:
+\begin{inparaitem}
+    \item $m = (m_1, \dots m_n)$ the vector of number of derivatives for each partial derivative.
+    \item $|m| := m_1 + \dots + m_n$
+    \item $x^n := (x_1^{m_1}, \dots , x_n^{m_n}$
+    \item $m! := m_1! \dots m_n!$
+\end{inparaitem}
+
+\subsubsection{Mixed Derivates Commute}
+For $X \subset \R^n$ open, $f: X \to \R^m \in C^k$ and $k \ge 2$. The derivatives of order $k$ are independent of the order in which the partial derivatives are taken.
+
+\begin{compactitem}
+    \item I.e. $\partial_{x, y} f = \partial_{y, x} f$
+\end{compactitem}
+
+\subsubsection{Hessian}
+For $X \subset \R^n$ open and $f: X \to \R^m \in C^2$. The Hessian matrix of $x$ is $\text{Hess}_f(x) = H_f(x) = (\partial_{x_i, x_j}f)_{1 \le i, j \le n} =
+\begin{pmatrix}
+    \partial_{x_1^2} f & \partial_{x_1, x_2} f & \dots & \partial_{x_1, x_n} f\\
+    \partial_{x_2, x_1} f & \partial_{x_2^2} f & \dots & \partial_{x_2, x_n} f\\
+    \vdots & & \ddots & \vdots\\
+    \partial_{x_n, x_1} f & \partial{x_n, x_2} f & \dots & \partial_{x_n^2} f
+\end{pmatrix}$.
+
+\begin{compactitem}
+    \item $H_f(x)$ is symmetric, square, $n \times n$.
+\end{compactitem}
+
