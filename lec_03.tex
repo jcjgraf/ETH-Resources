@@ -45,7 +45,7 @@ Multidimensional arrays are stored in row-major in a continuous array. Meaning t
 When viewed as a matrix, the first brackets defines the number of columns and the second bracket the number of rows.
 
 \subsubsection{Strings}
-There is no string type in C. Instead strings are an array of chars. The end of the array is marked by the null character $\\0$. We could assign it directly as an array of chars \code{char arr[3] = \{'a', 'b', '\\0'\}}. This way we must add the null character explicitly. It is often easier to assign the sting directly as \code{char arr[3]= "ab"}.
+There is no string type in C. Instead strings are an array of chars. The end of the array is marked by the null character \textbackslash 0. We could assign it directly as an array of chars \code{char arr[3] = \{'a', 'b', '\textbackslash 0'\}}. This way we must add the null character explicitly. It is often easier to assign the sting directly as \code{char arr[3]= "ab"}.
 
 Very important is that when setting the length of the array, we keep in mind that the null character requires some space too.
 
@@ -72,7 +72,7 @@ Manipulate single bits of any \textit{integral} data type (long, int, short, cha
     $\hat{}$ & xor
 \end{tabular}
 
-We can also use the to represent and manipulate sets. We encode bit vectors in a certain way.
+We can also use the to represent and manipulate sets. We encode bit vectors in a certain way. %something is missing in this sentence
 
 \paragraph{Logical}
 Viewing data as true and false where $0$ means false and everything else true. Either of the two states is always returned. They apply to the vector as a whole.
@@ -91,8 +91,8 @@ Viewing data as true and false where $0$ means false and everything else true. E
         \end{itemize}
     \item Right shift: $x >> y$ shift bit-vector $x$ right $y$ positions
         \begin{itemize}
-            \item Logical shift: fill with $0$s (always applied if int is signed)
-            \item Arithmetic shift: replicate most significant bit (always applied if int is unsigned)
+            \item Logical shift: fill with $0$s (always applied if int is unsigned)
+            \item Arithmetic shift: replicate most significant bit (always applied if int is signed)
         \end{itemize}
 \end{itemize}
 
