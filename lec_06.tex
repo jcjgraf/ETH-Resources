@@ -7,7 +7,7 @@ Often, we want some data to persist across multiple function calls but not for t
 
 \subsubsection{C Memory API}
 \paragraph{Allocation}
-\code{void *malloc(unsigned long sz)} allocates a lock of size \code{sz} and returns a pointer to the first byte of that memory. Actually, it returns a void pointer, which we then need to convert to our desired type. When null is returned, the memory could not be allocated. Therefore, one should always check if the procedure was successful. 
+\code{void *malloc(unsigned long sz)} allocates a block of size \code{sz} and returns a pointer to the first byte of that memory. Actually, it returns a void pointer, which we then need to convert to our desired type. When null is returned, the memory could not be allocated. Therefore, one should always check if the procedure was successful. 
 
 Typical usage may look as follows:
 \begin{lstlisting}
