@@ -1,0 +1,75 @@
+%! TEX root  = ./main.tex
+
+\section{Differential Equations (DE)}
+Equation where the unknown is a function $y = f(x)$ and the equation relates values of $y$ and its derivatives $y', y'' \dots$ at a single point $x$.
+
+The number of parameter determines its type:
+\begin{compactdesc}
+    \item[Ordinary Differential Equation (ODE):] DE with a function of only one variable $x$.
+    \item[Partial Differential Equation (PDE):] DE with a function of multiple variables $a, b \dots$.
+\end{compactdesc}
+
+\subsection{Properties}
+\begin{compactdesc}
+    \item[Order:] Highest derivative appearing in the DE.
+\end{compactdesc}
+
+\subsection{Linear Differential Equations}
+A linear differential equations of order $k$ is a DE of the form $y^{(k)} + a_{k - 1}y^{(k - 1)} + \dots + a_1y' + a_0y = b$ where $a_i, b, y_i$ are functions on $I \subset \mathbb{K}$. Meaning, all terms $y, y' \dots$ appear linearly.
+
+\subsubsection{Types}
+\begin{compactdesc}
+    \item[Homogenous Linear ODE:] RHS $b = 0$
+    \item[Inhomogenous Linear ODE:] RHS $b \neq 0$
+\end{compactdesc}
+
+\subsubsection{Solutions}
+The general solution to a inhomogeneous linear DE is $y = y_0 + y_p$.
+\begin{compactdesc}
+    \item[$\mathbf{y_0}$:] General solution to the homogeneous linear DE.
+        \begin{compactitem}
+            \item The set of all $y_0$ forms a vector space with dimension equal to the order of the DE
+        \end{compactitem}
+    \item[$\mathbf{y_p}$:] A particular solution the inhomogeneous linear DE.
+\end{compactdesc}
+
+\paragraph{Construction of Solutions}
+The following follows from the linearity of the DE:
+\begin{compactitem}
+    \item If $y_1$ and $y_2$ are two different solutions to an inhomogeneous linear DE, then $y = c_1 \cdot y_1 + c_2 \cdot c_2$ is also a solution.
+    \item If $y_1$ solves the linear DE for RHS $b_1$ and $y_2$ solves the linear DE for RHS $b_2$, then $y_1 + y_2$ solves the linear DE for RHS $b_1 + b_2$.
+\end{compactitem}
+
+\subsubsection{Initial Value Problem}
+For any DE of order $k$ and any $k$ initial value requirements there exists a unique general solution $y$.
+
+\subsection{Separation of Variables}
+\begin{compactdesc}
+    \item[Given:] ODE of order $1$ of the form:
+        $$\frac{dy}{dx} = h(x) g(y)$$
+    \item[Goal:] Find solution $y$
+\end{compactdesc}
+\begin{compactenum}
+    \item Separate the variable $x$ and the function $y$ by taking each on one side:
+        $$\frac{}{g(y)}dy = h(x) dx$$
+    \item Integrate both sides:
+        $$\int \frac{1}{g(y)} dy = \int h(x) dx$$
+    \item Combine integral constants into constant $C$
+    \item Solve $C$ using the initial condition
+\end{compactenum}
+
+\subsection{Euler-Ansatz}
+\begin{compactdesc}
+    \item[Given:] Linear ODE of order $k$ with constant coefficients $a_i \in \C$.
+    \item[Goal:] 
+\end{compactdesc}
+
+\begin{compactenum}
+    \item Find solution $y_0$ to homogeneous linear DE
+        \begin{compactitem}
+            \item Calculate the characteristic polynomial $P(\lambda)$
+            \item Find zeros $\lambda_i$ with multiplicity $m_i$ of $P(\lambda)$
+            \item Form solution 
+        \end{compactitem}
+    \item Find solution $y_p$ to 
+\end{compactenum}
