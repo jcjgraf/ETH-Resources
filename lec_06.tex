@@ -3,11 +3,11 @@
 \lecture{6}{Week 3}{Dynamic Memory Allocation}
 
 Global variables are allocated statically, meaning that they are allocated when the program is loaded and deallocated when the program exits. Function variables and function parameters are automatically allocated when the function is called and deallocated when the function returns.\\
-Often, we want some data to persist across multiple function calls but not for the whole lifetime of a program. Sometimes, the data is also to big to fit on the stack or a function may return a value whose size us unknown to the caller. All these problems an be solved with explizite memory allocation where the program explicitly requests new blocks of memory.
+Often, we want some data to persist across multiple function calls but not for the whole lifetime of a program. Sometimes, the data is also to big to fit on the stack or a function may return a value whose size is unknown to the caller. All these problems an be solved with explicit memory allocation where the program explicitly requests new blocks of memory.
 
 \subsubsection{C Memory API}
 \paragraph{Allocation}
-\code{void *malloc(unsigned long sz)} allocates a lock of size \code{sz} and returns a pointer to the first byte of that memory. Actually, it returns a void pointer, which we then need to convert to our desired type. When null is returns, the memory could not be allocated. Therefore, one should always check if the procedure was successful. 
+\code{void *malloc(unsigned long sz)} allocates a block of size \code{sz} and returns a pointer to the first byte of that memory. Actually, it returns a void pointer, which we then need to convert to our desired type. When null is returned, the memory could not be allocated. Therefore, one should always check if the procedure was successful. 
 
 Typical usage may look as follows:
 \begin{lstlisting}
@@ -19,10 +19,10 @@ if (arr == NULL) {
 arr[0] = 5L; // etc.
 \end{lstlisting}
 
-Unlike \code{malloc}, where the initialized mameory contains garbage, \code{void *calloc(unsigned long nm, unsigned long sz);} initialized a memory block of size $nm \cdot sz$ containing zeros. It is slightly slower than \code{malloc} but less error-prone and more readable.
+Unlike \code{malloc}, where the initialized memory contains garbage,\code{void *calloc(unsigned long nm, unsigned long sz);} initialized a memory block of size $nm \cdot sz$ containing zeros. It is slightly slower than \code{malloc} but less error-prone and more readable. %Problems with width
 
 \paragraph{Deallocation}
-When memory is no longer used, one deallocated it using \code{void free(void *);}, where the argument is the pointer to the first byte of the memory. It is also good practice to null the memory pointer after freeing.
+When memory is no longer used, one deallocates it using \code{void free(void *);}, where the argument is the pointer to the first byte of the memory. It is also good practice to null the memory pointer after freeing.
 
 \begin{lstlisting}
 long *arr = (long *)malloc(10 * sizeof(long));
@@ -54,13 +54,13 @@ if (arr == NULL) {
 \end{lstlisting}
 
 \paragraph{size\_t}
-Is a unsigned int, e.g. \code{unsigned long} is often used to store memory pointers. They are large enough to hold the size of the largest possible array in memory and are therefore often used to store pointers to memory addresses.
+Is an unsigned int, e.g. \code{unsigned long} is often used to store memory pointers. They are large enough to hold the size of the largest possible array in memory and are therefore often used to store pointers to memory addresses.
 
 \paragraph{ptrdiff\_t}
-Is a unsigned integer of some size and the result of subtracting two pointers. They are used for array loops, size calculations etc.
+Is an unsigned integer of some size and the result of subtracting two pointers. They are used for array loops, size calculations etc.
 
 \subsubsection{Managing the Heap}
-The heap is a large pool of unused memory, used for dynamic allocated data structures. \code{malloc/calloc} allocate chunks of memory, \code{free} empties and returns them. In order to know which parts of the heap are used, \code{malloc} maintains bookkeeping data to track allocations.
+The heap is a large pool of unused memory, used for dynamically allocated data structures. \code{malloc/calloc} allocate chunks of memory, \code{free} empties and returns them. In order to know which parts of the heap are used, \code{malloc} maintains bookkeeping data to track allocations.
 
 \paragraph{Memory Corruption}
 Memory can corrupt in many different ways:
@@ -79,7 +79,7 @@ Happen when code fails to deallocated memory that is no longer used. For short-l
 
 
 \paragraph{Stuctured Data}
-A \code{struct} is a C type that contains a set of fields. The tag of the structure is like the name of the structure. To referee to fields of a struct, we use the \code{tag.field} notation, to referee to fields from a pointer to the struct, we can use \code{p\_tag->field} which is the shorthand notation for \code{(*p\_tag).field}. Stucts can be initialized by either providing all values at the same time, or by assigning value by value.
+A \code{struct} is a C type that contains a set of fields. The tag of the structure is like the name of the structure. To refer to fields of a struct, we use the \code{tag.field} notation, to refer to fields from a pointer to the struct, we can use \code{p\_tag->field} which is the shorthand notation for \code{(*p\_tag).field}. Structs can be initialized by either providing all values at the same time, or by assigning value by value.
 
 \begin{lstlisting}
 struct Point {
@@ -99,11 +99,11 @@ int main() {
 }
 \end{lstlisting}
 
-When we assign struct types \code{p1 = p2}, the entire content of \code{p2} is copied to \code{p1}. As everything else, a struct is passed by value end hence, the whole stuct is copied. Structs can be the return type of a function.\\
-When a struct is mixed of fields of different type, the size of the struct may not be equal to the size of the summe of the sizes of the fiels, but the stuct may get padded. We can print the size of the struct with \code{printf("\%s", sizeof(mystruct));}.
+When we assign struct types \code{p1 = p2}, the entire content of \code{p2} is copied to \code{p1}. As everything else, a struct is passed by value end hence, the whole struct is copied. Structs can be the return type of a function.\\
+When a struct is mixed of fields of different type, the size of the struct may not be equal to the size of the sum of the sizes of the fields, but the struct may get padded. We can print the size of the struct with \code{printf("\%s", sizeof(mystruct));}.
 
 \paragraph{Unions}
-They are very similar to \code{struct}, but with the difference that only most recently assigned value is saved. All other fields cannot be accessed. There is no safety measurements for checking which field is the valid one.
+They are very similar to \code{struct}, but with the difference that only the most recently assigned value is saved. All other fields cannot be accessed. There is no safety measurements for checking which field is the valid one.
 
 \subsubsection{Type Definitions}
 \paragraph{typedef}

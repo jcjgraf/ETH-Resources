@@ -5,7 +5,7 @@
 \subsubsection{Sign extension}
 Given a $w$ bit signed integer $x$, convert it to a $w + k$ bit signed integer with the same value.
 
-We do that by coping the most significant bit of $x$ and copy it to all $k$ new bits
+We do that by copying the most significant bit of $x$ and copy it to all $k$ new bits.
 
 \includegraphics[width=0.8\textwidth]{04_signExtend.png}
 
@@ -25,7 +25,7 @@ Number $x$ can be negated using $\tilde x + 1 == -x$.
 It follows that $\tilde x + x == 111 \dots 111 == -1$
 
 \paragraph{Unsigned addition}
-When adding two unsigned number $u$ and $v$ of length $w$, we get a number of length $w + 1$.
+When adding two unsigned numbers $u$ and $v$ of length $w$, we get a number of length $w + 1$.
 
 \includegraphics[width=0.8\textwidth]{04_unsignedAdditionEquation.png}
 
@@ -42,7 +42,7 @@ The $Uadd_w$ function is the classical unsigned addition operator in C. There ar
 $UAdd_w(u,v)$ is an Abelian group (Closed, Commutative, Associative, Identity, Inverse)
 
 \paragraph{Two's complement addition}
-When adding two signed number $u$ and $v$ of length $w$, we get a number of length $w + 1$.
+When adding two signed numbers $u$ and $v$ of length $w$, we get a number of length $w + 1$.
 
 \includegraphics[width=0.8\textwidth]{04_signedAdditionEquation.png}
 
@@ -61,7 +61,7 @@ $TAdd$ is isomorphic to $UAdd$ and $TAdd$ forms a group (closed, commutative, as
 \subsubsection{Integer multiplication in C}
 
 \paragraph{Unsigned Multiplication}
-When multiplying two unsigned number $u$ and $v$ of length $w$, we get a number of length $2w$.
+When multiplying two unsigned numbers $u$ and $v$ of length $w$, we get a number of length $2w$.
 
 \includegraphics[width=0.8\textwidth]{04_unsignedMultiplyEquation.png}
 
@@ -74,7 +74,7 @@ In order that the product is exact $x$ and $y$ must satisfy $0 \le x \cdot y \le
 $UMULt_w$ forms a commutative ring with $UAdd$.
 
 \paragraph{Signed Multiplication}
-When multiplying two signed number $u$ and $v$ of length $w$, we get a number of length $2w$.
+When multiplying two signed numbers $u$ and $v$ of length $w$, we get a number of length $2w$.
 
 \includegraphics[width=0.8\textwidth]{04_signedMultiplicationEquation.png}
 
@@ -86,18 +86,18 @@ The minimal product which can be represented accurately is $x \cdot y \ge (-2^{w
 \paragraph{Multiplication}
 As we have seen, the shift operator shifts the binary representation of a number. Regarding the interpreted number, $u << k$ results in $u \cdot 2^k$. This is valid for signed and unsigned numbers.
 
-When shifting a signed/unsigned number of length $w$ by $k$, the $k$ over flowing bits are truncated.
+When shifting a signed/unsigned number of length $w$ by $k$, the $k$ overflowing bits are truncated.
 
 \includegraphics[width=0.8\textwidth]{04_powerOfTwo.png}
 
-Multiplication is much more complex than simple shifts. Therefore, to calculate $u \cdot 24$ we may write $(u << 5) - (u << 3)$. But modern compiler do such thinks (and even better optimisations) for us, therefore we should not do it.
+Multiplication is much more complex than simple shifts. Therefore, to calculate $u \cdot 24$ we may write $(u << 5) - (u << 3)$. But modern compiler do such things (and even better optimisations) for us, therefore we should not do it.
 
 \paragraph{Division}
 Equally as with multiplication, shifts can be used for division of power of twos. $u >> k$ gives $\lfloor \frac{u}{2^k} \rfloor$. The underflowing $k$ bits get truncated.
 
 \includegraphics[width=0.8\textwidth]{04_powerOfTwoDivide.png}
 
-Even though this works for unsigned and signed number, for signed numbers the results may be wrong for negative numbers. 
+Even though this works for unsigned and signed numbers, for signed numbers the results may be wrong for negative numbers. 
 This is because we round down, but actually we would like to round towards $0$. We can fix that by computing $\lfloor \frac{(s + 2^k - 1)}{2^k} \rfloor$. In C this is equivalent to $(s + (1 << k) -1) >> k$. This formula works for positive and negative numbers.
 
 \includegraphics[width=0.8\textwidth]{04_powerOfTwoDivideCorrect.png}

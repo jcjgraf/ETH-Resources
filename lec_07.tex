@@ -8,13 +8,13 @@ The C preprocessor (cpp) is not part of the language buts sits on top of it.
 \paragraph{Include}
 \code{\#include} is used to include header files inline in the source code. They provide a basic mechanism for for defining APIs.\\
 Header files are either system header files, which are included using \code{<systemHeader>}, or own header files, included using \code{"ownHeader"}. We do not need to provide a path to the file, but the preprocessor will look at certain dedicated paths for the appropriate files.\\
-It is important to \textbf{not} include a fie twice. Also one should never include \code{.c} files.
+It is important to \textbf{not} include a file twice. Also one should never include \code{.c} files.
 
 \paragraph{Macros}
 Macros provide token-based text substitution. A macro is defined using \code{\#define foo bar}. Any appearance of \code{foo} in the code is replaced with \code{baz}. Since macros are purely textual, we can use them for \textit{expressions} too. E.g. \code{\#define inc(x) (x + 1)} will replace \code{inc(1)} with \code{(1 + 1)}.\\
 An undefined, or a defined macro which was removed using \code{\#undef foo} will evaluate to $1$ which evaluates to true in an expression.\\
 Macros can span multiple lines and contains \textit{complex} structures by adding a backslash to the end of the line. The problem we may encounter with macros which represent a expression is that adding a semicolon after the term which gets replaced by the macro, results in two semicolons (if there is one in our macro too). When using the trick of \textit{Semicolon Swallowing}, we put our macro block inside a \code{do {ourMacro} while(0)} block. Adding a semicolon after the macro will no longer result in an error. The compiler removes the loop anyways.\\
-An advantage of macros is to prevent overhead by inlineing. But the compiler can do that by itself nowadays.
+An advantage of macros is to prevent overhead by inlining. But the compiler can do that by itself nowadays.
 
 \paragraph{Conditionals}
 Conditionals are useful to take different action at the build time. Preprocessors support conditionals of the form:
@@ -37,7 +37,7 @@ A module is a self-contained piece of a larger program. It consists of an extern
 
 \paragraph{Declaration vs Definition}
 C differentiates between declaration and definition. A declaration is like the definition but without the body. Structs are declarations and cannot be defined.\\
-A \textit{compilation unit} is a C source file and everything it includes. The compilation unit defines the visibility of of definitions.\\
+A \textit{compilation unit} is a C source file and everything it includes. The compilation unit defines the visibility of definitions.\\
 When we want to access a definition from another compilation unit (or the same) we prepend the declaration with \code{extern}. When prepending the declaration by \code{static}, this definition is only visible inside this compilation unit and cannot be accessed from the outside using \code{extern}.
 
 \paragraph{Global Variables}
