@@ -46,7 +46,7 @@ if (arr == NULL) {
     return ERRORCODE;
 }
 
-*arr = (long *)realloc(arr, 20 * sizeof(long));
+arr = (long *)realloc(arr, 20 * sizeof(long));
 if (arr == NULL) {
     printf("Error");
     return ERRORCODE;
@@ -69,7 +69,7 @@ Memory can corrupt in many different ways:
     \item Assume \code{malloc} zeroes out memory
     \item Wrong pointer arithmetic
     \item Free unallocated pointer
-    \item Double from same block
+    \item Double-free same block
     \item Use freed pointer
 \end{itemize}
 
@@ -90,7 +90,7 @@ int main() {
     struct Point p1 = {0, 2};
     struct Point p2;
     p2.x = 4;
-    px.y = 6;
+    p2.y = 6;
 
     struct Point *p_p1 = &p1;
     p_p1->x = 5;
@@ -107,14 +107,28 @@ They are very similar to \code{struct}, but with the difference that only the mo
 
 \subsubsection{Type Definitions}
 \paragraph{typedef}
-They introduce a new type definition and can be used to give a new name to a type. They are kind of an \textit{alias} for the original value. They allow for writing cleaner code and they are very useful for \code{struct}. For structs we have to add the \code{struct} keyword everytime we want to reference them. Typedef a struct allows to drop this additional keyword and reference it only by the typedef. Typedef can also be useful to build up complex declarations.
+They introduce a new type definition and can be used to give a new name to a type. The syntax is \code{typedef type name;}. They are kind of an \textit{alias} for the original type. They allow for writing cleaner code and they are very useful for \code{struct}. For structs we have to add the \code{struct} keyword everytime we want to reference them. Typedef a struct allows to drop this additional keyword and reference it only by the typedef.
+\begin{lstlisting}
+typedef struct Point {
+    int x, y;
+} Point_t;
+
+int main() {
+    Point_t p1 = {0, 2};
+    Point_t p2;
+
+    return 0;
+}
+\end{lstlisting}
+
+Typedef can also be useful to build up complex declarations.
 
 \paragraph{Namespaces}
 A namespace is a set of names of objects in a system. They allow the disambiguate different objects with same name. C has different namespaces for:
 \begin{enumerate}
     \item Label names for \code{goto}
     \item Tags of \code{struct}, \code{union}, \code{enum}
-    \item Member names, for each \code{struct}, \code{union}, \code{enum}
+    \item Member names, for each \code{struct}, \code{union}, \code{enum}. I.e. each \code{struct} has a different namespace.
     \item Everything else, including \code{typedef}
 \end{enumerate}
 

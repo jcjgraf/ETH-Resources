@@ -29,6 +29,8 @@ A \code{*} is used to indicate that a function returns a pointer as \code{int *g
 \subsubsection{Pointer Arithmetic}
 When incrementing a pointer by $1$, the value of the pointer (address) is incremented by the size of the type of the pointer. For integer this is e.g. $4$ bytes, for double $8$ bytes, for char $1$ byte etc... These values depend on the machine and compiler. The size can be evaluated using \code{sizeof(type)} or \code{sizeof(value)}.
 
+A pointer must be able to point to any location in the virtual address space. Therefore, it e.g. has size $8$ bytes for a  $64$ bit machines. Therefore, \code{sizeof(double *) = sizeof(char *) = sizeof(struct myStruct *)}.
+
 \subsubsection{Arrays and Pointers}
 An array is a collection of homogeneous data elements stored at contiguous memory adresses. A Pointer is a variable that stores a memory address. So pointers and arrays are different, but related things. The array name is an expression and treated as a pointer to the first element of the array \code{a == \&(a[0])}. We can access the array by the \textit{pointer} $+$ some offset. The compiler rewrites \code{A[i]} to \code{*(A+i)}, hence we could theoretically access arrays like \code{i[A]}.\\
 However, the array name is different from the pointer when:
@@ -37,24 +39,42 @@ However, the array name is different from the pointer when:
 \begin{lstlisting}
 int a[10]:
 assert(sizeof(a) == 10 * sizeof(int));
-assert(sizeof(&a[0] == sizeof(int *));
+assert(sizeof(&a[0]) == sizeof(int *));
 \end{lstlisting}
     \item The array's address is taken with \code{\&}
 \begin{lstlisting}
 int a[10];
 assert(&a == a);
 \end{lstlisting}
-    \item The array is string literal initializer
+    \item The array is string literal initializer. 
 \begin{lstlisting}
 char a[] = "Hello!";
 char *b = "Hello!"; // undef. behaviour when modified
 \end{lstlisting}
 \end{enumerate}
-In C, parameters are passed as value (since there is nothing like a reference), with the only exception of arrays and functions. They are passed by pointers. Therefore, the following three formal arguments \code{int *arr}, \code{int arr[]} and \code{int arr[10]} are equivalent.\\ 
+
+The first one is an actually array which is stored on the stack. The second one is a pointer, which itself lies on the stack, but it points to the string which is stored in the data section.
+
+In C, parameters are passed as value (since there is nothing like a reference), with the only exception of arrays and functions. They are passed by pointers. Therefore, the following three formal arguments \code{int *arr}, \code{int arr[]} and \code{int arr[10]} are equivalent.
+
 Arrays cannot be renamed, but we change the pointer.
 
 \subsubsection{Passed by Reference}
 Since C is passed by value, we can pass a reference by passing a pointer. However, this pointer is again passed by value and therefore can be modified in the scope of the functions.
+
+\subsubsection{Decipher Complex Declarations}
+Pointers allow to make complex variable declaration. The following schema can be use to figure out what a declaration actually means:
+
+\begin{enumerate}
+    \item Start at the variable name (or innermost construct if no identifier is present).
+    \item Look right without jumping over any brackets; say what you see.
+    \item Look left without jumping over any brackets; say what you see.
+    \item If there are no outer brackets we are done.
+    \item Else, jump out one level of brackets.
+    \item Repeat from $2$.
+\end{enumerate}
+
+Note \code{()} do not count as brackets but as a \textit{function}.
 
 \subsubsection{Examples}
 Here some pointer declaration examples:
