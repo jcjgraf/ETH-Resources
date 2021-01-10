@@ -50,7 +50,7 @@ The stack frame is the current status of the stack. Generally speaking, it has t
 
 \includegraphics[width=0.4\textwidth]{11_stackframe.png}
 
-The \textit{current stack} is the part between stack pointer and the \textit{frame pointer} \code{\%rbp}. The frame pointer points to the start of the current frame (frame contains everything related to the current procedure). At the top there are the \textit{Argument build}. It is actually not that often used nowadays. There we prepare the arguments for the function we are going to call. On top of that, there are the \textit{local variables}, which is data which we cannot keep in a register as well as the saved register content. And at the top of the current stack frame, appointed by the frame pointer, there is the \code{\%rbp} stored, of the previous frame.
+The \textit{current stack} is the part between stack pointer and the \textit{frame pointer} \code{\%rbp}. The frame pointer points to the start of the current frame (frame contains everything related to the current procedure). At the top there are the \textit{Argument build}. It is actually not that often used nowadays. There we prepare the arguments for the function we are going to call. On top of that, there are the \textit{local variables}, which is data which we cannot keep in a register as well as the saved register content. And at the top of the current stack frame, appointed by the frame pointer, there is the \code{\%rbp} of the previous frame stored.
 
 Above, we find the caller's stack frame. It contains the return address and arguments passed to the call of the current procedure.
 
@@ -73,11 +73,11 @@ Arguments are passed to the callee via registers. If more than $6$ arguments are
 
 There are two return registers. This way structs of size less than $128$ bits can be returned. If they exceed this size, they are put on the stack.
 
-All in all, genreal purpose registers are not actually not really general purpose.
+All in all, genreal purpose registers are actually not really general purpose.
 
 \paragraph{Working with the Stack and Stack Pointer}
 All references to the stack are via the stack pointer. When the compiler adds several values to the stack (e.g. to restore callee-saved registers) it often adds then relative to the stack pointer, and decrements the stack pointer only after adding all elements. This is done for optimisation reason since the stack pointer is not decremented several times. The newly added values, which are not yet actually on the stack (stack pointer not yet updated) are in the so called \textit{red zone}.
 
 Optimisation actions as such may break some conventions however, since it does not influence other parts, it is actually acceptable.
 
-Other tricks are to not use the stack, to not use any callee-saved registers. In a \textit{tail call} we no not even push the current address to the stack when calling. This is useful when nested functions return (i.e. there is no need to return the inner function, just jump to the outer function which then returns). This prevents stack overflow for recursive function calls. All in all, often the stack frame is not very heavily used.
+Other tricks are to not use the stack or to not use any callee-saved registers. In a \textit{tail call} we no not even push the current address to the stack when calling (call function with \code{jmp} instead of \code{call}). This is useful when nested functions return (i.e. there is no need to return the inner function, just jump to the outer function which then returns). This prevents stack overflow for recursive function calls. All in all, often the stack frame is not very heavily used.

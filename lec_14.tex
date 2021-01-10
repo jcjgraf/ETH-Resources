@@ -62,7 +62,7 @@ In the early days, there was no standard on how to represent binary numbers, and
 Floating point numbers are represented in the form $(-1)^S \cdot M \cdot 2^E$.
 \begin{description}
     \item[S:] sign bit determines whether the number is positive or negative.
-    \item[M:] is the significant and it is a fractional value in the range $)1.0, 2.0)$.
+    \item[M:] is the significant and it is a fractional value in the range $[1.0, 2.0)$. It is called mantissa.
     \item[E:] exponent weight.
 \end{description}
 
@@ -91,7 +91,7 @@ When casting one type to another, the bit representation changes. This is very d
     \item[int $\to$ float:] Will round according to the rounding mode.
 \end{description}
 
-Floating point numbers are einher normalized, or denormalized:
+Floating point numbers are either normalized, or denormalized:
 \paragraph{Normalized Values}
 
 \begin{itemize}
@@ -154,7 +154,7 @@ The description above does not handle the case when $exp = 111 \dots 1$. This va
         \begin{itemize}
             \item Compare sign bits
             \item Consider $-0 = 0$
-            \item Nan is problematic since what should the comparison yield?
+            \item NaN is problematic since what should the comparison yield?
         \end{itemize}
 \end{itemize}
 

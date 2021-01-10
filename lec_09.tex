@@ -26,7 +26,7 @@ Performance is not really an issue today. Today a successfully ISA is one which 
 
 \subsubsection{x86 History}
 \paragraph{Intel x86}
-A very successful chip was the $8086$, which was a $16$ bit processor and which was introduced in 1978. It has many revisions and was also adapted to a $32$ version, with the $80386$ in 1985. This ISA was named IA32 and recent code can still be run on this CPUs. They tried to radically shift from ia32 to ia64, however they failed because their Itanium architecture were very slow executing existing code, but only fast when writing new, code.\\
+A very successful chip was the $8086$, which was a $16$ bit processor and which was introduced in 1978. It has many revisions and was also adapted to a $32$ version, with the $80386$ in 1985. This ISA was named IA32 and recent code can still be run on this CPUs. Intel tried to radically shift from ia32 to ia64, however they failed because their Itanium architecture were very slow executing existing code, but only fast when writing new code.\\
 $8$ months after AMD released their x86-64, Intel released a compatible version ISA called EM64T (later renamed to Intel 64), wich was almost identical to x86-64. Their first 64 bit CPU was the Pentium 4F in 2005.\\
 From 2012 on, when the i7 was released, this Architecture was kept the same and many features were added.
 
@@ -46,7 +46,7 @@ Assembly has very little concerning semantics. The integers, containing data val
 We can perform arithmetic operations on registers or memory data. We can move data between registers and memory and there are conditional and unconditional branches.
 
 \paragraph{Object Code}
-In object code \code{.o}, the assembly code \code{.s} ins binary encoded. This is done by the assembler. In x86, instructions have variable length (unlike in MIPS).j
+In object code \code{.o}, the assembly code \code{.s} is binary encoded. This is done by the assembler. In x86, instructions have variable length (unlike in MIPS).
 
 \paragraph{Disassembling Object Code}
 This is the process of generating assembly code \code{.s} from object code \code{.o}. Disassembled code is not identical to the original assembly code, since object code does not have all program information, since assembly has some \textit{high level} usercode, like jump target names etc. A disassembler works by examining bytes and reconstructing the assembly instructions.\\
@@ -54,7 +54,7 @@ A disassembler is \code{objdump -d <file>} and it works for \code{a.out} as well
 
 \subsubsection{x86 Architecture}
 \paragraph{8086}
-This $16$ bit CPU had $10$ registers where $6$ of them were for general purpose. Although, even the general purpose registers wer designed for a specific purpose. This processor is the predecessor of the 8008, which was a $8$ bit processor wich has $4$ registers. The 8086 is actually an extension of that and therefore $4$ of the general purpose registers could access in high/low (access top $4$ respectively bottom $4$ bits separately).
+This $16$ bit CPU had $10$ registers where $6$ of them were for general purpose. Although, even the general purpose registers wer designed for a specific purpose. This processor is the successor of the 8008, which was a $8$ bit processor wich has $4$ registers. The 8086 is actually an extension of that and therefore $4$ of the general purpose registers could access in high/low (access top $4$ respectively bottom $4$ bits separately).
 
 \includegraphics[width=0.8\textwidth]{09_8086.png}
 
@@ -81,7 +81,8 @@ There are three operand types.
 \begin{description}
     \item[Immediate:] Constant integer in decimal or hexadecimal prepended by a $\$$ sign. The size can be $1$, $2$, $4$ or $8$ bytes.
     \item[Register:] Registers are referred by their name. There are general and special purpose registers.
-    \item[Memory:] The general access mode is \code{D(Rb, Ri, S)} which is leads to a access of \code{Mem[Reg[Rb] + S * Reg[Ri] + D]}
+    \item[Memory:] The general access mode is \code{D(Rb, Ri, S)} which is leads to a access of\\
+        \verb_Mem[Reg[Rb] + S * Reg[Ri] + D]_.
         \begin{description}
             \item[D:] Constant displacement of size $1$, $2$ or $4$ bytes
             \item[Rb:] Base register; any of the 16 registers
@@ -93,6 +94,6 @@ There are three operand types.
 Not all combinations of source and destination are available. So it is not possible to transfer data from memory to memory in one instruction.
 
 \paragraph{Address Computation Instruction}
-The command \code{lea Src, Dest} does not move any data, but rather calculates the address given by the address mode passed by \code{Src} and writes the address to \code{Dest}. This is useful when we need to compute an address without memory memory access, e.g. when creating a pointer. But it can also be used for general arithmetic.
+The command \code{lea Src, Dest} does not move any data, but rather calculates the address given by the address mode passed by \code{Src} and writes the address to \code{Dest}. This is useful when we need to compute an address without memory access, e.g. when creating a pointer. But it can also be used for general arithmetic.
 
 The reason being is that the address calculation requires lot of hardware. Therefore, it does also make sense to use it for arithmetic.

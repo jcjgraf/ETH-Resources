@@ -12,7 +12,7 @@ Important two-operand instructions:
     \code{subl} & $Dest = Dest - Src$\\
     \code{imull} & $Dest = Dest * Src$\\
     \code{sall} & $Dest = Dest << Src$\\
-    \code{shll} & $Dest = Dest >> Src$\\
+    \code{sarl} & $Dest = Dest >> Src$\\
     \code{shrl} & $Dest = Dest >> Src$\\
     \code{xorl} & $Dest = Dest\ \hat{}\ Src$\\
     \code{andl} & $Dest = Dest \& Src$\\
@@ -21,7 +21,7 @@ Important two-operand instructions:
 
 There is no difference between arithmetic and logic shift left, and hence, the instructions \code{sall} and \code{shll} are equivalent.
 
-Two-operand instructions to store the result of the calculation in one of the operands. There is not separate register. This is a limitation which stems from the early days where registers were rar but nowadays, where registers are actually stored in a register file with +200 resists which is is no longer an issue. (The name of a regster is just a temporary reference to an entry of the register file)
+Two-operand instructions store the result of the calculation in one of the operands. There is not separate register. This is a limitation which stems from the early days where registers were rar but nowadays, where registers are actually stored in a register file with +200 resists which is is no longer an issue. (The name of a regster is just a temporary reference to an entry of the register file)
 
 All operations act on the binary numbers and there is no notion of signed or unsigned integers. That is because it does not make any difference for the computation!
 
@@ -34,10 +34,12 @@ Important one operand instructions:
     \code{notl} & $Dest = \tilde{} Dest$
 \end{tabular}
 
-\paragraph{\code{leal} for Arithmetic Expressions}
-The compiler clever and makes us of \code{leal} for arithmetic instructions. This is especially powerful when replacing a multiplication by \code{leal} and shifts.
+\paragraph{\code{lea} for Arithmetic Expressions}
+The compiler clever and makes us of \code{lea} for arithmetic instructions. This is especially powerful when replacing a multiplication by \code{lea} and shifts.
 
 The C compiler is better in assembly than we humans :)
+
+There is again a version for different sized: \code{leal} etc.
 
 \subsubsection{Condition Codes}
 Condition codes are extra bits, like one-bit registers. But they are packed into the status register. They provide us extra information about executed operations.
@@ -144,4 +146,6 @@ Anything starting with a dot in assembler is stuff not in the machine code. This
 
 \code{.text} says that code is following
 
-\code{.global} means that the scope of the following name is global. .type tells the type of a variable/function.
+\code{.global} means that the scope of the following name is global.
+
+\code{.type} tells the type of a variable/function.

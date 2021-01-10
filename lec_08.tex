@@ -5,11 +5,11 @@
 
 Sidenote: A Runtime allows a programming language to use C libraries. C does not have a runtime, therefore it is well suites for e.g. OS programming.
 
-The OS allocates memory to the C program in pages. But we often only need a few bytes. A memory allocator is a interface which sits between the application and the memory and gives out memory blocks to applications. A block is a continuous range of bytes of any size.\\
+The OS allocates memory to the C program in pages. Using \verb+sbrk()+ we can request a new page from the OS. But we often only need a few bytes. A memory allocator is a interface which sits between the application and the memory and gives out memory blocks to applications. A block is a continuous range of bytes of any size.\\
 \code{malloc} is such a dynamic memory allocator
 
 \paragraph{Address Space}
-The address space is split into multiple parts. The NULL pointer is at address $0x00000000$ and contains nothing. On top of it, at $0x00000008$ is the \textit{Text}. This section contains the machine code of our functions. On top of it is the \textit{Data} section, where global variables and parameters (?) are stored. On top of all that is the heap, which grows upwards. At the top at $0xFFFFFFFF$ is the stack, which grown downwards. Functions of libraries, like \code{malloc} are dynamically linked and the address is determined at runtime. Addresses in the heap are not allocated linearly, but in some different fashion.
+The address space is split into multiple parts. The NULL pointer is at address $0x00000000$ and contains nothing. On top of it, at $0x00000008$ is the \textit{Text}. This section contains the machine code of our functions. On top of it is the \textit{Data} section, where global variables and parameters (?) are stored. On top of all that is the heap, which grows upwards. At the top, almost at $0xFFFFFFFF$, is the stack, which grown downwards. Functions of libraries, like \code{malloc} are dynamically linked and the address is determined at runtime. Addresses in the heap are not allocated linearly, but in some different fashion.
 
 \paragraph{Explicit Memory Allocation}
 Allocation and free is done manually by the user. All operations appear in the program source. After allocation, there is a point of time, from when on the object must be accessible. There is another point in time, before which the data object cannot be freed.
@@ -32,7 +32,7 @@ All memory allocations use explicit allocation under the hood, therefore it is c
 In this lecture we assume that memory is word addressed. This has the advantage that each word can hold a pointer.
 
 \paragraph{Constraints}
-One of the difficulties is that in a program we can issue arbitrary sequences of allocate and deallocate. Memory allocators cannot control the number or size of allocated block and obviously the y can only allocate free parts of the memory. Since they must respond immediately, they also have to time to reorder or buffer requests. Blocks must also be aligned to satisfy external requirements (8 byte alignment for GNU \code{malloc}). This means that the payload (/block) must always start at an alignment line (for better CPU performance). One a block is allocated, this block cannot be moved or changes anymore.
+One of the difficulties is that in a program we can issue arbitrary sequences of allocate and deallocate. Memory allocators cannot control the number or size of allocated block and obviously they can only allocate free parts of the memory. Since they must respond immediately, they also have to time to reorder or buffer requests. Blocks must also be aligned to satisfy external requirements (8 byte alignment for GNU \code{malloc}). This means that the payload (/block) must always start at an alignment line (for better CPU performance). Once a block is allocated, this block cannot be moved or changes anymore.
 
 \paragraph{Performance Goal}
 Given a sequence of allocations and deallocations, we want to maximize the \textit{throughput} as well as the \textit{peak memory utilization}. These goals are conflicting by nature.
@@ -55,7 +55,7 @@ To measure the peak memory utilization we define for some sequence of allocation
 Fragmentation may cause poor memory utilization. The two types of fragmentation are:
 
 \begin{description}
-    \item[Interlan Fragmentation:] For a given block where the payload is smaller than the block size
+    \item[Internal Fragmentation:] For a given block where the payload is smaller than the block size
         the payload is padded by unused unused space. Another cause is bookkeeping information, like start and end tags, are added.
     \item[External Fragmentation:] When there is enough free space on the heap, but not as a single free block.
 \end{description}
@@ -66,7 +66,7 @@ While internal fragmentation is predictable and easy to measure, external fragme
 In order that \code{free} knows how large the block of the memory to free is, \code{malloc} keeps track of the size of a memory block, by storing the size in the first word of the newly created memory block. The pointer it returns actually points on the second word.
 
 \subsubsection{Keeping Track of Free Block}
-The key policies for memory allocators are Placement policy (wo do we find the block to use), Splitting policy (how do we split blocks which are too large) and Coalescing policy (how do we merge free blocks).
+The key policies for memory allocators are Placement policy (how do we find the block to use), Splitting policy (how do we split blocks which are too large) and Coalescing policy (how do we merge free blocks).
 
 \paragraph{Implicit Free List}
 For each block we need to know its size, as well as whether it is allocated or not. We store all these information in the first word of block. The allocated flag is actually the least signification bit of the length. This introduces some internal fragmentation (because the length up rounded up), but it can be neglected. Especial also since due to the alignment of block, some of the lower-order address bits are often anyways always $0$.
@@ -117,7 +117,7 @@ This method is faster than implicit free list, since the required time is linear
 Similar to the explicit free list. But in contrast to that, we keep separate lists blocks of different size. Most of the time, small blocks are allocated, hence this gives very good performance.
 
 \subparagraph{Finding a free block}
-To allocate a block of size $n$ we search the list of blocks of size $m > n$. On success, we split the block (if required) and place the fragment on the appropriate list. We to to higher-level classes, till we have found a suitable block. If there is no such block, we request a new memory block from the OS. 
+To allocate a block of size $n$ we search the list of blocks of size $m > n$. On success, we split the block (if required) and place the fragment on the appropriate list. We do that on higher-level classes, till we have found a suitable block. If there is no such block, we request a new memory block from the OS. 
 
 \subparagraph{Freeing a block and coalescing}
 We coalesce the block and put in on the appropriate list.

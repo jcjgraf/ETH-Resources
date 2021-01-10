@@ -53,7 +53,7 @@ Multi level arrays are constructed of several separate arrays. It is actually ra
 \includegraphics[width=1\textwidth]{12_multilevelarrayoverview.png}
 
 \paragraph{Arrays for Matrix Multiplication}
-Compilers are good at doubly subscripted array accesses. However, in order to implement represent an matrix with nested arrays, its size needs to be known at compile time. When we want it more dynamically, we may implemented the \textit{nested array structure ourself} by heaving a block of memory and do all index computation by ourself. Since we need to do many multiplications and access of single elements are therefore rather costly, this is not very performant. Nevertheless, compiler are actually quite good ad improving this solution since there are many regular patters for e.g. a matrix multiplication.
+Compilers are good at doubly subscripted array accesses. However, in order to implement represent an matrix with nested arrays, its size needs to be known at compile time. When we want it more dynamically, we may implemented the \textit{nested array structure ourself} by heaving a block of memory and do all index computation by ourself. Since we need to do many multiplications and access of single elements are therefore rather costly, this is not very performant. Nevertheless, compiler are actually quite good at improving this solution since there are many regular patters for e.g. a matrix multiplication.
 
 \subsubsection{Structures}
 Stucts are a contiguously-allocated region of memory. The values are ordered contiguously in the same order as their are defined. Since they are arrange contiguously, we can theoretically access a subsequent element via the address of a previous element.
@@ -87,6 +87,8 @@ In short this means that if a primitive data type requires $K$ bytes, it is alwa
 In order that the data fields in the strut are aligned, the compiler may add padding between fields. Therefore, it is also not guaranteed that we can access a subsequent field by simple adding some padding. The placement of the struct itself is determined by the sizes of its fields. If $K$ is the alignment of the largest field, then the struct is aligned at a multiple of $K$.
 
 It may be optimal to define files of larger types first, but since the whole struct must be aligned in a multiple of the size of the largest fields, in practice there is not much gain.
+
+\includegraphics[width=0.8\textwidth]{12_structAlignment.png}
 
 \paragraph{Arrays of Structures}
 Stucts in arrays have to follow the alignment requirements too. This may lead to lots of unused padding space.
