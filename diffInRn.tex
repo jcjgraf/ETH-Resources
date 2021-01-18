@@ -84,7 +84,7 @@ For $X \subset \R^n$ open and $f, g: X \to \R^m$ and $1 \le i \le n$:
 For $X \subset \R^n$ open and $f: X \to \R^m$ with partial derivatives on $X$, $f(x) = f_1(x), \dots f_m(x))$, the matrix $J_f(x) = (\partial_j f_i(x))_{\substack{1 \le i \le m\\1 \le j \le n}} =
     \begin{pmatrix}
         \partial_1 f_1 & \partial_2 f_1 & \dots & \partial_n f_1\\
-        \partial_2 f_2 & \partial_2 f_2 & \dots & \partial_n f_2\\
+        \partial_1 f_2 & \partial_2 f_2 & \dots & \partial_n f_2\\
         \vdots & \vdots & \ddots & \vdots \\
         \partial_1 f_m & \partial_2 f_m & \dots & \partial_n f_m
     \end{pmatrix}
@@ -108,7 +108,7 @@ For $X \subset \R^n$ open, $x_0 \in X$ and $f: X \to \R^m$. $f$ is differentiabl
 \begin{compactitem}
     \item The linear map $u$ is called \textbf{total differential} of $f$ at $x_0$ and is denoted as $df(x_0)$ or $d_{x_0}f$.
     \item If $f$ is differentiable $\forall x_0 \in X$ then $f$ is differentiable on X.
-    \item The map $df(x_0)$ can be represented as a $m \times n$ matrix.
+    \item The map $df(x_0)$ can be represented as a $m \times n$ matrix $Df(x_0)$.
     \item $f(x) = f(x_0) + u(x - x_0) + E(f, x, x_0)$, where $\lim_{\substack{x \to x_0 \\ x \neq x_0}} \frac{E(f, x, x_0)}{|x - x_0|} = 0$
         \begin{compactitem}
             \item $f(x_0) + u(x - x_0)$ is a linear affine function.
@@ -123,7 +123,7 @@ For $X \subset \R^n$ open and $f: X \to \R^m$. $f$ is differentiable at $x_0$:
             \item if $f$ is differentiable on $X$, then $f$ is continuous on $X$
         \end{compactitem}
     \item $f$ has all partial derivatives at $x_0$
-    \item $df(x_0)$ is given by $A = J_f(x_0)$
+    \item $df(x_0)$ is given by $Df(x_0) = J_f(x_0)$
         \begin{compactitem}
             \item if $m = 1$, then $df(x_0) = J_f(x_0) = (\partial_i f(x_0), \dots \partial_n f(x_0))$
         \end{compactitem}
@@ -137,7 +137,7 @@ For $X \subset \R^n$ open and $f, g: X \to \R^m$ differentiable on $X$:
 \end{compactitem}
 
 \paragraph{Chain Rule}
-For $X \subset \R^n$ open, $Y \subset \R^m$ open and $f: X \to Y$ differentiable on $X$ and $g: Y \to \R^p$ differentiable on $Y$. Then $g \circ f: X \to \R^p$ is differentiable and $d(g \circ f)(x_0) = df(f(x_0)) \circ df(x_0)$.
+For $X \subset \R^n$ open, $Y \subset \R^m$ open and $f: X \to Y$ differentiable on $X$ and $g: Y \to \R^p$ differentiable on $Y$. Then $g \circ f: X \to \R^p$ is differentiable and $d(g \circ f)(x_0) = dg(f(x_0)) \cdot df(x_0)$.
 
 \begin{compactitem}
     \item The Jacobi satisfies $J_{g \circ f}(x_0) = J_g(f(x_0))J_f(x_0)$
@@ -153,7 +153,7 @@ For $X \subset \R^n$ open and $f: X \to \R^m$. If $f$ has all partial derivative
 \end{compactitem}
 
 \subsubsection{Tangent Space}
-For $X \subset \R^n$ open, $f: X \to \R^m$ differentiable on $X$ and $x_0 \in X$, the differential $u = df(x_0)$. The graph of the affine linear approximation $g: \R^n \to \R^m, g(x) = f(x_0) + u(x - x_0)$ is the tangent space of $f$.  
+For $X \subset \R^n$ open, $f: X \to \R^m$ differentiable on $X$ and $x_0 \in X$, the differential $u = df(x_0)$. The graph of the affine linear approximation $g: \R^n \to \R^m, g(x) = f(x_0) + u(x - x_0)$ is the tangent space of $f$.
 \begin{compactitem}
     \item The pts of the tangent space are in $\{(x, y) \in \R^n \times \R^m | y = f(x_0) + u(x - x_0) \}$.
     \item If $m = 1$ then $u(x - x_0) = df(x_0)(x - x_0) = \bigtriangledown f(x_0) \cdot (x - x_0)$.
@@ -163,7 +163,8 @@ For $X \subset \R^n$ open, $f: X \to \R^m$ differentiable on $X$ and $x_0 \in X$
 For $X \subset \R^n$ open, $f: X \to \R^m$, $v \in \R^n$ a non-zero vector and $x_0 \in X$. $f$ has a directional partial derivative $w \in \R^m$ in the direction $v$, if $g(t) = f(x_0 + tv)$, defined on $\{t \in \R | x_0 + tv \in X\}$, holds $g'(0) = w$.
 
 \begin{compactitem}
-    \item I.e. $\lim_{\substack{t \to 0\\ t \neq 0}} \frac{f(x_0 + tv) - f(x_0)}{t} = w$.
+    \item I.e. $w = \lim_{\substack{t \to 0\\ t \neq 0}} \frac{f(x_0 + tv) - f(x_0)}{t} = \lim_{\substack{t \to 0\\ t \neq 0}} \frac{g(t) - g(0)}{t} = g'(0)$.
+    \item Different notations: $w = df(x_0)(v)$
 \end{compactitem}
 
 For $X \subset \R^n$ open and $f: X \to \R^m$ differentiable. Then $\forall x \in X$ and $\forall v \in \R^n$ non-zero, $f$ has directional partial derivative at $x_0$ in the direction $v$ and is equal to $df(x_0) (v) = J_f(x_0)(v)$.
@@ -180,11 +181,11 @@ For $X \subset \R^n$ open and $f: X \to \R^m$ differentiable. Then $\forall x \i
 \begin{inparaitem}
     \item $f: [0, \infty) \times [0, 2\pi) \to \R^2$
     \item $(r, \theta) \mapsto (x, y) = (r \cos \theta, r \sin \theta)$
-    \item $J_f(x_0) = 
+    \item $J_f(x_0) =
         \begin{pmatrix}
             \frac{\partial f_1}{\partial r} & \frac{\partial f_1}{\partial \theta}\\
             \frac{\partial f_2}{\partial r} & \frac{\partial f_2}{\partial \theta}
-        \end{pmatrix} = 
+        \end{pmatrix} =
         \begin{pmatrix}
             \cos \theta & -r \sin \theta\\
             \sin \theta & r \cos \theta
@@ -195,7 +196,7 @@ For $X \subset \R^n$ open and $f: X \to \R^m$ differentiable. Then $\forall x \i
 \paragraph{Cylindrical Coordinates}
 \begin{compactitem}
     \item $f: [0, \infty) \times [0, 2 \pi) \times \R \to \R^3$
-    \item $(0, \theta, z) \mapsto 
+    \item $(0, \theta, z) \mapsto
         \begin{pmatrix}
             r \cos \theta\\
             r \sin \theta\\
@@ -249,7 +250,7 @@ For $X \subset \R^n$ open, $f: X \to \R^m$ differentiable and $x_0 \in X$. $f$ i
 For $X \subset \R^n$ open and $f: X \to \R^m$ differentiable. If $\exists x_0 \in X$ s.t. $J_f(x_0) \neq 0$ the $f$ is a change of variable around $x_0$.
 
 \begin{compactitem}
-    \item The Jacobi of $g$ at $x_0$ is $J_g(f(x_0)) O J_f(x_0)^{-1}$.
+    \item The Jacobi of $g$ at $x_0$ is $J_g(f(x_0)) = J_f(x_0)^{-1}$.
     \item $\text{det }J_f(x_0) \neq 0 \iff$ Jacobi matrix of $f$ at $x_0$ is invertible.
     \item If $f \in C^k$ then $g \in C^k$.
 \end{compactitem}
@@ -289,12 +290,12 @@ For $X \subset \R^n$ open and $f: X \to \R^m \in C^2$. The Hessian matrix of $x$
 \end{pmatrix}$.
 
 \begin{compactitem}
-    \item $H_f(x)$ is symmetric, square, $n \times n$.
+    \item If partial derivatives commute, then $H_f(x)$ is symmetric, square, $n \times n$.
 \end{compactitem}
 
 \subsection{Taylor Approximation}
 \subsubsection{Order 1}
-For $f: \R^n \to \R$, the Taylor Polynom of $f$ at $x_0$ of degree $q$ is $T_1f(y; x_0) := f(x_0) + \bigtriangledown f(x_0) \cdot y$.
+For $f: \R^n \to \R$, the Taylor Polynom of $f$ at $x_0$ of degree $1$ is $T_1f(y; x_0) := f(x_0) + \bigtriangledown f(x_0) \cdot y$.
 
 For a point $x_0$ close to $x$ the approximation of $x$ by a affine linear polynomial is $T_1(x - x_0; x_0)$.
 
@@ -303,9 +304,27 @@ For a point $x_0$ close to $x$ the approximation of $x$ by a affine linear polyn
 \end{compactitem}
 
 \subsubsection{Order k}
-For $X \subset \R^n, x_0 \in X, f: X \to \R, f \in C^k$, the $k$-th Taylor polynomial of $f$ at $x_0$ is $T_k(y; x_0) = f(x_0) + \sum_{i=1}^{n} \frac{\partial f}{\partial x_i} (x_0) y_i + \dots + \sum_{m_1 + \dots + m_n = k} \frac{1}{m_1! \dots m_n!}\frac{\partial^k f}{\partial x_1^{m_1} \dots \partial x_n^{m_n}}(x_0)y_1^{m_1} \dots y_n^{m_n} = \sum_{|m| \le k} \frac{1}{m!} \partial_x^m f(x_0) y^m$. Where $y^m := (y_1^{m_1}, \dots , y_n^{m_n}$.
+For $X \subset \R^n, x_0 \in X, f: X \to \R, f \in C^k$, the $k$-th Taylor polynomial of $f$ at $x_0$ is $T_k(y; x_0) = f(x_0) + \sum_{i=1}^{n} \frac{\partial f}{\partial x_i} (x_0) y_i + \dots + \sum_{m_1 + \dots + m_n = k} \frac{1}{m_1! \dots m_n!}\frac{\partial^k f}{\partial x_1^{m_1} \dots \partial x_n^{m_n}}(x_0)y_1^{m_1} \dots y_n^{m_n} = \sum_{|m| \le k} \frac{1}{m!} \partial_x^m f(x_0) y^m$. Where $y^m := (y_1^{m_1}, \dots , y_n^{m_n})$.
 
+\subsubsection{Approximation}
 For $f \in C^k(X; \R), x_0 \in X$. $T_k$ is approximation of $f$ at $x$ with $x_0$: $f(x) = T_kf(x - x_0; x_0) + E_k(f, x, x_0)$. For the error $E_k$ it holds $\lim_{x \to x_0} \frac{E_k(f, x, x_0)}{|x - x_0|^k} = 0$.
+
+\recipe{Taylor Polynom for $f: R^n \to \R$}
+Give Taylor of order $1 - 3$ of $f(x, y): \R^n \to \R$
+
+$T_1 f(x, y) = f(x_0, y_0) + \frac{\partial f(x_0, y_0)}{\partial x} \cdot (x - x_0) + \frac{\partial f(x_0, y_0)}{\partial y} \cdot (y - y_0)$
+
+$T_2 f(x, y) = T_1 f(x, y) + \frac{1}{2} \frac{\partial^2 f(x_0, y_0)}{\partial x \partial x} \cdot (x - x_0)^2 + \frac{1}{2} \frac{\partial^2 f(x_0, y_0)}{\partial y \partial y} \cdot (y - y_0)^2 + \frac{\partial^2 f(x_0, y_0)}{\partial x \partial y} \cdot (x - x_0)(y - y_0)$
+
+$T_3 f(x, y) = T_2 f(x, y) + \frac{1}{6} \frac{\partial^3 f(x_0, y_0)}{\partial^3 x} (x - x_0)^3 + \frac{1}{2} \frac{\partial^3 f(x_0, y_0)}{\partial^2 x \partial y} (x - x_0)^2 (y - y_0) + \frac{1}{2} \frac{\partial^3 f(x_0, y_0)}{\partial x \partial^2 y} (x - x_0) (y - y_0)^2 + \frac{1}{6} \frac{\partial^3 f(x_0, y_0)}{\partial^3 y} (y - y_0)^3$
+
+\recipe{Approximate $f: \R^2 \to \R$}
+Given $f: \R^2 \to \R$ and pt $x = (x_1, x_2)$. Approximate $f(x)$ using Taylor.
+
+\begin{compactitem}
+    \item Find pt $x_0 \approx x$ which approximates $x$ and is easy to evaluate.
+    \item Form Taylor $T_k(x - x_0, x)$ of desired order.
+\end{compactitem}
 
 \subsection{Critical Points}
 \subsubsection{Extrema}
@@ -334,8 +353,8 @@ For $X \subset \R^n$ open and $f: X \to \R$ differentiable. $x_0 \in X$, $\bigtr
 \subsubsection{Global Extrema}
 For $\bar{X} = \text{innerPart}(X) \cup \text{boundary}(X) \subset \R^n$ compact (closed and bounded) and $f: \bar{X} \to \R$ differentiable. A global extrema exists and it is either at a critical point ($\in \text{innterPart}(X)$) or on the boundary ($\in \text{boundary}(X)$) of $\bar{X}$.
 
-\subsubsection{Non-Degenerate Critical Point} 
-For $X \subset \R^n$ open and $f: X \to \R \in C^2$. A critical point $x_0 \in X$ is called non-degenerate if $\text{det }\text{Hess}_f(x_) \neq 0$.
+\subsubsection{Non-Degenerate Critical Point}
+For $X \subset \R^n$ open and $f: X \to \R \in C^2$. A critical point $x_0 \in X$ is called non-degenerate if $\text{det }\text{Hess}_f(x) \neq 0$.
 
 \subsubsection{Definite/Indefinite}
 A symmetric matrix $A = (a_{i,j}) \in \R^{n \times n}$, with $\text{det } A \neq 0$ is:
@@ -367,4 +386,30 @@ For $X \subset \R^n$ open, $f: X \to \R \in C^2$ and $x_0 \in X$ a non-degenerat
 \end{compactitem}
 
 In case that $\text{Hess}_f (x_0) = 0$ (i.e. $x_0$ is degenerate) we cannot use this criteria.
+
+\recipe{Extreme Pts using $2$nd Derivative Method}
+Given $f: \R^n \to \R$ find extreme points and determine if they are max/min/saddle.
+\begin{compactenum}
+    \item Calculate all partial derivatives up to order two.
+    \item Form $df(x) = (\partial_{x_1}f, \dots \partial_{x_n}f)$
+    \item Find all zeros $x_0$ of $df(x_0)$. They are the critical pts.
+    \item Form $\text{Hess}_f (x)$
+    \item Calculate $\text{det Hess}_f (x)$
+    \item Insert all $x_0$ into $\text{det Hess}_f (x_0)$ and evaluate.
+    \item If $\text{det Hess}_f (x_0) = 0 \implies$ this method does not work.
+    \item Use previous theorem to determine if $x_0$ is min/max/saddle.
+\end{compactenum}
+
+\recipe{$\text{det } A$ with Sarrus}
+Given matrix $A: 3 \times 3$ calculate $\text{det }A$.
+
+$\text{det } A = A_{1, 1} A_{2, 2} A_{3, 3} + A_{2, 1} A_{3, 2} A_{1, 3} + A_{3, 1} A_{1, 2} A_{2, 3} - A_{1, 3} A_{2, 2} A_{3, 1} - A_{1, 2} A_{2, 1} A_{3, 3} - A_{1, 1} A_{2, 3} A_{3, 2}$
+
+\recipe{Eigenwerte}
+Given square matrix $A$. Find the eigenvalues of $A$.
+
+\begin{compactenum}
+    \item Form characteristic polynomial $\text{det } (A - \lambda I)$.
+    \item Find zeros of the characteristic polynomial. They are the eigenvalues.
+\end{compactenum}
 

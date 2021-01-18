@@ -53,14 +53,33 @@ For $\gamma_1: [a, b] \to \R^n, \gamma_2: [c, d] \to \R^n$ parametrized paths, w
 For $\gamma: [a, b] \to \R^n$ parametrized path and $- \gamma:[a, b] \to \R^n$ the same path traced in opposite direction, then $\int_{-\gamma} f \mathrm{d}s = - \int_{\gamma} f \mathrm{d}s$.
 
 \paragraph{Independent of Path}
-For $X \subset \R^n$, vectorfield $f: X \to \R^n, g: X \to \R \in C^1$ s.t. $\bigtriangledown g = f$ and parametrized curve $\gamma: [a, b] \to \R^n, \gamma([a, b]) \subset X$ then: $\int_{\gamma} f \mathrm{d}t = \int_{a}^{b} f(\gamma(t)) \cdot \gamma'(t) \mathrm{d}t = \int_{a}^{b} \bigtriangledown g(\gamma(t)) \cdot \gamma'(t) \mathrm{d}t = \int_{a}^{b} \frac{d}{dt} (g \circ \gamma) \mathrm{d}t = (g \circ \gamma)(b) - (g \circ \gamma)(a)$. I.e. the integral only depends on the endpoints of the curve.
+For $X \subset \R^n$, vector field $f: X \to \R^n, g: X \to \R \in C^1$ s.t. $\bigtriangledown g = f$ and parametrized curve $\gamma: [a, b] \to \R^n, \gamma([a, b]) \subset X$ then: $\int_{\gamma} f \mathrm{d}t = \int_{a}^{b} f(\gamma(t)) \cdot \gamma'(t) \mathrm{d}t = \int_{a}^{b} \bigtriangledown g(\gamma(t)) \cdot \gamma'(t) \mathrm{d}t = \int_{a}^{b} \frac{d}{dt} (g \circ \gamma) \mathrm{d}t = (g \circ \gamma)(b) - (g \circ \gamma)(a)$. I.e. the integral only depends on the endpoints of the curve.
 
 \subsubsection{Potential}
-For $X \subset \R^n$, scalar field $g: X \to \R$ and $f: X \to \R^n$, where $\bigtriangledown g = f$, then $g$ is a potential for $f$.
+For $X \subset \R^n$, vector field $V: X \to \R^n$ and $f: X \to \R$, where $\bigtriangledown f = V$, then $f$ is a potential for $V$.
 
 \begin{compactitem}
-    \item Does always exists for $n = 1$ and is equivalent to the primitive (Ausleitung) of $f$
+    \item Does always exists for $n = 1$ and is equivalent to the primitive (Aufleitung) of $f$.
+    \item Necessary condition for existence of $g$: $\partial_j f_i = \partial_i f_j \quad \forall 1 \le i \neq j \le n$.
+        \begin{compactitem}
+            \item If X is star-shapend, then this condition is sufficient.
+        \end{compactitem}
 \end{compactitem}
+
+\recipe{Find Potential for Given Vector Field}
+Given vector field $V = (v_1, v_2, v_3): \R^3 \to \R^3$ find $f(x, y, z): \R^3 \to \R$ with $\bigtriangledown f = V$.
+
+\begin{compactenum}
+    \item Check necessary condition $\partial_j f_i = \partial_i f_j \quad \forall 1 \le i \neq j \le n$.
+\end{compactenum}
+
+$f$ will be of the form $f(x, y, z) = a(x, y, z) + b(y, z) + c(z)$
+
+\begin{compactenum}
+    \item Calculate $a(x, y, z) = \int v_1 \mathrm{d}x$.
+    \item Using $v_2 \overset{!}{=} \partial_y a(x, y, z) + \partial_y b(y, z) + \partial_y H(z)$ find $b(y, z)$.
+    \item Using $v_3 \overset{!}{=} \partial_z a(x, y, z) + \partial_z b(y, z) + \partial_z c(z)$ find $c(z)$.
+\end{compactenum}
 
 \subsubsection{Conservative}
 For $X \subset \R^n$, vector field $f: X \to \R^n \in C^1$. If for any $x_1, x_2 \in X$, the integral $\int_{\gamma} f \mathrm{d}s$ is independent of the curve from $x_1, x_2$ then the vector field $f$ is conservative.
@@ -69,7 +88,8 @@ For $X \subset \R^n$, vector field $f: X \to \R^n \in C^1$. If for any $x_1, x_2
     \item $f$ is conservative $\iff \int_{\gamma} f(s) \mathrm{d}s = 0$ for all closed ($\gamma(a) = \gamma(b)$) parametrized curves in $X$.
     \item if $f$ is conservative, then $\partial_j f_i = \partial_i f_j \quad \forall 1 \le i \neq j \le n$.
         \begin{compactitem}
-            \item if $f$ is in addition star-shapend, this condition holds in both directions.
+            \item if $f$ is in addition star-shaped, this condition holds in both directions.
+            \item $\implies$ its Jacobian matrix is symmetric.
         \end{compactitem}
 \end{compactitem}
 
@@ -85,6 +105,10 @@ If $X$ is path connected and $f: X \to \R^n \in C^1$ then:
 
 \subsubsection{Star Shaped}
 $X \subset \R^n$ is star shaped if $\exists x_0 \in X$ s.t. $\forall x \in X$ the line segment connecting $x$ and $x_0$ is in $X$.
+
+\begin{compactitem}
+    \item $\R^n$ is star-shaped.
+\end{compactitem}
 
 \subsubsection{curl}
 For $X \in \R^3$ open, $f: X \to \R^3 \in C^1$ vector field. Then $\text{curl } f =
@@ -102,6 +126,8 @@ For $X \in \R^3$ open, $f: X \to \R^3 \in C^1$ vector field. Then $\text{curl } 
 \begin{compactitem}
     \item $\text{curl } f$ is continuous
     \item $\text{curl } f = 0 \implies \partial_j f_i = \partial_i f_j \quad \forall 1 \le i \neq j \le n \implies f$ is conservative.
+    \item $\text{curl}(\bigtriangledown f) = 0$
+
 \end{compactitem}
 
 \subsection{Riemann Integral}
@@ -152,7 +178,7 @@ For $X \subset \R^n$ compact, $f, g: Q \to \R$ integrable (continuous) and $\alp
     \item If $f(x) \ge 0$ then $\int_X f(x) \mathrm{d}x \ge 0$
     \item $\left| \int_X f(x) \mathrm{d}x \right| < \int_X |f| \mathrm{d}x \le (\text{sup}_X |f|) \text{vol}(X)$.
     \item $\left| \int_X f(x) + g(x) \mathrm{d}x \right| < \int_X |f| \mathrm{d}x + \int_X | g(x) | \mathrm{d}x$.
-    \item Frobenius: If $Q = I_1 \times \dots \times I_n$ and $f$ continuous on $Q$ then $\int_{Q} f(x_1, \dots x_n) \mathrm{d}x_1,\dots,x_n = \int_{a_1}^{b_1} \int_{a_2}^{b_2} \dots \int_{a_n}^{b_n} f(x_n) \mathrm{d}x_n \dots \mathrm{d}x_2 \mathrm{d}x_1$.
+    \item Fubini: If $Q = I_1 \times \dots \times I_n$ and $f$ continuous on $Q$ then $\int_{Q} f(x_1, \dots x_n) \mathrm{d}x_1,\dots,x_n = \int_{a_1}^{b_1} \int_{a_2}^{b_2} \dots \int_{a_n}^{b_n} f(x_n) \mathrm{d}x_n \dots \mathrm{d}x_2 \mathrm{d}x_1$.
     \item If $f = 1$ then $\int_X 1 \mathrm{d}x = \text{vol}(X)$
     \item If $f \ge 0$ then $\int_X f(x) \mathrm{d}x = \text{vol}(\{(x, y) \in X \times \R | 0 \le y \le f(x) \})$.
 \end{compactitem}
@@ -316,7 +342,7 @@ Then $\int\int_X(\underbrace{\partial_x f_2 - \partial_y f_1)}_{\text{curl }f} \
 Other cases:
 \begin{compactitem}
     \item Given only a closed curve $\gamma$ and we want to calculate the enclosed area $X$. If we can find $f: \R^2 \to \R^2$ with $\text{curl } f = 1$, then $\text{Area}(X) = \int_{\partial X} f(x) \mathrm{d}x = \int\int_X 1 \mathrm{d}x\mathrm{y}$.
-    \item Given a two dimensional integral $\int\int_X g(x, y) \mathrm{d}x\mathrm{y}$ which we want to evaluate. If we can find $f = (f_1, f_2)$ with $\text{curl }f = g$ then we can use $\int\int_X g \mathrm{d}x\mathrm{d}y = \int\int_X \text{curl }f \mathrm{d}x\mathrm{y} = \int_{\partial X = \gamma} f \mathfm{d} x$
+    \item Given a two dimensional integral $\int\int_X g(x, y) \mathrm{d}x\mathrm{y}$ which we want to evaluate. If we can find $f = (f_1, f_2)$ with $\text{curl }f = g$ then we can use $\int\int_X g \mathrm{d}x\mathrm{d}y = \int\int_X \text{curl }f \mathrm{d}x\mathrm{y} = \int_{\partial X = \gamma} f \mathrm{d} x$
 \end{compactitem}
 
 
