@@ -1,13 +1,7 @@
 %! TEX root  = ./main.tex
 
-\section{Differential Equations (DE)}
+\section{Ordinary Differential Equations (ODE)}
 Equation where the unknown is a function $y = f(x)$ and the equation relates values of $y$ and its derivatives $y', y'' \dots$ at a single point $x$.
-
-The number of parameter determines its type:
-\begin{compactdesc}
-    \item[Ordinary Differential Equation (ODE):] DE with a function of only one variable $x$.
-    \item[Partial Differential Equation (PDE):] DE with a function of multiple variables $a, b \dots$.
-\end{compactdesc}
 
 \subsection{Properties}
 \begin{compactdesc}
@@ -15,7 +9,7 @@ The number of parameter determines its type:
 \end{compactdesc}
 
 \subsection{Linear Differential Equations}
-A linear differential equations of order $k$ is a DE of the form $y^{(k)} + a_{k - 1}y^{(k - 1)} + \dots + a_1y' + a_0y = b$ where $a_i, b, y_i$ are functions on $I \subset \mathbb{K}$. Meaning, all terms $y, y' \dots$ appear linearly.
+A linear ODE of order $k$ is a DE of the form $y^{(k)} + a_{k - 1}y^{(k - 1)} + \dots + a_1y' + a_0y = b$ where $a_i, b, y$ are functions on $I \subset \mathbb{K}$. Meaning, all terms $y, y' \dots$ appear linearly.
 
 \subsubsection{Types}
 \begin{compactdesc}
@@ -24,11 +18,11 @@ A linear differential equations of order $k$ is a DE of the form $y^{(k)} + a_{k
 \end{compactdesc}
 
 \subsubsection{Solutions}
-The general solution to a inhomogeneous linear DE is $y = y_0 + y_p$.
+The general solution to a inhomogeneous linear ODE is $y = y_0 + y_p$. The solutions set is $S_b = \{y_0 + y_p\}$.
 \begin{compactdesc}
-    \item[$\mathbf{y_0}$:] General solution to the homogeneous linear DE.
+    \item[$\mathbf{y_0}$:] General solution to the homogeneous linear DE. $S_0$ is the solution set.
         \begin{compactitem}
-            \item The set of all $y_0$ forms a vector space with dimension equal to the order of the DE
+            \item $S_0$ is a vector space with dimension equal to the order of the DE
         \end{compactitem}
     \item[$\mathbf{y_p}$:] A particular solution the inhomogeneous linear DE.
 \end{compactdesc}
@@ -41,35 +35,108 @@ The following follows from the linearity of the DE:
 \end{compactitem}
 
 \subsubsection{Initial Value Problem}
-For any DE of order $k$ and any $k$ initial value requirements there exists a unique general solution $y$.
+For any DE of order $k$ the initial condition is a set of $k$ equations $y^{(i)} (x_0) = y_i, 1 \le i \le k$ at some initial point $x_0$.  For any $k$ initial conditions there exists a unique solution $y$ (valid for homogeneous and inhomogeneous).
+
+\recipe{Solve $y' + ay = b$}
+\begin{compactenum}
+    \item Compute $\int a \mathrm{d}x = A(x)$
+    \item Formulate $y_0 = z e^{-A(x)}$ for $z \in C$.
+    \item Calculate $y_p = (\int b(x) e^{A(x)} \mathrm{d}x) e^{-A(x)}$.
+    \item Form general solution $y = y_0 + y_p$.
+    \item If initial condition is given, solve for $z$.
+\end{compactenum}
+
+\subsection{Linear ODE With Constant Coefficients}
+Equivalent to regular linear ODE with the difference that $a_i \in \C$.
+
+\subsubsection{Characteristic Polynomial}
+For lin. ODE with constant coefficients $y^{(k)} + a_{k - 1}y^{(k - 1)} + \dots + a_1y' + a_0y = 0$ the characteristic polynomial is $P(\lambda) = \lambda^k + a_{k - 1} \lambda^{k - 1} + \dots + a_0$.
+
+The $k$ zeros of $P(\lambda)$ are the eigenvalues.
+
+\subsection{Solution}
+Any general solution is again of the form $y = y_0 + y_p$.
+
+\subsubsection{Homogeneous $y_0$}
+\begin{compactitem}
+    \item For district eigenvalues $\lambda_1, \dots, \lambda_r$ with multiplicity $m_1, \dots, m_r$ the function $f_{j, l}, x \mapsto x^l e^{\lambda_j x}, \quad 1 \le j \le r, 0 \le l <m_j$ gives a system of solutions. I.e. all terms are multiplied with a constant $z_i$ and summed up.
+    \item If $\lambda_i = \beta + i \gamma$ is a EV the so is $\bar{\lambda_i} = \beta - i \gamma$.
+
+        \todo{Complex Euler stuff}
+\end{compactitem}
+
+\subsubsection{Inhomogeneous $y_p$}
+
+\paragraph{Method of Undetermined Coefficients/Ansatz}
+Solution will be similar to disturbance function $b(x)$.
+
+\begin{tabular}{l | l}
+    $b(x)$                              & Ansatz\\\hline
+    $ae^{\alpha x}$                     & $be^{\alpha x}$\\\hline
+    $a \sin(\beta x)$                   & $c \sin(\beta x) + d \cos(\beta x)$\\
+    $b \cos(\beta x)$                   & \\\hline
+    $a e^{\alpha x} \sin(\beta x)$      & $e^{\alpha x} (c \sin(\beta x) + d \cos(\beta x))$\\
+    $b e^{\alpha x} \cos(\beta x)$      & \\\hline
+    $P_n(x) e^{\alpha x}$               & $R_n(x) e^{\alpha x}$\\\hline
+    $P_n(x) e^{\alpha x} \sin(\beta x)$ & $e^{\alpha x}(R_n(x) \sin(\beta x) + S_n(x)\cos(\beta x))$\\
+    $Q_n(x) e^{\alpha x} \cos(\beta x)$ & \\\hline
+\end{tabular}
+
+\begin{compactitem}
+    \item If $b(x)$ is a lin. combination of functions we try the corresponding lin. comb. of Ansatz functions.
+    \item If $\lambda_i$ is a EW with multiplicity $m_i$ then we multiply the Ansatz by $x^{m_i}$.
+    \item If a Ansatz is equal to solution of the homogeneous equation we have to e.g. multiply it by $x$.
+\end{compactitem}
+
+\recipe{Solve using Ansatz}
+\begin{compactenum}
+    \item Select a suitable Ansatz and set $y_p =$ chosen Ansatz.
+    \item Calculate required derivatives $y_0^{(i)}$.
+    \item Insert $y_0$ and derivatives into the ODE.
+    \item Solve for the constant in the Ansatz.
+    \item $y_p$ is equal the Ansatz with replaces constant.
+\end{compactenum}
+
+\paragraph{Variation of Constants}
+Assume $k = 2$, i.e. $y'' + a_1y' + a_0y = b$ and a homogeneous solution $y_0 = z_1 f_1 + z_2 + f_2$, where $f_1, f_2$ are independent solutions.
+
+For $y_p$ we try $y_p = z_1(x) f_1 + z_2(x) f_2$. To determine the unknown functions $z_1(x), z_2(x)$ we try:
+\begin{align*}
+    z_1'f_1 + z_2'(x)f_2 =& 0\\ 
+    z_1'f_1 + z_2'(x)f_2 =& b
+\end{align*}
+
+$
+\underbrace{
+\begin{pmatrix}
+    f_1 & f_2\\
+    f_1' & f_2'
+\end{pmatrix}
+}_{=A}
+\begin{pmatrix}
+    z_1'(x)\\
+    z_2'(x)
+\end{pmatrix}=
+\begin{pmatrix}
+    0\\
+    b
+\end{pmatrix}\implies
+\begin{pmatrix}
+    z_1'(x)\\
+    z_2'(x)
+\end{pmatrix}= 
+A^{-1}
+\begin{pmatrix}
+    0\\
+    b
+\end{pmatrix}
+$
+
+Which gives the particular solution $y_p = z_1(x) f_1 + z_2(x) f_2$.
 
 \subsection{Separation of Variables}
-\begin{compactdesc}
-    \item[Given:] ODE of order $1$ of the form:
-        $$\frac{dy}{dx} = h(x) g(y)$$
-    \item[Goal:] Find solution $y$
-\end{compactdesc}
-\begin{compactenum}
-    \item Separate the variable $x$ and the function $y$ by taking each on one side:
-        $$\frac{}{g(y)}dy = h(x) dx$$
-    \item Integrate both sides:
-        $$\int \frac{1}{g(y)} dy = \int h(x) dx$$
-    \item Combine integral constants into constant $C$
-    \item Solve $C$ using the initial condition
-\end{compactenum}
+A ODE is separable if it is of the form $y' = b(x)g(y)$.
 
-\subsection{Euler-Ansatz}
-\begin{compactdesc}
-    \item[Given:] Linear ODE of order $k$ with constant coefficients $a_i \in \C$.
-    \item[Goal:] 
-\end{compactdesc}
+We can separate the variables $x, y$.
 
-\begin{compactenum}
-    \item Find solution $y_0$ to homogeneous linear DE
-        \begin{compactitem}
-            \item Calculate the characteristic polynomial $P(\lambda)$
-            \item Find zeros $\lambda_i$ with multiplicity $m_i$ of $P(\lambda)$
-            \item Form solution 
-        \end{compactitem}
-    \item Find solution $y_p$ to 
-\end{compactenum}
+$\frac{dy}{dx} = b(x)g(y) \implies \frac{dy}{g(y)} = b(x)dx \implies \int \frac{1}{g(y)} \mathrm{d}y = \int b(x)\mathrm{d}x$
