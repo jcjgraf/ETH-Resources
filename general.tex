@@ -22,6 +22,8 @@
     \item $a^nb^n = (ab)^n$
     \item $\frac{a^n}{b^n} = \left( \frac{a}{b} \right)^n$
     \item $a^x = e^{x \ln a}$
+    \item $\exp(x + y ) = \exp(x) \cdot \exp(y)$
+    \item $\exp(0) = 1$
 \end{compactitem}
 
 \subsection{Logarithmen}
@@ -38,27 +40,24 @@ $y = \log_a x \iff a^x = x$
     \item $\log(\frac{u}{v}) = \log(u) - \log(v)$
     \item $\log(u^r) = r \log(u)$
     \item $\log_a x = \frac{\log_b x}{\log_b a}$
+    \item $\ln(a \cdot b) = \ln(a) + \ln(b)$
+    \item $\ln(1) = 0$
 \end{compactitem}
-
-\subsection{Spezielle Summen}
-\begin{tabular}{l | l | c}
-    $\sum_{k=1}^{n} k$ & $1 + 2 + \dots + n$ & $\frac{n(n+1)}{2}$\\\hline
-    $\sum_{k=1}^{n} k^2$ & $1 + 4 + \dots + n^2$ & $\frac{n(n+1)(2n+1)}{6}$\\\hline
-    $\sum_{k=1}^{n} k^3$ & $1 + 8 + \dots n^3$ & $\left( \sum_{k=1}^{\infty} k  \right)^2$\\\hline
-    $\sum_{k=1}^{n} (2k - 1)$ & $1 + 3 + \dots + (2n -1)$ & $n^2$\\\hline
-    $\sum_{k=1}^{n} (2k - 1)^2$ & $1 + \dots + (2n - 1)^2$ & $\frac{n(2n-1)(2n+1)}{3}$\\\hline
-    $\sum_{k=0}^{n-1} q^k$ & $1 + q + \dots = \frac{q^n-1}{q-1}$ & $\frac{1 - q^n}{1-q}, \ q \not\in \{0, 1\}$\\\hline
-\end{tabular}
 
 \subsection{Trigonometrische Funktionen}
 \begin{compactdesc}
     \item[Sinussatz:] $\frac{a}{\sin \alpha} = \frac{b}{\sin \beta} = \frac{c}{\sin \gamma} = 2r$
     \item[Cosinussatz:] $a^2 = b^2 + c^2 - 2ab \cos \alpha$
+    \item[Tangens:] $\tan(z) := \frac{\sin(z)}{\cos(z)}, z \not\in \{\frac{\pi}{2} + \pi k\}$
+    \item[Cotangens:] $\cot(z) := \frac{\cos(z)}{\sin(z)}, z \not\in \{\pi k\}$
 \end{compactdesc}
+
 \begin{compactitem}
     \item $\sin^2a + \cos^2a = 1$
     \item $\tan a = \frac{\sin a}{\cos a}$
     \item $1 + \tan^2 a = \frac{1}{\cos^2 a}$
+    \item $\sin(2a) = 2\sin(a) \cos(a)$
+    \item $\cos(2a) = \cos^2(a) - \sin^2(a) = 1 - 2 \sin^2(a)$
 \end{compactitem}
 
 \subsubsection{Komposition}
@@ -70,6 +69,13 @@ $y = \log_a x \iff a^x = x$
 
 \subsubsection{Hyperbolisch}
 \begin{compactitem}
+    \item 
+        \begin{inparaitem}
+            \item $\sinh = \frac{e^x - e^{-x}}{2}$
+            \item $\cosh = \frac{e^x+e^{-x}}{2}$
+            \item $\tanh = \frac{\sinh(x)}{\cosh(x)}$
+        \end{inparaitem}
+
     \item $\cosh^2(x) - \sinh^2(x) = 1$
     \item $\sinh(a + b) = \sinh(a)\cosh(b) + \cosh(a)\sinh(b)$
     \item $\cosh(a + b) = \cosh(a)\cosh(b) + \sinh(a)\sinh(b)$
@@ -105,7 +111,6 @@ $y = \log_a x \iff a^x = x$
 
 \begin{compactitem}
     \item $\arccos(x) = \frac{\pi}{2} - \arcsin(x)$
-    \item $\lim_{n \to \infty} \arctan(n) = \frac{\pi}{2}$
 \end{compactitem}
 
 \subsubsection{Reduktion}
@@ -118,26 +123,212 @@ $y = \log_a x \iff a^x = x$
     $\sin -a = -\sin a$ & $\cos - a = \cos a$ & $\tan - a = -\tan a$\\
 \end{tabular}}
 
+\subsection{Trigonometrische Funktionen}
+\begin{compactenum}
+    \item $\exp(iz) = \cos(x) + i \sin(z) \ \forall z \in \C$
+    \item
+        \begin{inparaitem}
+            \item $\cos(z) = \cos(-z)$
+            \item $\sin(-z) = - \sin(z) \ \forall z \in \C$
+        \end{inparaitem}
+    \item
+        \begin{inparaitem}
+            \item $\sin(z) = \frac{e^{iz} - e^{-iz}}{2i}$
+            \item $\cos(z) = \frac{e^{iz} + e^{-iz}}{2}$
+        \end{inparaitem}
+    \item
+        \begin{inparaitem}
+            \item $\sin(z + w) = \sin(z) \cos(w) + \cos(z) \sin(w)$
+            \item $\cos(z + w) = \cos(z) \cos(w) - \sin(z) \sin(w)$
+        \end{inparaitem}
+    \item $\cos(z)^2 + \sin(z)^2 = 1 \ \forall z \in \C$
+    \item
+        \begin{inparaitem}
+            \item $\sin(2z) = 2 \sin(z) \cos(z)$
+            \item $\cos(2z) = \cos(z)^2 - \sin(z)^2$
+        \end{inparaitem}
+\end{compactenum}
+
 \subsection{Sonstiges}
 \begin{compactitem}
     \item $x_{1 / 2} = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$
     \item $\sqrt{i} = \frac{\sqrt{2}}{2} + i \frac{\sqrt{2}}{2}$
 \end{compactitem}
 
-\subsubsection{Bekannte Integrale}
-\begin{tabular}{l | l}
-    $f(x)$                      & $F(x)$\\\hline
-    $\sin^2(x)$                 & $\frac{x - \sin(x) \cos(x)}{2}$\\
-    $\cos^2(x)$                 & $\frac{x + \sin(x) \cos(x)}{2}$\\
-    $\sin(kx) \cdot \cos(kx)$   & $-\frac{1}{4k}\cos(2kx) = \frac{-(\cos(x))^2}{2}$\\
-    $\frac{x^2}{x^2 + 1}$       & $x - \arctan(x)$\\
-    $\frac{1}{(1 + x^2)^2}$     & $\frac{\frac{x}{x^2 + 1} + \arctan(x)}{2}$\\
-    $\frac{u'(x)}{u(x)}$        & $\ln |u(x)|$\\
-    $u'(x) \cdot u(x)$          & $\frac{1}{2}(u(x)^2)$\\
-    $\sqrt{a^2 - x^2}$          & $\frac{a^2 \arcsin(\frac{x}{|a|})}{2} + \frac{x \sqrt{a^2 - x^2}}{2}$\\
-    $\sqrt{a^2 + x^2}$          & $\frac{a^2 \ln(| \sqrt{x^2 + a^2} +x|)}{2} + \frac{x \sqrt{a^2 + x^2}}{2}$\\
-    $a^x \cdot \ln(a), \ a > 0$ & $a^x$\\
-    $x^x (1 + \ln x)$           & $x^x, \ x > 0$\\
-    $e^{\ln |x|}(\ln(|x|) + 1)$ & $|x|^x = e^{x \ln x}$\\
-    $\frac{1}{(x + a)^2}$ & $-\frac{1}{x - 1}$\\
+\subsection{Komplexe Zahlen}
+\begin{compactdesc}
+    \item[Imaginary Number:] $i, i^2 = -1$
+    \item[Complex Number:] $z, z = x + iy, \ x, y \in \R$
+    \item[Set:] $\C = \{x + iy | x,y \in \R\}$
+    \item[Konjugate:] $\overline{z} = x - iy, \ z = x + iy$
+        \begin{compactitem}
+            \item $z \cdot \overline{z} = x^2 \cdot y^2 = |z|^2$
+            \item $\overline{z_1 + z_2} = \overline{z_1} + \overline{z_2}$
+            \item $\overline{z_1 \cdot z_2} = \overline{z_1} \cdot \overline{z_2}$
+        \end{compactitem}
+    \item[Betrag:] $|z|$ Distanz zwischen $z$ und Origin
+        \begin{compactitem}
+            \item $|z| = \sqrt{x^2 + y^2} = \sqrt{z \cdot \overline{z}} $
+            \item $|z| = |\overline{z}|$
+            \item $|z_1 + z_2| \le |z_1| + |z_2|$
+            \item $|z_1 \cdot z_2| = |z_1||z_2|$
+            \item $|\frac{z_1}{z_2}| = \frac{|z_1|}{|z_2|}$
+        \end{compactitem}
+    \item[Euler:] $e^{i\gamma} = \cos \gamma + i \sin \gamma$
+        \begin{compactitem}
+            \item $|e^{i \gamma}| = 1$
+        \end{compactitem}
+\end{compactdesc}
+
+\subsubsection{Arithmetic}
+Für $z_1 = a + ib = re^{i \gamma}, z_2 = b + id = se^{i \delta}$:
+\begin{compactitem}
+    \item $z_1 + z_2 = (a + ib) + (c + id) = (a + c) + i(b + d)$
+    \item $z_1 \cdot z_2 = (a + ib) \cdot (c + id) = (ac - bd) + i(ad + bc)$
+        \begin{compactitem}
+            \item $z_1 z_2 = rse^{i(\gamma + \delta)}$
+        \end{compactitem}
+    \item $\frac{z_1}{z_2} = \frac{z_1 \cdot \overline{z_2}}{z_2 \cdot \overline{z_2}}= \frac{z_1 \cdot \overline{z_2}}{|z_2|}$
+        \begin{compactitem}
+            \item $\frac{z_1}{z_2} = \frac{r}{s}e^{i(\gamma - \delta)}$
+        \end{compactitem}
+        \item $\sqrt[^n]{z_1} = z_2 \implies z_1 = z_2^n = r^ne^{i n \delta} \overset{!}{=} re^{i\gamma}$
+            \begin{compactitem}
+                \item $s = \sqrt[^n]{r}$
+                \item $n \gamma = \gamma + 2 \pi k, k = 0\dots n - 1$
+            \end{compactitem}
+\end{compactitem}
+
+\subsubsection{Polar Coordinates}
+$z = x + iy \iff z = r(\cos \gamma + i \sin \gamma) \overset{Euler}{=} z = r e^{i \gamma}$
+\begin{compactitem}
+    \item 
+        \begin{inparaitem}
+            \item $x = r \cos \gamma$ 
+            \item $y = r \sin \gamma$
+        \end{inparaitem}
+    \item $r = |z|$
+    \item $\gamma = \arccos \frac{x}{r} = \arcsin \frac{y}{r}$
+    \item $\text{arg}z = |z| \in [0, 2\pi[ \implies r$ ist eindeutig bestimmt
+\end{compactitem}
+
+\subsection{Funktionen und deren Grenzwert}
+\begin{tabular}{l | c | c}
+    Funktion & Grenzwert & Bedingung\\\hline
+    $\lim_{n \to \infty} a^n$ & $0$ & $|a| < 1$\\\hline
+    $\lim_{n \to \infty} \sqrt[^n]{a}$ & $1$ & $a > 0$\\\hline
+    $\lim_{n \to \infty} \sqrt[^n]{n^a}$ & $1$ & $a > 0$\\\hline
+    $\lim_{n \to \infty} \sqrt[^n]{n}$ & $1$\\\hline
+    $\lim_{n \to \infty} \frac{\log_an}{n}$ & $0$ & $a > 1$\\\hline
+    $\lim_{n \to \infty} \frac{n^k}{a^n}$ & $0$ & $a > 1$\\\hline
+    $\lim_{n \to \infty} \frac{a^n}{n!}$ & $0$\\\hline
+    $\lim_{n \to \infty} \sum_{k=1}^{n} \frac{1}{k}$ & $\infty$\\\hline
+    $\lim_{n \to \infty} \left( 1 + \frac{1}{n} \right)^n$ & $e$\\\hline
+    $\lim_{n \to \infty} \left( 1 + \frac{a}{n} \right)^n$ &e$^a$\\\hline
+    $\lim_{n \to \infty} \left( 1 - \frac{1}{n} \right)^n$ & $\frac{1}{e}$\\\hline
+    $\lim_{n \to 0} \frac{\sin n}{n}$ & $1$\\\hline
+    $\lim_{n \to 1} \frac{\ln n}{n - 1}$ & $1$\\\hline
+    $\lim_{n \to \infty} \frac{n^m}{\exp(an)}$ & $0$ & $m \in \R, a > 0$\\\hline
+    $\lim_{n \to 0} \frac{\exp(n) - 1}{n}$ & $1$\\\hline
+    $\lim_{n \to 0} \frac{\ln(1 + n)}{n}$ & $1$\\\hline
+    $\lim_{n \to \infty} \frac{\ln n}{n^a}$ & $0$ & $a > 0$\\\hline
+    $\lim_{n \to 0} \frac{a^n - 1}{n}$ & $\ln a$ & $a > 0$\\\hline
+    $\lim_{n \to 0} (n^a \ln n)$ & $0$ & $a > 0$\\\hline
 \end{tabular}
+
+\subsection{Bekannte Reihen}
+\resizebox{\columnwidth}{!}{\begin{tabular}{l | l | c | c | c}
+    \multicolumn{2}{l |}{Reihe}                                      & Wert                                   & konv.               & div.\\\hline
+    \multicolumn{2}{l |}{Geometrische Reihe}                         & $q \in \C$                             &                     & \\\hline
+    $\sum_{k=0}^{\infty} aq^k$                                       & $a + aq +$                             & $\frac{a}{1-q}$     & $|g| < 1$    & $|q| \ge 1$\\\hline
+    $\sum_{k=0}^{\infty} (k+1)q^k$                                   & $1 + 2q +$                             & $\frac{1}{(1-q)^2}$ &              & \\\hline
+    \multicolumn{2}{l |}{Harmonische Reihe}                          &                                        &                     & \\\hline
+    $\sum_{k=1}^{\infty} \frac{1}{k}$                                &                                        & $\infty$            &              & \\\hline
+    $\sum_{k=1}^{\infty} \frac{1}{k^2}$                              &                                        & $\frac{\pi^2}{6}$   &              & \\\hline
+    $\sum_{k=1}^{\infty} \frac{1}{k^4}$                              &                                        & $\frac{\pi^4}{90}$  &              & \\\hline
+    $\sum_{k=1}^{\infty} \frac{1}{k^a}$                              &                                        &                     & $a > 1$      & $a \le 1$\\\hline
+    \multicolumn{2}{l |}{Alternierende Harmon. Reihe}                &                                        &                     & \\\hline
+    $\sum_{k=1}^{\infty} \frac{(-1)^{k+1}}{k}$                       &                                        & $\ln 2$             &              & \\\hline
+    $\sum_{k=1}^{\infty} \frac{(-1)^{k+1}}{k^2}$                     &                                        & $\frac{\pi^2}{12}$  &              & \\\hline
+    $\sum_{k=1}^{\infty} \frac{(-1)^{k+1}}{k^4}$                     &                                        & $\frac{\pi^4}{720}$ &              & \\\hline
+    $\sum_{k=0}^{\infty} \frac{(-1)^k}{2k + 1}$                      & $1 - \frac{1}{3} + \frac{1}{5} -$      & $\frac{\pi}{4}$     &              & \\\hline
+    \multicolumn{1}{l |}{Teleskopreihe}                              &                                        &                     & \\\hline
+    $\sum_{k=1}^{\infty} \frac{1}{k(k+1)}$                           &                                        & $1$                 &              & \\\hline
+    \multicolumn{3}{l |}{Exponentialfunktion $z \in \C,$ konv. abs.} &                                        & \\\hline
+    $\sum_{k=0}^{\infty} \frac{z^k}{k!}$                             & $1 + z + \frac{z^2}{2!} +$             & $\exp{z}$           &              & \\\hline
+    $\sum_{k=0}^{\infty} \frac{(-a)^k}{k!}$                          &                                        & $\frac{1}{e^a}$       &              & \\\hline
+    $\sum_{k=0}^{\infty} (-1)^k\frac{x^{2k+1}}{(2k+1)!}$             & $x -\frac{x^3}{3!} + \frac{x^5}{5!} -$ & $ \sin x$           &              & \\\hline
+    $\sum_{k=0}^{\infty} (-1)^k\frac{x^{2k}}{(2k)!}$                 & $1-\frac{x^2}{2}+\frac{x^4}{4!}-$      & $\cos x$            &              & \\\hline
+    $\sum_{k=0}^{\infty} \frac{x^{2k+1}}{(2k+1)!}$                   & $x+\frac{x^3}{3!}+\frac{x^5}{5!}+$     & $\sinh x$           &              & \\\hline
+    $\sum_{k=0}^{\infty} \frac{x^{2k}}{(2k)!}$                       & $1+\frac{x^2}{2}+\frac{x^4}{4!}+$      & $\cosh x$           &              & \\\hline
+\end{tabular}}
+
+\subsection{Spezielle Summen}
+\begin{tabular}{l | l | c}
+    $\sum_{k=1}^{n} k$ & $1 + 2 + \dots + n$ & $\frac{n(n+1)}{2}$\\\hline
+    $\sum_{k=1}^{n} k^2$ & $1 + 4 + \dots + n^2$ & $\frac{n(n+1)(2n+1)}{6}$\\\hline
+    $\sum_{k=1}^{n} k^3$ & $1 + 8 + \dots n^3$ & $\left( \sum_{k=1}^{\infty} k  \right)^2$\\\hline
+    $\sum_{k=1}^{n} (2k - 1)$ & $1 + 3 + \dots + (2n -1)$ & $n^2$\\\hline
+    $\sum_{k=1}^{n} (2k - 1)^2$ & $1 + \dots + (2n - 1)^2$ & $\frac{n(2n-1)(2n+1)}{3}$\\\hline
+    $\sum_{k=0}^{n-1} q^k$ & $1 + q + \dots = \frac{q^n-1}{q-1}$ & $\frac{1 - q^n}{1-q}, \ q \not\in \{0, 1\}$\\\hline
+\end{tabular}
+
+\subsection{Auf- und Ableitungen}
+\begin{tabular}{l | l | l}
+    $f'(x)$ & $f(x)$ & $F(x)$\\
+    \hline
+    $sax^{s-1}$                                                      & $ax^s$                  & $\frac{a}{s + 1}x^{s + 1}$\\
+    $\frac{1}{x}$                                                    & $\ln(ax)$               & $x \ln(ax) - x$\\
+    $\frac{1}{x + a}$                                                & $\ln(x + a)$            & $(x + a) \ln(x + a) + x$\\
+    $ae^{ax}$                                                        & $e^{ax}$                & $\frac{1}{a} e^{ax}$\\
+    $-\frac{1}{x^2}$                                                 & $\frac{1}{x}$           & $\ln(|x|)$\\
+    $\ln(a)b a^{b x}$                                                & $a^{bx}$                & $\frac{a^{bx}}{\ln(a)b}$\\
+    $\frac{1}{2\sqrt{x}}$                                            & $\sqrt{x}$              & $\frac{2}{3}x^{3/2}$\\
+    $\frac{1}{x\ln(a)}$                                              & $\log_a(x)$             & $\frac{x(\ln(x)-1)}{\ln(a)}$\\
+    $\cos(x)$                                                        & $\sin(x)$               & $-\cos(x)$\\
+    $\frac{1}{\sqrt{1-x^2} }$                                        & $\arcsin(x)$            & $x \arcsin(x) + \sqrt{1 - x^2}$\\
+    $2 \sin(x) \cos(x)$                                              & $\sin^2(x)$             & $\frac{x - \sin(x) \cos(x)}{2}$\\
+    $-\sin(x)$                                                       & $\cos(x)$               & $\sin(x)$\\
+    $\frac{-1}{\sqrt{1-x^2} }$                                       & $\arccos(x)$            & $x \arccos(x) - \sqrt{1 - x^2}$\\
+    $-2 \sin(x) \cos(x)$                                             & $\cos^2(x)$             & $\frac{x + \sin(x) \cos(x)}{2}$\\
+    $\frac{1}{\cos^2(x)} =$                                          & $\tan(x)$               & $-\ln(|\cos(x)|)$\\
+    $1 + \tan^2(x)$                                                  &                         & \\
+    $\frac{1}{1+x^2}$                                                & $\arctan(x)$            & $x \arctan(x) - \frac{\ln(x^2 + 1)}{2}$\\
+    $2a(\cos(ax))^2-a$                                               & $\sin(ax) \cos(ax)$     & $-\frac{1}{4a}\cos(2ax) =$\\
+                                                                     &                         & $\frac{-(\cos^2(ax))}{2a}$\\
+    $\frac{2x}{(x^2 + 1)^2}$                                         & $\frac{x^2}{x^2 + 1}$   & $x - \arctan(x)$\\
+    $\frac{-4x}{(x^2 + 1)^3}$                                        & $\frac{1}{(1 + x^2)^2}$ & $\frac{x}{2x^2 + 2} + \frac{\arctan(x)}{2}$\\
+                                                                     & $\frac{u'(x)}{u(x)}$    & $\ln |u(x)|$\\
+                                                                     & $u'(x) \cdot u(x)$      & $\frac{1}{2}(u(x)^2)$\\
+    $\frac{-x}{\sqrt{a^2 - x^2}}$                                    & $\sqrt{a^2 - x^2}$      & $\frac{a^2 \arcsin(\frac{x}{|a|})+ x \sqrt{a^2 - x^2}}{2}$\\
+    $\frac{x}{\sqrt{x^2 + a^2}}$                                     & $\sqrt{a^2 + x^2}$      & $\frac{a^2 \ln(| \sqrt{x^2 + a^2} +x|) + x \sqrt{a^2 + x^2}}{2}$\\
+    $x^x (1 + \ln x)$                                                & $x^x$                   & \\
+    $e^{\ln |x|}(\ln(|x|) + 1)$                                      & $|x|^x = e^{x \ln x}$   & \\
+    $\frac{-2}{(x + a)^3}$                                           & $\frac{1}{(x + a)^2}$   & $\frac{-1}{x + a}$\\
+    $\cosh(x)$                                                       & $\sinh(x)$              & $\cosh(x)$\\
+    $\frac{1}{\sqrt{1+x^2}}$                                         & $\arcsinh(x)$           & \\
+    $\sinh(x)$                                                       & $\cosh(x)$              & $\sinh(x)$\\
+    $\frac{1}{\sqrt{x-1}\sqrt{x+1}}$                                 & $\arccosh(x)$           & \\
+    $\frac{1}{\cosh^2(x)} =$                                         & $\tanh(x)$              & $\ln(e^{2x} + 1) - x$\\
+    $1 - \tanh^2(x)$                                                 &                         & \\
+    $\frac{1}{2x+2} - \frac{1}{2x - 2}$                              & $\arctanh(x)$           & \\
+\end{tabular}
+
+
+\subsection{Eigenschaften Ableitung}
+\begin{tabular}{c | c | c | c | l}
+    $f(x)$            & $f'(x)$  & $f''(x)$ & $ f'''(x)$ & Eigenschaft\\\hline
+    $= 0$             &          &          &            & Nullstelle\\\hline
+    $= 0$             & $= 0$    & $\neq 0$ &            & $2$-fache Nullstelle\\\hline
+                      & $> 0$    &          &            & Strikt Monoton Steigend\\\hline
+                      & $< 0$    &          &            & Strikt Monoton Fallend\\\hline
+                      & $= 0$    & $< 0$    &            & Lokales Maximum\\\hline
+                      & $= 0$    & $> 0$    &            & Lokales Minimum\\\hline
+                      & $\neq 0$ & $= 0$    & $> 0$      & Wendepunkt r $\to$ l\\\hline
+                      & $\neq 0$ & $= 0$    & $< 0$      & Wendepunkt l $\to$ r\\\hline
+                      & $= 0$    & $= 0$    & $> 0$      & Sattelpunkt r $\to$ l\\\hline
+                      & $= 0$    & $= 0$    & $< 0$      & Sattelpunkt l $\to$ r\\\hline
+                      &          & $> 0$    &            & Streng Konvex\\\hline
+                      &          & $< 0$    &            & Streng Konkav\\\hline
+\end{tabular}
+

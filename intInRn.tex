@@ -303,6 +303,9 @@ Let $\gamma: X \to Y \in C^1$ bijective and $\text{det }J_p(x) \neq 0 \quad \for
     \item $\mathrm{d}x\mathrm{d}y\mathrm{z} = r^2 \sin(\varnothing)\mathrm{d}r\mathrm{d}\theta\mathrm{z}\varnothing$
 \end{compactitem}
 
+\subsubsection{Area in $n = 3$}
+Given a surface in $S = \{(x, y, z) \in \R^3\}$ by $f: \R^2 \to \R$, then $\text{Area}(S) = \int \int \sqrt{1 + (\partial_x f(x, y))^2 + (\partial_y f(x, y))^2} \mathrm{d}x\mathrm{d}y$ for $X \subset \R^2$.
+
 \subsection{Green's Formula}
 For:
 \begin{compactenum}
@@ -339,11 +342,45 @@ Then $\int\int_X(\underbrace{\partial_x f_2 - \partial_y f_1)}_{\text{curl }f} \
     \item Calculate line integral if the double integral of $\text{curl }f$ looks simpler.
 \end{compactenum}
 
+\recipe{Calculate line integral as double integral}
+Given $f = (f_1, f_2): X \to \R^2 \in C^1$ for which both partial derivatives exists and curve $\gamma: [a,  b] \to \R^2$ which forms the boundary of $X$ and is closed and simple.
+
+Goal, calculate $\int_{\gamma} f \mathrm{d}s$
+
+\begin{compactenum}
+    \item Check if $X$ lies on the left of $\gamma$. If it is not, make it do that.
+    \item Calculate partial derivatives $\partial_x f_2$ and $\partial_y f_1$.
+    \item Calculate $\text{curl }f = \partial_x f_2 - \partial_y f_1$
+    \item Calculate $\int \int_X \text{curl }f \mathrm{d}x\mathrm{d}y$
+\end{compactenum}
+
+\recipe{Calculate area enclosed by curve}
+Given curve $\gamma: [a,  b] \to \R^2$ which is closed and simple.
+
+Goal, find the area of $X$ which is enclosed by the curve.
+
+\begin{compactenum}
+    \item Select $f = (0, x)$ or $f = (y, 0)$ for which $\text{curl }f = 1$.
+    \item $\text{Area}(X) = \int_{\partial X} f(x) \mathrm{d}x = \int\int_X 1 \mathrm{d}x\mathrm{y}$.
+\end{compactenum}
+
+\recipe{Curve goes in wrong direction}
+Given curve $\gamma: [a,  b] \to \R^2$ which is closed and simple but the enclosed area is on the right.
+
+\begin{compactitem}
+    \item If curve is symmetric w.r.t. x-axis
+        \begin{compactitem}
+            \item $-\gamma$ parametrizes curve in opposite direction.
+            \item $\int_{-\gamma} f \mathrm{d}s = - \int_{\gamma} f \mathrm{d}s$
+        \end{compactitem}
+\end{compactitem}
+
 Other cases:
 \begin{compactitem}
-    \item Given only a closed curve $\gamma$ and we want to calculate the enclosed area $X$. If we can find $f: \R^2 \to \R^2$ with $\text{curl } f = 1$, then $\text{Area}(X) = \int_{\partial X} f(x) \mathrm{d}x = \int\int_X 1 \mathrm{d}x\mathrm{y}$.
     \item Given a two dimensional integral $\int\int_X g(x, y) \mathrm{d}x\mathrm{y}$ which we want to evaluate. If we can find $f = (f_1, f_2)$ with $\text{curl }f = g$ then we can use $\int\int_X g \mathrm{d}x\mathrm{d}y = \int\int_X \text{curl }f \mathrm{d}x\mathrm{y} = \int_{\partial X = \gamma} f \mathrm{d} x$
 \end{compactitem}
+
+
 
 
 
