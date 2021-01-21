@@ -18,9 +18,9 @@ A linear ODE of order $k$ is a DE of the form $y^{(k)} + a_{k - 1}y^{(k - 1)} + 
 \end{compactdesc}
 
 \subsubsection{Solutions}
-The general solution to a inhomogeneous linear ODE is $y = y_0 + y_p$. The solutions set is $S_b = \{y_0 + y_p\}$.
+The general solution to a inhomogeneous linear ODE is $y = y_h + y_p$. The solutions set is $S_b = \{y_h + y_p\}$.
 \begin{compactdesc}
-    \item[$\mathbf{y_0}$:] General solution to the homogeneous linear DE. $S_0$ is the solution set.
+    \item[$\mathbf{y_h}$:] General solution to the homogeneous linear DE. $S_0$ is the solution set.
         \begin{compactitem}
             \item $S_0$ is a vector space with dimension equal to the order of the DE
         \end{compactitem}
@@ -40,9 +40,9 @@ For any DE of order $k$ the initial condition is a set of $k$ equations $y^{(i)}
 \recipe{Solve $y' + ay = b$}
 \begin{compactenum}
     \item Compute $\int a \mathrm{d}x = A(x)$
-    \item Formulate $y_0 = z e^{-A(x)}$ for $z \in C$.
+    \item Formulate $y_h = z e^{-A(x)}$ for $z \in C$.
     \item Calculate $y_p = (\int b(x) e^{A(x)} \mathrm{d}x) e^{-A(x)}$.
-    \item Form general solution $y = y_0 + y_p$.
+    \item Form general solution $y = y_h + y_p$.
     \item If initial condition is given, solve for $z$.
 \end{compactenum}
 
@@ -54,51 +54,59 @@ For lin. ODE with constant coefficients $y^{(k)} + a_{k - 1}y^{(k - 1)} + \dots 
 
 The $k$ zeros of $P(\lambda)$ are the eigenvalues.
 
-\subsection{Solution}
-Any general solution is again of the form $y = y_0 + y_p$.
+\subsubsection{Solution}
+Any general solution is again of the form $y = y_h + y_p$.
 
-\subsubsection{Homogeneous $y_0$}
+\paragraph{Homogeneous $y_h$}
 \begin{compactitem}
     \item For district eigenvalues $\lambda_1, \dots, \lambda_r$ with multiplicity $m_1, \dots, m_r$ the function $f_{j, l}, x \mapsto x^l e^{\lambda_j x}, \quad 1 \le j \le r, 0 \le l <m_j$ gives a system of solutions. I.e. all terms are multiplied with a constant $z_i$ and summed up.
-    \item If $\lambda_i = \beta + i \gamma$ is a EV the so is $\bar{\lambda_i} = \beta - i \gamma$.
-
-        \todo{Complex Euler stuff}
+    \item If $\lambda_i = \beta + i \gamma$ is a EV then so is $\bar{\lambda_i} = \beta - i \gamma$.
+    \item If a root $\lambda_i$ is complex, i.e. $\lambda_i = \beta_i \pm i\gamma_i$, with multiplicity $m_i$ then they contribute the system $x^l e^{\beta_i x} (\cos(\gamma_ix) + i \sin(\gamma_ix))$ to the solution.
+    \item For complex roots $\beta + i \gamma$, which are part of a solution system, the following transformation is useful: $z_1 e^{(\beta + i \gamma) x} + z_2 e^{(\beta - i \gamma) x} = \tilde{z_1} e^{\beta x} \cos(\gamma x) + \tilde{z_2} e^{\beta x} \sin(\gamma x)$.
 \end{compactitem}
 
-\subsubsection{Inhomogeneous $y_p$}
+\paragraph{Inhomogeneous $y_p$}
 
-\paragraph{Method of Undetermined Coefficients/Ansatz}
+\subparagraph{Method of Undetermined Coefficients/Ansatz}
 Solution will be similar to disturbance function $b(x)$.
 
 \begin{tabular}{l | l}
-    $b(x)$                              & Ansatz\\\hline
-    $ae^{\alpha x}$                     & $be^{\alpha x}$\\\hline
-    $a \sin(\beta x)$                   & $c \sin(\beta x) + d \cos(\beta x)$\\
-    $b \cos(\beta x)$                   & \\\hline
-    $a e^{\alpha x} \sin(\beta x)$      & $e^{\alpha x} (c \sin(\beta x) + d \cos(\beta x))$\\
-    $b e^{\alpha x} \cos(\beta x)$      & \\\hline
-    $P_n(x) e^{\alpha x}$               & $R_n(x) e^{\alpha x}$\\\hline
-    $P_n(x) e^{\alpha x} \sin(\beta x)$ & $e^{\alpha x}(R_n(x) \sin(\beta x) + S_n(x)\cos(\beta x))$\\
-    $Q_n(x) e^{\alpha x} \cos(\beta x)$ & \\\hline
+    $b(x)$                                  & Ansatz\\\hline
+    $a$                                     & $b$\\
+    $P_n(x)$                                & $Q_n(x)$\\
+    $P_n e^{\alpha x}$                      & $Q_n e^{\alpha x}$\\
+    $P_n \sin(\beta x)$                     & $Q_n \sin(\beta x) + R_n \cos(\beta x)$\\
+    $P_n \cos(\beta x)$                     & $Q_n \sin(\beta x) + R_n \cos(\beta x)$\\
+    $P_n \cos(\beta x)$                     & $Q_n \sin(\beta x) + R_n \cos(\beta x)$\\
+    $P_n \sin(\beta x) + G_n \cos(\beta x)$ & $Q_n \sin(\beta x) + R_n \cos(\beta x)$\\
+    $a e^{\alpha x} \sin(\beta x)$          & $e^{\alpha x} (c \sin(\beta x) + d \cos(\beta x))$\\
+    $b e^{\alpha x} \cos(\beta x)$          & \\
+    $P_n(x) e^{\alpha x}$                   & $R_n(x) e^{\alpha x}$\\
+    $P_n(x) e^{\alpha x} \sin(\beta x)$     & $e^{\alpha x}(R_n(x) \sin(\beta x) + S_n(x)\cos(\beta x))$\\
+    $Q_n(x) e^{\alpha x} \cos(\beta x)$     & \\
 \end{tabular}
 
 \begin{compactitem}
-    \item If $b(x)$ is a lin. combination of functions we try the corresponding lin. comb. of Ansatz functions.
+    \item If $b(x)$ is a lin. combination of functions we try
+        \begin{inparaitem}
+            \item Lin. comb. of Ansatz functions
+            \item Superposition
+        \end{inparaitem}
     \item If $\lambda_i$ is a EW with multiplicity $m_i$ then we multiply the Ansatz by $x^{m_i}$.
-    \item If a Ansatz is equal to solution of the homogeneous equation we have to e.g. multiply it by $x$.
+    \item If a Ansatz is equal to solution of the homogeneous equation we have to multiply the Ansatz by $x$.
 \end{compactitem}
 
 \recipe{Solve using Ansatz}
 \begin{compactenum}
-    \item Select a suitable Ansatz and set $y_p =$ chosen Ansatz.
-    \item Calculate required derivatives $y_0^{(i)}$.
-    \item Insert $y_0$ and derivatives into the ODE.
+\item Select a suitable Ansatz and set $y_p =$ chosen Ansatz (check special cases listed above).
+    \item Calculate required derivatives $y_p^{(i)}$.
+    \item Insert $y_p$ and derivatives into the ODE.
     \item Solve for the constant in the Ansatz.
     \item $y_p$ is equal the Ansatz with replaces constant.
 \end{compactenum}
 
-\paragraph{Variation of Constants}
-Assume $k = 2$, i.e. $y'' + a_1y' + a_0y = b$ and a homogeneous solution $y_0 = z_1 f_1 + z_2 + f_2$, where $f_1, f_2$ are independent solutions.
+\subparagraph{Variation of Constants}
+Assume $k = 2$, i.e. $y'' + a_1y' + a_0y = b$ and a homogeneous solution $y_h = z_1 f_1 + z_2 + f_2$, where $f_1, f_2$ are independent solutions.
 
 For $y_p$ we try $y_p = z_1(x) f_1 + z_2(x) f_2$. To determine the unknown functions $z_1(x), z_2(x)$ we try:
 \begin{align*}

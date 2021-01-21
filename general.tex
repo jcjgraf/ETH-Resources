@@ -4,13 +4,13 @@
 
 \subsection{Potenzen und Wurzeln}
 \begin{compactitem}
-    \item 
+    \item
         \begin{inparaitem}
             \item $a^1 = a$
             \item $a^0 = 1$
         \end{inparaitem}
     \item $a^{-n} = \frac{1}{a^n}$
-    \item 
+    \item
         \begin{inparaitem}
             \item $a^{\frac{1}{n}} = \sqrt[^n]{a}$
             \item $a^{\frac{m}{n}} = \sqrt[^n]{a^m}$
@@ -31,7 +31,7 @@ $y = \log_a x \iff a^x = x$
 \begin{compactitem}
     \item $a^{\log_a x} = x$
     \item $\log_a a^x = x$
-    \item 
+    \item
         \begin{inparaitem}
             \item $\log_a a = 1$
             \item $\log_a 1 = 0$
@@ -69,7 +69,7 @@ $y = \log_a x \iff a^x = x$
 
 \subsubsection{Hyperbolisch}
 \begin{compactitem}
-    \item 
+    \item
         \begin{inparaitem}
             \item $\sinh = \frac{e^x - e^{-x}}{2}$
             \item $\cosh = \frac{e^x+e^{-x}}{2}$
@@ -150,10 +150,12 @@ $y = \log_a x \iff a^x = x$
 \end{compactenum}
 
 \subsection{Sonstiges}
-\begin{compactitem}
-    \item $x_{1 / 2} = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$
-    \item $\sqrt{i} = \frac{\sqrt{2}}{2} + i \frac{\sqrt{2}}{2}$
-\end{compactitem}
+\begin{compactdesc}
+    \item[Mitternacht:] $x_{1 / 2} = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$
+    \item[-] $\sqrt{i} = \frac{\sqrt{2}}{2} + i \frac{\sqrt{2}}{2}$
+    \item[Ellipse Gleichung:] $\frac{x^2}{a^2} + \frac{y^2}{y^2} = 1$
+    \item[Ellipse Volumen:] $\pi a b$
+\end{compactdesc}
 
 \subsection{Komplexe Zahlen}
 \begin{compactdesc}
@@ -202,15 +204,55 @@ Für $z_1 = a + ib = re^{i \gamma}, z_2 = b + id = se^{i \delta}$:
 \subsubsection{Polar Coordinates}
 $z = x + iy \iff z = r(\cos \gamma + i \sin \gamma) \overset{Euler}{=} z = r e^{i \gamma}$
 \begin{compactitem}
-    \item 
+    \item
         \begin{inparaitem}
-            \item $x = r \cos \gamma$ 
+            \item $x = r \cos \gamma$
             \item $y = r \sin \gamma$
         \end{inparaitem}
     \item $r = |z|$
     \item $\gamma = \arccos \frac{x}{r} = \arcsin \frac{y}{r}$
     \item $\text{arg}z = |z| \in [0, 2\pi[ \implies r$ ist eindeutig bestimmt
 \end{compactitem}
+
+\subsubsection{Rechenregeln Ableitung}
+\begin{compactdesc}
+    \item[$\mathbf{f + g}$:] $(f + g)'(x_0) = f'(x_0) + g'(x_0)$.
+    \item[$\mathbf{f \cdot g}$:] $(f \cdot g)'(x_0) = f'(x_0)g(x_0) + f(x_0)g'(x_0)$.
+    \item[$\mathbf{\frac{f}{g}}$:] $\left( \frac{f}{g} \right)' (x_0) = \frac{f'(x_0)g(x_0) - f(x_0)g'(x_0)}{g(x_0)^2}, \ g(x_0) \neq 0$.
+    \item[$\mathbf{g \circ f}$:] $(g \circ f)'(x_0) = g'(f(x_0)) \cdot f'(x_0)$
+\end{compactdesc}
+
+\subsubsection{Rechenregel Integral}
+\begin{compactdesc}
+    \item[Partiell:] $\int_{a}^{b} f(x)g'(x) \mathrm{d}x = f(x)g(x)|_a^b - \int_{a}^{b} f'(x)g(x) \mathrm{d}x$
+    \item[Substitution:] $\int_{\phi(a)}^{\phi(b)} f(x) \mathrm{d}x = \int_a^b f(\phi(t))\phi'(t) \mathrm{d}t$
+    \item[Paritalbruch:]
+\end{compactdesc}
+
+\subsection{Rationale Funktionen}
+$R(x) = P(x) / Q(x), \ P(x), Q(x)$ sind Polynome, $x \mapsto \frac{P(x)}{Q(x)}$.
+\begin{compactitem}
+    \item
+\end{compactitem}
+
+\subsubsection{Partialbruchzerlegung}
+$\int R(x) \mathrm{d}x, R(x) = \frac{P(x)}{Q(x)}$
+\begin{compactenum}
+    \item \textbf{Reduktion}
+        \begin{compactitem}
+            \item Falls $\text{grad}(P) \ge \text{grad}(Q)$ führe Polynomdivision durch: $P(x) = S(x)Q(X) + \hat{P}(x)$
+            \item $\implies \frac{P(x)}{Q(x)} = S(x) + \frac{\hat{P}(x)}{Q(x)}$
+        \end{compactitem}
+    \item \textbf{Zerlegung}
+        \begin{compactitem}
+            \item $n := grad(Q)$
+            \item $\alpha_1 \pm i \beta_1, \dots \alpha_l \pm i \beta_l, \gamma_1, \dots , \gamma_k, \ \alpha, \beta, \gamma \in \R, \beta \neq 0$ paarweise verschiedene Nullstellen.
+            \item $Q(x) = \prod_{j = 1}^l \left( (x - \alpha_j)^2 + \beta_j^2 \right) ^{m_j} \prod_{i=1}^{k} (x - \gamma_i)^{n_i}$
+            \item $\frac{P(x)}{Q(x)} = \left( S(x) + \right) \sum_{i=1}^{l} \sum_{j=1}^{m_i} \frac{A_{ij} + B_{ij} x}{\left( (x - \alpha_i)^2 + \beta_i^2 \right)^j } + \sum_{i=1}^{k} \sum_{j=1}^{n_i} \frac{C_{ij}}{(x - \gamma_i)^j}, \exists A_{ij}, B_{ij}, C_{ij} \in \R$.
+            \item Finde eindeutige $A_{ij}, B_{ij}, C_{ij}$ durch Koeffizientenvergleich.
+        \end{compactitem}
+    \item \textbf{Integration der Partialbrüche}
+\end{compactenum}
 
 \subsection{Funktionen und deren Grenzwert}
 \begin{tabular}{l | c | c}
@@ -313,22 +355,3 @@ $z = x + iy \iff z = r(\cos \gamma + i \sin \gamma) \overset{Euler}{=} z = r e^{
     $1 - \tanh^2(x)$                                                 &                         & \\
     $\frac{1}{2x+2} - \frac{1}{2x - 2}$                              & $\arctanh(x)$           & \\
 \end{tabular}
-
-
-\subsection{Eigenschaften Ableitung}
-\begin{tabular}{c | c | c | c | l}
-    $f(x)$            & $f'(x)$  & $f''(x)$ & $ f'''(x)$ & Eigenschaft\\\hline
-    $= 0$             &          &          &            & Nullstelle\\\hline
-    $= 0$             & $= 0$    & $\neq 0$ &            & $2$-fache Nullstelle\\\hline
-                      & $> 0$    &          &            & Strikt Monoton Steigend\\\hline
-                      & $< 0$    &          &            & Strikt Monoton Fallend\\\hline
-                      & $= 0$    & $< 0$    &            & Lokales Maximum\\\hline
-                      & $= 0$    & $> 0$    &            & Lokales Minimum\\\hline
-                      & $\neq 0$ & $= 0$    & $> 0$      & Wendepunkt r $\to$ l\\\hline
-                      & $\neq 0$ & $= 0$    & $< 0$      & Wendepunkt l $\to$ r\\\hline
-                      & $= 0$    & $= 0$    & $> 0$      & Sattelpunkt r $\to$ l\\\hline
-                      & $= 0$    & $= 0$    & $< 0$      & Sattelpunkt l $\to$ r\\\hline
-                      &          & $> 0$    &            & Streng Konvex\\\hline
-                      &          & $< 0$    &            & Streng Konkav\\\hline
-\end{tabular}
-
