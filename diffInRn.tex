@@ -103,6 +103,10 @@ For $X \subset \R^n$ open and $f: X \to \R$ with partial derivatives on $X$, the
 \end{pmatrix}
 = (J_f(x_0))^T$ is the gradient of $f$ at $x_0$ denoted as $\bigtriangledown f(x_0)$.
 
+\begin{compactitem}
+    \item Slop is maximal in the direction of the gradient.
+\end{compactitem}
+
 \subsection{Differentiability}
 For $X \subset \R^n$ open, $x_0 \in X$ and $f: X \to \R^m$. $f$ is differentiable at $x_0$ with differential $u: \R^n \to \R^m$ if $\lim_{\substack{x \to x_0\\ x \neq  x_0}} \frac{1}{|x - x_0|}(f(x) - f(x_0) - u(x - x_0)) = \frac{R(x, x_0)}{|x - x_0|} = 0$.
 \begin{compactitem}
@@ -309,21 +313,26 @@ For $X \subset \R^n, x_0 \in X, f: X \to \R, f \in C^k$, the $k$-th Taylor polyn
 \subsubsection{Approximation}
 For $f \in C^k(X; \R), x_0 \in X$. $T_k$ is approximation of $f$ at $x$ with $x_0$: $f(x) = T_kf(x - x_0; x_0) + E_k(f, x, x_0)$. For the error $E_k$ it holds $\lim_{x \to x_0} \frac{E_k(f, x, x_0)}{|x - x_0|^k} = 0$.
 
-\recipe{Taylor Polynom for $f: R^n \to \R$}
-Give Taylor of order $1 - 3$ of $f(x, y): \R^n \to \R$
-
-$T_1 f(x, y) = f(x_0, y_0) + \frac{\partial f(x_0, y_0)}{\partial x} \cdot (x - x_0) + \frac{\partial f(x_0, y_0)}{\partial y} \cdot (y - y_0)$
-
-$T_2 f(x, y) = T_1 f(x, y) + \frac{1}{2} \frac{\partial^2 f(x_0, y_0)}{\partial x \partial x} \cdot (x - x_0)^2 + \frac{1}{2} \frac{\partial^2 f(x_0, y_0)}{\partial y \partial y} \cdot (y - y_0)^2 + \frac{\partial^2 f(x_0, y_0)}{\partial x \partial y} \cdot (x - x_0)(y - y_0)$
-
-$T_3 f(x, y) = T_2 f(x, y) + \frac{1}{6} \frac{\partial^3 f(x_0, y_0)}{\partial^3 x} (x - x_0)^3 + \frac{1}{2} \frac{\partial^3 f(x_0, y_0)}{\partial^2 x \partial y} (x - x_0)^2 (y - y_0) + \frac{1}{2} \frac{\partial^3 f(x_0, y_0)}{\partial x \partial^2 y} (x - x_0) (y - y_0)^2 + \frac{1}{6} \frac{\partial^3 f(x_0, y_0)}{\partial^3 y} (y - y_0)^3$
-
-\recipe{Approximate $f: \R^2 \to \R$}
-Given $f: \R^2 \to \R$ and pt $x = (x_1, x_2)$. Approximate $f(x)$ using Taylor.
+\recipe{Taylor Polynom for $f: R^2 \to \R$}
+Give Taylor of order $k \in \{1, 2, 3\}$ of $f(x, y): \R^2 \to \R$ for a pt $(x_0, y_0)$.
 
 \begin{compactitem}
-    \item Find pt $x_0 \approx x$ which approximates $x$ and is easy to evaluate.
-    \item Form Taylor $T_k(x - x_0, x)$ of desired order.
+    \item Computer all parietal derivatives of order up to $k$.
+    \item Form Taylor according to:
+\end{compactitem}
+
+\begin{compactitem}
+    \item $T_1 f((\alpha, \beta); (x_0, y_0)) = f(x_0, y_0) + \frac{\partial f(x_0, y_0)}{\partial x} \cdot \alpha + \frac{\partial f(x_0, y_0)}{\partial y} \cdot \beta$
+    \item $T_2 f((\alpha, \beta); (x_0, y_0)) = T_1 f((\alpha, \beta); (x_0, y_0)) + \frac{1}{2} \frac{\partial^2 f(x_0, y_0)}{\partial x \partial x} \cdot \alpha^2 + \frac{1}{2} \frac{\partial^2 f(x_0, y_0)}{\partial y \partial y} \cdot \beta^2 + \frac{\partial^2 f(x_0, y_0)}{\partial x \partial y} \cdot \alpha\beta$
+    \item $T_3 f((\alpha, \beta); (x_0, y_0)) = T_2 f((\alpha, \beta); (x_0, y_0)) + \frac{1}{6} \frac{\partial^3 f(x_0, y_0)}{\partial^3 x} \alpha^3 + \frac{1}{2} \frac{\partial^3 f(x_0, y_0)}{\partial^2 x \partial y} \alpha^2 \beta + \frac{1}{2} \frac{\partial^3 f(x_0, y_0)}{\partial x \partial^2 y} \alpha \beta^2 + \frac{1}{6} \frac{\partial^3 f(x_0, y_0)}{\partial^3 y} \beta^3$
+\end{compactitem}
+
+\recipe{Approximate $f: \R^2 \to \R$}
+Given $f: \R^2 \to \R$ and pt $(x, y)$. Approximate $f(x, y)$ using Taylor.
+
+\begin{compactitem}
+    \item Find pt $(x_0, y_0) \approx (x, y)$ which approximates $(x, y)$ and is easy to evaluate.
+    \item Form Taylor $T_k((x - x_0, y - y_0); (x_0, y_0))$ of desired order $k$.
 \end{compactitem}
 
 \subsection{Critical Points}
@@ -360,11 +369,11 @@ For $X \subset \R^n$ open and $f: X \to \R \in C^2$. A critical point $x_0 \in X
 A symmetric matrix $A = (a_{i,j}) \in \R^{n \times n}$, with $\text{det } A \neq 0$ is:
 
 \begin{compactdesc}
-    \item[Positive Definite $\textbf{A > 0}$:] iff $xAx^t > 0 \forall x \in \R^n \setminus \{0\}$
+    \item[Positive Definite ($\textbf{A > 0}$):] iff $xAx^t > 0 \forall x \in \R^n \setminus \{0\}$
         \begin{compactitem}
             \item All eigenvalues are positive.
         \end{compactitem}
-    \item[Negative Definite $\textbf{A < 0}$:] iff $xAx^t < 0 \forall x \in \R^n \setminus \{0\}$
+    \item[Neg. Definite ($\textbf{A < 0}$):] iff $xAx^t < 0 \forall x \in \R^n \setminus \{0\}$
         \begin{compactitem}
             \item All eigenvalues are negative.
         \end{compactitem}
@@ -393,6 +402,7 @@ Given $f: \R^n \to \R$ find extreme points and determine if they are max/min/sad
     \item Calculate all partial derivatives up to order two.
     \item Form $df(x) = (\partial_{x_1}f, \dots \partial_{x_n}f)$
     \item Find all zeros $x_0$ of $df(x_0)$. They are the critical pts.
+    \item If $X \subset \R^n$, check boundary for max/min pts.
     \item Form $\text{Hess}_f (x)$
     \item Calculate $\text{det Hess}_f (x)$
     \item Insert all $x_0$ into $\text{det Hess}_f (x_0)$ and evaluate.

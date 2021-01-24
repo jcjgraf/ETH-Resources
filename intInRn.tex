@@ -93,6 +93,16 @@ For $X \subset \R^n$, vector field $f: X \to \R^n \in C^1$. If for any $x_1, x_2
         \end{compactitem}
 \end{compactitem}
 
+\recipe{Lineintegral of Concervative Vector Field}
+Given vector field $V: \R^n \to \R^n$ and curve $\gamma$, $a \le t \le b$. Calculate $\int_{\gamma} f \mathrm{d}s$.
+
+\begin{compactitem}
+    \item Calculate potential $g$ with $\bigtriangledown g = V$.
+    \item Calculate boundaries $(a, \gamma(a))$ and $(b, \gamma(b))$
+    \item Calculate $g(b, \gamma(b)) - g(a, \gamma(a))$
+\end{compactitem}
+
+
 \subsubsection{Path Connected}
 For $X \subset \R^n$ open. $X$ is path connected if $\forall x_1, x_2 \in X \quad \exists \gamma: (0, 1] \to X$ with $\gamma(0) = x, \gamma(1) = y$.
 
@@ -306,6 +316,10 @@ Let $\gamma: X \to Y \in C^1$ bijective and $\text{det }J_p(x) \neq 0 \quad \for
 \subsubsection{Area in $n = 3$}
 Given a surface in $S = \{(x, y, z) \in \R^3\}$ by $f: \R^2 \to \R$, then $\text{Area}(S) = \int \int \sqrt{1 + (\partial_x f(x, y))^2 + (\partial_y f(x, y))^2} \mathrm{d}x\mathrm{d}y$ for $X \subset \R^2$.
 
+\begin{compactitem}
+    \item Can also be used to calculate the length of the arc of a curve.
+\end{compactitem}
+
 \subsection{Green's Formula}
 For:
 \begin{compactenum}
@@ -379,9 +393,3 @@ Other cases:
 \begin{compactitem}
     \item Given a two dimensional integral $\int\int_X g(x, y) \mathrm{d}x\mathrm{y}$ which we want to evaluate. If we can find $f = (f_1, f_2)$ with $\text{curl }f = g$ then we can use $\int\int_X g \mathrm{d}x\mathrm{d}y = \int\int_X \text{curl }f \mathrm{d}x\mathrm{y} = \int_{\partial X = \gamma} f \mathrm{d} x$
 \end{compactitem}
-
-
-
-
-
-\todo{Area ellipse}

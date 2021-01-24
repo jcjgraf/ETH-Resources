@@ -153,7 +153,7 @@ $y = \log_a x \iff a^x = x$
 \begin{compactdesc}
     \item[Mitternacht:] $x_{1 / 2} = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$
     \item[-] $\sqrt{i} = \frac{\sqrt{2}}{2} + i \frac{\sqrt{2}}{2}$
-    \item[Ellipse Gleichung:] $\frac{x^2}{a^2} + \frac{y^2}{y^2} = 1$
+    \item[Ellipse Gleichung:] $\frac{x^2}{a^2} + \frac{y^2}{b^2} = 1$
     \item[Ellipse Volumen:] $\pi a b$
 \end{compactdesc}
 
@@ -226,33 +226,7 @@ $z = x + iy \iff z = r(\cos \gamma + i \sin \gamma) \overset{Euler}{=} z = r e^{
 \begin{compactdesc}
     \item[Partiell:] $\int_{a}^{b} f(x)g'(x) \mathrm{d}x = f(x)g(x)|_a^b - \int_{a}^{b} f'(x)g(x) \mathrm{d}x$
     \item[Substitution:] $\int_{\phi(a)}^{\phi(b)} f(x) \mathrm{d}x = \int_a^b f(\phi(t))\phi'(t) \mathrm{d}t$
-    \item[Paritalbruch:]
 \end{compactdesc}
-
-\subsection{Rationale Funktionen}
-$R(x) = P(x) / Q(x), \ P(x), Q(x)$ sind Polynome, $x \mapsto \frac{P(x)}{Q(x)}$.
-\begin{compactitem}
-    \item
-\end{compactitem}
-
-\subsubsection{Partialbruchzerlegung}
-$\int R(x) \mathrm{d}x, R(x) = \frac{P(x)}{Q(x)}$
-\begin{compactenum}
-    \item \textbf{Reduktion}
-        \begin{compactitem}
-            \item Falls $\text{grad}(P) \ge \text{grad}(Q)$ führe Polynomdivision durch: $P(x) = S(x)Q(X) + \hat{P}(x)$
-            \item $\implies \frac{P(x)}{Q(x)} = S(x) + \frac{\hat{P}(x)}{Q(x)}$
-        \end{compactitem}
-    \item \textbf{Zerlegung}
-        \begin{compactitem}
-            \item $n := grad(Q)$
-            \item $\alpha_1 \pm i \beta_1, \dots \alpha_l \pm i \beta_l, \gamma_1, \dots , \gamma_k, \ \alpha, \beta, \gamma \in \R, \beta \neq 0$ paarweise verschiedene Nullstellen.
-            \item $Q(x) = \prod_{j = 1}^l \left( (x - \alpha_j)^2 + \beta_j^2 \right) ^{m_j} \prod_{i=1}^{k} (x - \gamma_i)^{n_i}$
-            \item $\frac{P(x)}{Q(x)} = \left( S(x) + \right) \sum_{i=1}^{l} \sum_{j=1}^{m_i} \frac{A_{ij} + B_{ij} x}{\left( (x - \alpha_i)^2 + \beta_i^2 \right)^j } + \sum_{i=1}^{k} \sum_{j=1}^{n_i} \frac{C_{ij}}{(x - \gamma_i)^j}, \exists A_{ij}, B_{ij}, C_{ij} \in \R$.
-            \item Finde eindeutige $A_{ij}, B_{ij}, C_{ij}$ durch Koeffizientenvergleich.
-        \end{compactitem}
-    \item \textbf{Integration der Partialbrüche}
-\end{compactenum}
 
 \subsection{Funktionen und deren Grenzwert}
 \begin{tabular}{l | c | c}
