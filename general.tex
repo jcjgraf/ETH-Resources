@@ -15,15 +15,15 @@
             \item $a^{\frac{1}{n}} = \sqrt[^n]{a}$
             \item $a^{\frac{m}{n}} = \sqrt[^n]{a^m}$
         \end{inparaitem}
-    \item $a^x = e^{x \ln a}$
     \item $a^ma^n = a^{m + n}$
     \item $\frac{a^m}{a^n} = a^{m - n}$
     \item $(a^m)^n = a^{m n}$
     \item $a^nb^n = (ab)^n$
     \item $\frac{a^n}{b^n} = \left( \frac{a}{b} \right)^n$
-    \item $a^x = e^{x \ln a}$
-    \item $\exp(x + y ) = \exp(x) \cdot \exp(y)$
-    \item $\exp(0) = 1$
+    \item $a^b = e^{b \ln a}$
+    \item $e^{a \ln b} = b^a$
+    \item $e^{a + b} = e^a \cdot e^b$
+    \item $e^0 = 1$
 \end{compactitem}
 
 \subsection{Logarithmen}
@@ -214,7 +214,7 @@ $z = x + iy \iff z = r(\cos \gamma + i \sin \gamma) \overset{Euler}{=} z = r e^{
     \item $\text{arg}z = |z| \in [0, 2\pi[ \implies r$ ist eindeutig bestimmt
 \end{compactitem}
 
-\subsubsection{Rechenregeln Ableitung}
+\subsection{Rechenregeln Ableitung}
 \begin{compactdesc}
     \item[$\mathbf{f + g}$:] $(f + g)'(x_0) = f'(x_0) + g'(x_0)$.
     \item[$\mathbf{f \cdot g}$:] $(f \cdot g)'(x_0) = f'(x_0)g(x_0) + f(x_0)g'(x_0)$.
@@ -222,7 +222,7 @@ $z = x + iy \iff z = r(\cos \gamma + i \sin \gamma) \overset{Euler}{=} z = r e^{
     \item[$\mathbf{g \circ f}$:] $(g \circ f)'(x_0) = g'(f(x_0)) \cdot f'(x_0)$
 \end{compactdesc}
 
-\subsubsection{Rechenregel Integral}
+\subsection{Rechenregel Integral}
 \begin{compactdesc}
     \item[Partiell:] $\int_{a}^{b} f(x)g'(x) \mathrm{d}x = f(x)g(x)|_a^b - \int_{a}^{b} f'(x)g(x) \mathrm{d}x$
     \item[Substitution:] $\int_{\phi(a)}^{\phi(b)} f(x) \mathrm{d}x = \int_a^b f(\phi(t))\phi'(t) \mathrm{d}t$
