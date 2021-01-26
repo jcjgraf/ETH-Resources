@@ -93,8 +93,8 @@ For $X \subset \R^n$, vector field $f: X \to \R^n \in C^1$. If for any $x_1, x_2
         \end{compactitem}
 \end{compactitem}
 
-\recipe{Lineintegral of Concervative Vector Field}
-Given vector field $V: \R^n \to \R^n$ and curve $\gamma$, $a \le t \le b$. Calculate $\int_{\gamma} f \mathrm{d}s$.
+\recipe{Lineintegral of Conservative Vector Field}
+Given conservative vector field $V: \R^n \to \R^n$ and curve $\gamma$, $a \le t \le b$. Calculate $\int_{\gamma} f \mathrm{d}s$.
 
 \begin{compactitem}
     \item Calculate potential $g$ with $\bigtriangledown g = V$.
@@ -143,7 +143,7 @@ For $X \in \R^3$ open, $f: X \to \R^3 \in C^1$ vector field. Then $\text{curl } 
 \subsection{Riemann Integral}
 
 \subsubsection{Partition}
-For $Q = I_1 \times \dots \times I_n, I_k = [a_k, b_k]$. A partition $P$ if $Q$ is a subcollection of rectangular boxes $Q_1, \dots , Q_k$, s.t.:
+For $Q = I_1 \times \dots \times I_n, I_k = [a_k, b_k]$. A partition $P$ if $Q$ is a sub-collection of rectangular boxes $Q_1, \dots , Q_k$, s.t.:
 \begin{inparaitem}
     \item $Q = \bigcup_{j = 1}^k Q_j$
     \item $\text{int } Q_i \cap \text{int }Q_j \neq 0, i \neq j$
@@ -184,7 +184,7 @@ For $X \subset \R^n$ compact, $f, g: Q \to \R$ integrable (continuous) and $\alp
 
 \begin{compactitem}
     \item $\int_X \alpha f + \beta g \mathrm{d}x = \alpha \int_X f(x) \mathrm{d}x + \beta \int_X g(x) \mathrm{d}x$
-    \item If $f(x) \le f(x) \quad \forall x \in Q$ then $\int_X f(x) \mathrm{d}x \le \int_X g(x) \mathrm{d}x$.
+    \item If $f(x) \le g(x) \quad \forall x \in Q$ then $\int_X f(x) \mathrm{d}x \le \int_X g(x) \mathrm{d}x$.
     \item If $f(x) \ge 0$ then $\int_X f(x) \mathrm{d}x \ge 0$
     \item $\left| \int_X f(x) \mathrm{d}x \right| < \int_X |f| \mathrm{d}x \le (\text{sup}_X |f|) \text{vol}(X)$.
     \item $\left| \int_X f(x) + g(x) \mathrm{d}x \right| < \int_X |f| \mathrm{d}x + \int_X | g(x) | \mathrm{d}x$.
@@ -196,7 +196,7 @@ For $X \subset \R^n$ compact, $f, g: Q \to \R$ integrable (continuous) and $\alp
 \subsubsection{Fubini}
 For $X \subset \R^n$ compact, $f: X \to \R, n = n_1 + n_2, n_i \ge 1$. Let $x_1 \in \R^{n_1}$, then $X_{x_1} = \{x_2 \in \R^{n_2} | (x_1, x_2) \in X\}$. Let $X_1 = \{x_1 \in \R^{n_1} | X_{x_1} \neq \emptyset \}$. The in general $X_1$ is compact in $\R^{n_1}$ and $X_{x_1}$ is compact in $\R^{n_2} \quad \forall x_1 \in X_1$.
 
-If $g(x_1) := \int_{X_1} f(x_1, x_2 \mathrm{d}x_2$ continuous on $X_1$ then $\int_X f(x_1, x_2) \mathrm{d}x = \int_{X_1} g(x_1) \mathrm{d}x_1 = \int_{X_1} \int_{X_{x_1}} f(x_1, x_2) \mathrm{d}x_2 \mathrm{d}x_1$.
+If $g(x_1) := \int_{X_1} f(x_1, x_2) \mathrm{d}x_2$ continuous on $X_1$ then $\int_X f(x_1, x_2) \mathrm{d}x = \int_{X_1} g(x_1) \mathrm{d}x_1 = \int_{X_1} \int_{X_{x_1}} f(x_1, x_2) \mathrm{d}x_2 \mathrm{d}x_1$.
 
 Switching $x_1$ and $x_2$ we have 
 $\int_X f(x_1, x_2) \mathrm{d}x = \int_{X_2} \int_{X_{x_2}} f(x_1, x_2) \mathrm{d}x_1 \mathrm{d}x_2$.
@@ -319,6 +319,14 @@ Given a surface in $S = \{(x, y, z) \in \R^3\}$ by $f: \R^2 \to \R$, then $\text
 \begin{compactitem}
     \item Can also be used to calculate the length of the arc of a curve.
 \end{compactitem}
+
+\recipe{Calculate Arc Length of $\gamma$}
+Given curve $\gamma [a, b] \to \R$, calculate its length.
+
+\begin{compactenum}
+    \item Calculate $\gamma'(t)$
+    \item Evaluate $int_a^b \sqrt{1 + |\gamma'(t)|^2 \mathrm{d}t}$
+\end{compactenum}
 
 \subsection{Green's Formula}
 For:

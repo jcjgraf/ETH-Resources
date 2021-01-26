@@ -62,7 +62,7 @@ If $f, g$ are continuous then $f + g, f \cdot g, \frac{f}{g}, f \circ g$ are con
 \subsubsection{Sandwich Lemma}
 If $f, g, h: \R^n \to \R$, where $f(x) < g(x) < h(x) \quad \forall x \in \R^n$ and for some $a \in \R^n, \lim_{y \to a} f(x) = \lim_{x \to a} h(x) = L$ then $\lim_{x \to a} g(x) = L$.
 
-\subsubsection{Polar Coordinates Trick}
+\recipe{Polar Coordinates Trick}
 For $f: \R^2 \to \R$ check if continuous at $0$. Let $f(x, y) = f(r \cos \delta, r \sin \delta)$. If $\lim_{(x, y) \to 0} f(x, y) = \lim_{r \to 0}$ is dependant on $\delta \implies$ limes does not exists $\implies$ not continuous at $0$.
 
 \subsection{Partial Derivatives}
@@ -152,7 +152,7 @@ For $X \subset \R^n$ open and $f: X \to \R^m$. If $f$ has all partial derivative
 
 \begin{compactitem}
     \item $\substack{\text{partial derivatives exist}\\ + \text{partial derivatives are continuous}} \implies f \text{ is differentiable}$.
-    \item $df(x_0) J_f(x_0)$.
+    \item $df(x_0) = J_f(x_0)$.
     \item This implies that most functions are differentiable.
 \end{compactitem}
 
@@ -162,6 +162,15 @@ For $X \subset \R^n$ open, $f: X \to \R^m$ differentiable on $X$ and $x_0 \in X$
     \item The pts of the tangent space are in $\{(x, y) \in \R^n \times \R^m | y = f(x_0) + u(x - x_0) \}$.
     \item If $m = 1$ then $u(x - x_0) = df(x_0)(x - x_0) = \bigtriangledown f(x_0) \cdot (x - x_0)$.
 \end{compactitem}
+
+\recipe{Calculate Tangent Space}
+Given function $f: \R^2 \to \R$, calculate the tangent space at pt $(x_0, y_0)$.
+
+\begin{compactenum}
+    \item Calculate $\partial_x f$ and $\partial_y f$.
+    \item Calculate $f(x_0, y_0)$.
+    \item Form $z = f(x_0, y_0) + \partial_x f(x_0, y_0) \cdot (x - x_0) + \partial_y f (x_0, y_0) \cdot (y - y_0)$.
+\end{compactenum}
 
 \subsubsection{Directional Derivative}
 For $X \subset \R^n$ open, $f: X \to \R^m$, $v \in \R^n$ a non-zero vector and $x_0 \in X$. $f$ has a directional partial derivative $w \in \R^m$ in the direction $v$, if $g(t) = f(x_0 + tv)$, defined on $\{t \in \R | x_0 + tv \in X\}$, holds $g'(0) = w$.
@@ -174,11 +183,21 @@ For $X \subset \R^n$ open, $f: X \to \R^m$, $v \in \R^n$ a non-zero vector and $
 For $X \subset \R^n$ open and $f: X \to \R^m$ differentiable. Then $\forall x \in X$ and $\forall v \in \R^n$ non-zero, $f$ has directional partial derivative at $x_0$ in the direction $v$ and is equal to $df(x_0) (v) = J_f(x_0)(v)$.
 
 \begin{compactitem}
-\item If $m = 1$ and $|v| = 1$, then $df(x_0) (v) = J_f(x_0)(v) = <\bigtriangledown f(x_0), v> = |\bigtriangledown f(x_0)||v|\cos(\theta)$.
+\item If $m = 1$ and $|v| = 1$, then $df(x_0) (v) = J_f(x_0)(v) = \left<\bigtriangledown f(x_0), v\right> = |\bigtriangledown f(x_0)||v|\cos(\theta)$.
     \begin{compactitem}
         \item This is maximal if we maximize $\cos \theta$ which is the case for $\theta = 0$.
     \end{compactitem}
 \end{compactitem}
+
+\recipe{Calculate Directional Derivative in Direction $v$}
+Given $f: \R^n \to \R$ differentiable, vector $v$ and pt $(x_0, y_0)$. Calculate $df(x_0, y_0)(v)$.
+
+\begin{compactenum}
+    \item Calculate all partial derivatives of order $1$.
+    \item Form $J_f(x, y)$.
+    \item Normalize $\tilde{v} = \frac{v}{|v|}$
+    \item Calculate $J_f(x_0, y_0) \cdot \tilde{v}$
+\end{compactenum}
 
 \subsubsection{Special Coordinates}
 \paragraph{Polar Coordinates}
@@ -313,7 +332,7 @@ For $X \subset \R^n, x_0 \in X, f: X \to \R, f \in C^k$, the $k$-th Taylor polyn
 \subsubsection{Approximation}
 For $f \in C^k(X; \R), x_0 \in X$. $T_k$ is approximation of $f$ at $x$ with $x_0$: $f(x) = T_kf(x - x_0; x_0) + E_k(f, x, x_0)$. For the error $E_k$ it holds $\lim_{x \to x_0} \frac{E_k(f, x, x_0)}{|x - x_0|^k} = 0$.
 
-\recipe{Taylor Polynom for $f: R^2 \to \R$}
+\recipe{Taylor Polynom for $f: \R^2 \to \R$}
 Give Taylor of order $k \in \{1, 2, 3\}$ of $f(x, y): \R^2 \to \R$ for a pt $(x_0, y_0)$.
 
 \begin{compactitem}
@@ -396,7 +415,7 @@ For $X \subset \R^n$ open, $f: X \to \R \in C^2$ and $x_0 \in X$ a non-degenerat
 
 In case that $\text{Hess}_f (x_0) = 0$ (i.e. $x_0$ is degenerate) we cannot use this criteria.
 
-\recipe{Extreme Pts using $2$nd Derivative Method}
+\recipe{Extreme Pts using $2$nd Derivative Method (open)}
 Given $f: \R^n \to \R$ find extreme points and determine if they are max/min/saddle.
 \begin{compactenum}
     \item Calculate all partial derivatives up to order two.
@@ -408,6 +427,22 @@ Given $f: \R^n \to \R$ find extreme points and determine if they are max/min/sad
     \item Insert all $x_0$ into $\text{det Hess}_f (x_0)$ and evaluate.
     \item If $\text{det Hess}_f (x_0) = 0 \implies$ this method does not work.
     \item Use previous theorem to determine if $x_0$ is min/max/saddle.
+\end{compactenum}
+
+\recipe{Extreme Pts using $2$nd Derivative Method (closed)}
+As before, but $f: X \to \R$.
+
+\begin{compactenum}
+    \item Follow previous recipe
+    \item Evaluate all corners and record their value.
+    \item For site $i$:
+        \begin{compactenum}
+            \item Find parametrisation $\gamma_i(t)$.
+            \item Calculate $\frac{d \gamma_i}{d t}$.
+            \item Find $t_0$ for which $\frac{d \gamma_i}{d t} = 0$.
+            \item Calculate $f(\gamma_i(t_0))$ and record their values.
+        \end{compactenum}
+    \item Compare all evaluated points and determine the min/max/saddle pts.
 \end{compactenum}
 
 \recipe{$\text{det } A$ with Sarrus}

@@ -51,13 +51,31 @@ $y = \log_a x \iff a^x = x$
     \item[Tangens:] $\tan(z) := \frac{\sin(z)}{\cos(z)}, z \not\in \{\frac{\pi}{2} + \pi k\}$
     \item[Cotangens:] $\cot(z) := \frac{\cos(z)}{\sin(z)}, z \not\in \{\pi k\}$
 \end{compactdesc}
-
 \begin{compactitem}
-    \item $\sin^2a + \cos^2a = 1$
+    \item $\exp(iz) = \cos(x) + i \sin(z)$
+    \item
+        \begin{inparaitem}
+            \item $\cos(z) = \cos(-z)$
+            \item $\sin(-z) = - \sin(z)$
+        \end{inparaitem}
+    \item
+        \begin{inparaitem}
+            \item $\sin(z) = \frac{e^{iz} - e^{-iz}}{2i}$
+            \item $\cos(z) = \frac{e^{iz} + e^{-iz}}{2}$
+        \end{inparaitem}
+    \item
+        \begin{inparaitem}
+            \item $\sin(z + w) = \sin(z) \cos(w) + \cos(z) \sin(w)$
+            \item $\cos(z + w) = \cos(z) \cos(w) - \sin(z) \sin(w)$
+        \end{inparaitem}
+    \item $\cos(z)^2 + \sin(z)^2 = 1$
+    \item
+        \begin{compactitem}
+            \item $\sin(2z) = 2 \sin(z) \cos(z)$
+            \item $\cos(2z) = \cos(z)^2 - \sin(z)^2 = 1 - 2 \sin^2(z) = 2 \cos^2(z) - 1$
+        \end{compactitem}
     \item $\tan a = \frac{\sin a}{\cos a}$
     \item $1 + \tan^2 a = \frac{1}{\cos^2 a}$
-    \item $\sin(2a) = 2\sin(a) \cos(a)$
-    \item $\cos(2a) = \cos^2(a) - \sin^2(a) = 1 - 2 \sin^2(a)$
 \end{compactitem}
 
 \subsubsection{Komposition}
@@ -122,32 +140,6 @@ $y = \log_a x \iff a^x = x$
     $\sin 2\pi -a = -\sin a$ & $\cos 2\pi - a = \cos a$ & $\tan 2 \pi - a = -\tan a$\\
     $\sin -a = -\sin a$ & $\cos - a = \cos a$ & $\tan - a = -\tan a$\\
 \end{tabular}}
-
-\subsection{Trigonometrische Funktionen}
-\begin{compactenum}
-    \item $\exp(iz) = \cos(x) + i \sin(z) \ \forall z \in \C$
-    \item
-        \begin{inparaitem}
-            \item $\cos(z) = \cos(-z)$
-            \item $\sin(-z) = - \sin(z) \ \forall z \in \C$
-        \end{inparaitem}
-    \item
-        \begin{inparaitem}
-            \item $\sin(z) = \frac{e^{iz} - e^{-iz}}{2i}$
-            \item $\cos(z) = \frac{e^{iz} + e^{-iz}}{2}$
-        \end{inparaitem}
-    \item
-        \begin{inparaitem}
-            \item $\sin(z + w) = \sin(z) \cos(w) + \cos(z) \sin(w)$
-            \item $\cos(z + w) = \cos(z) \cos(w) - \sin(z) \sin(w)$
-        \end{inparaitem}
-    \item $\cos(z)^2 + \sin(z)^2 = 1 \ \forall z \in \C$
-    \item
-        \begin{inparaitem}
-            \item $\sin(2z) = 2 \sin(z) \cos(z)$
-            \item $\cos(2z) = \cos(z)^2 - \sin(z)^2$
-        \end{inparaitem}
-\end{compactenum}
 
 \subsection{Sonstiges}
 \begin{compactdesc}
@@ -228,30 +220,6 @@ $z = x + iy \iff z = r(\cos \gamma + i \sin \gamma) \overset{Euler}{=} z = r e^{
     \item[Substitution:] $\int_{\phi(a)}^{\phi(b)} f(x) \mathrm{d}x = \int_a^b f(\phi(t))\phi'(t) \mathrm{d}t$
 \end{compactdesc}
 
-\subsection{Funktionen und deren Grenzwert}
-\begin{tabular}{l | c | c}
-    Funktion & Grenzwert & Bedingung\\\hline
-    $\lim_{n \to \infty} a^n$ & $0$ & $|a| < 1$\\\hline
-    $\lim_{n \to \infty} \sqrt[^n]{a}$ & $1$ & $a > 0$\\\hline
-    $\lim_{n \to \infty} \sqrt[^n]{n^a}$ & $1$ & $a > 0$\\\hline
-    $\lim_{n \to \infty} \sqrt[^n]{n}$ & $1$\\\hline
-    $\lim_{n \to \infty} \frac{\log_an}{n}$ & $0$ & $a > 1$\\\hline
-    $\lim_{n \to \infty} \frac{n^k}{a^n}$ & $0$ & $a > 1$\\\hline
-    $\lim_{n \to \infty} \frac{a^n}{n!}$ & $0$\\\hline
-    $\lim_{n \to \infty} \sum_{k=1}^{n} \frac{1}{k}$ & $\infty$\\\hline
-    $\lim_{n \to \infty} \left( 1 + \frac{1}{n} \right)^n$ & $e$\\\hline
-    $\lim_{n \to \infty} \left( 1 + \frac{a}{n} \right)^n$ &e$^a$\\\hline
-    $\lim_{n \to \infty} \left( 1 - \frac{1}{n} \right)^n$ & $\frac{1}{e}$\\\hline
-    $\lim_{n \to 0} \frac{\sin n}{n}$ & $1$\\\hline
-    $\lim_{n \to 1} \frac{\ln n}{n - 1}$ & $1$\\\hline
-    $\lim_{n \to \infty} \frac{n^m}{\exp(an)}$ & $0$ & $m \in \R, a > 0$\\\hline
-    $\lim_{n \to 0} \frac{\exp(n) - 1}{n}$ & $1$\\\hline
-    $\lim_{n \to 0} \frac{\ln(1 + n)}{n}$ & $1$\\\hline
-    $\lim_{n \to \infty} \frac{\ln n}{n^a}$ & $0$ & $a > 0$\\\hline
-    $\lim_{n \to 0} \frac{a^n - 1}{n}$ & $\ln a$ & $a > 0$\\\hline
-    $\lim_{n \to 0} (n^a \ln n)$ & $0$ & $a > 0$\\\hline
-\end{tabular}
-
 \subsection{Bekannte Reihen}
 \resizebox{\columnwidth}{!}{\begin{tabular}{l | l | c | c | c}
     \multicolumn{2}{l |}{Reihe}                                      & Wert                                   & konv.               & div.\\\hline
@@ -289,43 +257,78 @@ $z = x + iy \iff z = r(\cos \gamma + i \sin \gamma) \overset{Euler}{=} z = r e^{
     $\sum_{k=0}^{n-1} q^k$ & $1 + q + \dots = \frac{q^n-1}{q-1}$ & $\frac{1 - q^n}{1-q}, \ q \not\in \{0, 1\}$\\\hline
 \end{tabular}
 
+\subsection{Funktionen und deren Grenzwert}
+\begin{tabular}{l | c | c}
+    Funktion & Grenzwert & Bedingung\\\hline
+    $\lim_{n \to \infty} a^n$ & $0$ & $|a| < 1$\\\hline
+    $\lim_{n \to \infty} \sqrt[^n]{a}$ & $1$ & $a > 0$\\\hline
+    $\lim_{n \to \infty} \sqrt[^n]{n^a}$ & $1$ & $a > 0$\\\hline
+    $\lim_{n \to \infty} \sqrt[^n]{n}$ & $1$\\\hline
+    $\lim_{n \to \infty} \frac{\log_an}{n}$ & $0$ & $a > 1$\\\hline
+    $\lim_{n \to \infty} \frac{n^k}{a^n}$ & $0$ & $a > 1$\\\hline
+    $\lim_{n \to \infty} \frac{a^n}{n!}$ & $0$\\\hline
+    $\lim_{n \to \infty} \sum_{k=1}^{n} \frac{1}{k}$ & $\infty$\\\hline
+    $\lim_{n \to \infty} \left( 1 + \frac{1}{n} \right)^n$ & $e$\\\hline
+    $\lim_{n \to \infty} \left( 1 + \frac{a}{n} \right)^n$ &e$^a$\\\hline
+    $\lim_{n \to \infty} \left( 1 - \frac{1}{n} \right)^n$ & $\frac{1}{e}$\\\hline
+    $\lim_{n \to 0} \frac{\sin n}{n}$ & $1$\\\hline
+    $\lim_{n \to 1} \frac{\ln n}{n - 1}$ & $1$\\\hline
+    $\lim_{n \to \infty} \frac{n^m}{\exp(an)}$ & $0$ & $m \in \R, a > 0$\\\hline
+    $\lim_{n \to 0} \frac{\exp(n) - 1}{n}$ & $1$\\\hline
+    $\lim_{n \to 0} \frac{\ln(1 + n)}{n}$ & $1$\\\hline
+    $\lim_{n \to \infty} \frac{\ln n}{n^a}$ & $0$ & $a > 0$\\\hline
+    $\lim_{n \to 0} \frac{a^n - 1}{n}$ & $\ln a$ & $a > 0$\\\hline
+    $\lim_{n \to 0} (n^a \ln n)$ & $0$ & $a > 0$\\\hline
+\end{tabular}
+
 \subsection{Auf- und Ableitungen}
 \begin{tabular}{l | l | l}
     $f'(x)$ & $f(x)$ & $F(x)$\\
     \hline
-    $sax^{s-1}$                                                      & $ax^s$                  & $\frac{a}{s + 1}x^{s + 1}$\\
-    $\frac{1}{x}$                                                    & $\ln(ax)$               & $x \ln(ax) - x$\\
-    $\frac{1}{x + a}$                                                & $\ln(x + a)$            & $(x + a) \ln(x + a) + x$\\
-    $ae^{ax}$                                                        & $e^{ax}$                & $\frac{1}{a} e^{ax}$\\
-    $\frac{-a}{x^2}$                                                 & $\frac{a}{x}$           & $a\ln(|x|)$\\
-    $\ln(a)b a^{b x}$                                                & $a^{bx}$                & $\frac{a^{bx}}{\ln(a)b}$\\
-    $\frac{1}{2\sqrt{x}}$                                            & $\sqrt{x}$              & $\frac{2}{3}x^{3/2}$\\
-    $\frac{1}{x\ln(a)}$                                              & $\log_a(x)$             & $\frac{x(\ln(x)-1)}{\ln(a)}$\\
-    $\cos(x)$                                                        & $\sin(x)$               & $-\cos(x)$\\
-    $\frac{1}{\sqrt{1-x^2} }$                                        & $\arcsin(x)$            & $x \arcsin(x) + \sqrt{1 - x^2}$\\
-    $2 \sin(x) \cos(x)$                                              & $\sin^2(x)$             & $\frac{x - \sin(x) \cos(x)}{2}$\\
-    $-\sin(x)$                                                       & $\cos(x)$               & $\sin(x)$\\
-    $\frac{-1}{\sqrt{1-x^2} }$                                       & $\arccos(x)$            & $x \arccos(x) - \sqrt{1 - x^2}$\\
-    $-2 \sin(x) \cos(x)$                                             & $\cos^2(x)$             & $\frac{x + \sin(x) \cos(x)}{2}$\\
-    $\frac{1}{\cos^2(x)} =$                                          & $\tan(x)$               & $-\ln(|\cos(x)|)$\\
-    $1 + \tan^2(x)$                                                  &                         & \\
-    $\frac{1}{1+x^2}$                                                & $\arctan(x)$            & $x \arctan(x) - \frac{\ln(x^2 + 1)}{2}$\\
-    $2a(\cos(ax))^2-a$                                               & $\sin(ax) \cos(ax)$     & $-\frac{1}{4a}\cos(2ax) =$\\
-                                                                     &                         & $\frac{-(\cos^2(ax))}{2a}$\\
-    $\frac{2x}{(x^2 + 1)^2}$                                         & $\frac{x^2}{x^2 + 1}$   & $x - \arctan(x)$\\
-    $\frac{-4x}{(x^2 + 1)^3}$                                        & $\frac{1}{(1 + x^2)^2}$ & $\frac{x}{2x^2 + 2} + \frac{\arctan(x)}{2}$\\
-                                                                     & $\frac{u'(x)}{u(x)}$    & $\ln |u(x)|$\\
-                                                                     & $u'(x) \cdot u(x)$      & $\frac{1}{2}(u(x)^2)$\\
-    $\frac{-x}{\sqrt{a^2 - x^2}}$                                    & $\sqrt{a^2 - x^2}$      & $\frac{a^2 \arcsin(\frac{x}{|a|})+ x \sqrt{a^2 - x^2}}{2}$\\
-    $\frac{x}{\sqrt{x^2 + a^2}}$                                     & $\sqrt{a^2 + x^2}$      & $\frac{a^2 \ln(| \sqrt{x^2 + a^2} +x|) + x \sqrt{a^2 + x^2}}{2}$\\
-    $x^x (1 + \ln x)$                                                & $x^x$                   & \\
-    $e^{\ln |x|}(\ln(|x|) + 1)$                                      & $|x|^x = e^{x \ln x}$   & \\
-    $\frac{-2}{(x + a)^3}$                                           & $\frac{1}{(x + a)^2}$   & $\frac{-1}{x + a}$\\
-    $\cosh(x)$                                                       & $\sinh(x)$              & $\cosh(x)$\\
-    $\frac{1}{\sqrt{1+x^2}}$                                         & $\arcsinh(x)$           & \\
-    $\sinh(x)$                                                       & $\cosh(x)$              & $\sinh(x)$\\
-    $\frac{1}{\sqrt{x-1}\sqrt{x+1}}$                                 & $\arccosh(x)$           & \\
-    $\frac{1}{\cosh^2(x)} =$                                         & $\tanh(x)$              & $\ln(e^{2x} + 1) - x$\\
-    $1 - \tanh^2(x)$                                                 &                         & \\
-    $\frac{1}{2x+2} - \frac{1}{2x - 2}$                              & $\arctanh(x)$           & \\
+    $sax^{s-1}$                                                       & $ax^s$                  & $\frac{a}{s + 1}x^{s + 1}$\\
+    $\frac{1}{x}$                                                     & $\ln(ax)$               & $x \ln(ax) - x$\\
+    $\frac{1}{x + a}$                                                 & $\ln(x + a)$            & $(x + a) \ln(x + a) + x$\\
+    $ae^{ax}$                                                         & $e^{ax}$                & $\frac{1}{a} e^{ax}$\\
+    $\frac{-a}{x^2}$                                                  & $\frac{a}{x}$           & $a\ln(|x|)$\\
+    $\ln(a)b a^{b x}$                                                 & $a^{bx}$                & $\frac{a^{bx}}{\ln(a)b}$\\
+\end{tabular}
+
+\begin{tabular}{l | l | l}
+    $\frac{1}{2\sqrt{x}}$                                             & $\sqrt{x}$              & $\frac{2}{3}x^{3/2}$\\
+    $\frac{1}{x\ln(a)}$                                               & $\log_a(x)$             & $\frac{x(\ln(x)-1)}{\ln(a)}$\\
+    $\cos(x)$                                                         & $\sin(x)$               & $-\cos(x)$\\
+    $\frac{1}{x\ln(a)}$                                               & $\log_a(x)$             & $\frac{x(\ln(x)-1)}{\ln(a)}$\\
+    $\cos(x)$                                                         & $\sin(x)$               & $-\cos(x)$\\
+    $\frac{1}{\sqrt{1-x^2} }$                                         & $\arcsin(x)$            & $x \arcsin(x) + \sqrt{1 - x^2}$\\
+    $2 \sin(x) \cos(x)$                                               & $\sin^2(x)$             & $\frac{x - \sin(x) \cos(x)}{2}$\\
+    $-\sin(x)$                                                        & $\cos(x)$               & $\sin(x)$\\
+    $\frac{-1}{\sqrt{1-x^2} }$                                        & $\arccos(x)$            & $x \arccos(x) - \sqrt{1 - x^2}$\\
+    $-2 \sin(x) \cos(x)$                                              & $\cos^2(x)$             & $\frac{x + \sin(x) \cos(x)}{2}$\\
+    $\frac{1}{\cos^2(x)} =$                                           & $\tan(x)$               & $-\ln(|\cos(x)|)$\\
+    $1 + \tan^2(x)$                                                   &                         & \\
+    $\frac{1}{1+x^2}$                                                 & $\arctan(x)$            & $x \arctan(x) - \frac{\ln(x^2 + 1)}{2}$\\
+    $2a(\cos(ax))^2-a$                                                & $\sin(ax) \cos(ax)$     & $-\frac{1}{4a}\cos(2ax) =$\\
+                                                                      &                         & $\frac{-(\cos^2(ax))}{2a}$\\
+                                                                      & $\sin(x) \sin^2(x)$     & $\frac{-\sin^2(x) - 2}{3}\cos(x)$\\
+                                                                      & $\cos(x) \cos^2(x)$     & $\frac{\sin(x) \cos^2(x) + 2 \sin(x)}{3}$\\
+                                                                      & $\sin(x) \cos^2(x)$     & $\frac{-\cos^3(x)}{3}$\\
+                                                                      & $\sin^2(x) \cos(x)$     & $\frac{\sin^3(x)}{3}$\\
+                                                                      & $\sin(x) \sin(2x)$      & $\frac{-\sin(3x) + 3 \sin(x)}{6}$\\
+                                                                      & $\cos(x) \cos(2x)$      & $\frac{\sin(3x) + 3 \sin(x)}{6}$\\
+    $\frac{2x}{(x^2 + 1)^2}$                                          & $\frac{x^2}{x^2 + 1}$   & $x - \arctan(x)$\\
+    $\frac{-4x}{(x^2 + 1)^3}$                                         & $\frac{1}{(1 + x^2)^2}$ & $\frac{x}{2x^2 + 2} + \frac{\arctan(x)}{2}$\\
+                                                                      & $\frac{u'(x)}{u(x)}$    & $\ln |u(x)|$\\
+                                                                      & $u'(x) \cdot u(x)$      & $\frac{1}{2}(u(x)^2)$\\
+    $\frac{-x}{\sqrt{a^2 - x^2}}$                                     & $\sqrt{a^2 - x^2}$      & $\frac{a^2 \arcsin(\frac{x}{|a|})+ x \sqrt{a^2 - x^2}}{2}$\\
+    $\frac{x}{\sqrt{x^2 + a^2}}$                                      & $\sqrt{a^2 + x^2}$      & $\frac{a^2 \ln(| \sqrt{x^2 + a^2} +x|) + x \sqrt{a^2 + x^2}}{2}$\\
+    $x^x (1 + \ln x)$                                                 & $x^x$                   & \\
+    $e^{\ln |x|}(\ln(|x|) + 1)$                                       & $|x|^x = e^{x \ln x}$   & \\
+    $\frac{-2}{(x + a)^3}$                                            & $\frac{1}{(x + a)^2}$   & $\frac{-1}{x + a}$\\
+    $\cosh(x)$                                                        & $\sinh(x)$              & $\cosh(x)$\\
+    $\frac{1}{\sqrt{1+x^2}}$                                          & $\arcsinh(x)$           & \\
+    $\sinh(x)$                                                        & $\cosh(x)$              & $\sinh(x)$\\
+    $\frac{1}{\sqrt{x-1}\sqrt{x+1}}$                                  & $\arccosh(x)$           & \\
+    $\frac{1}{\cosh^2(x)} =$                                          & $\tanh(x)$              & $\ln(e^{2x} + 1) - x$\\
+    $1 - \tanh^2(x)$                                                  &                         & \\
+    $\frac{1}{2x+2} - \frac{1}{2x - 2}$                               & $\arctanh(x)$           & \\
 \end{tabular}
