@@ -1,0 +1,23 @@
+\ProvidesPackage{summary}
+
+% Packages
+\usepackage{xcolor}
+\usepackage{amsmath, amssymb}
+\usepackage{graphicx}
+\graphicspath{{Figures/}}
+\usepackage{fancyhdr}
+%\usepackage{shortvrb}
+%\MakeShortVerb`
+\usepackage{enumitem}
+\setlist{nolistsep}
+
+\usepackage{geometry}
+\geometry{paper=a4paper,left=32mm,right=23mm,top=35mm, bottom=35mm}
+
+% Todo
+\newcommand{\todo}[1]{\textcolor{red}{TODO: #1}\PackageWarning{TODO:}{#1!}}
+
+% List commands
+\newcommand{\ipro}{\item[+]}
+\newcommand{\icon}{\item[-]}
+\newcommand{\ides}[1]{\item \textbf{#1}}
