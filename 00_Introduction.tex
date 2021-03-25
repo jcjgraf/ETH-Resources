@@ -38,7 +38,7 @@
                 \begin{itemize}
                     \item Functions have a global scope
                     \item Order of declaration does not matter
-                    \item \verb+let <local func, var, const decl.> in <expr. using these definitions>+
+                    \item \verb+let <local func, var, const decl.> in <expr. using these defs>+
                         \begin{itemize}
                             \item More powerful that \verb+where+
                         \end{itemize}
@@ -51,8 +51,9 @@
         \end{itemize}
     \item Constants can be defined outside of functions
     \item Program consists of multiple function definitions
-    \item Indentations determines separation of definitions
+    \ides{Indentations}
         \begin{itemize}
+            \item Determines separation of definitions
             \item All function definitions start at the same indentation
             \item The body of a function definition needs to be indented
             \item If line is split into two, indent new line again
@@ -70,26 +71,27 @@
     \ides{Integral}
         \begin{itemize}
             \ides{Int:} Bound
-            \ides{Integer:} Unbound
+            \ides{Integer:} Arbitrary precision
         \end{itemize}
         \ides{Double}
-    \ides{Char:}
+    \ides{Char}
         \begin{itemize}
             \item Surrounded by \verb+'+
         \end{itemize}
-    \ides{String:}
+    \ides{String}
         \begin{itemize}
             \item List of characters
             \item Surrounded by \verb+"+
+            \item Concatenate using \verb|++|
         \end{itemize}
     \ides{Bool}
-    \ides{Function/Operator:}
+    \ides{Function/Operator}
         \begin{itemize}
             \ides{Operator:} Binary function which is used infix
             \item \verb+`func`+ makes function infix
             \item \verb+(op)+ makes operator prefix
         \end{itemize}
-    \ides{Tuple:}
+    \ides{Tuple}
         \begin{itemize}
             \item Compose multiple values of different type
             \item Composed by a \textit{Type Constructor}
@@ -99,3 +101,13 @@
         \end{itemize}
 \end{itemize}
 
+\subsubsection{Input/Output}
+\begin{itemize}
+    \item I/O is not referential transparent (has side effects)
+    \item Wrap by \verb+IO+ to capture side effects
+    \item \verb+getLine :: IO String+ reads a string
+    \item \verb+putStrLn :: String -> IO ()+ prints a string.
+    \item \verb+do+ blocks sequences side effects
+    \item \verb+<-+ extract values from IO
+    \item \verb+return+ wraps values in IO
+\end{itemize}
