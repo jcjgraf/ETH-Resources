@@ -1,0 +1,101 @@
+%! TEX root = ./main.tex
+
+\section{Introduction}
+\subsection{Functional Programming}
+\begin{itemize}
+    \item Like mathematical expressions
+    \item Consists of functions and values
+    \item Functions are actually values themselves
+    \item There is no state
+    \ides{Referential Transparency:} Not state $\implies$ expression \textbf{always} evaluate to the same value
+    \ipro Easy to parallelize
+    \ipro Easy to analyze
+    \item Recursion instead of iteration
+    \ipro Flexible type system
+\end{itemize}
+
+\subsection{Haskell}
+\begin{itemize}
+    \ides{Lazy Evaluation:} expression evaluates always outermost and leftmost term
+\end{itemize}
+
+\subsubsection{Syntax}
+\begin{itemize}
+    \ides{Function}
+        \begin{itemize}
+            \item Function name and arguments start with lower-case
+            \item Contains several cases (\textit{guards})
+                \begin{itemize}
+                    \item Boolean expression
+                \end{itemize}
+            \item Expression after the equal sign is the return value
+            \item Pattern matching is used to determine right definition
+                \begin{itemize}
+                    \item Pattern are variables, constants, tuples etc.
+                    \item Forces evaluation (no longer lazy evaluation)
+                \end{itemize}
+            \ides{Scope}
+                \begin{itemize}
+                    \item Functions have a global scope
+                    \item Order of declaration does not matter
+                    \item \verb+let <local func, var, const decl.> in <expr. using these definitions>+
+                        \begin{itemize}
+                            \item More powerful that \verb+where+
+                        \end{itemize}
+                    \item \verb+where <local func, var, const decl.>+
+                        \begin{itemize}
+                            \item Follows guard or function return
+                            \item Top-Down development (use and then declare)
+                        \end{itemize}
+                \end{itemize}
+        \end{itemize}
+    \item Constants can be defined outside of functions
+    \item Program consists of multiple function definitions
+    \item Indentations determines separation of definitions
+        \begin{itemize}
+            \item All function definitions start at the same indentation
+            \item The body of a function definition needs to be indented
+            \item If line is split into two, indent new line again
+                \begin{itemize}
+                    \item Can be done recursively
+                \end{itemize}
+            \item Spaces have to be used, not tabs
+        \end{itemize}
+\end{itemize}
+
+\subsubsection{Types}
+\begin{itemize}
+    \item Strongly typed
+    \item Can explicitly define function definition or let Haskell do that
+    \ides{Integral}
+        \begin{itemize}
+            \ides{Int:} Bound
+            \ides{Integer:} Unbound
+        \end{itemize}
+        \ides{Double}
+    \ides{Char:}
+        \begin{itemize}
+            \item Surrounded by \verb+'+
+        \end{itemize}
+    \ides{String:}
+        \begin{itemize}
+            \item List of characters
+            \item Surrounded by \verb+"+
+        \end{itemize}
+    \ides{Bool}
+    \ides{Function/Operator:}
+        \begin{itemize}
+            \ides{Operator:} Binary function which is used infix
+            \item \verb+`func`+ makes function infix
+            \item \verb+(op)+ makes operator prefix
+        \end{itemize}
+    \ides{Tuple:}
+        \begin{itemize}
+            \item Compose multiple values of different type
+            \item Composed by a \textit{Type Constructor}
+            \item If $T_1, \dots, T_n$ are Types, then $(T_1, \dots , T_n)$ is a tuple type
+            \item If $v_1 :: T_1, \dots, v_n :: T_n$ are values of matching type, then $(v_1, \dots , v_n) :: (T_1, \dots , T_n)$ is a valid tuple
+            \item Can be nested
+        \end{itemize}
+\end{itemize}
+
