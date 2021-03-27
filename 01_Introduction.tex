@@ -1,0 +1,272 @@
+%! TEX root = ./main.tex
+
+\section{Computer Networks}
+\subsection{Components}
+\begin{itemize}
+    \item Are composed of three basic components
+        \begin{itemize}
+            \ides{End-Systems:}
+                \begin{itemize}
+                    \item Send and receive data
+                    \item Represent the users of a networks
+                    \item Huge diversity of such devices
+                \end{itemize}
+            \ides{Switches/Routers:} Forward data to the destination
+            \item{Links:} Interconnect switches/routers and end-systems
+        \end{itemize}
+    \ides{Last Mile:} Link which connects user to their ISP 
+        \begin{itemize}
+            \item There are different types of last mile
+                \ides{Digital Subscriber Line (DSL)}
+                    \begin{itemize}
+                        \item Used telephone lines
+                            \begin{itemize}
+                                \item Cheap because lines were already there
+                            \end{itemize}
+                        \item Composed of:
+                            \begin{itemize}
+                                \item Upstream data
+                                \item Downstream data
+                                \item $2$-way phone channel
+                            \end{itemize}
+                        \item Asynchronous
+                    \end{itemize}
+                \ides{Cable Access Technology (CATV)}
+                    \begin{itemize}
+                        \item Uses TV cable
+                        \item Coaxial copper cable for house connection
+                        \item Fiber cable for household junction to ISP
+                        \item Composed of:
+                            \begin{itemize}
+                                \item Downstream data
+                                \item Upstream data
+                            \end{itemize}
+                        \item Asynchronous
+                        \item Many households share the same connection
+                            \begin{itemize}
+                                \item Vulnerable to hacks
+                            \end{itemize}
+                    \end{itemize}
+                \ides{Enterprise Access}
+                    \begin{itemize}
+                        \item Relatively directly connected to ISP
+                        \item Local switches and aggregated switches
+                    \end{itemize}
+                \ides{Ethernet}
+                    \begin{itemize}
+                        \item Most widely used local area network technology
+                        \item Twisted pair copper
+                        \item Symmetric (same speed in both direction)
+                    \end{itemize}
+                \ides{Unsersea Cable}
+                    \begin{itemize}
+                        \item Different hardening depending on the environment
+                    \end{itemize}
+                \ides{Other}
+                    \begin{itemize}
+                        \item Many other technologies
+                        \item Satellites, balloons etc.
+                    \end{itemize}
+        \end{itemize}
+    \ides{Internet:} Network of networks
+        \begin{itemize}
+            \item Enormously complex
+            \item We consider a abstraction
+            \item A network is graph with nodes and edged:
+                \begin{itemize}
+                    \ides{Node:}
+                        \begin{itemize}
+                            \ides{Capacity:} How much data can they transfer at a given time?
+                            \ides{Degree:} How are they connected to other nodes?
+                        \end{itemize}
+                    \ides{Edges:}
+                        \begin{itemize}
+                            \ides{Directed:} Can data travel in both directions?
+                            \ides{Capacity:} How much data can they transfer at a given time?
+                            \ides{Latency:} How much time does it take to transfer data?
+                        \end{itemize}
+                \end{itemize}
+        \end{itemize}
+\end{itemize}
+
+\subsection{Resources Sharing}
+\begin{itemize}
+    \item Links are shared among users
+    \ides{Oversubscribe:} Assumed that not all user will use it at the same time 
+    \item Terminology
+        \begin{itemize}
+            \ides{P:} Peak rate
+            \ides{A:} Average rate
+            \ides{A/P:} Level of utilisation
+        \end{itemize}
+    \item Two main principles
+\end{itemize}
+
+\subsubsection{Circuit Switching/Reservation}
+\begin{itemize}
+    \item Reserve the bandwidth $P$ for all switches on the path in advance
+    \item Only required $A/P$
+    \item Good when $P/A$ small
+    \item Multiplexed at flow-level
+    \item Two different methods
+    \ides{Time-base:} Periodic timeslots which are reserved
+    \ides{Frequency-base:} Specific frequencies are reserved
+    \item Both methods can be combined
+    \ipro Predictable performance
+    \icon Does not routes around failed switches
+        \begin{itemize}
+            \item Setup of new path required
+        \end{itemize}
+    \icon Long setup and take down of the link
+        \begin{itemize}
+            \item Not suited for short communication
+        \end{itemize}
+    \item Used in phone networks
+\end{itemize}
+
+\subsubsection{Packet Switching/On-Demand}
+\begin{itemize}
+    \item Send data when needed
+    \item Good when $P/A$ large
+    \item Multiplexed at packet-level
+    \ipro Efficient use of resource
+    \ipro Routes around failed switches
+    \icon Unpredictable performance
+    \icon Packets can clash
+    \icon Network can ``overflow'' (congestion)
+    \item Used by the internet
+\end{itemize}
+
+\subsection{Network Layer}
+\begin{itemize}
+    \item Network is structured in $5$ layer
+    \item Each layer has its protocols
+    \item Each layer builds on a service provided by the lower layer
+    \item Each layer provides a service to the upper layer
+    \item OSI model has $7$ layers
+    \ides{Physical Layer:}
+        \begin{itemize}
+            \item Provides physical transfer of bits
+            \item Moves \textit{bits}
+        \end{itemize}
+    \ides{Link Layer:}
+        \begin{itemize}
+            \item Provides local best-effort delivery
+            \item Moves \textit{frames}
+        \end{itemize}
+    \ides{Network Layer:}
+        \begin{itemize}
+            \item Provides global best-effort delivery
+            \item Moves \textit{packet}
+        \end{itemize}
+    \ides{Transport Layer:}
+        \begin{itemize}
+            \item Provides end-to-end delivery (reliable of not)
+            \item Transports \textit{segments}
+        \end{itemize}
+    \ides{Application Layer:}
+        \begin{itemize}
+            \item Provides network access
+            \item Exchanges \textit{messages}
+        \end{itemize}
+    \item Each layer adds its own header to the message before transmitting it to the lower level
+    \item Different devices implement different layers
+        \begin{itemize}
+            \item Host implements all layers
+            \item Router implements up to L3
+            \item Switch implements up to L2
+        \end{itemize}
+\end{itemize}
+
+\subsection{End-To-End Principle}
+\begin{itemize}
+    \item Network is unreliable, but try to make it as reliable as possible
+        \begin{itemize}
+            \item Else we have many end-to-end retries
+        \end{itemize}
+    \item End-to-end check \textbf{always} necessary 
+    \ides{Fate-Sharing Principle:} Acceptable to loose state but only if the entity is lost too
+        \begin{itemize}
+            \item Store state always co-local to entities
+        \end{itemize}
+\end{itemize}
+
+\subsection{Characteristics and Performance}
+\begin{itemize}
+    \item Network is characterized by delay, loss and throughput
+\end{itemize}
+
+\subsubsection{Delay}
+\begin{itemize}
+    \item Total delay is sum of:
+        \begin{itemize}
+            \ides{Transmission Delay}
+                \begin{itemize}
+                    \item Time to push all bits onto the link
+                    \item $\text{transmission delay [sec]} = \frac{\text{packet size [\# bits]}}{\text{line bandwith [\# bits/sec]}}$
+                    \item Due to link properties
+                \end{itemize}
+            \ides{Propagation Delay}
+                \begin{itemize}
+                    \item Time for a bit to travel through the link
+                    \item $\text{Propagation delay [sec]} = \frac{\text{link length [m]}}{\text{propagation speed [m/sec]}}$
+                    \item Propagation speed is a fraction of $c$ (speed of light)
+                    \item Due to link properties
+                \end{itemize}
+            \ides{Processing Delay}
+                \begin{itemize}
+                    \item Time to process a request
+                    \item Due to traffic and switch internals
+                    \item Tiny; can be neglected
+                \end{itemize}
+            \ides{Queuing Delay}
+                \begin{itemize}
+                    \item Time a packet waits in the buffer for transmission
+                    \item Varies from packet to packet
+                        \begin{itemize}
+                            \item Hard to predict
+                            \item Analysis requires statistical measures
+                        \end{itemize}
+                    \item Depends on:
+                        \begin{itemize}
+                            \item Arrival rate of new pack
+                            \item Transmission rate of outgoing link
+                            \item Traffic burstiness
+                        \end{itemize}
+                    \ides{Analysis}
+                        \begin{itemize}
+                            \ides{a [packets/sec]:} average packet arrival rate
+                            \ides{R [bit/sec]:} transmission rate on outgoing link
+                            \ides{L [bit]:} fixed packet length
+                            \ides{La [bit/sec]:} average bits arrival rate
+                            \ides{La/R:} traffic intensity
+                            \item Queuing delay is exponential with increasing traffic intensity 
+                            \item Diverges at $1$
+                            \item Increases fast if traffic is bursty
+                            \item Goal: operate far from critical point
+                        \end{itemize}
+                    \item Due to traffic and switch internals
+                \end{itemize}
+        \end{itemize}
+    \item Cannot predict which delay dominates
+\end{itemize}
+
+\subsubsection{Loss}
+\begin{itemize}
+    \item Queue can hold at most $N$ packets in their buffer
+        \begin{itemize}
+            \item $N + 1$ packet gets dropped
+        \end{itemize}
+    \item Upper bound $= N \cdot L / R$
+    \item Loss may be acceptable of not
+        \begin{itemize}
+            \item Can resend redundant information as $A, B, A \oplus B$
+        \end{itemize}
+\end{itemize}
+
+\subsubsection{Throughput}
+\begin{itemize}
+    \item Rate at which a host receives data
+    \item $\text{Average throughput [\# bits/sec]} = \frac{\text{data size [\# bits]}}{\text{transfer time [sec]}}$
+    \item End-to-end throughput is the throughput of the bottleneck
+\end{itemize}
