@@ -1,0 +1,156 @@
+%! TEX root = ./main.tex
+
+\section{Abstraction}
+\begin{itemize}
+    \ides{Polymorphic Type t:} A set of types
+    \ides{Parametric Polymorphism:} Function works for type \verb+t+ iff it works for all types contained in \verb+t+
+    \item A type \verb+w+ for \verb+f+ is most general (principal) type iff for all types \verb+s+ for \verb+f+, \verb+s+ is an instance of \verb+w+.
+    \item Type variables start with lower-case
+\end{itemize}
+
+\subsection{Higher-Order Functions}
+\begin{itemize}
+    \item Types
+        \begin{itemize}
+            \ides{First Order:} Arguments are base types or constructor types
+                \begin{itemize}
+                    \item \verb+Int -> [Int]+
+                \end{itemize}
+            \ides{Second Order:} Arguments are themselves functions
+                \begin{itemize}
+                    \item \verb+(Int -> Int) -> [Int]+
+                \end{itemize}
+            \ides{Third Order:} Arguments are functions, whose arguments are functions
+                \begin{itemize}
+                    \item \verb+((Int -> Int) -> Int) -> [Int]+
+                \end{itemize}
+            \ides{Higher-Order:} Functions of arbitrary order
+        \end{itemize}
+    \item Advantages
+    \ipro Definition is easier to understand
+    \ipro Parts are easier to modify
+    \ipro Pars are easier to reuse
+    \ipro Correctness is simpler to understand and show
+\end{itemize}
+
+\subsubsection{Examples}
+\begin{itemize}
+    \ides{Map}
+        \begin{itemize}
+            \item Apply function to each argument in a list
+            \item
+\begin{verbatim}
+map :: (a -> b) -> [a] -> [b]
+map f [] = []
+map f (x:xs) = f x : map f xs
+\end{verbatim}
+        \end{itemize}
+    \ides{Folding}
+        \begin{itemize}
+            \item Aggregate all elements of a list
+            \ides{foldr}
+                \begin{itemize}
+                    \item Written as \verb+(f x_1 (f x_2 (f ... (f x_k e)))+ for list $x$, function $f$ and default value $e$
+                    \item When seen as a tree, the con is replaced by $f$ and the empty list by $e$
+                    \item Can operate on infinite list
+\begin{verbatim}
+foldr :: (a -> b -> b) -> b -> [a] -> b
+foldr f z [] = z
+foldr f z (x: xs) = f x (foldr f z xs)
+\end{verbatim}
+
+                \end{itemize}
+            \ides{foldl}
+                \begin{itemize}
+                    \item Written as \verb+f(f(f(f e x_1) x_2) ...) x_k+ for list $x$, function $f$ and default value $e$
+                    \item Runs infinitely on infinite lists
+                    \item
+\begin{verbatim}
+foldl :: (a -> b -> b) -> b -> [a] -> b
+foldl f z []
+foldl f z (x: xs) = foldl f ( f z x) xs
+\end{verbatim}
+                \end{itemize}
+        \end{itemize}
+\end{itemize}
+
+\subsection{$\lambda$-Expression}
+\begin{itemize}
+    \item Allows in-line function definitions
+    \item Constructed as \verb+(\v_1 -> ... -> \v_k -> <someExpression>)+
+        \begin{itemize}
+            \item Can be simplified to \verb+(\v_1 ... v_k -> <someExpression>)+
+        \end{itemize}
+    \item Adoption of Church's $\lambda$-notation
+\end{itemize}
+
+\subsection{Function as Values}
+\begin{itemize}
+    \item Function itself can be returned from function
+    \item Returned function cannot be displayed, but only evaluated
+\end{itemize}
+
+
+\subsubsection{Examples}
+\begin{itemize}
+    \ides{Function Composition}
+        \begin{itemize}
+            \item Takes two functions as arguments and returned the composite function
+            \item Application associates to the left
+            \item
+\begin{verbatim}
+(.) :: (b -> c) -> (a -> b) -> (a -> c)
+(f . g) x = f (g x)
+\end{verbatim}
+        \end{itemize}
+    \ides{Iteration}
+    \todo{Iteration}
+    \ides{Difference Lists}
+    \todo{Difference List}
+\end{itemize}
+
+
+\subsection{Function Arguments}
+\begin{itemize}
+    \item One applies only some but not all arguments
+    \item A new function still requiring some arguments is returned
+    \item Useful for \verb+map+, \verb+filter+ etc.
+    \item If $f :: t_1 \to t_2 \to \dots \to f_n \to t$ and $e_1 :: t_1, \dots , e_k :: t_k$ then the partial application has type $f e_1 \dots e_k :: t_{k + 1} \to \dots \to t_n \to t$
+    \item Partial application is consistent with the view that function takes multiple arguments
+        \begin{itemize}
+            \item But a function takes exactly one arguments
+        \end{itemize}
+    \item For infix operator $\oplus$:
+        \begin{itemize}
+            \item $(a \oplus) \equiv \lambda x. a \oplus x$
+            \item $(\oplus a) \equiv \lambda x. x \oplus a$
+            \item Importend to consider when operator is not commutative
+        \end{itemize}
+    \ides{Tupling}
+        \begin{itemize}
+            \item Wrapping multiple arguments into tuple lets us apply them as one argument
+            \item Function is one of:
+                \begin{itemize}
+                    \ides{Curryed:} Takes multiple arguments
+                    \ides{Uncurry:} Takes a tuple as argument
+                \end{itemize}
+            \item We want convert one representation to the other using:
+                \begin{itemize}
+                    \ides{Curry}
+\begin{verbatim}
+curry :: ((a,b) -> c) -> a -> b -> c
+curry f = f’ where f’ x1 x2 = f (x1,x2)
+\end{verbatim}
+                    \ides{Uncurry}
+\begin{verbatim}
+uncurry :: (a -> b -> c) -> (a,b) -> c
+uncurry f’ = f where f (x1,x2) = f’ x1 x2
+\end{verbatim}
+                \end{itemize}
+        \end{itemize}
+    \ides{Uncluttering Notation}
+        \begin{itemize}
+            \item Right associative operator \verb+$+ for arguments
+            \item Avoids parentheses
+        \end{itemize}
+\end{itemize}
