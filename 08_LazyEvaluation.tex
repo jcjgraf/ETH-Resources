@@ -1,0 +1,76 @@
+%! TEX root = ./main.tex
+
+\section{Lazy Evaluation}
+\begin{itemize}
+    \item Substitute arguments without argument evaluation
+    \item Some expressions are never evaluated
+        \begin{itemize}
+            \item Can save arbitrary amount of work
+        \end{itemize}
+    \ides{Duplicate Evaluation:}
+        \begin{itemize}
+            \item One argument may be used multiple times
+            \item Haskell avoids duplicate evaluation of the same arguments
+            \ides{Sharing:} Pointer graph of arguments indicated if an argument was already executed
+                \begin{itemize}
+                    \item If it was, we can directly take the result
+                \end{itemize}
+        \end{itemize}
+    \item Arguments are evaluated only when needed and at most once
+    \ides{Pattern Matching}
+        \begin{itemize}
+            \item Arguments evaluate as far as needed to determine pattern match
+            \item Start matching the top most pattern (I guess)
+        \end{itemize}
+    \ides{Guards}
+        \begin{itemize}
+            \item Evaluate only what is required to check if guard is true
+            \item Start with top most guard
+        \end{itemize}
+    \ides{Local Definitions}
+        \begin{itemize}
+            \item \verb+where+ and \verb+let+ are lazily evaluated
+        \end{itemize}
+    \ides{Functions}
+        \begin{itemize}
+            \item Outermost operator is first evaluated
+                \begin{itemize}
+                    \item Top-down evaluation in a syntax tree
+                \end{itemize}
+            \ides{Eager Evaluation:} Evaluate from left to right, but consider precedence
+        \end{itemize}
+\end{itemize}
+
+\subsection{Application}
+\begin{itemize}
+    \ides{Data-Driven Programming}
+        \begin{itemize}
+            \item Data can be generate on demand
+                \begin{itemize}
+                    \item Improved runtime complexity
+                \end{itemize}
+            \item Due to lazy evaluation, only required data is constructed
+        \end{itemize}
+    \ides{Infinite Data}
+        \begin{itemize}
+            \item Finite representation of infinite data
+                \begin{itemize}
+                    \item E.g. \verb|from n = n : ones (n+1)| generates an infinite list
+                \end{itemize}
+            \item We can calculate with infinite data in finite time
+                \begin{itemize}
+                    \item E.g. \verb+head from 1+
+                \end{itemize}
+            \item I.e. we describe an infinite stream and compute with arbitrarily large finite prefixes of it
+        \end{itemize}
+\end{itemize}
+
+\subsection{Correctness}
+\begin{itemize}
+    \item Complicated analysis of correctness and complexity
+    \item Type like \verb+[Int]+ include finite and infinite lists
+    \item Proof by induction is sound only for finite lists
+        \begin{itemize}
+            \item We always assume finite lists for this course
+        \end{itemize}
+\end{itemize}
