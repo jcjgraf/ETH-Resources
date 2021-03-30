@@ -1,0 +1,137 @@
+%! TEX root = ./main.tex
+
+\section{Lists}
+\subsection{Introduction}
+\begin{itemize}
+    \ides{List Type:} If \verb+T+ is a type then \verb+[T]+ is a type
+        \begin{itemize}
+            \item Is a new type constructor
+        \end{itemize}
+    \ides{Empty List:} \verb+[] :: [T]+ is of type \verb+[T]+
+    \ides{Non-Empty List:} \verb+(x : xs) :: [T]+ iff \verb+x :: T+ and \verb+xs :: [T]+
+        \begin{itemize}
+            \ides{Cons Operator:} \verb+:+ prepends an element to a list
+                \begin{itemize}
+                    \ides{Concatenate:} \verb|++| concatenates two lists
+                \end{itemize}
+            \item \verb+[a, b, c] = a : (b : (c : []))+ can be seen as a tree
+        \end{itemize}
+    \item \verb+[n, p .. m]+ constructs a list from \verb+n+ to \verb+m+ with step \verb+p - n+
+        \begin{itemize}
+            \item \verb+p+ is optional; Default step is \verb+1+
+            \item Can be seen as, ``First element is \verb+n+, second element is \verb+p+, continue like this till \verb+m+''
+            \item \verb+m+ is not necessarily included
+        \end{itemize}
+\end{itemize}
+
+\subsection{Pattern Matching}
+\begin{itemize}
+    \item Is used for:
+        \begin{itemize}
+            \item Check if argument has proper type
+            \item Bind values to variables
+        \end{itemize}
+    \ides{Pattern}
+        \begin{itemize}
+            \item Inductively defined
+            \item Pattern are
+                \begin{itemize}
+                    \item Constants
+                    \item Variables
+                    \item Wild Card (\verb+_+)
+                    \item Tuples $(p_1, p_2, ... , p_k)$ where $p_i$ is a pattern
+                    \item Non-Empty Lists $(p_1 : p_2)$ where $p_i$ is a pattern
+                \end{itemize}
+            \item Must be \textbf{linear}
+                \begin{itemize}
+                    \item I.e. each variable cannot occur more than once
+                    \item Does not count for wild card
+                \end{itemize}
+        \end{itemize}
+    \ides{Pattern Matching}
+        \begin{itemize}
+            \item Pattern \verb+p+ matches term \verb+a+ by the following recursion on \verb+p+:
+                \begin{itemize}
+                    \ides{Constant:} \verb+p = c+ if \verb+c = a+
+                    \ides{Variable:} \verb+p = x+ always succeeds with binding \verb+x = a+
+                    \ides{Wild Card:} \verb+p = _+ always success but without binding
+                    \ides{Tuple:} $p = (p_1, \dots , p_k)$ succeeds if $a = (a_1, \dots , a_k)$ and $p_i$ matches $a_i \quad \forall i \in \{1, \dots , k\} $
+                    \ides{Non-Empty List:} $p = (p_1 : p_2)$ succeeds if $a = (a_1 : a_2)$ and $p_i$ matches $a_i \quad \forall i \in \{1, 2\}$
+                \end{itemize}
+        \end{itemize}
+\end{itemize}
+
+\subsection{Sorting Algorithms}
+\begin{itemize}
+    \ides{Insertion Sort}
+\begin{verbatim}
+isort :: [Int] -> [Int]
+isort [] = []
+isort (x: xs) = ins x (isort xs)
+
+ins :: Int -> [Int] -> [Int]
+ins a [] = [a]
+ins a (x: xs)
+    | a <= x = a : (x: xs)
+    | otherwise = x : ins a xs
+\end{verbatim}
+    \ides{Quick Sort (long form)}
+\begin{verbatim}
+qsort :: [Int] -> [Int]
+qsort [] = []
+qsort (x: xs) = qsort ( lesseq x xs) ++ [x] ++ qsort (greater x xs)
+where
+    lesseq _ [] = []
+    lesseq x (y: ys)
+        | y <= x = y : lesseq x ys
+        | otherwise = lesseq x ys
+    greater _ [] = []
+    greater x (y: ys)
+    | y >x = y : greater x ys
+    | otherwise = greater x ys
+\end{verbatim}
+    \ides{Quick Sort (short form)}
+\begin{verbatim}
+q :: [Int] -> [Int]
+q [] = []
+q (p:xs) = q [x | x <- xs, x <= p] ++ [p] ++ q [x | x <- xs, x > p]
+\end{verbatim}
+\end{itemize}
+
+\subsection{List Comprehension}
+\begin{itemize}
+    \item Notation for sequential processing of list elements
+    \item Analogous to set comprehension in set theory
+    \item General form: \verb+[func x | <gen_1>, ... , <gen_n>, <pred_1, ..., <pred_m>]+
+    \item Generators can depend on each other
+        \begin{itemize}
+            \item E.g. \verb+[x | n <- [1..10], x <- [1..n]]+
+        \end{itemize}
+    \item Generators can depend on if then else
+        \begin{itemize}
+        \item E.g. \verb+[x | n <- [1..10], if even x then x <- [1,2] else x <- [1]]+
+        \end{itemize}
+    \item \todo{Add more handy dandy examples}
+\end{itemize}
+
+\subsection{Induction Over Lists}
+\begin{itemize}
+    \item Prove $P$ for all $xs$ in $[T]$
+        \begin{itemize}
+            \ides{Base Case:} prove $P[xs/[]]$
+            \ides{Step Case:} prove $\forall y :: T, ys :: [T]. P[xs/ys] \to P[xs/y:ys]$
+                \begin{itemize}
+                    \ides{Fix} arbitrary but non-free $y :: T, ys :: [T]$
+                    \ides{Induction Hypothesis:} Assume $P[xs/ys]$
+                \end{itemize}
+        \end{itemize}
+    \item Sometimes hard to pick right induction variable
+        \begin{itemize}
+            \item Proof may fail depending on the variable
+        \end{itemize}
+    \ides{Generalisation}
+        \begin{itemize}
+            \item Proof a stronger statement as a subproof
+            \item Required for some proofs
+        \end{itemize}
+\end{itemize}
