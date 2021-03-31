@@ -112,27 +112,33 @@ foldl f z (x: xs) = foldl f ( f z x) xs
 
 \subsection{Function Arguments}
 \begin{itemize}
-    \item One applies only some but not all arguments
-    \item A new function still requiring some arguments is returned
-    \item Useful for \verb+map+, \verb+filter+ etc.
-    \item If $f :: t_1 \to t_2 \to \dots \to f_n \to t$ and $e_1 :: t_1, \dots , e_k :: t_k$ then the partial application has type $f e_1 \dots e_k :: t_{k + 1} \to \dots \to t_n \to t$
-    \item Partial application is consistent with the view that function takes multiple arguments
+    \ides{Partial Application}
         \begin{itemize}
-            \item But a function takes exactly one arguments
-        \end{itemize}
-    \item For infix operator $\oplus$:
-        \begin{itemize}
-            \item $(a \oplus) \equiv \lambda x. a \oplus x$
-            \item $(\oplus a) \equiv \lambda x. x \oplus a$
-            \item Importend to consider when operator is not commutative
+            \item One applies only some but not all arguments
+            \item A new function still requiring some arguments is returned
+            \item Useful for \verb+map+, \verb+filter+ etc.
+            \item If $f :: t_1 \to t_2 \to \dots \to f_n \to t$ and $e_1 :: t_1, \dots , e_k :: t_k$ then the partial application has type $f e_1 \dots e_k :: t_{k + 1} \to \dots \to t_n \to t$
+            \item Partial application is consistent with the view that function takes multiple arguments
+                \begin{itemize}
+                    \item But a function takes exactly one arguments
+                \end{itemize}
+            \item For infix operator $\oplus$:
+                \begin{itemize}
+                    \item $(a \oplus) \equiv \lambda x. a \oplus x$
+                    \item $(\oplus a) \equiv \lambda x. x \oplus a$
+                    \item Importend to consider when operator is not commutative
+                        \begin{itemize}
+                            \item \verb+(a `func`) != (`func` a)+
+                        \end{itemize}
+                \end{itemize}
         \end{itemize}
     \ides{Tupling}
         \begin{itemize}
             \item Wrapping multiple arguments into tuple lets us apply them as one argument
             \item Function is one of:
                 \begin{itemize}
-                    \ides{Curryed:} Takes multiple arguments
-                    \ides{Uncurry:} Takes a tuple as argument
+                    \ides{Curry Func:} Takes multiple arguments
+                    \ides{Uncury Func:} Takes a tuple as argument
                 \end{itemize}
             \item We want convert one representation to the other using:
                 \begin{itemize}
