@@ -173,6 +173,7 @@
                             \item Root server returns domain IP to DNS server
                             \item DNS server return domain IP to DNS client
                         \end{itemize}
+                        \todo{Add query image}
                 \end{itemize}
             \ides{Iterative Query:}
                 \begin{itemize}
@@ -188,6 +189,7 @@
                             \item Domain server returns domain IP to DNS server
                             \item DNS server return IP to DNS client
                         \end{itemize}
+                        \todo{Add query image}
                     \item Somehow we sometimes say that CNS client is recursively (makes only one request) while the DNS server is iteratively (makes many requests)
                 \end{itemize}
         \end{itemize}
@@ -215,4 +217,149 @@
 \end{itemize}
 
 \subsection{Web}
+\begin{itemize}
+    \item Distributed database of pages
+    \item Composed of:
+        \begin{itemize}
+            \ides{Infrastructure:} Client/Browser, servers, proxies
+            \ides{Content:} Objects organized in web sites
+            \ides{Implementation:} URL, HTTP
+        \end{itemize}
+\end{itemize}
+
+\subsubsection{URL}
+\begin{itemize}
+    \ides{Uniform Resource Locator (URL):} address to a internet source
+    \item $\text{protocol}://\text{hostname}[:\text{port}]/\text{directory\_path}/\text{resource}$
+        \begin{itemize}
+            \ides{Protocol:} e.g. HTTP(S), FTP, SMTP etc.
+            \ides{Hostname:} DNS name or IP address
+            \ides{Port:} Optional and defaults to protocol standard
+                \begin{itemize}
+                    \item $80$ for HTTP, $443$ for HTTPS
+                \end{itemize}
+                \ides{Directory\_path/Resource:} Identify resource on destination
+        \end{itemize}
+\end{itemize}
+
+\subsubsection{HTTP}
+\begin{itemize}
+    \ides{Hypertext Transfer Protocol (HTTP)} 
+    \item Simple
+    \item Synchronous Request-Response: make request and wait
+    \item Layered over a bidirectional byte stream: Build on TCP (most of the times)
+    \item Text-Based: Human readable
+    \item State-Less: No info about past client requests
+    \ides{Request}
+        \begin{itemize}
+            \item Message is composed of header and body
+            \item Following three header fields are required
+            \ides{Method:}
+                \begin{itemize}
+                    \ides{GET:} request resource
+                    \ides{HEAD:} request headers only
+                        \begin{itemize}
+                            \item E.g. used by bots
+                        \end{itemize}
+                    \ides{POST:} send data to the server
+                \end{itemize}
+            \ides{URL:} Relative (to server) address of resource
+            \ides{Version:} HTTP version to use
+            \item Can have many other optional header fields
+                \begin{itemize}
+                    \item Header has a variable length
+                \end{itemize}
+        \end{itemize}
+    \ides{Response}
+        \begin{itemize}
+            \item Message is composed of header and body
+            \item Following three header fields are required
+            \ides{Version:} HTTP version to use
+            \ides{Status:} Status code
+                \begin{itemize}
+                    \ides{1XX:} Informational
+                    \ides{2XX:} Success
+                    \ides{3XX:} Redirection
+                    \ides{4XX:} Client Error
+                    \ides{5XX:} Server Error
+                \end{itemize}
+            \ides{Phrase:} Status message
+                \begin{itemize}
+                    \item Associated with status code
+                \end{itemize}
+            \item Can have many other optional header fields
+                \begin{itemize}
+                    \item Header has a variable length
+                \end{itemize}
+        \end{itemize}
+    \ides{Cookies}
+        \begin{itemize}
+            \ides{Stateless:} Each request is treated independently 
+                \begin{itemize}
+                    \ipro Server-side scalability
+                    \ipro Failure handling is trivial
+                    \icon Some application need state
+                \end{itemize}
+            \ides{Cookie:} Small textfile saved on the client side
+                \begin{itemize}
+                    \item Sent along with each request
+                    \item Server can request us to update the content
+                \end{itemize}
+        \end{itemize}
+    \ides{Web Page}
+        \begin{itemize}
+            \item Web pages consist of man different resources
+            \item All resources have to be fetched
+            \item Resources have to be compile according to their dependency
+                \begin{itemize}
+                    \item Prevent race conditions
+                    \item Browser has to be conservative
+                    \item Model as DAG
+                        \begin{itemize}
+                            \ides{Node:} Task (fetch or compile)
+                            \ides{Edge:} Must-happen-before Relationship
+                            \ides{Weight:} Time predeceasing task takes
+                        \end{itemize}
+                    \item Loading time is equal the critical path (the longest path) length
+                    \item Find using either algorithm:
+                        \begin{itemize}
+                            \item Top-Sort
+                            \item Recursively find the longest path for each node
+                        \end{itemize}
+                    \item Costs $O(n + v)$
+                    \item Speed-up task on critical path will shorten or change the critical path
+                \end{itemize}
+            \item Loading time is ambiguously defined
+                \begin{itemize}
+                    \item I.e. not clear when page has finished loading
+                \end{itemize}
+        \end{itemize}
+    \ides{Speed-up}
+        \begin{itemize}
+            \item Many techniques to speed-up the loading
+            \ides{Simplify and Restructure Web Page}
+                \begin{itemize}
+                    \item Prevent cross dependency
+                    \item Better compression
+                    \item Inline code
+                    \item Mark resources as asynchronous
+                        \ides{Minify:} Make code as compact as possible
+                \end{itemize}
+            \ides{Faster End-Devices}
+                \begin{itemize}
+                    \item Shorter rendering time
+                \end{itemize}
+            \ides{Better Network Infrastructure}
+                \begin{itemize}
+                    \item Decrease fetching time
+                    \item Diminishing Returns
+                \end{itemize}
+            \ides{Decrease RTT}
+                \begin{itemize}
+                    \item Great improvement
+                    \item Hard to achieve in practice
+                \end{itemize}
+        \end{itemize}
+\end{itemize}
+
 \subsection{Internet Video}
