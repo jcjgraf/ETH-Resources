@@ -1,0 +1,218 @@
+%! TEX root = ./main.tex
+
+\section{Application Layer}
+\subsection{Domain Name Service (DNS)}
+\begin{itemize}
+    \item Provides core functionality for the internet
+    \item Human identify hosts using hostnames, while internet uses IPs
+    \item DNS provides hostnames to IP mapping
+    \item Not one-to-one
+        \begin{itemize}
+            \ides{Load Balancing:} One hostname maps to multiple IP
+            \ides{Reuse hardware:} Multiple hostnames map to same IP
+                \begin{itemize}
+                    \item E.g. host multiple websites on same machine
+                \end{itemize}
+        \end{itemize}
+    \ides{History}
+        \begin{itemize}
+            \item One list of all mappings
+            \item Manually shared and updated
+            \item Placed in \verb+/etc/hosts+
+            \icon Not scalable
+            \icon Hard to manage
+            \icon Inconsistent
+            \icon List no always available for download
+        \end{itemize}
+    \ipro Scalability
+    \ipro Availability
+        \begin{itemize}
+            \item Domains are independent of each other
+        \end{itemize}
+    \ipro Extensible
+        \begin{itemize}
+            \item Can extend any part without interference of other parts
+        \end{itemize}
+\end{itemize}
+
+\subsubsection{Structure}
+\begin{itemize}
+    \item DNS uses three intertwined hierarchies
+        \begin{itemize}
+            \ides{Naming Structure}
+                \begin{itemize}
+                    \ides{Root:} After the TLD
+                        \begin{itemize}
+                            \item Imaginary dot
+                        \end{itemize}
+                    \ides{Top Level Domain (TLD):} Sit at the top
+                    \ides{Domain:} Subtree of the TLD
+                    \ides{Subdomain:} Subtree of domain
+                        \begin{itemize}
+                            \item Can be arbitrarily nested
+                        \end{itemize}
+                    \item A name is a leaf-to-root path
+                \end{itemize}
+            \ides{Management}
+                \begin{itemize}
+                    \item Root is managed by the IANA
+                        \begin{itemize}
+                            \item Association of 13 companies
+                        \end{itemize}
+                    \item TLDs are managed by private or federal organisations
+                    \item Domains are managed by private organisations
+                    \item Name collision is trivially avoided
+                \end{itemize}
+            \ides{Infrastructure}
+                \begin{itemize}
+                    \item $13$ root servers
+                        \begin{itemize}
+                            \item Named \textit{a} through \textit{m}
+                            \item Each has numerous mirrors
+                            \item Distributed all around the world
+                            \item Two \textit{k} root server are located in CH
+                        \end{itemize}
+                    \item TLD are managed professionally
+                    \item Domains are managed by ISPs or locally
+                \end{itemize}
+        \end{itemize}
+    \ides{BGP Anycast}
+        \begin{itemize}
+            \item Allows sharing of same IP for multiple servers
+            \item Determines ``fastest'' path
+                \begin{itemize}
+                    \item Not necessarily the shortest
+                \end{itemize}
+            \item Used by the roots servers for load balancing
+        \end{itemize}
+    \item For the system to work, we need
+        \begin{itemize}
+            \item Each DNS server knows the address of the root server
+            \item Each root servers knows the address of all TLD servers
+            \item Each DNS server knows the address of all its children
+        \end{itemize}
+    \ides{DNS Server}
+        \begin{itemize}
+            \item Each domain must have at least two DNS server to ensure availability
+            \item Stores \textit{Resource Records} as tuples \verb+(name, value, type, TTL)+
+                \begin{itemize}
+                    \ides{Name:} The variable which we want to map
+                    \ides{Value:} Desired value
+                    \ides{Type:} One of:
+
+                        \begin{tabular}{l l l}
+                            Record Type & Name & Value\\
+                            \hline
+                            A & hostname & IP address\\
+                            NS & domain & DNS server name\\
+                            MX & domain & Mail server name\\
+                            CNAME & alias & canonical name\\
+                            PTR & IP address & corresponding hostname
+                        \end{tabular}
+                    \ides{Time-to-Life (TTL):} How long the mapping is value
+                        \begin{itemize}
+                            \item Used for caching
+                        \end{itemize}
+                \end{itemize}
+        \end{itemize}
+\end{itemize}
+
+\subsubsection{DNS Query}
+\begin{itemize}
+    \item Used UDP on port 53
+        \begin{itemize}
+            \item Unreliable; may not get an answer
+        \end{itemize}
+    \ides{Main Steps}
+        \begin{itemize}
+            \item Browser wants to access a domain name
+            \item OS triggers resolution process
+                \begin{itemize}
+                    \item OS sends request to local DNS server
+                \end{itemize}
+            \item DNS systems translates domain
+        \end{itemize}
+    \ides{Local DNS Server}
+        \begin{itemize}
+            \item Normally closed to the endhost
+            \item Can be either:
+                \begin{itemize}
+                    \ides{Locally:} Running on host
+                    \ides{Enterprise:} Somewhere in the network
+                    \ides{ISP:} Running by the ISP
+                    \ides{External:} Run by a third-party company
+                        \begin{itemize}
+                            \icon Wrong geographical local
+                            \icon PGB Anycast does not give fastest server
+                            \icon Insecure
+                        \end{itemize}
+                \end{itemize}
+            \item Endhosts can choose a DNS server by:
+                \begin{itemize}
+                    \item Hardcoding it to \verb+/etc/resolv.conf+
+                    \item Rely on dynamic allocation by \verb+DHCP+
+                \end{itemize}
+        \end{itemize}
+    \ides{Query Type}
+        \begin{itemize}
+            \ides{Recursive Query:}
+                \begin{itemize}
+                    \item Client offloads task of resolving to the next server
+                    \item Not done in practice
+                        \begin{itemize}
+                            \item Except for external resolvers apparently
+                        \end{itemize}
+                    \item Steps:
+                        \begin{itemize}
+                            \item DNS client asks DNS server for domain IP
+                            \item DNS server queries root server
+                            \item Root server queries TLD server
+                            \item TLD server queries domain server
+                            \item Domain server returns domain IP to TLD server
+                            \item TLD server returns domain IP to root server
+                            \item Root server returns domain IP to DNS server
+                            \item DNS server return domain IP to DNS client
+                        \end{itemize}
+                \end{itemize}
+            \ides{Iterative Query:}
+                \begin{itemize}
+                    \item Each server only returns address to next server
+                    \item Steps
+                        \begin{itemize}
+                            \item DNS client asks DNS server for IP
+                            \item DNS server queries root server
+                            \item Root server returns TLD server IP to DNS server
+                            \item DNS server queries TLD server at given IP
+                            \item TLD server returns domain server IP to DNS server
+                            \item DNS server queries domain server at given IP
+                            \item Domain server returns domain IP to DNS server
+                            \item DNS server return IP to DNS client
+                        \end{itemize}
+                    \item Somehow we sometimes say that CNS client is recursively (makes only one request) while the DNS server is iteratively (makes many requests)
+                \end{itemize}
+        \end{itemize}
+\end{itemize}
+
+\subsubsection{Caching}
+\begin{itemize}
+    \item Most DNS queries requests the same site
+    \item Cache result of former queries
+    \item DNS records is cached for TTL seconds
+    \item Hit rate of about $75\%$
+\end{itemize}
+
+\subsubsection{Problems}
+\begin{itemize}
+    \item DNS is vital for the internet
+        \begin{itemize}
+            \item Server not accessible when DNS server not available
+        \end{itemize}
+    \item DNS servers can see the sites one visits
+        \begin{itemize}
+            \item Sell data
+        \end{itemize}
+    \item Vulnerable to different security breaches
+\end{itemize}
+
+\subsection{Web}
+\subsection{Internet Video}
