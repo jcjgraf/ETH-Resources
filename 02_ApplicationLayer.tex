@@ -359,6 +359,58 @@
                     \item Great improvement
                     \item Hard to achieve in practice
                 \end{itemize}
+            \ides{Simplify Network Protocols}
+                \begin{itemize}
+                    \item Naive HTTP opens one TCP connection per object
+                        \begin{itemize}
+                            \item Fetch $n$ objects costs $2n$ RTT
+                        \end{itemize}
+                    \item Use $M$ parallel connection
+                        \begin{itemize}
+                            \item Fetch $n$ objects costs $2n / M$ RTT
+                            \icon Burden to server
+                            \icon Bandwidth contention
+                        \end{itemize}
+                    \item Use persistent connection
+                        \begin{itemize}
+                            \item Fetch $n$ objects costs $n + 1$ RTT
+                            \item Default in HTTP/1.1
+                            \ipro Reduce connection setup and tear down cost
+                            \ipro Allow for more accurate RTT estimation
+                            \ipro Allow TCP congestion window to increase
+                        \end{itemize}
+                    \item Use parallel requests/responses
+                        \begin{itemize}
+                            \item Fetch $n$ objects costs $n$ RTT
+                            \item Pack multiple requests into one large
+                        \end{itemize}
+                \end{itemize}
+            \ides{Caching}
+                \begin{itemize}
+                    \item Same, unchanged resources are fetched over and over
+                    \ipro Saves time
+                    \ipro Decreases server load
+                    \ipro Decreases network load
+                    \item Significant portion of objects are uncachable
+                        \begin{itemize}
+                            \item Dynamic data (e.g. weather)
+                            \item Scripts (where the result depends on some parameters)
+                            \item Cookies (result may depend on sent cookie)
+                            \item SSL encrypted content
+                            \item Advertising
+                        \end{itemize}
+                    \item Clients send in the request the time they have last fetched the object. The server sends the object only when it was changed in the mean time.
+                    \item Caches are at:
+                        \begin{itemize}
+                            \ides{Client:} Browser Cache
+                            \ides{Close to Client:} By ISP, CDN or enterprise network
+                            \ides{Close to Destination:} Reverse proxy
+                        \end{itemize}
+                \end{itemize}
+            \ides{Replication}
+                \begin{itemize}
+                    \item See CDN section below
+                \end{itemize}
         \end{itemize}
 \end{itemize}
 
