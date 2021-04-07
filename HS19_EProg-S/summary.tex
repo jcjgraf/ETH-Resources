@@ -1,0 +1,1811 @@
+% Created 2019-11-12 Di 07:43
+% Intended LaTeX compiler: pdflatex
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{grffile}
+\usepackage{longtable}
+\usepackage{wrapfig}
+\usepackage{rotating}
+\usepackage[normalem]{ulem}
+\usepackage{amsmath}
+\usepackage{textcomp}
+\usepackage{amssymb}
+\usepackage{capt-of}
+\usepackage{hyperref}
+\usepackage{amsmath}
+\usepackage[paper=a4paper,left=30mm,right=20mm,top=25mm, bottom=25mm]{geometry}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{aligned-overset}
+\usepackage[ruled,vlined]{algorithm2e}
+\usepackage{xcolor}
+\newcommand\mycommfont[1]{\footnotesize\ttfamily\textcolor{blue}{#1}}
+\SetCommentSty{mycommfont}
+\newcommand\com[1]{\textcolor{red}{#1}}
+\newcommand*{\QED}{\hfill\ensuremath{\square}}%
+\author{Jean-Claude Graf}
+\date{\textit{[2019-09-17 Di]}}
+\title{Einführung in die Programmierung}
+\hypersetup{
+ pdfauthor={Jean-Claude Graf},
+ pdftitle={Einführung in die Programmierung},
+ pdfkeywords={},
+ pdfsubject={},
+ pdfcreator={Emacs 26.3 (Org mode 9.1.9)}, 
+ pdflang={English}}
+\begin{document}
+
+\maketitle
+\tableofcontents
+
+\setcounter{secnumdepth}{0}
+
+\section{Header}
+\label{sec:org1483c50}
+\begin{itemize}
+\item Einführung in die Programmierung\\
+\item \href{https://www.bi.id.ethz.ch/personensuche/personenDetail.view?page=1\&lang=de\&schnellSuche=Thomas+Gross\&order=NAME\&descending=false\&paging=true\&pid=134a9}{Prof. Dr. Thomas Gross}\\
+\item Department Informatik\\
+\item \href{https://www.lst.inf.ethz.ch}{Laboratory for Software Technology}\\
+\item \href{http://www.vvz.ethz.ch/Vorlesungsverzeichnis/lerneinheitPre.do?lerneinheitId=132733\&semkez=2019W\&lang=de}{Vorlesungsverzeichnis}\\
+\item \href{https://www.lst.inf.ethz.ch/education/einfuehrung-in-die-programmierung-i--252-0027-.html}{Vorlesungswebseite}\\
+\end{itemize}
+
+\subsection{Ziel der Vorlesung}
+\label{sec:orga27870d}
+\begin{itemize}
+\item Kompetenz\\
+\begin{itemize}
+\item Korrekte Programme systematisch erstellen\\
+\end{itemize}
+\item Wichtig sind:\\
+\begin{itemize}
+\item Aufmerksamkeit\\
+\item Imagination, Phantasie\\
+\item Übung\\
+\end{itemize}
+\item Java\\
+\begin{enumerate}
+\item Programm lesen\\
+\item Programm verstehen\\
+\item Programm erstellen\\
+\end{enumerate}
+\end{itemize}
+
+\subsection{Media}
+\label{sec:orgc839a6e}
+\subsubsection{Slides}
+\label{sec:org1c21afc}
+\begin{itemize}
+\item unbeschrieben\\
+\begin{itemize}
+\item ev. vor der Vorlesung\\
+\end{itemize}
+\item beschrieben (nur mit wichtigen Notizen)\\
+\begin{itemize}
+\item 24h-48h nach Vorlesung\\
+\end{itemize}
+\end{itemize}
+\subsubsection{Video}
+\label{sec:org46d9731}
+\begin{itemize}
+\item übertragenes Video\\
+\item Hauptprojektor\\
+\end{itemize}
+
+\subsection{Übungen}
+\label{sec:org6ca0275}
+\begin{itemize}
+\item Aufgabenblätter\\
+\begin{itemize}
+\item auf Website publiziert\\
+\item in Übungsgruppe vor-besprochen\\
+\end{itemize}
+\item Praxisübung\\
+\begin{itemize}
+\item Lösung im Internet\\
+\end{itemize}
+\item Bonusübung\\
+\begin{itemize}
+\item ab 4. od 5. Aufgabenblatt\\
+\item Max 0.25 Note Bonus für Basisprüfung\\
+\item selber lösen\\
+\begin{itemize}
+\item Mit anderen reden, aber keine Notizen davon mitnehmen und innert mind 1h danach nichts aufschreiben\\
+\end{itemize}
+\end{itemize}
+\end{itemize}
+
+\noindent\rule{\textwidth}{0.5pt}
+\section{0.0 Einleitung}
+\label{sec:org4723959}
+\subsection{Programm, Programmiereun und co.}
+\label{sec:orgf81f35c}
+\subsubsection{Programm}
+\label{sec:org6757c47}
+\begin{itemize}
+\item \emph{Programmieren} - \emph{Programm}: griechisch \emph{programma} = schriftliche Banntmachung, Aufruf\\
+\item Folge von Anweisungen\\
+\item Von Computer ausgeführt\\
+\begin{itemize}
+\item Wir müssen wissen was er alles versteht. Mögliche Anweisungen -> Programmiersprache\\
+\end{itemize}
+\item Realisiert einen Algorithmus\\
+\end{itemize}
+
+\subsubsection{Programmieren}
+\label{sec:orga9a09fd}
+\begin{itemize}
+\item Erstellen eines Programms/Software Entwicklung\\
+\item Beinhaltet alle Aspekte von Entwurf bis Installation\\
+\item Bedenken was nicht offensichtlich ist macht es fordernd\\
+\item \emph{Programming as universal activity} by Vinton Cerf, CACM March 2016, vol 59(3) p7\\
+\begin{itemize}
+\item analyzing problems\\
+\item breaking them into manageable parts\\
+\item finding solutions\\
+\item integrating the results\\
+\end{itemize}
+\item Lösungen finden\\
+\begin{itemize}
+\item Für Mensch (Lösung beschreiben)\\
+\item Für Maschiene (Anweisung)\\
+\end{itemize}
+\item Wichtiges Informatik Konzept\\
+\end{itemize}
+
+\subsubsection{Probleme}
+\label{sec:org69cc7d5}
+\begin{itemize}
+\item Möglichkeiten und Grenzen der maschinellen Informationsverarbeitung\\
+\begin{itemize}
+\item es exists unmögliche Probleme\\
+\item Kosten der Berechnung sind sehr wichtig\\
+\end{itemize}
+\end{itemize}
+
+\subsubsection{Programmiersprache}
+\label{sec:org88d716e}
+\begin{itemize}
+\item Sprache für Computer (führt aus)\\
+\item Folge von mögliche Anweisungen\\
+\item Sprache für Menschen (schreibt, liest)\\
+\item Geben vor wie Löaungen für ein Problem beschrieben werden können\\
+\end{itemize}
+
+\subsection{Java}
+\label{sec:orgb2bb9fc}
+\begin{itemize}
+\item \emph{Industrial strength} Sprache\\
+\begin{itemize}
+\item sehr verbreitet\\
+\end{itemize}
+\item Viele Konzepte\\
+\begin{itemize}
+\item nicht alle in dieser Vorlesung behandelt\\
+\end{itemize}
+\item JSHell\\
+\begin{itemize}
+\item nur für simple Snippets\\
+\end{itemize}
+\item Beispiel:\\
+\begin{itemize}
+\item Grosse Zahlen können zu unerwarteten Lösungen führen\\
+\item Daher, was sind legale Eingabewerte für Zahlen?\\
+\end{itemize}
+\end{itemize}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=.9\linewidth]{./img/190917eclipse.jpg}
+\caption{Funktionsweise von Eclipse (jedem IDE)}
+\end{figure}
+
+
+\section{1.0 EBNF Notation}
+\label{sec:org7b75009}
+E - Extended\\
+B - Backus\\
+N - Naur oder Normal\\
+F - Form\\
+
+\begin{itemize}
+\item Beschreibt die Syntax einer Sprache\\
+\item EBNF ist eine Erweiterung von BNF\\
+
+\item Vier elementaren Ausdrucksmöglichkeiten ("control forms") die in Java vorkommen\\
+\item Symbol kann Name, Keyword, Anweisung, Zahl etc. sein\\
+\end{itemize}
+
+\subsection{EBNF Beschreibung}
+\label{sec:org0558326}
+\begin{itemize}
+\item haben einen Namen (für kompliziertere Beschreibungen zu erstellen)\\
+\begin{itemize}
+\item gewählter Name ist irrelevant\\
+\end{itemize}
+\item erstellen ist ähnlich wie Programmieren in Java\\
+\item sind sehr \emph{formal} \\
+\begin{itemize}
+\item sehr präzise und verständlich\\
+\end{itemize}
+\item Sind eine Menge EBNF Regeln\\
+\begin{itemize}
+\item Menge: -> Reihenfolge unwichtig\\
+\end{itemize}
+\item geben an welche Symbole erlaubt sind\\
+\begin{itemize}
+\item Alphabet muss jedoch nicht explizit definiert werden. Es besteht einfach aus den Verwendeten Symbolen\\
+\end{itemize}
+\item Reihenfolge der Regeln ist irrelevant\\
+\begin{itemize}
+\item Konvention:\\
+\begin{itemize}
+\item von einfachen nach komplexen Regeln\\
+\item Name der letzten Regel ist der Name der relevanten Beschreibung\\
+\end{itemize}
+\end{itemize}
+\end{itemize}
+
+\subsection{EBNF Regel}
+\label{sec:orgb32c77e}
+\begin{itemize}
+\item Haben 3 Bestandteile\\
+\item Gibt an welche Symbole erlaubt sind\\
+\end{itemize}
+
+\subsubsection{Linke-Seite (LHS)}
+\label{sec:orgf105570}
+\begin{itemize}
+\item Wort, welches der Name der Regel ist (kursiv- (oder in '<>' als Ersatzdarstellung) und  kleingeschrieben)\\
+\end{itemize}
+\subsubsection{Rechte-Seite (RHS)}
+\label{sec:org0acaa0f}
+\begin{itemize}
+\item Beschreibt den Namen\\
+\item Kann enthalten\\
+\begin{itemize}
+\item Namen anderer Beschreibungen\\
+\item Buchstaben (Definiertes Set möglicher Werten)\\
+\item Kombinationen der vier Kontrollelementen\\
+\end{itemize}
+\end{itemize}
+\subsubsection{Verbindung}
+\label{sec:org67d80ef}
+\begin{itemize}
+\item "ist definiert als" (\(\Leftarrow\)) Spezielles zeichen\\
+\item trennt LHS und RHS\\
+LHS \(\Leftarrow\) RHS\\
+\end{itemize}
+
+\subsubsection{Kontrollelemente (\emph{Control Forms})}
+\label{sec:orgb3186a5}
+\begin{enumerate}
+\item Aufreihung (\emph{sequence})
+\label{sec:orgba00afa}
+\begin{itemize}
+\item von links nach rechts gelesen\\
+\item Reihenfolge ist wichtig\\
+\begin{itemize}
+\item 'abc' != 'cba'\\
+\end{itemize}
+\item Zwischenraum zwischen Aufreihung ist nicht relevant\\
+\begin{itemize}
+\item Leerzeichen muss explizit gezeigt werden wenn eines vorhanden sein sollte\\
+\end{itemize}
+\item Andere EBNF Regeln können als Baustein verwendet werden\\
+\end{itemize}
+digit-d \Leftarrow d\\
+digit-2 \Leftarrow 2\\
+digit-8 \Leftarrow 8\\
+raum \Leftarrow digit-d digit-2 digit-8\\
+
+\item Entscheidung (\emph{decision})
+\label{sec:org0eb593a}
+\begin{enumerate}
+\item Auswahl
+\label{sec:orgccb8870}
+\begin{itemize}
+\item Menge von Alternativen\\
+\item Reihenfolge ist nicht wichtig\\
+\item Durch \(|\) (\emph{stroke}) getrennt\\
+\item Um Umklarheiten zu vermeiden können wir Klammern \(()\)  verwenden um die Reihenfolge zu verdeutlichen\\
+\begin{itemize}
+\item wie in der Mathe\\
+\end{itemize}
+\end{itemize}
+
+<digit> \Leftarrow 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 0
+
+\item Option
+\label{sec:org805dda4}
+\begin{itemize}
+\item wie die Alternative jedoch können wir auch "nichts" wählen\\
+\item Element(e) in \([]\) (\emph{Square Brackets}) und durch \(|\) getrennt\\
+\item \(\Epsilon\) (Epsilon) steht für "nichts"\\
+\end{itemize}
+
+<initials> \Leftarrow T [R] G  //TRG oder TG\\
+---\\
+<Vorzeichen> \Leftarrow [+|-]\\
+---\\
+<pm> \Leftarrow +|-\\
+<vorzeichen> \Leftarrow [pm]\\
+---\\
+<choice> \Leftarrow [a|\Epsilon] // Wähle a oder "nichts"\\be
+\end{enumerate}
+
+\item Wiederholung (\emph{repetition})
+\label{sec:org89d57dd}
+\begin{itemize}
+\item Zu Wiederholende Ausdruck steht in \({}\) (\emph{Curly Brackets})\\
+\item kann 0, 1, oder beliebig mal wiederholt werden\\
+\begin{itemize}
+\item 0 Wiederholungen heisst Element fehlt (Epsilon)\\
+\item können nicht sagen das etwas genau n mal wiederholt werden soll\\
+\end{itemize}
+\end{itemize}
+
+<folge> \Leftarrow {a} // kann eine Anzahl von a, oder auch \Epsilon sein\\
+--- \\
+<digit> \Leftarrow 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 0\\
+<integer> \Leftarrow [+|-] digit{digit} // Integral Darstellung\\
+
+\item Rekursion (\emph{recursion})
+\label{sec:orgcb225cd}
+\begin{itemize}
+\item Manchaml nötig für komplexe Beschreibungen\\
+\item Direkt Rekursiv\\
+\begin{itemize}
+\item Der Name der Linken Seite wird \textbf{direkt} (LHS in RHS) auf der Rechten Seite der Regel verwendet\\
+<r> \Leftarrow A | A <r>
+
+\begin{itemize}
+\item Ist AAB legal?\\
+\begin{table}[htbp]
+\caption{Tabellen überprüfung}
+\centering
+\begin{tabular}{ll}
+ & Regel\\
+\hline
+\(<r>\) & \\
+\(B \vert Ar\) & \#1\\
+\(Ar\) & \#2\\
+\(A(b \vert Ar)\) & \#1\\
+\(AAr\) & \#2\\
+\(AA(B\vert Ar)\) & \#1\\
+\(AAB\) & \#2\\
+\end{tabular}
+\end{table}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=.9\linewidth]{img/190927_1.jpg}
+\caption{Ableitungbaum überprüfung}
+\end{figure}
+\end{itemize}
+\end{itemize}
+\item Indirekt Rekusiv\\
+\begin{itemize}
+\item Der Name einer Regel kommt in der RHS einer anderen Regel der selben Beschreibung vor\\
+name1 \Leftarrow A name2\\
+name2 \Leftarrow B name1 | C\\
+\end{itemize}
+
+\item Nicht alle Rekursionen können durch Wiederholungen ausgedrückt werden\\
+\begin{itemize}
+\item keine  Beschreibung ohne Rekursion für \(A^n B^n \forall n \geq 0\)\\
+balance \Leftarrow | A balance B
+
+\begin{center}
+\includegraphics[width=.9\linewidth]{img/190927_10.jpg}
+\end{center}
+\end{itemize}
+
+\item BNF erhielt anfänglich nur Rekursion und Auswahl\\
+\item Nicklaus Wirth fügte das E hinzu\\
+\end{itemize}
+\end{enumerate}
+
+\subsection{Überprüfung für Legalität}
+\label{sec:orgea8b907}
+Eine gebegenes Symbol (Folge von Buchstaben) kann für eine EBNF beschreibung legal sein, wenn \textbf{alle} Buchstaben des Symbols mit den Elementen der EBNF Regel übereinstimmen, oder ansonnsten illegal, sein. Ein legales symbol \emph{entspricht} einer EBNF Beschreibung.\\
+
+\subsubsection{Informeller Bestimmung:}
+\label{sec:org3642b21}
+Wir gehen das Symbol von links nach rechts durch und überprüfen ob es allen Regeln der Beschreibung entspricht\\
+
+\subsubsection{Tabellen}
+\label{sec:orgbb7b0a3}
+Sind \textbf{formaler} und \textbf{kompakter}\\
+
+\begin{itemize}
+\item Aufbau:\\
+\begin{itemize}
+\item 1. Zeile: Namen der zu testenden EBNF Beschreibung\\
+\item folgende Zeilen verden aus der vorgehenden abgeleitet\\
+\item letzte Zeile: Symbol (gegebenes Symbol wenn es der Beschreibung entspricht)\\
+\end{itemize}
+
+\item Durchführung:\\
+\begin{enumerate}
+\item Ersetzen eines Namen (LHS) durch die entsprechende Definition (RHS)\\
+\item Wahle einer Alternative\\
+\item Entscheidung ob ein optionales Element dabei ist oder nicht\\
+\item Bestimmung der Zahl der Wiederholungen\\
+
+\item 1. \& 2. Regeln dürfen als einzige zusammengefasst werden\\
+\end{enumerate}
+
+\item Bsp. Überprüfung von \(+142\) für \(<digit>\)\\
+\begin{center}
+\begin{tabular}{ll}
+Status & Reason (rule \#)\\
+\hline
+\(<interger>\) & Given\\
+\([+ \vert -]<digit>{<digit>}\) & Replace \(<integer>\) by RHS (\#1)\\
+\([+]<digit>{<digit>}\) & Choose \(+\) alternative (\#2\#\\
+\(+<digit>{<digit>}\) & Include option (3)\\
+\(+1{<digit>}\) & Replace the first \(<digit>\) by \(1\) alternative (\#1 \& \#2)\\
+\(+1<digit><digit>\) & Use two repetitions (\#4)\\
+\(+14<digit>\) & Replace the first <digit> by \(4\) alternative (\#1 \& \#2)\\
+\(+142\) & Replace the first <digit> by \(2\) alternative (\#1 \& \#2)\\
+\end{tabular}
+\end{center}
+\end{itemize}
+
+\subsubsection{Ableitungsbäume}
+\label{sec:orgef61d57}
+Grafische Darstellung eines Beweises\\
+
+\begin{itemize}
+\item Aufbau:\\
+\begin{itemize}
+\item Oben: Name der zu testenden EBNF Beschreibung\\
+\item Unten: Symbol (gegebenes Symbol wenn es der Beschreibung entspricht)\\
+\end{itemize}
+
+\item Durchführung:\\
+\begin{itemize}
+\item Kanten Zeigen welche Regel verwendet wird um von einer Zeile zur nächsten zu kommen\\
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=.9\linewidth]{img/190927_3.jpg}
+\caption{Ableitungbaum}
+\end{figure}
+\end{itemize}
+\end{itemize}
+
+\subsection{Sonderzeichen}
+\label{sec:org1ed7352}
+\begin{itemize}
+\item Viele Zeichen habe eine spezielle Bedeutung in EBNF\\
+\begin{itemize}
+\item \{, \}, [, ], |, (, ), \(\Rightarrow\),\\
+\item weiter ev. auch <, > und  "\\
+\end{itemize}
+\item Um ein solches Zeichen als Symbol zu verwenden wir es in einem Quadrat (oder als Ersatzdarstellung in Anzührungszueichen) geschrieben\\
+\begin{itemize}
+\item \(\boxed{\{}\)\\
+\end{itemize}
+\end{itemize}
+
+\subsection{Äquivalenz von Beschreibungen}
+\label{sec:org9151ca3}
+\begin{itemize}
+\item EBNF Beschreibungen sind äquivalent wenn sie die selben Symbolen legal resp. illegal sind\\
+\item die Sprache der Beschreibungen sind identisch\\
+\item Zwei Beschreibungen \(B_1\) und \(B_2\) definieren die selbe Sprache:\\
+\begin{itemize}
+\item Symbol legal für \(B_1\): dann auch legal für \(B_2\)\\
+\item Symbol illegal für \(B_1\): dann auch illegal für \(B_2\) \\
+\item Symbol legal für \(B_2\): dann auch legal für \(B_1\)\\
+\item Symbol illegal für \(B_2\): dann auch illegal für \(B_1\)\\
+\end{itemize}
+\end{itemize}
+
+-> äquivalenz zwischen folgenden Beschreibungen liegen vor:\\
+<singn> \Leftarrow +|-\\
+<digit> \Leftarrow 0|1|2|3|4|5|6|7|8|9\\
+<integer> \Leftarrow [<sign>]{<digit>}\\
+---\\
+<integer> \Leftarrow [+|-]{0|1|2|3|4|5|6|7|8|9}\\
+
+\subsection{Syntax und Semantik}
+\label{sec:orgb6965ad}
+\begin{itemize}
+\item \emph{Syntax}: Form\\
+\item \emph{Semantik}: Bedeutung\\
+
+\item Syntak ist viel einfach festzulegen als die Semantik\\
+\item Eine Beschreibung kann zwar syntaxisch richtig sein, jedoch keinen Sinn machen\\
+\begin{itemize}
+\item Bsp. Alle lesenden Schiffe riechen gelb\\
+\end{itemize}
+
+\item zwei wichtige Semantik Fragen:\\
+\begin{enumerate}
+\item Können unterschiedliche Symbole die selbe Bedeutung haben?\\
+\item Kann ein Symbol verschiedene Bedeutungen haben?\\
+\end{enumerate}
+\item Der Kontext spielt eine wichtige Rolle\\
+\begin{itemize}
+\item z.B. haben 0012 und 12 die selbe Bedeutung? Kommt auf den Kontext drauf an\\
+\begin{itemize}
+\item Mathematik: ja\\
+\item Pin: nein\\
+\end{itemize}
+\end{itemize}
+\end{itemize}
+
+\subsection{Menge von Zahlen}
+\label{sec:org098f235}
+\begin{itemize}
+\item Klammern mit eine Box oder Anführungzeichen escapen\\
+\end{itemize}
+<intergerlist> \Leftarrow <integer>{, <integer>}\\
+<integerset> \Leftarrow \boxed{\{}[<integerlist>]\boxed{\}}
+
+\begin{itemize}
+\item Entsprechen einer Beschreibung (sind legal) wenn sie legal für alle Elemente sind\\
+\begin{itemize}
+\item müssen den Beweis nicht bis zum Ende führen, sondern können beim Erreichen eines Lemmas stoppen\\
+\end{itemize}
+\end{itemize}
+
+\subsubsection{Äquivalenz von Mengen}
+\label{sec:org240436e}
+\begin{itemize}
+\item Mehrfachnennungen und Reihenfolge sind irrelevant\\
+\item Kanonische Darstellung (geordnet von klein (links) zu gross (rechts))\\
+\begin{itemize}
+\item Kann nicht durch EBNF Regeln erzwungen werden\\
+\end{itemize}
+\item Langsam kommen EBNF Regeln an ihre Grenzen\\
+\end{itemize}
+
+<nonzero> \Leftarrow 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9\\
+<sign> \Leftarrow [+|-]\\
+<integer> \Leftarrow <sign> <nonzero> {<nonzero> | 0}\\
+
+\subsection{Graphische Darstellung von EBNF Regeln}
+\label{sec:org799f42f}
+\begin{itemize}
+\item Syntax Graph: graphische Darstellung\\
+\item Machen es leichter zu erkennen, welche Zeichen in einem Symbol (in welcher Reihenfolge) auftreten können\\
+\item Aufreigung: \(A B C D\)\\
+\begin{itemize}
+\item Durch jedes element der Reihe\\
+\begin{center}
+\includegraphics[width=.9\linewidth]{img/190927_4.jpg}
+\end{center}
+\end{itemize}
+\item Option: \([A]\)\\
+\begin{itemize}
+\item Ein element der Leiter\\
+\begin{center}
+\includegraphics[width=.9\linewidth]{img/190927_5.jpg}
+\end{center}
+\end{itemize}
+\item Wiederholung: \({A}\)\\
+\begin{itemize}
+\item entweder Kante ohne oder Kante mit Element\\
+\begin{center}
+\includegraphics[width=.9\linewidth]{img/190927_6.jpg}
+\end{center}
+\end{itemize}
+\item Auswahl: \(A | B | C | D\)\\
+\begin{itemize}
+\item Pfeil von rechts zurück nach links\\
+\begin{center}
+\includegraphics[width=.9\linewidth]{img/190927_7.jpg}
+\end{center}
+\end{itemize}
+\item Klammersetzung: \(A B | C\)\\
+\begin{itemize}
+\item Klammern sind sehr wichtig\\
+\begin{center}
+\includegraphics[width=.9\linewidth]{img/190927_8.jpg}
+\end{center}
+\end{itemize}
+\item Können einen Graphen in einen anderen einsetzen/substitutionieren\\
+\begin{itemize}
+\item interne Namen von Beschreibungen verschwinden\\
+\begin{center}
+\includegraphics[width=.9\linewidth]{img/190927_9.jpg}
+\end{center}
+\end{itemize}
+\item Können von einem Graphen auf legale Symbole zurückführen oder sogar die Beschreibung mit den Regeln rekonstruieren\\
+\end{itemize}
+
+
+\section{2.0 Einfach Java Programme}
+\label{sec:org7475015}
+\subsection{EBNF}
+\label{sec:org36aece4}
+\begin{itemize}
+\item Hält die Synatx der Regeln von Java fest\\
+\item Namen / identifier:\\
+\begin{itemize}
+\item mind. 1 Zeichen lang\\
+\item mit Buchstaben anfangen [a-zA-Z]\\
+\item kann Buchstaben und Ziffern enthalten\\
+\end{itemize}
+\end{itemize}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=.9\linewidth]{img/190924_1.jpg}
+\caption{Java Regeln}
+\end{figure}
+
+\subsection{Einleitung}
+\label{sec:org5bce39f}
+\begin{itemize}
+\item Programm besteht aus mind einer Klasse, mind einer Methode \(main\) und einer Reihe von Answeisungen\\
+\item Wir müssen uns strikt an die Anweisungen halten, sonst gibt es Probleme beim kompolieren \(\rightarrow\) Error Message\\
+\begin{itemize}
+\item nicht alle Fehlermeldungen sind intuitiv\\
+\end{itemize}
+\item jshell erlaubt das ausführen von Code wie in einer Hauptclass und Main Methode\\
+
+\item Bestimmte Namen sind durch Java reserviert und dürfen nicht vorkommen\\
+\end{itemize}
+
+\subsubsection{Classe}
+\label{sec:org8560afb}
+\begin{itemize}
+\item nur eine \(class\) pro Datei (fürs Erste)\\
+\item Name/Bezeichner der \(class\) gleich Name der Datei\\
+\item Konvention: UpperCamelCase\\
+\begin{center}
+\includegraphics[width=.9\linewidth]{img/190924_2.jpg}
+\end{center}
+\end{itemize}
+\subsubsection{Methode}
+\label{sec:orgbb155a6}
+\begin{itemize}
+\item \(public static void main\) muss zwingen in einer Klasse vorkommen\\
+\item \(main\) muss denn auszufürenden Code beinhalten\\
+\item Konvention lowerCamelCase\\
+\begin{center}
+\includegraphics[width=.9\linewidth]{img/190924_3.jpg}
+\end{center}
+\item \(println\) Java Medhode/Funktion\\
+\begin{itemize}
+\item gibt Strings aus mit neuer Zeile\\
+\end{itemize}
+\item \(print\)\\
+\begin{itemize}
+\item gibt String aus ohne neue Zeile\\
+\end{itemize}
+\end{itemize}
+\subsubsection{\(String\)}
+\label{sec:orgc8e68bf}
+\begin{itemize}
+\item Text zwischen Anführungszeichen "bla"\\
+\item Folge von Buchstaben\\
+\item Darf nur eine Zeile lang sein\\
+\item Darf keine Anführungzeichen beinhalten\\
+\item Sonderzeichen\\
+\begin{itemize}
+\item Ersatzdarstellungen (escape sequences)\\
+Startet mit Backslash\\
+\begin{itemize}
+\item \(\n\) new line character\\
+\item \(\t\) Tab character\\
+\item \(\"\) Quotation mark characeter\\
+\item \(\\\) Backslash character\\
+\end{itemize}
+\end{itemize}
+\end{itemize}
+
+\subsubsection{Kommentare}
+\label{sec:org586061e}
+\begin{itemize}
+\item Notizen im Programmcode\\
+\begin{verbatim}
+// Text bis zum Ende der Zeile
+/* Text bis zum 
+naechsten
+*/
+\end{verbatim}
+\begin{itemize}
+\item Verwendung:\\
+\begin{itemize}
+\item Anfang des Programms\\
+\begin{itemize}
+\item Zweck\\
+\item Algorithmus\\
+\item Author\\
+\end{itemize}
+\item Anfang jeder Methode\\
+\item Wenn Code nicht direkt verständliche\\
+\begin{verbatim}
+/* 
+ * Author: Ein Student; Herbst 2016, Uebung 1
+ * Entwurf uebernommen von einer Frau XXXX (Assistentin) 
+ */
+\end{verbatim}
+\end{itemize}
+\end{itemize}
+\begin{center}
+\includegraphics[width=.9\linewidth]{img/190924_4.jpg}
+\end{center}
+\end{itemize}
+
+\subsection{2.1 Methoden}
+\label{sec:orgb24fbaa}
+\begin{itemize}
+\item Folge von strukturierten Anweisungen mit Namen\\
+\item Wiederholungen können vermieden werden\\
+\item \(static\)\\
+\begin{itemize}
+\item gibt der Methode weitere Eigenschaften\\
+\item \(main\) ist \(static\)\\
+\item \(main\) wird automatisch aufgerufen\\
+\end{itemize}
+\item Methoden finden, die Teilprobleme lösen\\
+\begin{itemize}
+\item Teilprobleme einzeln lösen\\
+\end{itemize}
+\item Müssen \emph{deklariert} werden, befor sie aufgerufen wrden können\\
+\item Mehrfachaufruf möglich\\
+\item Folge der Ausführungen wird \emph{control flow} genannt\\
+\begin{itemize}
+\item Zuerst wird die Methode komplet ausgeführt, erst dann wird zurück zur Aufrufermethode gegangen\\
+\(\Rightarrow\) geradliniger Kontrollflow\\
+\item Anweisungsreihenfolge ist explizit\\
+\begin{itemize}
+\item Control flow kann aktiv geändert werden\\
+\end{itemize}
+\begin{center}
+\includegraphics[width=.9\linewidth]{img/190927_11.jpg}
+\end{center}
+\end{itemize}
+\item Anordnung der Methoden in der Class ist irrelevant\\
+\end{itemize}
+
+\subsection{2.2 Typen und Variable}
+\label{sec:org5770744}
+\subsubsection{Typen}
+\label{sec:orgc4dfdd5}
+\begin{itemize}
+\item Beschreiben Eigenschaften von Daten\\
+\item Haben Auswirkung auf:\\
+\begin{itemize}
+\item Darstellung der Werte\\
+\item mögliche Operationen\\
+\end{itemize}
+\item Sagen wie Daten im Computer gespeichert sind\\
+\begin{itemize}
+\item Intern wird alles in Binär gespeichert\\
+\item Definiert durch eine Tabelle (Ähnlich wie ASCII)\\
+\end{itemize}
+\item ist ein Binärstring \(01100001\) nun eine Zahl \(97\) oder ein Zeichen \(a\)?\\
+\begin{itemize}
+\item Datentyp gibt nötige Zusatzinformation\\
+\end{itemize}
+\item Tatentypen sollten immer explizit angegeben werden\\
+\begin{itemize}
+\item Compiler kann auch selbstständig den Typ herausfinden, ist jedoch nicht so empfolen\\
+\end{itemize}
+\item Vrhinden Fehler\\
+\item Erlauben Optimierungen\\
+\item Von wo kommen Typen\\
+\begin{itemize}
+\item in der Sprache Definierte Type (\emph{primitive types})\\
+\begin{table}[htbp]
+\caption{Primative Types}
+\centering
+\begin{tabular}{ll}
+Name & Beschreibung\\
+\hline
+int & ganze Zahlen\\
+long & ganze lange Zahlen\\
+double & reelle Zahlen\\
+char & einzelne Buchstaben\\
+characterboolean & logische Werte\\
+\end{tabular}
+\end{table}
+\item Typen aus Bibliotheken\\
+\item Benutzer-definierte Typen\\
+\end{itemize}
+
+\item Werte haben einen (festen) Typen\\
+\begin{itemize}
+\item \(TypeA \bigdot TypeA \rightarrow TypeA\)\\
+\begin{itemize}
+\item z.b. \(14 / 3 = 4\)\\
+\end{itemize}
+\end{itemize}
+\end{itemize}
+
+\begin{enumerate}
+\item Ausdrücke (Expressions)
+\label{sec:orgd675276}
+\begin{itemize}
+\item Ein Wert (\emph{literal value}), Operanden, Operatoren oder eine kombination von mehreren sind Ausdrücke für einen Typen\\
+\item Werden während der Ausführung ausgewertet\\
+\begin{center}
+\includegraphics[width=.9\linewidth]{img/190927_12.jpg}
+\end{center}
+\end{itemize}
+
+\item Operatoren
+\label{sec:org9f35136}
+\begin{itemize}
+\item Verknüpfen Werte oder Ausdrücke\\
+\begin{itemize}
+\item + Addition\\
+\item - Subtraktion\\
+\item * Multiplikation\\
+\item / Division\\
+\item \% Modulo\\
+\begin{itemize}
+\item gibt den Rest der int division zurück\\
+\end{itemize}
+\end{itemize}
+\end{itemize}
+
+\item Assoziativität
+\label{sec:orgfdc9a1d}
+\begin{itemize}
+\item Bestimmt welche Elemente ein Operand verbindet\\
+\item \(a \bigodot b \bigodot c\)\\
+\begin{itemize}
+\item Rechtsassoziativ: \(a \bigodot (b \bigodot c)\)\\
+\item Linksassoziativ: \((a \bigodot b) \bigodot c\)\\
+\end{itemize}
+
+\item die meisten bekannten Operatoren sind Linksassoziativ\\
+\end{itemize}
+
+\item Rangordnung (\emph{Precedence})
+\label{sec:org620938c}
+\begin{itemize}
+\item Bestimmt welche Operatoren in welcher Reihenfolge ausgeführt werden\\
+\item Rangordnung von \(\bigodot\) und \(\bigotimes\) entscheidet wenn ein Ausdruck mehrere Operanden \(X, Y, Z\) hat\\
+\end{itemize}
+
+\item Operanden und Operatoren
+\label{sec:org45949fc}
+\begin{itemize}
+\item Ausführ Reihenfolge bei vorkommen von mehreren Operatoren\\
+\begin{itemize}
+\item Rangordnung\\
+\item Assoziativität\\
+\item von links nach rechts\\
+\end{itemize}
+
+\item mit Klammern kann eine Abweichung von diesen Regeln erzwungen werden.\\
+\begin{center}
+\includegraphics[width=.9\linewidth]{img/190926_1.jpg}
+\end{center}
+\end{itemize}
+
+\item \(Long\)
+\label{sec:org4dfda6d}
+\begin{itemize}
+\item löst das Problem von \(int\) (Grosse Zahle verhalten sich "komisch")\\
+\begin{itemize}
+\item kann aber auch überfordert werden\\
+\end{itemize}
+\item Durch anfügen von \(L\) ans Ende der Zahl wird die Zahl als \(Long\) definiert\\
+\end{itemize}
+
+\item \(Double\)
+\label{sec:orgb3f8088}
+\begin{itemize}
+\item Reelle Zahlen\\
+\item durch hinzuführen von \$.\$ oder \$.0\$ zu einer ganzen Zahl,  macht sie zu \(Double\)\\
+\end{itemize}
+
+\item Kombinieren von Ausdrücken und Typen
+\label{sec:org715a9d1}
+\begin{itemize}
+\item \(Int\) oder \(Long\) und \(Double\) werden kombiniert zu \(Double\)\\
+\begin{itemize}
+\item \(double \bigodot intOrLong) \rightarow  double\)\\
+\end{itemize}
+\item Wird in einem Audruck für jede Operation einzeln gemacht\\
+\begin{itemize}
+\item dabei wird die Rangordnung und Assoziativität beachtet\\
+\end{itemize}
+\end{itemize}
+
+\item Umwandlung von Typen
+\label{sec:org33e5bc8}
+\begin{itemize}
+\item implizit: Durch kompination von Typen\\
+\item explizip: durch type cast\\
+\begin{itemize}
+\item cast bezieht sich nur auf den Ausdruck direkt dahinter (Rechtsassoziativ)\\
+\begin{itemize}
+\item \((type) expression\)\\
+\end{itemize}
+\item höhere Rangordnung als Arithmetische Operatoren\\
+\end{itemize}
+\end{itemize}
+
+\item String Operatoren
+\label{sec:orge6e6c52}
+\begin{itemize}
+\item \(+\) Operator verkettet (\emph{concatenation}) \(Strings\)\\
+\item Zahlen werden automatich zu \(String\) konvertiert wenn man den Operator für \(String\) und Zahl verwendet\\
+\end{itemize}
+\end{enumerate}
+
+\subsubsection{Variabeln}
+\label{sec:org433a780}
+\begin{itemize}
+\item Name der es erlauft, auf einen gespeicherten Wert zuzugreifen\\
+\item verhindert Wiederholungen und doppeltes Berechnen\\
+\item Ablauf\\
+\begin{itemize}
+\item Deklaration: gibt Name und Typ an\\
+\begin{itemize}
+\item Reserviert Speicher für den Wert\\
+\(int myNumber;\)\\
+\begin{center}
+\includegraphics[width=.9\linewidth]{img/190927_13.jpg}
+\end{center}
+\end{itemize}
+\item Zuweisung(\emph{Assignment}): speichert einen Wert in der Variabel\\
+\begin{itemize}
+\item mittels \(=\) Zeichen\\
+\(myNumber = 5;\)\\
+\begin{center}
+\includegraphics[width=.9\linewidth]{img/190927_14.jpg}
+\end{center}
+\item Wiederholte Zuweisungen sind erlaubt\\
+\end{itemize}
+\item Gebrauch: in einem Ausdruck durch aufrufen des Variabelnamen\\
+\end{itemize}
+
+\item Deklaration und Zuwesung separat oder auch kombiniert in einer Zeile erfolgen\\
+\(int x = 5;\)\\
+\begin{center}
+\includegraphics[width=.9\linewidth]{img/190927_15.jpg}
+\end{center}
+
+\item Java ist passed by Value\\
+\item Können nur Werte ihres Types speichern\\
+\end{itemize}
+
+\subsection{2.3 Schleifen}
+\label{sec:orgb9618c5}
+\begin{itemize}
+\item Wiederholtes Ausführen von Anweisungen\\
+\end{itemize}
+
+\subsubsection{\(for\) Schleife}
+\label{sec:orgcab001c}
+\begin{itemize}
+\item wird einmal Inizialisiert\\
+\begin{itemize}
+\item legt die Variabel (Zählervariabel) der Schleife fest (\emph{loop counter})\\
+\end{itemize}
+\item solange \(Test\) true wird folgendes Wiederholt\\
+\begin{itemize}
+\item \(Statements\)\\
+\item \(Update\)\\
+\end{itemize}
+\end{itemize}
+\begin{center}
+\includegraphics[width=.9\linewidth]{img/190927_16.jpg}
+\end{center}
+
+\begin{itemize}
+\item Loop Counter muss sich ändern sonst terminiert der Loop nie\\
+\end{itemize}
+\begin{center}
+\includegraphics[width=.9\linewidth]{img/190927_17.jpg}
+\end{center}
+
+\begin{itemize}
+\item Können verschachtelt sein\\
+\end{itemize}
+
+\subsection{2.4 Methoden mit Parameter}
+\label{sec:orgff2dd8e}
+\begin{itemize}
+\item Parameter: Ein Wert den eine aufgerufene Methode von der aufrufenden Methode erhält\\
+\item Parametrifizierung: mit Parametern versehen\\
+\item Parameter werden mit Datentyp bei der Methoden Deklaration angegeben\\
+\begin{itemize}
+\item \textbf{Alle} Parameter müssen im richtigen Datentyp gegeben werden\\
+\end{itemize}
+\item Parameter werden beim Aufrufen der Methode übergeben\\
+\item Parameter in der Deklaration heisst Formaler Parameter (\emph{Formal Parameter})\\
+\item Der tatsächlich übergebene Wert heisst tatäschlicher Parameter (\emph{Actual Parameter}) oder Argument\\
+\item Argument wird in der Methode in einer Parameter Variable gespeichert\\
+\item Die Methode erhält lediglich den Wert und hat z.B. keine Referenz zur Variabel von wo der Wert kommt\\
+\begin{itemize}
+\item Die Variabel die übergeben wurde kann sich nicht ändern, da die Methode keine Referenz zu ihr hat\\
+\item Parameter der Basistypen werden bei der Übergabe kopiert (\emph{Value Semantics})\\
+\end{itemize}
+\end{itemize}
+
+
+\subsection{2.5 if Anweisungen}
+\label{sec:org58bc863}
+\begin{itemize}
+\item erlauben Verzweigungen\\
+\item if Block nur ausgeführt, wenn ein bestimmter Test wahr ist\\
+\begin{itemize}
+\item else Block wird ansonnsten ausgeführt\\
+\end{itemize}
+\item Vergleichsketten sind in Java nicht erlaubt \sout{\(2 <= x <= 10\)}\\
+\item Operatoren \&\&, || und ! um Aussagen zu verbinden\\
+\item Pfade:\\
+\begin{itemize}
+\item Genau ein Pfad: if, else if, else\\
+\item o oder 1 Pfad: if, else if, else if\\
+\item 0, 1, oder viele: if, if, if\\
+\end{itemize}
+\end{itemize}
+
+\subsection{Boolean}
+\label{sec:org36b6a60}
+\begin{itemize}
+\item können nur wahr oder falsch sein\\
+\item ein Vergleich ist ein Boolischer Ausdruck\\
+\item werden mit boolischen Operatoren kombiniert\\
+\item werden in Tests nicht mit true oder false verglichen\\
+\begin{itemize}
+\item \sout{isTrue == true}\\
+\end{itemize}
+\item werden von links nach rechts folgend ihrer Preszendenz ausgewertet\\
+\item Bedingte Auswertung\\
+\begin{itemize}
+\item Java beendet die evaluation sobald ein teil des Tests falsch ist\\
+\item (false \&\& egalWasHierSteht) -> egalWasHierSteht wird nicht ausgewertet\\
+\end{itemize}
+\end{itemize}
+
+
+\subsection{{\bfseries\sffamily TODO} 2.X Einschub Input}
+\label{sec:orgae41e05}
+\begin{itemize}
+\item Liest Input von der Konsole\\
+\item Standard Input: Vordefiniertes Inputfenster\\
+\begin{itemize}
+\item \emph{System.in}\\
+\end{itemize}
+\item Standard Output: Vordefiniertes Outputfenster\\
+\begin{itemize}
+\item \emph{System.out}\\
+\end{itemize}
+\item Normalerweise int Input- und Outputfenster das selber\\
+\item Output ist einfacher als Input\\
+\begin{itemize}
+\item Da man nicht weis was der Benutzer alles eingibt?\\
+\end{itemize}
+\item \emph{Scanner} erlaubt Services um von der Konsole zu lesen\\
+\begin{itemize}
+\item Erlaubt Input von unterschiedlichen Quellen (Datei, Konsole, Webseite\ldots{})\\
+\item Kommt von Bibliotheke \emph{java.util}\\
+\item Import mit /import java.util.*;\\
+\item Scanner constuction: \emph{Scanner name = new Scanner(System.in);}\\
+\item Wartet bis der User "ENTER" oder "RETURN" clickt\\
+\end{itemize}
+\end{itemize}
+
+
+\begin{center}
+\begin{tabular}{ll}
+Methode & Description\\
+\hline
+nextInt() & reads an Int from the user and returnss it\\
+nextDouble() & reads a Double from the user\\
+next() & reads a one-word String from the user\\
+nextLine() & reads a one-line String from the user\\
+\end{tabular}
+\end{center}
+
+\begin{itemize}
+\item Fordern (\emph{prompt}) the User auf eine Eingabe zu machen\\
+\item \emph{nextInt()} liest eine Folge von Ziffern (Token) und wandelt diese in einen Int um\\
+\begin{itemize}
+\item Tokens werden durch \emph{whitespaces} getrennt (\emph{space}, \emph{tab}, \emph{new line})\\
+\end{itemize}
+\end{itemize}
+
+
+\begin{verbatim}
+  System.out.print("Wie alt sind Sie? "); // prompt
+int alter = console.nextInt();
+System.out.println("Ihre Eingabe " + alter);
+\end{verbatim}
+
+
+\subsection{{\bfseries\sffamily TODO} Strings}
+\label{sec:org166cb94}
+\begin{itemize}
+\item Zugriff auf die Buchstaben mittels Index\\
+\begin{itemize}
+\item Startet mit Index 0\\
+\item Buchstaben sind vom Basistyp \emph{char}\\
+\end{itemize}
+\item Ein String ist kein Array\\
+\item Sind sehr wichtig und werden vom Compiler daher anders behandelt\\
+\end{itemize}
+
+
+\begin{center}
+\begin{tabular}{ll}
+Methode & Description\\
+\hline
+charAt(index) & Character at index\\
+indexOf(str) & index where the start of the given string appears. If not found -1\\
+length() & nunber of characters in this string\\
+substring(index1, index2) & the characters in this string from index1 (inclusive) to index2 (exclusive)\\
+substring(index1) & grabs till end of string\\
+toLowerCase() & a new String with all lowercase lettes\\
+toUpperCase() & a new String with all uppercase letters\\
+\end{tabular}
+\end{center}
+
+
+
+\subsection{2.6 Nochmals Schleifen}
+\label{sec:orgb7bb37c}
+\subsubsection{Kurzform zur Aktualisierung des Loop Counters}
+\label{sec:orgcbc01b2}
+Increment oder decrement um 1 ist sehr häufig\\
+\begin{itemize}
+\item \(i = i + 1 \Rightarrow i ++\)\\
+\begin{itemize}
+\item \(i++\) wird zuerst verwendet, danach erhöht.\\
+\(y = x++; \Rightarrow temp = x; x = x + 1; y = temp;\)\\
+\item Diese Operatioen sind nicht so effizient wie man denken könnte und führen zu verwirrung und Fehler\\
+\end{itemize}
+
+\item \(i = i + 1 \Rightarrow i += 1\)\\
+
+\item Increments in einer \(||\) und \(&&\) expression sind gefährlich, denn diese werden nicht zwingend ausgeführt\\
+\begin{itemize}
+\item \((ex1 || ex2) \neq (ex2 || ex1)\)\\
+\end{itemize}
+\end{itemize}
+
+\subsubsection{Schleifen Probleme}
+\label{sec:org09a1abb}
+Wir wollen alle Zahlen, kommagetrennt bis \(n\) ausgeben.\\
+\begin{itemize}
+\item Verhindern das ein Komma am Schluss kommt\\
+\item Lösung:\\
+Wir Printen den erste Fahl ausserhalb des Loops und dann immer eine Komma, gefolgt von der Zahl. Oder können auch den letzten Fall am Ende nach dem Loop Printen\\
+\item \emph{off-by-one} Error ist sehr läufig\\
+Loop wurde einmal zuviel ode zu wenig ausgeführt\\
+\end{itemize}
+
+\subsubsection{Terminierung von Loops}
+\label{sec:orgdca50be}
+\begin{enumerate}
+\item while Schleife
+\label{sec:org6f86046}
+\begin{itemize}
+\item unkestimmte Schleife (\emph{idefinite loop}): Anzahl der Ausführungen ist im voraus nicht bekannt\\
+\begin{center}
+\includegraphics[width=.9\linewidth]{img/191004_1.jpg}
+\end{center}
+
+\item Sentinel: Ein Wert der das Ende einer Reihe anzeigt\\
+\begin{itemize}
+\item While loop wird terminiert sobald der sentinel eingegeben wird\\
+\end{itemize}
+
+\item do-wile löst das Problem das etwas bei eingabe eines sientinels nochmals eingegeben wird\\
+\end{itemize}
+\end{enumerate}
+
+\subsection{2.7 Rückgabe für Methoden}
+\label{sec:orgfd3f221}
+\begin{itemize}
+\item erlaubt kommunikation zwischen Aufrufer und Methode\\
+\item \emph{Return value} wird an Aufrufer gegeben\\
+\item \emph{return} gibt die Expression zurück und beendet die Methode\\
+\begin{itemize}
+\item kann auch keinen Wert zurückgeben\\
+\end{itemize}
+\item Typ muss stimmen\\
+\item Bei verschachtelten If/Else macht der Kompiler manchmal blöd wenn ein If nur true sein kann.\\
+\end{itemize}
+
+\subsection{2.8 Sichtbarkeit von Vaiablennamen}
+\label{sec:org0dfdd60}
+\begin{itemize}
+\item Sichtbarkeit (\emph{Scope})\\
+\item Variabeln müssen deklariert sein bevor sie sichtbar sind\\
+\item Sichtbar von Deklaration bis zum Ende des Blocks für den die Variable deklariert ist\\
+\begin{itemize}
+\item Block ist durch \{ und \} begrenzt\\
+\end{itemize}
+\end{itemize}
+
+
+\section{3.0 Arrays}
+\label{sec:org232b73c}
+\begin{itemize}
+\item Sind Objekte\\
+\item Mehrere Werte des selben Typs speichern\\
+\item Element: Wert eines Array\\
+\item Index: Zahl un ein Element des Arrays auzuwählen\\
+\item Base: Erste Element hat Index 0\\
+\begin{verbatim}
+type[] name = new type[length];
+\end{verbatim}
+\item Länge kann eine beliebiger int sein\\
+\item Länge kann auch implizit gegeben sein durch die Anzahl elemente bei der Zuweisung\\
+\item Anhängig von Typ wird der Array mit unterschiedlichen defaultwerten initiaisiert\\
+\item Zugriff via Index:\\
+\begin{verbatim}
+name[index]; // Access
+name[index] = value; // assign
+\end{verbatim}
+\item Legaler index zwischen 0 und lenght -1\\
+\item \(name.length\) liefert die Anzahl Elemente des Arrays\\
+\item werden häufig zusammen mit Schleifen verwendet\\
+\item Methoden\\
+\begin{center}
+\begin{tabular}{ll}
+binarySearch(array, value) & returns the index of the given value in a sorted array (or < 0 if not found)\\
+copyOf(array, length) & returns a new copy of an array\\
+equals(array1, array2) & returns true if the two arrays contain same elements in the same order\\
+fill(array, value) & sets every element to the given value\\
+sort(array) & arranges the elements into sorted order\\
+toString(array) & returns a string representing the array, such as "[10, 30, - 25, 17]"\\
+\end{tabular}
+\end{center}
+\item Bei der Übergabe von Arrays al Paameter oder als Return wert müssen wir [] Klammern verwenden\\
+\end{itemize}
+
+\section{4.0 Klassen und Objekte}
+\label{sec:orgaf1ffc5}
+\subsection{4.1 Klassen}
+\label{sec:orgbeccfa2}
+\begin{itemize}
+\item wird mit Keyword \emph{class} definiert\\
+\item Bieten einen \emph{Service} an\\
+\item Typen von Klassen\\
+\begin{itemize}
+\item Namenloser Dienst\\
+\begin{itemize}
+\item wird geladen und ausgeführt\\
+\end{itemize}
+\item Mit Namen ausgewählter Dienste\\
+\item Eigene Klassen\\
+\end{itemize}
+\item Beschreibt einen Typ\\
+\item Referenzvariabel verweist auf ein Objekt\\
+\item Objekt ist der Sammelbegriff aller Datenwerte die durch eine Klasse beschrieben werden\\
+\begin{itemize}
+\item wird erschaffen\\
+\begin{itemize}
+\item wird durch \emph{new} operator gemacht, oder durch eine Initialisierung\\
+\begin{verbatim}
+String s; int counter;
+s = "hello " + counter;
+\end{verbatim}
+\end{itemize}
+\end{itemize}
+\item Vergleichsoperatoren funktionieren nicht für Objekte\\
+\begin{itemize}
+\item \("Hello" == "Hello" \Rightarrow false\)\\
+\item \emph{equals} wird stattdessen verwend\\
+\begin{center}
+\begin{tabular}{ll}
+equals(str) & whether two strings contain the same characters\\
+equalsIgnoreCase(str) & whether two strings contain the same characters, ignoring upper vs. lower case\\
+startsWith(str) & whether one contains other's characters at start\\
+endsWith(str) & whether one contains other's characters at end\\
+contains(str) & whether the given string is found within this one\\
+\end{tabular}
+\end{center}
+\end{itemize}
+\end{itemize}
+
+\subsection{Referenzvariabel}
+\label{sec:orgd2ba881}
+\begin{itemize}
+\item Referenzvariabel (\emph{reference type variable})\\
+\item verweisen immer auf das selbe Objekt\\
+\item bei der Zuweisung muss jedoch der Typ stimmen\\
+\item wenn einer Referenzvariabel eine neue Referenzvariabel assigned wird, geht der initiale Wert verlohren(er existiert jedoch weiter im Speicher)\\
+\item Diese "verlohreren" Werte werden automatisch gelöscht\\
+\item Änderung der Referenzvariabel ändert die originale Variabel\\
+\end{itemize}
+
+\subsection{Value Semantics}
+\label{sec:org4eca990}
+\begin{itemize}
+\item Passed by Value\\
+\item trifft für die Primitive Types zu (int, boolean etc.)\\
+\end{itemize}
+
+\subsection{Reference Semantics}
+\label{sec:org5ff5cdb}
+\begin{itemize}
+\item Passed by Reference (gibt es eigentlich nicht in Java, aber irgendwie trotzdem)\\
+\item Erlauben einer Methode den Parameter direkt zu bearbeiten ohne diesen zu kopieren\\
+\begin{itemize}
+\item Updates in place\\
+\end{itemize}
+\item Sparen Zeite und Platz\\
+\item Funktioniert mit Objekten\\
+\end{itemize}
+
+\subsection{4.4 Attribute}
+\label{sec:org6dcd374}
+\begin{itemize}
+\item Variabel (\emph{field}) innerhalb eines Objects\\
+\item Zugriff via Referenzvariabel\\
+\item "null" kann verwendet werden um Referenzvariabeln zurückzusetzen\\
+\item Dereferenzieren (\emph{dereference}) wia Dotnotation durch Referenzvariabel auf Wert zugreifen\\
+\end{itemize}
+
+\subsection{4.5 Methoden}
+\label{sec:org8f64edc}
+\begin{itemize}
+\item Instanzmethode existiert innerhalb jedes Objekts einer Klasse und beschreibt das Verhalten eines Objects\\
+\item Impliziter Parameter: Das Objekt für das die Methode aufgerufen wird\\
+\begin{itemize}
+\item wird immer übergeben\\
+\item System weiss nicht wie ein Objekt gedruckt werden soll. Eine custom printmethode löst das Problem\\
+\begin{itemize}
+\item "toString()" wird immer verwendet wenn ein nicht String resp nicht primitive Type gedruckt wird\\
+\end{itemize}
+\end{itemize}
+\item Accessor Methode wird verwendet um auf den Zustand eines Objekts zuzugreifen\\
+\begin{itemize}
+\item Read-only method\\
+\end{itemize}
+\item Mutator Method wird verwendet um den Zusatand eines Objekts zu verändern\\
+\end{itemize}
+
+\subsection{4.6 Konstruktor}
+\label{sec:orga586227}
+\begin{itemize}
+\item Wird durch "new" verwendet um ein neues Objekt zu erstellen\\
+\item Wir geben die Werte für die Attribute direkt mit bei der Initialisierung\\
+\begin{itemize}
+\item Der Kustruktor verarbeitet diese Parameter\\
+\end{itemize}
+\item Der Konstruktor hat keinen Typen, resp der Typ ist der Name der Klasse\\
+\item Der Konstruktor ist keine Methode\\
+\item Attribute die nicht durch Konstruktor gesetzt werden bekommen den Wert null\\
+\item Wir können mehrere Konstruktoren haben, jedoch dürfen sie nicht die slebe Anzahl Parameter haben\\
+
+\item in line if/Else: booleanExpression ? expression1 : expression2\\
+\end{itemize}
+
+\subsection{4.7 Sichtbarkeit für Attribute}
+\label{sec:org8ec9ef0}
+\begin{itemize}
+\item Encapsulation\\
+\begin{itemize}
+\item Objekte haben einen Zustand, nicht nur Klasse\\
+\item Können angeben von wo man auf welches Attribut zugreifen kann\\
+\begin{itemize}
+\item private: nicht von ausserhalb der Klasse zugreiffbar\\
+\begin{itemize}
+\item Zugriff von Accessor und Mutator Methoden geht\\
+\end{itemize}
+\end{itemize}
+\end{itemize}
+\item Bei Namenskonflikten "gewinnt" die innerte deklaration.\\
+\item \emph{this} verweis innerhalb einer Methode auf das Objekt selbst\\
+\begin{itemize}
+\item kann auch innerhalb eines Konstruktors auf einen anderen Konstruktor zugreifen \emph{this(parameter1, parameter2)}\\
+\end{itemize}
+
+\item Shaddowing:\\
+\begin{itemize}
+\item zwei Veriabeln den selben Namen\\
+\item Illegar in Java, ausser für Attribute\\
+\end{itemize}
+
+\item public macht etwas von überall her sichtbar\\
+\end{itemize}
+
+\subsection{4.8 Static Methoden und Variabeln}
+\label{sec:org6c94181}
+\begin{itemize}
+\item Modul\\
+\begin{itemize}
+\item Kein eigenständiges Programm, sondern wird von einem anderen Programm verwendet.\\
+\item Kein Mail Methode\\
+\item Wird via die Klassenreferenz verwendet\\
+\end{itemize}
+\item static ist eine Ausnahme, normal ist mit Attributen\\
+\item Leicht die übersicht zu verlieren\\
+\begin{itemize}
+\item wenig Gründe für static\\
+\begin{itemize}
+\item z.b. bei final (Wert kann nach einmal setzten nicht mehr verändert werden)\\
+\end{itemize}
+\end{itemize}
+\item static sollte private oder final sein für attribute\\
+\item statische Methoden dürfen nicht this verwenden!\\
+\begin{itemize}
+\item Objektattribute können nicht gelesen/geschrieben werden\\
+\end{itemize}
+\end{itemize}
+
+
+\section{Einschub Random und Math}
+\label{sec:orgd1e74f4}
+\subsection{Random}
+\label{sec:orgfd5e942}
+\begin{itemize}
+\item liefert Pseudozufallszahlen\\
+\item teil von java.util\\
+\begin{center}
+\begin{tabular}{ll}
+Method & Description\\
+\hline
+nextInt() & returns a random integer\\
+nextInt(max) & returns a random integer in the range [0, max)\\
+nextDouble() & returns a random real number in range [0.0, 1.0)\\
+\end{tabular}
+\end{center}
+\end{itemize}
+
+\subsection{Math}
+\label{sec:orgaa74cab}
+\begin{itemize}
+\item Sammlung von Mathe Operanden\\
+\item Teil von java.util\\
+\item auch wenn ein Returnvalue ein theoretischer Int ist, wird ein Double returned\\
+\end{itemize}
+
+\section{4.3 Klassen (selber entwickeln)}
+\label{sec:org42494f2}
+\begin{itemize}
+\item Objekte fassen zusammengehörende Daten zusammen\\
+\item Programm wird übersichtlicher und robuster\\
+\end{itemize}
+
+\subsection{4.3.1 Einleitung}
+\label{sec:orgb767301}
+\begin{itemize}
+\item Eine Art neue Typen zu beschreiben\\
+\item Objekt (object): Gebilde das Zustand (state) und Verhalten (behaviour) verbindet\\
+\begin{itemize}
+\item stellt services zur Verfügung (Methoden)\\
+\end{itemize}
+\item OOP: Program als Menge von aufeinanderwirkenden Objekte\\
+\item Klassen beschreiben Objekte\\
+\item Objekte sind Exemplate (Instances) einer Klasse\\
+\item OOP geht auch ohne Klassen, aber dies ist nicht verbreitet\\
+\end{itemize}
+
+\subsection{4.3.2 OOP in der Praxis}
+\label{sec:orge999e2d}
+\begin{itemize}
+\item grosse Softwaresysteme\\
+\item Modellierungen realter Simulationen\\
+\item Abstraktion: lassen irrelevante Sachen weg in der Klasse\\
+\item \emph{Client} verwendet eine bestimmte Klasse\\
+\item Klassen schreibt man gross\\
+\item Attribute werden wie bei Methoden übergeben\\
+\item Zugriff auf Atribute via dot dotation\\
+\end{itemize}
+
+\section{5.1 Graphische Benutzeroberfläche}
+\label{sec:org700a1f2}
+\begin{itemize}
+\item GUI: Graphical User Interface\\
+\item Thema: Input / Output I/O\\
+
+\item Vorteile GUI\\
+\begin{itemize}
+\item 2 oder 3 Dimensional\\
+\item Eingabe durch Maus/Geste\\
+\item Oft intuitiver und ansprechender\\
+\end{itemize}
+
+\item Nachteil GUI\\
+\begin{itemize}
+\item Höhere Komplexität\\
+\begin{itemize}
+\item Kontrollfluss: Programm muss immer auf den Benutzer reagieren\\
+\item Verschiedene Steuerelemente\\
+\item An Fenstergrösse anpassen\\
+\end{itemize}
+\end{itemize}
+\end{itemize}
+
+\subsection{Window}
+\label{sec:org200aff4}
+\begin{itemize}
+\item new Window("name", b, h)\\
+
+\item Window Methods\\
+\begin{center}
+\begin{tabular}{ll}
+open() & öffne Fenster\\
+close() & schliesse Fenster\\
+waitUntilClosed() & warte bis manuell geschlossen\\
+isOpen() & überprüfe ob geöffnet\\
+fillRect(x, y, h, b) & Zeichne Rechteck\\
+setColor(r, g, b) & ändere Farbe für fenster\\
+fillRect() & \\
+fillCircle() & \\
+fillOval() & \\
+fillRect(x, y, 1, 1) & Zeichnen eines pixels -> frei Zeichnen\\
+refresh() & änderungen werden angezeigt\\
+refresh(int waitTime) & wartet eine best Anzahl milisekunden\\
+refreshAndClear() & macht alles weiss und bemalt es dann wieder\\
+isKeyPressed() & \\
+isLeftMouseButtonPressed() & \\
+isRightMouseButtonPressed() & \\
+wasKeyTyped() & \\
+wasMouseButtonClicked() & \\
+getMouseX() & \\
+getMouseY() & \\
+drawRect() & \\
+drawCircle() & \\
+drawLine() & \\
+drawString() & \\
+drawImage() & \\
+drawImageCentered() & \\
+setColor() & \\
+setStrokeWidth() & \\
+setFontSize() & \\
+\end{tabular}
+\end{center}
+
+\item Input:\\
+\begin{itemize}
+\item Tasten drücken\\
+\item Mausclick\\
+\end{itemize}
+\end{itemize}
+
+
+\section{5.2 Input/Output mit Dateien}
+\label{sec:orga5f7371}
+\begin{itemize}
+\item import java.io.*;\\
+
+\item new File(fileName);\\
+\begin{itemize}
+\item Kann auch Ordner handeln\\
+\end{itemize}
+
+\item wird mit Scanner kombiniert um Files zu lesen. Dafür übergeben wir dem Scanner das File Object\\
+\begin{itemize}
+\item jedoch throwt der Scanner eine Exception welcher gehandelt werden muss\\
+\begin{itemize}
+\item falls man aus einer Dateil liest, welche nicht existiet\\
+\item mit throws kann man sagen das eine Exception nicht gefangen werden soll, resp. weitergeleitet wird -> crash\\
+\begin{itemize}
+\item public static void foo() throws type\\
+\end{itemize}
+\end{itemize}
+\end{itemize}
+\end{itemize}
+
+
+\begin{center}
+\begin{tabular}{ll}
+exists() & \\
+canRead() & \\
+getName() & \\
+length() & \\
+rename() & \\
+\end{tabular}
+\end{center}
+
+
+\begin{itemize}
+\item print(), println() kann auch zu File schreiben\\
+\begin{itemize}
+\item übergeben File Object als Parameter\\
+\item alte Datei wird überschrieben\\
+\end{itemize}
+
+\item Alle System.out können über einen Alternativen Stream ausgegeben werden\\
+\end{itemize}
+
+\section{5.3 Scanner im Einsatz}
+\label{sec:org885742c}
+\begin{itemize}
+\item jenachdem was wir für einen Typen werwarten benutzen wir eine andere lese Methode\\
+\item input cursor scannt denn input -> identifiziert ein Token (wo fängt z.B. der nächste Int an)\\
+\item Der Scanenr \emph{konsumiert} das Token (liest es ein)\\
+\item mit \$.hasNextDouble()\$ kann mit einer Schleife eine unbekannte Anzahl Daten eingelesen werden\\
+\begin{center}
+\begin{tabular}{ll}
+hasNext() & if there is a next token\\
+hasNextInt() & if next token int exists\\
+hasNextDouble() & if next token double exists\\
+\end{tabular}
+\end{center}
+\item \$.next()\$ geht zum nächsten Token ohne es zu konsumieren\\
+\item Zeilenbasierter Scanner kann verwendet werden wenn auf einer Zeile verschiedene Anzahle von verschienenen Typen existieren\\
+\begin{center}
+\begin{tabular}{ll}
+nextLine() & Returns the entire line till \n\\
+hasNextLine() & Checks if there is another line\\
+\end{tabular}
+\end{center}
+\begin{itemize}
+\item \n wird konsumiert, jedoch nicht an die Methode übergeben\\
+\end{itemize}
+\item Der Scanner auch auf einen String angewant werden\\
+\begin{itemize}
+\item Dies ist hilfreich wenn wird z.b. mit einem Scanner die Zeilen aus einem File einlesen, und ein 2. Scanner verarbeitet die Zeilen (Strings) dann\\
+\end{itemize}
+\item Wenn ein File bereits existsiert sollten wir e.v. ein neue File erstellen, da sonnst die File überschriben wird wenn der Scanner für den Output zuständig ist\\
+\end{itemize}
+
+
+\section{6.0) Arbeiten mit Objekten und Klassen}
+\label{sec:orgb1d4c91}
+\subsection{6.1) Einleigung-Datenstruktur mit Verknüpfungen}
+\label{sec:org7fb463e}
+\begin{itemize}
+\item Arrays haben eine feste Strukture, jedoch wollen wir manchmal mehr "dynamisch" arbeiten können\\
+\item Listen lösen diese Problem\\
+\item Listen mit Construktoren sind mühsam\\
+\end{itemize}
+
+
+\subsection{6.2) Entwurf von abgekapselten Klassen}
+\label{sec:org03717fd}
+\begin{itemize}
+\item System.exit(-1) wird verwendet um ein Programm zu beenden\\
+\begin{itemize}
+\item In einer return methode mussen wird ein "dummy" return einfügen damit der Compile nicht reklamiert\\
+\end{itemize}
+\item Methoden können den selben Namen haben wenn sie sich in der Parametern unterscheiden\\
+
+\item Array Vorteile:\\
+\begin{itemize}
+\item Konstante Zugriffszeit\\
+\end{itemize}
+
+\item Vorteile List\\
+\begin{itemize}
+\item Länge variabel\\
+\end{itemize}
+\end{itemize}
+
+\subsection{6.3) Hinweise und Regel für verständliche Programme}
+\label{sec:org87d5228}
+\subsubsection{Code Struktur}
+\label{sec:org5d4a82a}
+\begin{itemize}
+\item gut lesbar und kompakt\\
+\item Nicht mehr als 100 Zeichen Pro Zeile\\
+\begin{itemize}
+\item neue Zeile für jede Anweisung\\
+\item Keine unnötigen neuen Zeilen\\
+\end{itemize}
+\item Aufeinandervolgende Anweisungen untereinander\\
+\item Blöcke einrücken\\
+\item Geschweifte Klammern verwenden\\
+\item Klammern setzen\\
+\item Lange if Statements mit oder oder und auf mehrere Zeilen\\
+\item main Methode entweder zuoberst oder zuunterst\\
+\end{itemize}
+
+\subsubsection{Namen}
+\label{sec:orgf919dca}
+\begin{itemize}
+\item Nur Buchstaben und Ziffern ohne Spezialzeichen\\
+\item Klassennamen\\
+\begin{itemize}
+\item gross\\
+\end{itemize}
+\item Methodennamen\\
+\begin{itemize}
+\item klein\\
+\item Verb\\
+\end{itemize}
+\item Variabelnnamen\\
+\begin{itemize}
+\item beschreibend\\
+\end{itemize}
+\item Kurze Namen für Loopcounter\\
+\item Keine Typ/Metainformationen im Namen\\
+\end{itemize}
+
+\subsubsection{Weiteres}
+\label{sec:orgb6a0a69}
+\begin{itemize}
+\item Masseinheiten soll im Namen vorhanden sein\\
+\item Deklaration zusammen mit Initialisierung\\
+\item Bei Arrays Eckigen Klammern hiter Typ und nicht hinter Namen\\
+\item Durch Faktorisierung gemeinsame Codeelemente herausarbeiten -> Kompakterer Code\\
+\item Keine unnötigen mehrfachverechnungen in if Statements da es den Code länger macht\\
+\item Fragezeicheoperator: (test) ? value1 : value2\\
+\begin{itemize}
+\item kicht so effizient aber kompakter\\
+\end{itemize}
+\end{itemize}
+
+
+\subsubsection{Speicher und Addressen}
+\label{sec:org583dbc5}
+\begin{itemize}
+\item In 4 Digit Hex angegeben\\
+\item Addressen sind in Java "unsichtbar"\\
+\item 4 Bytes werden zu einem Wort zusammengefasst und daher sind die Addressen in 4er Schritten\\
+\item Speicher ist in verschiedene Bereich aufgeteilt:\\
+\begin{itemize}
+\item Variabeln die immer existierene: in "static data"\\
+\item durch new Operator erschaffene daten: "heap"\\
+\item aufgerufene Methoden: "Stack Frame"\\
+\begin{itemize}
+\item In einem Stack organisiert\\
+\end{itemize}
+\end{itemize}
+\item Müssen stets genügend Platz frei haben damit sich der Stack und Heap nicht überlappen\\
+\item Reference Variabel enthält Addressen des Objekt Exemplars\\
+\item Stack zeigt auf Exemplar im Heap mittels eines Pointers\\
+\begin{itemize}
+\item Gibt es Bereiche im Heap die keine Referenzen haben zählt es als garbage und wird von der garbage collection empfernt.\\
+\end{itemize}
+\item Valuesemantics und Referencesemantics wird im Kern gleich behandelt\\
+\end{itemize}
+
+
+
+
+\subsection{6.5) Mehr Optionen für Kontrolle der Sichbarkeit}
+\label{sec:orgb42e39c}
+\begin{itemize}
+\item package ist eine Ansammlung von zusammengehörenden Klassen\\
+\begin{itemize}
+\item Datei kann nur in einem Package sein\\
+\item Klassen legen fest in welcher Package sie ist\\
+\item Schaffen einen namespace um namenskonflikte zu vermeinden\\
+\end{itemize}
+\item Package -> Verzeichnis\\
+\item Klasse -> Datei\\
+\item Root des Package wird durc den Class Path, oder Ausruferverzeichnis von java gegeben\\
+\item Class Path:\\
+\begin{itemize}
+\item Path an welchem Java class Files sucht\\
+\item Konfiguriert in Eclipse\\
+\end{itemize}
+
+\item Package\\
+\begin{itemize}
+\item Deklaration\\
+\begin{itemize}
+\item Anfang der Datei\\
+\item package packageName;\\
+\end{itemize}
+\item Import\\
+\begin{itemize}
+\item import PackageName.*;\\
+\item Namenskonflikte werden unterschiedlich behandelt\\
+\end{itemize}
+\item Können auch ohne import auf Packages zugreifen\\
+\begin{itemize}
+\item Durch den vollen Namen\\
+\item packagename.className\\
+\item Praktisch um namenskonflikte zu vermeiden\\
+\end{itemize}
+\item Gliedern das Projekt\\
+\item Default Package\\
+\begin{itemize}
+\item alle Daten die nicht explizit in einem Package sind sind automatisch da\\
+\item Können nicht importiert werden\\
+\item Können nicht von anderen Klassen verwendet werden\\
+\end{itemize}
+\end{itemize}
+\item Access Modifiers:\\
+\begin{itemize}
+\item Public: in allen Klassen nach Import\\
+\item Private: nur in der Klasse selbst\\
+\item default (package). In der Klasse und allen anderen Klasse des packages\\
+\end{itemize}
+\end{itemize}
+\end{document}
