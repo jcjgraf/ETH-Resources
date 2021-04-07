@@ -363,3 +363,29 @@
 \end{itemize}
 
 \subsection{Internet Video}
+\begin{itemize}
+    \item Requirement: Good quality without rebuffering
+    \item Different viewers have different setups and therefore have different requirements
+    \ides{End-End Workflow:}
+        \begin{itemize}
+            \item Encode video in multiple qualities and resolutions
+                \begin{itemize}
+                    \item Resulting in encodings of different bitrate
+                \end{itemize}
+            \item Replicate content using CDN
+            \item Player picks appropriate quality
+                \begin{itemize}
+                    \item Manifest file gives information about available bitrates
+                    \item Clients can pick different qualities for different chunks
+                        \begin{itemize}
+                            \item Each chunk is about $1$ to $3$ seconds long
+                        \end{itemize}
+                    \ides{Capacity Estimation:} Estimate bandwidth and choose video with smaller bitrate than estimated bandwidth
+                    \ides{Buffer-Based Adaption:} Choose bitrate based on buffered duration
+                        \begin{itemize}
+                            \item Need to differentiate startup phase
+                        \end{itemize}
+                    \item Both algorithms can be combined
+                \end{itemize}
+        \end{itemize}
+\end{itemize}
