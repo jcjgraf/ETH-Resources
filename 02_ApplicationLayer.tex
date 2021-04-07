@@ -441,3 +441,47 @@
                 \end{itemize}
         \end{itemize}
 \end{itemize}
+
+\subsection{CDN}
+\begin{itemize}
+    \ides{Content Delivery Network / Content Distribution Network}
+    \item Not an application itself but used by web and video
+    \item Spread popular content among datacenters around the world
+    \item Interconnect CDN
+    \item Direct clients to CDN instead of original server
+        \begin{itemize}
+            \item Done using either:
+                \begin{itemize}
+                    \ides{DNS-Based}
+                        \begin{itemize}
+                            \item Returns different IP addresses
+                            \item Based on geo-location
+                            \item Requires rewriting of URL (I guess somehow)
+                                \icon May not result in good experience when using external DNS resolvers
+                        \end{itemize}
+                    \ides{BGP Anycast}
+                        \begin{itemize}
+                            \item Always give same IP
+                            \ipro Easy
+                            \icon Less flexible
+                            \icon Less control
+                        \end{itemize}
+                \end{itemize}
+        \end{itemize}
+    \item Two types of caching:
+        \begin{itemize}
+            \ides{Pull Caching:} Cache whatever clients request
+            \ides{Pull Replication:} Cache popular content before user request it
+        \end{itemize}
+
+    \ipro Load balancing
+    \ipro Better reliability
+        \begin{itemize}
+            \item No single source of failure
+        \end{itemize}
+    \ipro Content is closer to the client
+        \begin{itemize}
+            \item Reduce latency
+        \end{itemize}
+    \ipro Speedup uncachable data
+\end{itemize}
