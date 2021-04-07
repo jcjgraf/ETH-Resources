@@ -1,0 +1,155 @@
+%! TEX root = ./main.tex
+
+\section{Types}
+\begin{itemize}
+    \item Should prevent dangerous expressions
+        \begin{itemize}
+            \item Which cause a runtime error
+        \end{itemize}
+    \item Classification of expressions is undecidable
+    \item Type checker should offer:
+        \begin{itemize}
+            \item quick, decidable, static analysis
+            \item permit generality/re-usability
+            \item prevent runtime-errors
+        \end{itemize}
+\end{itemize}
+
+\subsection{Mini-Haskell}
+\begin{itemize}
+    \item Typing system
+    \item Subset of Haskell
+    \ides{Syntax}
+        \begin{itemize}
+            \item Programs are terms
+            \item
+\begin{align*}
+    t ::=& \underbrace{\mathcal{V}}_{\text{Variables}} \mid \underbrace{(\lambda x.t)}_{\text{lambda abstraction}} \mid \underbrace{(t_1 \ t_2)}_{\text{functions}} \mid \text{True} \mid \text{False} \mid \\
+         & (\text{iszero } t) \mid \underbrace{\mathcal{Z}}_{\text{Integers}} \mid (t_1 + t_2) \mid (t_1 * t_2) \mid\\
+         & \text{if } t_0 \text{ then } t_1 \text{ else } t_2 \mid \underbrace{(t_1, t_2)}_{\text{Pairing}} \mid (\text{fst } t) \mid (\text{snd } t)
+\end{align*}
+            \item Can easily be extended
+            \item Add syntactic sugar: Can leave out parenthesis when not necessary
+        \end{itemize}
+    \ides{Typing}
+        \begin{itemize}
+            \item Set of types $\tau :: = \underbrace{\mathcal{V}_{\tau}}_{\text{Set of Variables}} \mid \text{Bool} \mid \text{Int} \mid \underbrace{(\tau, \tau)}_{\text{Pair Constructor}} \mid \underbrace{(\tau \to \tau)}_{\text{Function Constructor}}$
+            \ides{Typing Judgement:} $\Gamma \vdash t :: \tau$
+                \begin{itemize}
+                    \ides{$\Gamma$:} Set of bindings mappings from variables to types)
+                    \ides{$t$:} Term
+                    \ides{$\tau$:} Type
+                    \item ``Based on the assignments $\Gamma$, term $t$ is of type $\tau$''
+                \end{itemize}
+            \ides{Rules}
+                \todo{Add mini Haskell rules}
+        \end{itemize}
+    \ides{Type Inference}
+        \begin{itemize}
+            \item Given term $t$ that is its type?
+            \item Algorithms:
+                \begin{enumerate}
+                    \item Start with judgement $\vdash t :: \tau_0$ where $\tau_0$ is the type variable and $t$ is the expression whose type we want to determine.
+                    \item Build derivation tree bottom-up by applying rules and collect constraints. Introduce fresh type variables if need.
+                    \item Solve constraints to get possible types.
+                \end{enumerate}
+            \item Some terms are untypeable
+                \begin{itemize}
+                    \item Type inference fails to build inference tree or solve constraints.
+                \end{itemize}
+        \end{itemize}
+    \ides{Type Proof}
+    \todo{Add Type Proof section}
+    \ides{Self Application}
+        \begin{itemize}
+            \item Apply function $f$ to itself: $\lambda f. f f$
+            \item Is not typeable
+        \end{itemize}
+    \ides{Curry-Howard Isomorphism (not examrelevant)}
+        \begin{itemize}
+            \item Type constructor '$\to$' corresponds to propositional logic connectivity '$\to$'
+            \item Atomic types correspond to propositional variables
+            \item Rules correspond to those minimal propositional logic
+        \end{itemize}
+\end{itemize}
+
+\subsection{Type Classes}
+\begin{itemize}
+    \item Defines
+        \begin{itemize}
+            \item Set of types
+            \item Set of allowed functions on these types
+        \end{itemize}
+    \ides{Monomorphic:} restricted to a single type (base type)
+    \ides{Polymorphic:} restricted by the type set (a type class)
+    \ides{Definition}
+        \begin{itemize}
+            \ides{Name:} upper-case (I guess)
+            \ides{Signature:} Function names with their type
+                \begin{itemize}
+                    \item Required to be implemented by instances of this type
+                \end{itemize}
+            \ides{Default Definition:} Definition based on other signatures
+                \begin{itemize}
+                    \item Optional
+                    \item Can be overwritten
+                \end{itemize}
+            \item 
+\begin{verbatim}
+class Eq a where -- Class Name
+    (==) :: a -> a -> Bool -- Signature
+    (/=) :: a -> a -> Bool -- Signature
+
+    x /= y = not (x == y) -- Default definition
+\end{verbatim}
+            \item To indicate that a certain type \verb+t+ if of type class \verb+Eq+ we write \verb+Eq t => t+
+        \end{itemize}
+    \ides{Instance}
+        \begin{itemize}
+            \item Application of a type class to a certain type
+            \item Elements of a class are instances
+            \item Keyword \verb+instance+ builds instances by \textit{interpreting} signature functions
+            \item Requires defining all signatures and optionally, overwrite default definitions
+            \item 
+\begin{verbatim}
+instance Eq Bool where
+    True == True   = True
+    False == False = True
+    _ == _         = False
+\end{verbatim}
+            \item Can be recursive. If \verb+t+ is of type \verb+Eq+ then so is \verb+[Eq]+
+                \begin{itemize}
+                    \item 
+\begin{verbatim}
+instance Eq t => Eq [t]  where
+    []     == []     = True
+    (x:xs) == (y:ys) = x == y && xs == ys
+    _      == _      = False
+\end{verbatim}
+
+                \end{itemize}
+        \end{itemize}
+\end{itemize}
+
+\subsubsection{Derived Classes and Class Hierarchies}
+\begin{itemize}
+    \item Type classes can build on top of other type classes.
+    \item If \verb+a+ belongs to the child type it must also belong to the parent type
+    \item All function of the parent type are inherited and some new ones (may be) added
+    \item
+\begin{verbatim}
+class Eq a => Ord a where... 
+\end{verbatim}
+\end{itemize}
+
+\subsection{Overloading}
+\begin{itemize}
+    \item Execution of parametric polymorphic functions independent  of type of arguments
+    \item Classes implements \textit{ad hoc} polymorphism
+    \item Selection of function definition is either
+        \begin{itemize}
+            \item At compile time if types are knows
+            \item else, at runtime 
+        \end{itemize}
+    \todo{I am not sure what this all means}
+\end{itemize}
