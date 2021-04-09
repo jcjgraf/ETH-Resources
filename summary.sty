@@ -8,8 +8,23 @@
 \usepackage{fancyhdr}
 %\usepackage{shortvrb}
 %\MakeShortVerb`
+
 \usepackage{enumitem}
+
+% Make list compact
 \setlist{nolistsep}
+
+% Increase listing depth
+\setlistdepth{20}
+\renewlist{itemize}{itemize}{20}
+
+% initially, use dots for all levels
+\setlist[itemize]{label=$\cdot$}
+
+% customize the first 3 levels
+\setlist[itemize,1]{label=\textbullet}
+\setlist[itemize,2]{label=--}
+\setlist[itemize,3]{label=*}
 
 \usepackage{geometry}
 \geometry{paper=a4paper,left=32mm,right=23mm,top=35mm, bottom=35mm}
