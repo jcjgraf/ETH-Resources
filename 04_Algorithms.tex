@@ -1,0 +1,137 @@
+%! TEX root = ./main.tex
+
+\section{Algorithms}
+
+\subsection{Algorithms}
+\begin{itemize}
+    \ides{Max-Flow Min-Cut}
+        \begin{itemize}
+            \ides{Max-Flow Size:} How much traffic can a network carry
+            \ides{Min-Cut Size:} How reliable is a network
+            \item Ford-Fulkerson
+            \ides{Multi-commodity-flow (MCF):} Many different sources with different destinations
+                \begin{itemize}
+                    \item Requires specialized algorithms
+                \end{itemize}
+        \end{itemize}
+    \ides{Matching}
+        \begin{itemize}
+            \item Analogous to finding circuits in networks
+                \begin{itemize}
+                    \item E.g. inside a switch of optical fibers
+                \end{itemize}
+            \item Can solve by max-flow
+        \end{itemize}
+    \ides{Shortest-Path}
+        \begin{itemize}
+            \item Find optimal path in network
+        \end{itemize}
+\end{itemize}
+
+\subsection{Linear Programming}
+\begin{itemize}
+    \item Technique for optimizing/solving linear objective functions
+        \begin{itemize}
+            \item Given Linear equality and inequality constraints
+        \end{itemize}
+    \item Use it as black box
+    \item Very simple rules
+    \item Modelling of problem is not unique
+    \item Solved in polynomial time
+        \begin{itemize}
+            \item But not always nice polynomials
+        \end{itemize}
+    \ides{Integer Linear Programming (ILP):} Constants are required to be integers
+        \begin{itemize}
+            \item Is often NP-Hard
+        \end{itemize}
+    \item Specific algorithms are often better
+    \item Need to specify:
+        \begin{itemize}
+            \ides{Variables:} How does our setup look like
+                \begin{itemize}
+                    \item Real number
+                \end{itemize}
+            \ides{Objective:} What is our goal
+                \begin{itemize}
+                    \item Max/min of a linear Combination of variables
+                \end{itemize}
+            \ides{Constrains:} What constraints do we have
+                \begin{itemize}
+                    \item linear combination of variables
+                    \item must be negative or zero
+                        \begin{itemize}
+                            \item Can always adopt it to follow that
+                        \end{itemize}
+                \end{itemize}
+        \end{itemize}
+    \ides{Ex. Max-Flow}
+        \begin{itemize}
+            \ides{Variables:}
+                \begin{itemize}
+                    \ides{f:} flow $s \to t$
+                    \ides{$\mathbf{f_{uv}}$:} flow on edge $u \to v$
+                \end{itemize}
+            \ides{Objective:} Maximize $f$
+            \ides{Constraints:}
+                \begin{itemize}
+                    \ides{Capacity:} $f_{uv} \le c_{uv}$
+                    \ides{End-Pts:}
+                        \begin{itemize}
+                            \item $\sum_{s \to \textbf{v}} f_{sv} = f$
+                            \item $\sum_{\textbf{v} \to t} f_{vt} = f$
+                        \end{itemize}
+                    \ides{Conservation:} $\sum_{\textbf{w} \to u} f_{wu} = \sum_{u \to \textbf{v}} f_{uv} \quad \forall u \setminus \{s, t\}$
+                    \ides{Positive Flow:} $f_{uv} \ge 0$
+                \end{itemize}
+        \end{itemize}
+    \ides{Ex. Multiple Commodities Flow (MCF):}
+        \begin{itemize}
+            \item Move commodities from different sources to different destinations
+            \item There is not specific algorithms for this problem
+            \item LP is best solution
+            \item Simplification: Each source $x$ sends to only one destination $\text{dest}(x)$
+                \begin{itemize}
+                    \item Removed by identifying flows not only by source but also destination
+                \end{itemize}
+            \ides{Variables:}
+                \begin{itemize}
+                    \ides{$\mathbf{f_x}$:} flows
+                    \ides{$\mathbf{f_{x,uv}}$:} flow $f_x$ on edge $u \to v$
+                \end{itemize}
+            \ides{Objective:} Maximize $\sum_x f_x$
+            \ides{Constraints:}
+                \begin{itemize}
+                    \ides{Capacity:} $\sum_x f_{x,uv} \le c_{uv}$
+
+                    \ides{End-Pts:}
+                        \begin{itemize}
+                            \item $\sum_{x \to \textbf{v}} f_{x,xv} = f$
+                            \item $\sum_{\textbf{v} \to \text{dest}(x)} f_{x,v \text{ dest}(x)} = f$
+                        \end{itemize}
+                        \ides{Conservation (flows do not mix):} $\sum_{\textbf{w} \to u} f_{x, wu} = \sum_{u \to \textbf{v}} f_{x,uv} \quad \forall u \setminus \{x, \text{dest}(x)\}$
+
+                    \ides{Positive Flow:} $f_{x,uv} \ge 0$
+                \end{itemize}
+        \end{itemize}
+    \ides{Ex. Shortest Path}
+        \begin{itemize}
+            \item Minimize $s - t$ path length
+            \ides{Variables:}
+                \begin{itemize}
+                    \ides{$\mathbf{x_{uv}}$:} Indicator variable, is edge $u \to v$ on SP?
+                \end{itemize}
+                \ides{Objective:} minimize $\sum_{\mathbf{u \to v}} x_{uv} \cdot w_{uv}$
+            \ides{Constraints:}
+                \begin{itemize}
+                    \ides{Path Connected:} \[\sum_{\mathbf{u} \to v} x_{uv} - \sum_{v \to \mathbf{w}} x_{vw} =
+\begin{cases}
+    0 &\text{if } v \not\in \{s, t\}\\
+    1 &\text{if } v = t\\
+    -1 &\text{if }v = s
+\end{cases}\]
+                    \ides{If we want the shortest path:} $x_{uv} \in \{0,1\}$
+                    \ides{If we want the only the length of the shortest path:} $x_{uv} \in [0,1]$
+                \end{itemize}
+        \end{itemize}
+\end{itemize}
