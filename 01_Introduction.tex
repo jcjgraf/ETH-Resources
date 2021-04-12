@@ -1,0 +1,49 @@
+%! TEX root = ./main.tex
+
+\section{Introduction}
+\subsection{Terminology}
+\begin{itemize}
+    \ides{Database (DB):} collection of data
+    \ides{Database Management System (DBMS):} software for maintaining and utilizing a DB
+    \begin{itemize}
+        \item Desired properties:
+            \begin{itemize}
+                \ides{Data Independance:} applications should not know how data are stored
+                \ides{Declarative Efficient Data Access:} system should be efficient
+                \ides{Transactional Access:} simulate each user that it is the only one interacting with the system
+                \ides{Generic Abstraction:} users should not worry about all the issues above
+            \end{itemize}
+        \item Different flavours exists for different purposes
+    \end{itemize}
+\end{itemize}
+
+\subsection{Different Models}
+\begin{itemize}
+    \ides{Hierarchical Model}
+        \begin{itemize}
+            \item Introduced by IBM
+            \item 1968 - today
+            \item Hierarchical structure of entities
+            \item Imperative query (say how we want it)
+            \icon No data independence
+            \icon No declarative efficient data access
+        \end{itemize}
+    \ides{Network Model}
+        \begin{itemize}
+            \item 1969
+            \item Today in XML and JSON
+            \item Network of entities and relations
+            \item Imperative query (say how we want it)
+            \icon No data independence
+            \icon No declarative efficient data access
+        \end{itemize}
+    \ides{Relational Model}
+        \begin{itemize}
+            \item 1969
+            \item One of the most popular today
+            \item Data stored in tables
+            \item Declarative query (say what we want)
+            \ipro Data independence
+            \ipro Declarative efficient data access
+        \end{itemize}
+\end{itemize}
