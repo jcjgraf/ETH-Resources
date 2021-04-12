@@ -1,0 +1,96 @@
+%! TEX root = ./main.tex
+
+\section{Relational Algebra}
+\begin{itemize}
+    \item Imperative
+        \begin{itemize}
+            \item Say how we want it
+            \item Different ways to implement the same query
+        \end{itemize}
+    \ides{Operators}
+        \begin{itemize}
+            \item Create a new relation $R'$ from one or two given relations $R_1, R_2$
+            \ides{Union $\cup$:} 
+                \begin{itemize}
+                    \item $x \in R_1 \cup R_2 \iff x \in R_1 \lor R_2$
+                    \item Schema of both operands must match
+                \end{itemize}
+            \ides{Difference $-$:} 
+                \begin{itemize}
+                    \item $x \in R_1 - R_2 \iff x \in R_1 \land \neg (x \in R_2)$
+                    \item Schema of both operands must match
+                \end{itemize}
+            \ides{Intersection $\cap$:} 
+                \begin{itemize}
+                    \item $x \in R_1 \cap R_2 \iff x \in R_1 \land x \in R_2$
+                    \item Schema of both operands must match
+                    \item Follows from $R_1 \cap R_2 = R_1 - (R_1 - R_2)$
+                \end{itemize}
+            \ides{Selection $\sigma$:}
+                \begin{itemize}
+                    \item $x \in \sigma_c (R) \iff x \in R \land c(x) = True$
+                    \item Return tuples which satisfy a given condition $c$
+                \end{itemize}
+            \ides{Projection $\pi$}:
+                \begin{itemize}
+                    \item $\pi_{A_1,\dots,A_n} (R)$ keeps only columns $A_1, \dots A_n$
+                \end{itemize}
+            \ides{Cartesian Product $\times$:}
+                \begin{itemize}
+                    \item $(x, y) \in R_1 \times R_2 \iff x \in R_1 \land y \in R_2$
+                    \item If $R_1$ and $R_2$ have columns in common renaming is required
+                    \item Rarely used in practice
+                \end{itemize}
+            \ides{Renaming $\rho$:}
+                \begin{itemize}
+                    \item $\rho_{B_1, \dots, B_n} (R)$ changes the name of the attributes to $B_1, \dots B_n$
+                    \item $\rho_S(R)$ changes the names of the attributes of $R$ to the one of $S$
+                \end{itemize}
+            \ides{Natural Join $\bowtie$:}
+                \begin{itemize}
+                    \item $R_1 (A, B) \bowtie R_2 (B, C) = \pi_{A, B, C} (\sigma_{R_1.B = R_2.B}(R_1 \times R_2))$
+                            \begin{itemize}
+                                \ides{No shared attributes:} Equivalent to cross product
+                                \ides{All attributes shared:} Equivalent to intersect
+                            \end{itemize}
+                    \item Is associative
+                    \item Other flavours
+                        \begin{itemize}
+                            \ides{Left Outer Join:} Natural join $\bigcup$ unmatched tuples from left operand
+                            \ides{Right Outer Join:} Natural join $\bidcup$ unmatched tuples from right operand
+                            \ides{Full Outer Join:} Natural join $\bigcup$ unmatched tuples from left and right operand
+                            \ides{Left Semi Join:} Tuples from left operand which match with any tuples from right operand
+                                \begin{itemize}
+                                    \item $R_1(A_1, \dots, A_n) xxx_C R_2(B_1, \dots, B_2) = \Pi_{A_1, \dots, A_n}(R_1 \bowtie_C R_2$
+                                \end{itemize}
+                            \ides{Right Semi Join:} Tuples from right operand which match with any tuples from left operand
+
+                            \todo{Correct join symbols}
+                        \end{itemize}
+                \end{itemize}
+            \ides{Theta Join $\bowtie_\theta$:}
+                \begin{itemize}
+                    \item $R_1 \bowtie_\theta R_2 = \sigma_\theta (R_1 \times R_2)$
+                    \item Flavour
+                        \begin{itemize}
+                            \ides{Equi-Join:} $R_1 \bowtie_{A=B} R_2 = \sigma_{A=B} (R_1 \times R_2)$
+                        \end{itemize}
+                \end{itemize}
+            \ides{Relational Division $\div$:}
+                \begin{itemize}
+                    \item $A \div B = C$ where $C$ is the largest relation such that $B \times C \subseteq A$
+                    \item Inverse of cross product
+                \end{itemize}
+        \end{itemize}
+    \ides{Expression:} Composition of multiple operations
+    \icon No infinite (recursive) queries
+    \ides{Bags}
+        \begin{itemize}
+            \item Real DBMS use bag semantic
+            \item Can have duplicates
+            \item Difficult to extend RA to bags
+                \begin{itemize}
+                    \item Need to add new operators (duplicate elimination)
+                \end{itemize}
+        \end{itemize}
+\end{itemize}
