@@ -1,0 +1,73 @@
+\documentclass[a4paper, 11pt, landscape]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+\usepackage[english,ngerman]{babel}
+
+\usepackage{multicol}
+\setlength{\columnseprule}{0.4pt}
+
+\usepackage[left=4.5mm, right=4.5mm, top=4.5mm, bottom=6mm, landscape, nohead, nofoot]{geometry}
+
+\usepackage{amsmath, amssymb}
+\newcommand\N{\ensuremath{\mathbb{N}}}
+\newcommand\R{\ensuremath{\mathbb{R}}}
+\newcommand\Z{\ensuremath{\mathbb{Z}}}
+\newcommand\Q{\ensuremath{\mathbb{Q}}}
+\newcommand\C{\ensuremath{\mathbb{C}}}
+\renewcommand\O{\ensuremath{\emptyset}}
+\newcommand{\notimplies}{\;\not\!\!\!\implies}
+\DeclareMathOperator\arcsinh{arcsinh}
+\DeclareMathOperator\arccosh{arccosh}
+\DeclareMathOperator\arctanh{arctanh}
+
+\usepackage{enumitem}
+\usepackage{paralist}
+\setdefaultitem{$\textcolor{red}\bullet$}{\textcolor{red}\textendash}{$\textcolor{red}\textasteriskcentered$}{$\textcolor{red}\textperiodcentered$}
+
+\usepackage{xcolor}
+\newcommand{\todo}[1]{\textcolor{red}{TODO: #1}\PackageWarning{TODO:}{#1!}}
+\usepackage{parskip}
+\usepackage{tcolorbox}
+\usepackage[small,compact]{titlesec}
+
+\titleformat{name=\section}[block]
+  {\sffamily}
+  {}
+  {0pt}
+  {\colorsection}
+\newcommand{\colorsection}[1]{%
+	\colorbox{red!40}{\parbox[t][0em]{\dimexpr\columnwidth-2\fboxsep}{\thesection\ #1}}}
+
+
+\titleformat{name=\subsection}[block]
+  {\sffamily}
+  {}
+  {0pt}
+  {\subcolorsection}
+\newcommand{\subcolorsection}[1]{%
+	\colorbox{orange!40}{\parbox[t][0em]{\dimexpr\columnwidth-2\fboxsep}{\thesubsection\ #1}}}
+
+
+\titleformat{name=\subsubsection}[block]
+  {\sffamily}
+  {}
+  {0pt}
+  {\subsubcolorsection}
+\newcommand{\subsubcolorsection}[1]{%
+	\colorbox{blue!40}{\parbox[t][0em]{\dimexpr\columnwidth-2\fboxsep}{\thesubsubsection\ #1}}}
+
+% shrink horizontal padding in table
+\setlength{\tabcolsep}{0.3em}
+
+\begin{document}
+\begin{multicols*}{3}
+    \input{general}
+    \input{zahlenUndVektoren}
+    \input{folgenUndReihen}
+    \input{stetigeFunktionen}
+    \input{differenzierbareFunktionen}
+    \input{riemannIntegral}
+\end{multicols*}
+\end{document}

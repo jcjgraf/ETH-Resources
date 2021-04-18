@@ -1,0 +1,395 @@
+%! TEX root = ./main.tex
+
+\section{Folgen}
+
+\begin{compactdesc}
+    \item[Folge:] $\left( a_n \right)_{n \ge a  > 0}$ ist Funktion $a:\N^* \to \mathbb{A}, n \mapsto a_n, \mathbb{A}$ ist beliebiges Set.
+    \item[Konvergent:] ist $(a_n)_{n \in \N}$ falls $\exists l \in R: \quad \forall \epsilon > 0$ das Set $\left\{ n \in \N | a_n \not\in  ] l - \epsilon, l + \epsilon[ \right\} = \left\{ n \in N^* | \left| a_n - l \right| \ge \epsilon  \right\} $ endlich ist
+        \begin{compactitem}
+            \item $\forall  \epsilon > 0 \ \exists  N \ge 1: \quad |a_n - l| < \epsilon \ \forall n \ge N$
+            \item $(a_n)_{n \in \N}$ konvergente $\implies (a_n)_{n \in \N}$ beschränkt.
+            \item Es gibt $2$ Arten von divergenten Folgen
+        \end{compactitem}
+    \item[Grenzwert:] $(a_n)_{n \in \N}$ konvergiert gegen $a \iff \lim_{n \to \infty} a_n = a \iff \forall \epsilon > 0, \exists n_0 \in N, \forall n \ge n_0: \left| a_n - a \right| < \epsilon$
+        \begin{compactitem}
+            \item $\lim_{n \to \infty} a_n = \lim_{n \to \infty} a_{n+k} \forall k \in \N $
+        \end{compactitem}
+\end{compactdesc}
+
+\subsection{Rechenregeln}
+$\forall (a_n)_{n \in \N}, (b_n)_{n \in \N}$ konvergent, mit $\lim_{n \to \infty} a_n = a, \lim_{n \to \infty} b_n = b$
+\begin{compactenum}
+    \item $(a_n + b_n)_{n \in \N}$ ist konvergent mit $\lim_{n \to \infty} (a_n + b_n) = a + b$
+    \item $(a_n \cdot  b_n)_{n \in \N}$ ist konvergent mit $\lim_{n \to \infty} (a_n \cdot  b_n) = a \cdot b$
+    \item $\left( \frac{a_n}{b_n} \right) _{n \in \N}$ ist konvergent mit $\lim_{n \to \infty} \left( \frac{a_n}{b_n} \right) = \left( \frac{a}{b} \right)$ if $b_n \neq 0 \ \forall n \in N \wedge  b \neq 0$
+    \item Falls $\exists K \ge 1, a_n \le  b_n \ \forall n \ge K \implies a \le b$
+    \item $\lim_{n \to \infty} \sqrt{a_n} = \sqrt{\lim_{n \to \infty} a_n}$
+\end{compactenum}
+
+\subsection{Monotonie}
+\begin{compactdesc}
+    \item[Monoton Wachsend:] $a_n \le a_{n+1} \quad \forall n \in \N$
+    \item[Strikt Monoton Wachsend:] $a_n < a_{n+1} \quad \forall n \in \N$
+    \item[Monoton Fallend:] $a_n \ge a_{n+1} \quad \forall n \in \N$
+    \item[Strikt Monoton Fallend:] $a_n > a_{n+1} \quad \forall n \in \N$
+\end{compactdesc}
+
+\subsection{Einschliessungskriterium}
+    $\lim_{n \to \infty} a_n = \lim_{n \to \infty} b_n = \alpha \in \R \ \exists K \in \N \ \exists \left( c_n \right)_{n \in \N}: a_n \le  c_n \le b_n \ \forall n \ge K \implies \lim_{n \to \infty} c_n = \alpha$
+
+\subsection{Weierstrass / Monoton Konvergenz Satz}
+\begin{compactitem}
+   \item $(a_n)_{n \in \N}$ monoton wachend und nach oben beschränkt $\implies (a_n)_{n \in \N}$ konvergiert und $\lim_{n \to \infty} a_n = \sup \left\{ a_n : n \ge 1 \right\}$
+   \item $(a_n)_{n \in \N}$ monoton fallend und nach unten beschränkt $\implies (a_n)_{n \in \N}$ konvergiert und $\lim_{n \to \infty} a_n = \inf \left\{ a_n : n \ge 1 \right\}$
+\end{compactitem}
+
+\subsection{Funktionen und deren Grenzwert}
+\begin{tabular}{l | c | c}
+    Funktion & Grenzwert & Bedingung\\\hline
+    $\lim_{n \to \infty} a^n$ & $0$ & $|a| < 1$\\\hline
+    $\lim_{n \to \infty} \sqrt[^n]{a}$ & $1$ & $a > 0$\\\hline
+    $\lim_{n \to \infty} \sqrt[^n]{n^a}$ & $1$ & $a > 0$\\\hline
+    $\lim_{n \to \infty} \sqrt[^n]{n}$ & $1$\\\hline
+    $\lim_{n \to \infty} \frac{\log_an}{n}$ & $0$ & $a > 1$\\\hline
+    $\lim_{n \to \infty} \frac{n^k}{a^n}$ & $0$ & $a > 1$\\\hline
+    $\lim_{n \to \infty} \frac{a^n}{n!}$ & $0$\\\hline
+    $\lim_{n \to \infty} \sum_{k=1}^{n} \frac{1}{k}$ & $\infty$\\\hline
+    $\lim_{n \to \infty} \left( 1 + \frac{1}{n} \right)^n$ & $e$\\\hline
+    $\lim_{n \to \infty} \left( 1 + \frac{a}{n} \right)^n$ &e$^a$\\\hline
+    $\lim_{n \to \infty} \left( 1 - \frac{1}{n} \right)^n$ & $\frac{1}{e}$\\\hline
+    $\lim_{n \to 0} \frac{\sin n}{n}$ & $1$\\\hline
+    $\lim_{n \to 1} \frac{\ln n}{n - 1}$ & $1$\\\hline
+    $\lim_{n \to \infty} \frac{n^m}{\exp(an)}$ & $0$ & $m \in \R, a > 0$\\\hline
+    $\lim_{n \to 0} \frac{\exp(n) - 1}{n}$ & $1$\\\hline
+    $\lim_{n \to 0} \frac{\ln(1 + n)}{n}$ & $1$\\\hline
+    $\lim_{n \to \infty} \frac{\ln n}{n^a}$ & $0$ & $a > 0$\\\hline
+    $\lim_{n \to 0} \frac{a^n - 1}{n}$ & $\ln a$ & $a > 0$\\\hline
+    $\lim_{n \to 0} (n^a \ln n)$ & $0$ & $a > 0$\\\hline
+\end{tabular}
+
+\subsection{Bernoulli Ungleichung}
+$\left( 1 + x \right)^{n} \ge  1 + n \cdot x \ \forall n \in N, x > -1 $
+
+\subsection{Limes Superior und Limes Inferior}
+Jede beschränkte Folge $(a_n)_{n \in \N}$ kann in zwei monotone Folgen $(b_n)_{n \in \N}$ und $(c_n)_{n \in \N}$ geteilt werden.
+\begin{compactenum}
+    \item $\forall n \ge 1: b_n = \inf \{a_k | k \ge n\}$ und $c_n = \sup \{a_k | k \ge n\} $
+    \item $b_n \le b_{n+1}$ und $c_n \ge c_{n+1} \quad \forall n \in \N$
+    \item $(b_n)_{n \in \N}$ monoton wachsend, $(c_n)_{n \in \N}$ monoton fallend
+    \item $b_n$ und $c_n$ sind beschränkt $\implies$ konvergent
+    \item \textbf{Limes Inferior:} $\liminf_{n \to \infty} a_n := \lim_{n \to \infty} b_n $
+    \item \textbf{Limes Superior:} $\limsup_{n \to \infty} a_n := \lim_{n \to \infty} c_n $
+    \item $b_n \le  c_n \implies \liminf_{n \to \infty} a_n \le  \limsup_{n \to \infty} a_n $
+\end{compactenum}
+
+\begin{compactitem}
+    \item $(a_n)_{n \in \N}$ konvergiert $\iff \ (a_n)_{n \in \N}$ beschränkt und $\liminf_{n \to \infty} a_n = \limsup_{n \to \infty} a_n$
+\end{compactitem}
+
+\subsection{Cauchy Kriterium}
+\begin{compactdesc}
+    \item[Cauchy-Folge:] $(a_n)_{n \in \N}$ falls $\forall \epsilon > 0 \ \exists N \in \N: \quad \forall m,n \ge N \ |a_n - a_m| < \epsilon$
+        \begin{compactitem}
+            \item Abstand zwischen Folgegliedern wird mit wachsendem Index beliebig klein
+        \end{compactitem}
+\end{compactdesc}
+
+\begin{compactitem}
+    \item $a_n$ Cauchy-Folge $\implies a_n$ beschränkt
+    \item $a_n$ konvergent $\iff a_n$ Cauchy-Folge
+    \item $(a_n)_{n \in \N}$ konvergiert $\iff \ \forall \epsilon > 0 \ \exists \N \ge 1: |a_n - a_m| < \epsilon \quad \forall n,m \ge \N$
+    \item $a_n$ nicht Cauchy-Folge $\implies a_n$ divergent
+\end{compactitem}
+
+\subsection{Abgeschlossener Teilintervall}
+Teilmenge $I \subset \R$
+\begin{compactenum}
+    \item $[a, b] \quad a \le b, a,b \in \R \implies \text{L}(I) = b - a$
+    \item $[a, +\infty[ \quad a \in \R \implies \text{L}(I) = \infty$
+    \item $]-\infty, a] \quad a \in \R \implies \text{L}(I) = \infty$
+    \item $]-\infty, +\infty[ = \R \implies \text{L}(I) = \infty$
+\end{compactenum}
+
+\begin{compactitem}
+    \item $I \subset \R$ beschränkt$ \ \iff \text{L}(I) < + \infty$
+    \item $I \subset \R$ ist abgeschlossen $\iff $ für jede konvergierende $(a_n)_{n \in \N}$ aus Elementen in $I$ muss $\lim_{n \to \infty} a_n \in I$
+    \item $I=[a, b], J=[c, d], a \le b, c \le d, \ a,b,c,d \in \R$, falls $c \le a$ und $b \le d \implies I \subset J$
+        \begin{compactitem}
+            \item $\text{L}(I) = b - a \le  d - c = \text{L}(J)$
+        \end{compactitem}
+    \item Monoton fallende Folge von Teilmengen von $\R$ ist eine Folge $(X_n)_{n \in \N}, X_n \subset \R$ mit $X_1 \supseteq X_2, \supseteq \dots \supseteq X_n \supseteq \dots $
+\end{compactitem}
+
+\subsection{Cauchy-Cantor}
+Für absteigende Folge geschlossener Intervalle $I_1 \supseteq \dots  \supseteq I_n \supseteq \dots $ mit $\text{L}(I_1) < + \infty$ gilt $\bigcap_{n \ge 1} I_n \neq \O $. Falls $\lim_{n \to \infty} \text{L}(I_n) = 0 \implies \bigcap_{n \ge  1} I_n =\{x\} \ x \in \R $.
+
+\subsection{Teilfolge}
+Teilfolge von $(a_n)_{n \in \N}$ ist $(b_n)_{n \in \N}$ wobei $b_n = a_{\text{l}(n)}$ für $l:\N^* \to \N^*$ mit der Eigenschaft $\text{l}(n) < l(n + 1) \forall n \ge 1$
+\begin{compactitem}
+    \item Entsteht durch weglassen von Folgengliedern.
+    \item $(a_n)_{n \in \N}$ konvergent $\implies (a_{\text{l}(n)})_{n \in \N}$ konvergent für alle Teilfolgen.
+\end{compactitem}
+
+\subsection{Bolzano-Weierstrass}
+Jede beschränkte Folge besitzt eine konvergente Teilfolge.
+\begin{compactitem}
+    \item $(a_n)_{n \in \N}$ beschränkt $\implies$ für jede beschränkte Teilfolge $(b_n)_{n \in \N}$ gilt $\liminf_{n \to \infty} a_n \le \lim_{n \to \infty} b_n \le  \limsup_{n \to \infty} a_n$
+    \item Es gibt je eine Teilfolgen von $(a_n)_{n \in \N}$ die $\liminf_{n \to \infty} a_n$ resp. $\limsup_{n \to \infty} a_n$ als Limes annehmen.
+\end{compactitem}
+
+\subsection{Rezept: Konvergenz und Grenzwert}
+\begin{compactdesc}
+    \item[Geschlossene Formel:]
+        \begin{inparaitem}
+            \item auf Bruch erweitern
+            \item $n$ ausklammern und kürzen
+            \item $n$ in Nenner bekommen
+        \end{inparaitem}
+    \item[Rekursive Definition:]
+        \begin{inparaitem}
+            \item Geschlossene Formel finden
+            \item
+                \begin{inparaenum}
+                    \item Monotonie zeigen
+                    \item Beschränktheit zeigen
+                    \item Monoton Konvergenzsatz
+                    \item Induktionstrick:
+                        \begin{inparaitem}
+                            \item $c = \lim_{n \to \infty} a_n = \lim_{n \to \infty} a_{n+1}$
+                            \item Solve $c$
+                        \end{inparaitem}
+                \end{inparaenum}
+        \end{inparaitem}
+\end{compactdesc}
+
+\section{Reihen}
+\begin{compactdesc}
+    \item[Folge der Partialsummen:] $(S_n)_{n \in \N} := a_1 + a_2 + \dots + a_n = \sum_{k=1}^{n} a_k$ einer Folge $(a_n)_{n \in \N}$.
+        \begin{compactitem}
+        \item $(S_n)_{n \in \N}$ konv. $\implies \sum_{k=1}^{\infty} a_k$  konv.
+            \item $(S_n)_{n \in \N} \text{ nach oben beschränkt } \iff \sum_{k=1}^{\infty} a_k, a_k \ge 0 \ \forall k \in \N^*$ konvergiert.
+            \item Ist monoton steigend.
+        \end{compactitem}
+    \item[Reihe:] Unendliche Summe $\sum_{k=1}^{\infty} a_k$ einer Folge $(a_n)_{n \in \N}$.
+        \begin{compactitem}
+            \item Für divergierende Reihen ist die Summe ein Symbol nicht konvergente Folge $(s_n)_{n \in \N}$.
+            \item Für konvergente Reihe ist die Summe ein Symbol für den Grenzwert der Folge $(s_n)_{n \in \N}$.
+        \end{compactitem}
+    \item[Konvergent:] ist $\sum_{k=1}^{\infty} a_k$ falls die Folge $(S_n)_{n \in \N}$ von $(a_n)_{n \in \N}$ konvergiert.
+        \begin{compactitem}
+            \item $\sum_{k=1}^{\infty} a_k$ konvergiert $\implies \lim_{k \to \infty} a_k = 0 $.
+            \item $\lim_{k \to \infty} |a_k| \neq  0 \implies \sum_{k=1}^{\infty} a_k$ divergent.
+        \end{compactitem}
+    \item[Grenzwert:] $\sum_{k=1}^{\infty} a_k := \lim_{n \to \infty} S_n = \lim_{k \to \infty} \sum_{n=1}^{k} S_n$.
+    \item Weglassen von Anfangsgliedern verändert die Konvergenz nicht, verändert ggf. jedoch den Grenzwert.
+\end{compactdesc}
+
+\subsection{Bekannte Reihen}
+\resizebox{\columnwidth}{!}{\begin{tabular}{l | l | c | c | c}
+    \multicolumn{2}{l |}{Reihe}                                      & Wert                                   & konv.               & div.\\\hline
+    \multicolumn{2}{l |}{Geometrische Reihe}                         & $q \in \C$                             &                     & \\\hline
+    $\sum_{k=0}^{\infty} aq^k$                                       & $a + aq +$                             & $\frac{a}{1-q}$     & $|g| < 1$    & $|q| \ge 1$\\\hline
+    $\sum_{k=0}^{\infty} (k+1)q^k$                                   & $1 + 2q +$                             & $\frac{1}{(1-q)^2}$ &              & \\\hline
+    \multicolumn{2}{l |}{Harmonische Reihe}                          &                                        &                     & \\\hline
+    $\sum_{k=1}^{\infty} \frac{1}{k}$                                &                                        & $\infty$            &              & \\\hline
+    $\sum_{k=1}^{\infty} \frac{1}{k^2}$                              &                                        & $\frac{\pi^2}{6}$   &              & \\\hline
+    $\sum_{k=1}^{\infty} \frac{1}{k^4}$                              &                                        & $\frac{\pi^4}{90}$  &              & \\\hline
+    $\sum_{k=1}^{\infty} \frac{1}{k^a}$                              &                                        &                     & $a > 1$      & $a \le 1$\\\hline
+    \multicolumn{2}{l |}{Alternierende Harmon. Reihe}                &                                        &                     & \\\hline
+    $\sum_{k=1}^{\infty} \frac{(-1)^{k+1}}{k}$                       &                                        & $\ln 2$             &              & \\\hline
+    $\sum_{k=1}^{\infty} \frac{(-1)^{k+1}}{k^2}$                     &                                        & $\frac{\pi^2}{12}$  &              & \\\hline
+    $\sum_{k=1}^{\infty} \frac{(-1)^{k+1}}{k^4}$                     &                                        & $\frac{\pi^4}{720}$ &              & \\\hline
+    $\sum_{k=0}^{\infty} \frac{(-1)^k}{2k + 1}$                      & $1 - \frac{1}{3} + \frac{1}{5} -$      & $\frac{\pi}{4}$     &              & \\\hline
+    \multicolumn{1}{l |}{Teleskopreihe}                              &                                        &                     & \\\hline
+    $\sum_{k=1}^{\infty} \frac{1}{k(k+1)}$                           &                                        & $1$                 &              & \\\hline
+    \multicolumn{3}{l |}{Exponentialfunktion $z \in \C,$ konv. abs.} &                                        & \\\hline
+    $\sum_{k=0}^{\infty} \frac{z^k}{k!}$                             & $1 + z + \frac{z^2}{2!} +$             & $\exp{z}$           &              & \\\hline
+    $\sum_{k=0}^{\infty} \frac{(-a)^k}{k!}$                          &                                        & $\frac{1}{e^a}$       &              & \\\hline
+    $\sum_{k=0}^{\infty} (-1)^k\frac{x^{2k+1}}{(2k+1)!}$             & $x -\frac{x^3}{3!} + \frac{x^5}{5!} -$ & $ \sin x$           &              & \\\hline
+    $\sum_{k=0}^{\infty} (-1)^k\frac{x^{2k}}{(2k)!}$                 & $1-\frac{x^2}{2}+\frac{x^4}{4!}-$      & $\cos x$            &              & \\\hline
+    $\sum_{k=0}^{\infty} \frac{x^{2k+1}}{(2k+1)!}$                   & $x+\frac{x^3}{3!}+\frac{x^5}{5!}+$     & $\sinh x$           &              & \\\hline
+    $\sum_{k=0}^{\infty} \frac{x^{2k}}{(2k)!}$                       & $1+\frac{x^2}{2}+\frac{x^4}{4!}+$      & $\cosh x$           &              & \\\hline
+\end{tabular}}
+
+\subsection{Rechenregeln}
+$\forall \sum_{k=1}^{\infty} a_k, \sum_{k=1}^{\infty} b_k$ konvergent, $\alpha \in \C$
+\begin{compactenum}
+    \item $\sum_{k=1}^{\infty} (a_k + b_k) = \left( \sum_{k=1}^{\infty} a_k \right) + \left( \sum_{k=1}^{\infty} b_k \right)$ konvergent.
+    \item $\sum_{k=1}^{\infty} \alpha \cdot a_k = \alpha \cdot \sum_{k=1}^{\infty} a_k$ konvergent.
+\end{compactenum}
+
+\subsection{Cauchy Kriterium}
+$\sum_{k=1}^{\infty} a_k$ konvergent $\iff \forall \epsilon > 0 \ \exists N \ge 1: \ \left| \sum_{k=n}^{m} a_k \right| < \epsilon \ \forall m \ge  n \ge N$.
+\begin{compactitem}
+    \item $\sum_{k=1}^{\infty} a_k$ konvergent $\iff \lim_{k \to \infty} \left| \sum_{k=n}^{m} a_k \right| = 0 \ m \ge n$.
+    \item $\sum_{k=1}^{\infty} a_k$ konvergent $\implies \lim_{k \to \infty} a_k = 0 $.
+    \item $\lim_{k \to \infty} a_k \neq  0 \implies \sum_{k=1}^{\infty} a_k$ divergent.
+\end{compactitem}
+
+\subsection{Vergleichssatz}
+Für $\sum_{k=1}^{\infty} a_k$ $\sum_{k=1}^{\infty} b_k, 0 \le a_k \le b_k \ \forall k \ge K$:
+\begin{compactdesc}
+\item[Majoranten Kriterium:] $\sum_{k=1}^{\infty} b_k$ konvergiert $\implies \sum_{k=1}^{\infty} a_k$ konvergiert (konv. abs. falls $|a_k| \le b_k$)
+    \item[Minoranten Kriterium:] $\sum_{k=1}^{\infty} k_k$ divergiert $\implies \sum_{k=1}^{\infty} b_k$ divergiert.
+\end{compactdesc}
+
+\subsection{Umordnung}
+$\sum_{k=1}^{\infty} a'_k$ ist eine Umordnung von $\sum_{k=1}^{\infty} a_k$ falls es eine Bijektion $\phi : \N^* \to \N^*$ gibt so dass $a'_n = a_{\phi(n)}$
+\begin{compactitem}
+\item Eine nicht subjektive (nur injektiv) Abbildung entspricht der Reihe einer Teilfolge der Folge. $\sum_{n=1}^{\infty} (a_n)_{n \in N}$ konvergent $\implies \sum_{n=1}^{\infty} (a_{\phi(n)})_{n \in \N}$ konvergent.
+\end{compactitem}
+
+\subsection{Absolute Konvergenz}
+$\sum_{k=1}^{\infty} a_k$ absolut konvergent falls $\sum_{k=1}^{\infty} |a_k|$ konvergent.
+\begin{compactitem}
+    \item Falls divergent, kann sie nur gegen $+\infty$ divergieren.
+    \item $\sum_{k=1}^{\infty}| a_k|$ konvergent $\implies \sum_{k=1}^{\infty} a_k$ konvergent
+        \begin{compactitem}
+            \item $\left| \sum_{k=1}^{\infty} a_k \right| \le \sum_{k=1}^{\infty} \left| a_k \right|$.
+        \end{compactitem}
+    \item $a_n \ge 0 \implies$ absolute Konvergenz ist äquivalent zu konvergent.
+\end{compactitem}
+\begin{compactdesc}
+    \item[Bedingt Konvergent:] $\sum_{k=1}^{\infty} a_k$ ist konvergent aber nicht absolut konvergent.
+\end{compactdesc}
+
+\subsubsection{Dirichlet}
+$\sum_{k=1}^{\infty} a_k$ absolute konvergent $\implies$ jede Umordnung ist konvergent mit demselben Grenzwert.
+
+\subsubsection{Riemann}
+$\sum_{k=1}^{\infty} a_k$ konvergent aber nicht absolut konvergent $\implies \exists $ Umordnung $\forall A \in \R \cup \{\pm \infty\}: \sum_{k=1}^{\infty} a_{\phi(n)} = A $.
+
+\subsection{Leibniz}
+$(a_n)_{n \in \N}$ monoton fallend, $a_n \ge 0 \ \forall n \in \N$ und $\lim_{n \to \infty} a_n = 0 \implies S:= \sum_{k=1}^{\infty} \left( -1 \right)^{k+1} a_k$ konvergiert.
+\begin{compactitem}
+    \item $a_1 - a_2 \le S \le a_1$
+    \item $(s_n)_{n \in \N}$ beschränkt, $\lim_{n \to \infty} s_{2n} = \lim_{n \to \infty} s_{2n + 1} = s \implies \lim_{n \to \infty} s_n = s$.
+\end{compactitem}
+
+\subsection{Quotientenkriterium}
+Für $(a_n)_{n \in \N}, a_n \neq 0 \ \forall n \ge 1$:
+\begin{compactenum}
+    \item $\limsup_{k \to \infty} \frac{\left| a_{n+1} \right|}{\left| a_n \right| } < 1 \implies \sum_{k=1}^{\infty} a_k$ konv. abs.
+    \item $\liminf_{k \to \infty} \frac{\left| a_n + 1 \right|}{\left| a_n \right| } > 1 \implies \sum_{k=1}^{\infty} a_k$ divergiert.
+\end{compactenum}
+\begin{compactitem}
+    \item $\exists \lim_{k \to \infty} \left| \frac{a_n + 1}{a_n} \right| =:  L \implies$
+        \[
+        \begin{cases}
+            \sum_{k=1}^{\infty} a_k \text{ absolut konvergent} & \text{ if } L < 1\\
+            \sum_{k=1}^{\infty} a_k \text{ konvergent} & \text{ if } L > 1\\
+            \text{ versagt Kriterium} & \text{ if } L = 1
+        \end{cases}
+        \]
+    \item Nützlich für $n!, a^n$ und Polynom.
+    \item Versagt wenn unendlich viele Glieder $a_n$ der Reihe verschwinden.
+\end{compactitem}
+
+\subsection{Wurzelkriterium}
+Für $(a_n)_{n \in \N}$:
+\begin{compactenum}
+    \item $\limsup_{n \to \infty} \sqrt[^n]{\left| a_n \right| } < 1 \implies \sum_{k=1}^{\infty} a_k$ konv. abs.
+    \item $\limsup_{n \to \infty} \sqrt[^n]{\left| a_n \right| } > 1 \implies \sum_{k=1}^{\infty} a_k$ und $\sum_{k=1}^{\infty} |a_k|$ divergieren.
+\end{compactenum}
+\begin{compactitem}
+    \item $\exists \lim_{k \to \infty} \sqrt[^n]{ \left| a_n \right| }  = L \implies$
+        \[
+        \begin{cases}
+            \sum_{k=1}^{\infty} a_k \text{ absolut konvergent} & \text{ if } L < 1\\
+            \sum_{k=1}^{\infty} a_k \text{und }\sum_{k=1}^{\infty} |a_k| \text{ konvergent} & \text{ if } L > 1\\
+            \text{ versagt Kriterium} & \text{ if } L = 1
+        \end{cases}
+        \]
+\end{compactitem}
+
+\subsection{Potenzreihe}
+$\text{P}(z) := c_0 + c_1 \cdot z + c_2 \cdot z^2 + \dots = \sum_{k=0}^{\infty} c_k z^k, \ (c_n)_{n \in \N}, z \in \C$.
+\begin{compactitem}
+    \item Ist absolute konvergent $\forall |z| < p$ und divergiert $\forall |z| > p$.
+    \item $
+        p:= \begin{cases}
+            +\infty & \text{ if } \limsup_{k \to \infty} \sqrt[^k]{\left| c_k \right| }  = 0\\
+            \frac{1}{\limsup_{k \to \infty} \sqrt[^k]{|c_k|}} & \text{ if } \limsup_{k \to \infty} \sqrt[^k]{|c_k|} > 0
+        \end{cases}
+    $
+    \item Funktioniert nur wenn $\limsup_{k \to \infty} \sqrt[^k]{|c_k|}$ existiert.
+    \item Konvergenzbereich von Potenzreihe ist ein Kreis.
+\end{compactitem}
+Konvention:
+\begin{compactenum}
+\item $\{\sqrt[^n]{ \left| a_k \right| } \}$ unbeschränkt $\implies$ wir setzen $p=0 \ (\implies |z| < 0)$.
+\item $\{\sqrt[^n]{ \left| a_k \right| } \}$ beschränkt und $\limsup_{k \to \infty} \sqrt[^k]{c_k}=0 \implies$ wir setzen $p=\infty$ ($\implies p(z)$ konvergiert $\forall c \in \C$).
+\item $\{\sqrt[^n]{ \left| a_k \right| } \}$ beschränkt und $\limsup_{k \to \infty} \sqrt[^k]{c_k}\neq 0 \implies$ wir setzen $p= \frac{1}{\limsup_{k \to \infty} \sqrt[^k]{c_k}} \ (\implies p(z)$ konvergiert $\forall |z| < p)$.
+\end{compactenum}
+
+\subsection{Rezept: Konvergenzradius Berechnen}
+\begin{compactenum}
+    \item Berechne $|p| = \lim_{n \to \infty} \left| \frac{a_n}{a_{n+1}} \right|$ falls $a_0 \neq 0 \forall n > N$ und Limes definiert oder unendlich ist.
+    \item Alternativ verwende $|p| = \frac{1}{\lim_{n \to \infty} \sqrt[^n]{|a_n|}}$
+    \item Überprüfe ob $p$ inklusive oder exklusiv ist.
+\end{compactenum}
+
+\subsection{Riemann Zeta Funktion}
+$\zeta(s) := 1 + \frac{1}{2^s} + \frac{1}{3^s} + \dots = \sum_{n=1}^{\infty} \frac{1}{n^s}, \ s > 0$.
+\begin{compactitem}
+    \item $\zeta(s), 0 < s \le 1 \implies \zeta(s)$ konvergiert.
+    \item $\zeta(s), s > 1 \implies \zeta(s) < \sum_{k=0}^{\infty} \left( \frac{1}{2^{s-1}} \right)^n $ divergent.
+\end{compactitem}
+
+\subsection{Doppelfolgen und -reihen}
+\begin{compactdesc}
+    \item[Doppelfolge:] $(c_{kl})_{k,l \in \N} := a_k \cdot b_l$
+    \item[Doppelreihe:] $\sum_{k,l\ge1} c_{kl}$
+        \begin{compactitem}
+            \item $\sum_{k=0}^{\infty} \sum_{l=0}^{\infty}c_{kl}$ und $\sum_{l=0}^{\infty} \sum_{k=0}^{\infty}c_{kl}$ können mit unterschiedlichem Grenzwert konvergieren.
+        \end{compactitem}
+    \item[Lineare Anordnung:] von $\sum_{k,l \ge 1} a_{kl}$ ist $\sum_{k=0}^{\infty} b_k$ falls $\exists$ Bijektion $\phi N \to N \times N$ mit $b_k = a_{\phi(k)}$.
+\end{compactdesc}
+
+\subsection{Cauchy}
+$\exists B \ge 0: \ \sum_{i=0}^{m} \sum_{j=0}^{m} \left| a_{ij} \right| \le B \ \forall m \ge 0 \implies$
+\begin{compactitem}
+    \item Folgende Reihen konvergieren absolut:
+        \begin{compactitem}
+            \item $S_i := \sum_{j=0}^{\infty} a_{ij} \ \forall i \ge 0$
+            \item $U_j := \sum_{i=0}^{\infty} a_{ij} \ \forall j \ge 0$
+            \item $\sum_{i=0}^{\infty} S_i$
+            \item $\sum_{j=0}^{\infty} U_j$
+        \end{compactitem}
+    \item Es gilt $\sum_{i=0}^{\infty} S_i = \sum_{j=0}^{\infty} U_j$
+    \item Es konvergiert jede lineare Anordnung der Doppelreihe absolut und hat demselben Grenzwert.
+\end{compactitem}
+
+\subsection{Cauchy Produkt}
+Produkt von $\sum_{i=1}^{\infty} a_i, \sum_{j=1}^{\infty} b_j$ ist $\sum_{n=0}^{\infty} \left( \sum_{j=0}^{\infty} a_{n-j}b_j \right) = a_0b_0 + (a_0b_1 + a_1b_0) + (a_0b_2 + a_1b_1 + a_2b_0) + \dots$
+\begin{compactitem}
+    \item Muss nicht immer konvergiere.
+    \item Falls $\sum_{i=1}^{\infty} a_i$ und $\sum_{j=1}^{\infty} b_j$ absolut konvergieren $\implies \sum_{n=0}^{\infty} \left( \sum_{j=0}^{\infty} a_{n-j}b_j \right) = \left( \sum_{i=0}^{\infty} a_i \right) \left( \sum_{i=0}^{\infty} b_j \right) $ konvergiert.
+\end{compactitem}
+
+\subsection{Folgen Funktionen}
+$\forall n$ sein $f_n : \N \to \R$ eine Folge. Wir nehmen an:
+\begin{compactenum}
+    \item $f(j) := \lim_{n \to \infty} f_n(j)$ existiert $\forall j \in \N$.
+    \item $\exists$ Funktion $g: \N \to [0, \infty[$ so dass:
+        \begin{compactenum}[{2}.1]
+            \item $\left| f_n(j) \right| \le g(j) \ \forall j,n \ge 0$.
+            \item $\sum_{j=0}^{\infty} g(j)$ konvergiert.
+        \end{compactenum}
+\end{compactenum}
+dann folgt $\sum_{j=0}^{\infty} f(j) = \lim_{n \to \infty} \sum_{j=0}^{\infty} f_n(j)$.
+\begin{compactitem}
+\item $\forall z \in \C$ konvergiert die Folge $\left( \left( 1 + \frac{z}{n} \right)^n  \right)_{n \in \N} $ und $\lim_{n \to \infty} \left( 1 + \frac{z}{n} \right)^n = \exp(z)$.
+\end{compactitem}
+
+\subsection{Rezept: Konvergenz und Grenzwert}
+Gegeben $\sum_{n=1}^{\infty} (a_n)_{n \in N}$
+\begin{compactenum}
+    \item Ist spezieller Typ $\implies$ betrachte Typ
+    \item $\lim_{n \to \infty} a_n \neq 0 \implies$ divergent
+    \item Quotientenkriterium anwendbar $\implies$ fertig
+    \item Wurzelkriterium anwendbar $\implies$ fertig
+    \item $\exists$ konvergente Majoranten $\implies$ konvergent
+    \item $\exists$ divergierende Minoranten $\implies$ divergent
+    \item Umformen, ausprobieren etc...
+\end{compactenum}
