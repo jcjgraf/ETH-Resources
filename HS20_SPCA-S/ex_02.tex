@@ -1,0 +1,54 @@
+%! TEX root=./main.tex
+
+\lecture{Ex 2}{Week: 2}{}
+
+\subsubsection{Header Files and Modules}
+
+\paragraph{Definition vs. Declaration}
+There is a difference between declaration and definition:
+\begin{itemize}
+    \item Declaration gives the signature of the function / variable.
+    \item Definition gives the code /storage space for variables.
+\end{itemize}
+
+\paragraph{Header Files}
+In order to share a function among different source file, we have to place the function declaration into the header file.
+
+Using \code{\#include "mymodule.h"} the function can be included into other source files. Note the difference between the prior include and e.g. \code{\#include <stdio.h>}. The first one looks for header files in the same directory while the second one looks for system header files.
+
+Header files are considered globally accessible. So one should only put there what is actually necessary like e.g. public interfaces.
+
+Header files are actually copy-pasted into the source file during compilation. To prevent multiple imports (e.g. for nested modules), a guard structure should be used.
+
+\paragraph{Compilation}
+To compile programs which consists of multiple source files with their associated header files, we have to list all required source (not header) files for gcc.
+
+\subsubsection{Makefile}
+Makefiles are used to automate compilation. It it like defining functions for or complex compile commands. The general structure is
+
+\begin{verbatim}
+targets: prerequisites
+    command
+    command
+\end{verbatim}
+
+where \verb+target+ is the name of the function, in \verb+prerequisits+ we list all required source and header files and beneath we place the command(s) required for compilation.
+
+We can also define rules for different tasks than only compiling like for build cleanup.
+
+\subsubsection{gcc Flags}
+Useful flags:
+
+\begin{description}
+    \item[Werror:] Make all warnings into errors.
+    \item[Wpedantic:] Issue all the warnings demanded by strict ISO C and reject all programs that use forbidden extensions.
+    \item[Wall:] Enable different warnings about questionable code.
+    \item[fsanitize=address:] Instrument code to detect heap management errors.
+    \item[fsanitize=undefined:] Instrument code to detect undefined behaviour at runtime.
+    \item[fsanitize-address-use-after-scope:] Instrument code to detect addresses used when already out of scope.
+    \item[fstack-protector-all:] Instrument code to detect buffer overflow on the stack.
+\end{description}
+
+In practice we should use something like:
+
+\verb+gcc <FILES> -Wall -Wpedantic -Wextra -Werror -std=c99 -Wmissing-prototypes+

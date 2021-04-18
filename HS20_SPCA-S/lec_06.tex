@@ -1,0 +1,139 @@
+%! TEX root = ./main.tex
+
+\lecture{6}{Week 3}{Dynamic Memory Allocation}
+
+Global variables are allocated statically, meaning that they are allocated when the program is loaded and deallocated when the program exits. Function variables and function parameters are automatically allocated when the function is called and deallocated when the function returns.\\
+Often, we want some data to persist across multiple function calls but not for the whole lifetime of a program. Sometimes, the data is also to big to fit on the stack or a function may return a value whose size is unknown to the caller. All these problems an be solved with explicit memory allocation where the program explicitly requests new blocks of memory.
+
+\subsubsection{C Memory API}
+\paragraph{Allocation}
+\code{void *malloc(unsigned long sz)} allocates a block of size \code{sz} and returns a pointer to the first byte of that memory. Actually, it returns a void pointer, which we then need to convert to our desired type. When null is returned, the memory could not be allocated. Therefore, one should always check if the procedure was successful. 
+
+Typical usage may look as follows:
+\begin{lstlisting}
+long *arr = (long *)malloc(10 * sizeof(long));
+if (arr == NULL) {
+    printf("Error");
+    return ERRORCODE;
+}
+arr[0] = 5L; // etc.
+\end{lstlisting}
+
+Unlike \code{malloc}, where the initialized memory contains garbage,\code{void *calloc(unsigned long nm, unsigned long sz);} initialized a memory block of size $nm \cdot sz$ containing zeros. It is slightly slower than \code{malloc} but less error-prone and more readable. %Problems with width
+
+\paragraph{Deallocation}
+When memory is no longer used, one deallocates it using \code{void free(void *);}, where the argument is the pointer to the first byte of the memory. It is also good practice to null the memory pointer after freeing.
+
+\begin{lstlisting}
+long *arr = (long *)malloc(10 * sizeof(long));
+if (arr == NULL) {
+    printf("Error");
+    return ERRORCODE;
+}
+arr[0] = 5L; // etc.
+
+free(arr);
+arr = NULL;
+\end{lstlisting}
+
+\paragraph{Resize Memoryblock}
+With \code{void *realloc(void *ptr, unsigned long size);} a given block in memory, designated by the pointer to the first memory block, can be resized to the desired size. In most cases the whole memory block is copied to a new location and hence, one should alway use the newly returned address.
+
+\begin{lstlisting}
+long *arr = (long *)malloc(10 * sizeof(long));
+if (arr == NULL) {
+    printf("Error");
+    return ERRORCODE;
+}
+
+arr = (long *)realloc(arr, 20 * sizeof(long));
+if (arr == NULL) {
+    printf("Error");
+    return ERRORCODE;
+}
+\end{lstlisting}
+
+\paragraph{size\_t}
+Is an unsigned int, e.g. \code{unsigned long} is often used to store memory pointers. They are large enough to hold the size of the largest possible array in memory and are therefore often used to store pointers to memory addresses.
+
+\paragraph{ptrdiff\_t}
+Is an unsigned integer of some size and the result of subtracting two pointers. They are used for array loops, size calculations etc.
+
+\subsubsection{Managing the Heap}
+The heap is a large pool of unused memory, used for dynamically allocated data structures. \code{malloc/calloc} allocate chunks of memory, \code{free} empties and returns them. In order to know which parts of the heap are used, \code{malloc} maintains bookkeeping data to track allocations.
+
+\paragraph{Memory Corruption}
+Memory can corrupt in many different ways:
+\begin{itemize}
+    \item Assign values past the end of the allocated memory array
+    \item Assume \code{malloc} zeroes out memory
+    \item Wrong pointer arithmetic
+    \item Free unallocated pointer
+    \item Double-free same block
+    \item Use freed pointer
+\end{itemize}
+
+\paragraph{Memory Leaks}
+Happen when code fails to deallocated memory that is no longer used. For short-lived programs this is ok, but for long-lived program this is bad.\\
+\code{Valgrind} is a tool which helps to detect memory leaks. In the report, \textit{directly loss} means that locations which are directly pointed to are not freed. \textit{Indirect loss} means that the object we point directly to, points to other objects, which are not freed.
+
+
+\paragraph{Stuctured Data}
+A \code{struct} is a C type that contains a set of fields. The tag of the structure is like the name of the structure. To refer to fields of a struct, we use the \code{tag.field} notation, to refer to fields from a pointer to the struct, we can use \code{p\_tag->field} which is the shorthand notation for \code{(*p\_tag).field}. Structs can be initialized by either providing all values at the same time, or by assigning value by value.
+
+\begin{lstlisting}
+struct Point {
+    int x, y;
+};
+
+int main() {
+    struct Point p1 = {0, 2};
+    struct Point p2;
+    p2.x = 4;
+    p2.y = 6;
+
+    struct Point *p_p1 = &p1;
+    p_p1->x = 5;
+
+    return 0;
+}
+\end{lstlisting}
+
+When we assign struct types \code{p1 = p2}, the entire content of \code{p2} is copied to \code{p1}. As everything else, a struct is passed by value end hence, the whole struct is copied. Structs can be the return type of a function.\\
+When a struct is mixed of fields of different type, the size of the struct may not be equal to the size of the sum of the sizes of the fields, but the struct may get padded. We can print the size of the struct with \code{printf("\%s", sizeof(mystruct));}.
+
+\paragraph{Unions}
+They are very similar to \code{struct}, but with the difference that only the most recently assigned value is saved. All other fields cannot be accessed. There is no safety measurements for checking which field is the valid one.
+
+\subsubsection{Type Definitions}
+\paragraph{typedef}
+They introduce a new type definition and can be used to give a new name to a type. The syntax is \code{typedef type name;}. They are kind of an \textit{alias} for the original type. They allow for writing cleaner code and they are very useful for \code{struct}. For structs we have to add the \code{struct} keyword everytime we want to reference them. Typedef a struct allows to drop this additional keyword and reference it only by the typedef.
+\begin{lstlisting}
+typedef struct Point {
+    int x, y;
+} Point_t;
+
+int main() {
+    Point_t p1 = {0, 2};
+    Point_t p2;
+
+    return 0;
+}
+\end{lstlisting}
+
+Typedef can also be useful to build up complex declarations.
+
+\paragraph{Namespaces}
+A namespace is a set of names of objects in a system. They allow the disambiguate different objects with same name. C has different namespaces for:
+\begin{enumerate}
+    \item Label names for \code{goto}
+    \item Tags of \code{struct}, \code{union}, \code{enum}
+    \item Member names, for each \code{struct}, \code{union}, \code{enum}. I.e. each \code{struct} has a different namespace.
+    \item Everything else, including \code{typedef}
+\end{enumerate}
+
+\subsubsection{Dynamic Data Structures}
+In C we can implement dynamic data structures, like linked-lists, as we are used to in other languages.
+
+\subsubsection{Generic Data Structures}
+When we want to let the user choose the type stored in the data structure, we can store in each node a generic pointer \code{void *element} instead of a fixed type. Clients can convert their specific type to \code{void *} before pushing it to the data structure.

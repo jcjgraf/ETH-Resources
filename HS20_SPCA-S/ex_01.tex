@@ -1,0 +1,17 @@
+%! TEX root=./main.tex
+
+\lecture{Ex 1}{Week: 1}{}
+
+\subsubsection{Bit Mask}
+Bit masks can be used to:
+\begin{description}
+    \item[Delete] and \textbf{test} bits with AND
+    \item[Set] bits with OR
+    \item[Flip] bits with XOR
+\end{description}
+
+Test if $i$-th bit is $1$: \code{result = (input \& (1<<i))}
+
+Flip if $i$-th bit is $1$: \code{result = (input \^ (1<<i))}
+
+Set if $i$-th bit is $1$: \code{result = (input | (1<<i))}
