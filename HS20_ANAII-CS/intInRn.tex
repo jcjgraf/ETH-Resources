@@ -1,0 +1,403 @@
+%!TEX root = ./main.tex
+
+\section{Integration in $\R^n$}
+For $I = [a, b] \subset \R$ compact and $f:I \to \R^n, f(t) = (f_1(t), \dots f_n(t))$ continuous ($\implies f_i$ continuous $\forall 1 \le i \le n$). Then $\int_{a}^{b} f(t) \mathrm{d}t = (\int_{a}^{b} f_1(t) \mathrm{d}t, \dots \int_{a}^{b} f_n(t) \mathrm{d}t)$.
+
+For $f,g: [a, b] \to \R^n$:
+\begin{compactitem}
+    \item $\int_{a}^{b} (f(t) + g(t)) \mathrm{d}t = \int_{a}^{b} f(t) \mathrm{d}t + \int_{a}^{b} g(t) \mathrm{d}t$
+    \item $\int_{a}^{b} f(t) \mathrm{d}t = - \int_{b}^{a} f(t) \mathrm{d}t$
+\end{compactitem}
+
+\subsection{Vector Field}
+For $X \subset \R^n$ and $f: X \to \R^n$. $f$ is a vector fields which sends each $x \in X$ to a vector $v \in \R^n$.
+
+ \subsection{Parametrized Curve}
+ For a curve (represented by a map) $\gamma: [a, b] \to \R^n$ continuous and piecewise $\in C^1$. $\gamma$ is a parametrized curve between $\gamma(a)$ and $\gamma(b)$.
+
+ \begin{compactitem}
+     \item $\gamma:[0, 2\pi] \to (a \cos t, b \sin t)$ is a parametrisation of a ellipse.
+        \begin{compactitem}
+            \item If $a = b$ is is a circle of radius $a$.
+            \item If $t$ is replaced by $2 \pi - t$, the ellipse turns in opposite direction.
+        \end{compactitem}
+    \item If $a = (a_1, a_2, a_3), b = (b_1, b_2, b_3)$ and $\gamma: [0, 1] \to \R^3, t \mapsto (a_1 + b_1t, a_2 + b_2t, a_3 + b_3t)$ is the parametrisation of the line segment between vector $a$ and $a + b$.
+    \item For $f: [a, b] \to \R \in C^1$, the normal graphs we are used to are a parametrisation of $\gamma: [0, 1] \to \R^2, t \mapsto (t, f(t))$.
+\end{compactitem}
+
+\subsection{Line Integral}
+For $\gamma: [a, b] \to \R^n$ parametrised curve, $X \subset \R^n$ containing the image of $\gamma$ and $f: X \to \R^n$ continuous. The integral $\int_{a}^{b} f(\gamma(t)) \cdot \gamma'(t) \mathrm{d}t \in \R$ of $f$ along $\gamma$.
+
+\begin{compactitem}
+    \item Denoted as $\int_{\gamma} f(s) \cdot \mathrm{d}s$
+\end{compactitem}
+
+\subsubsection{Properties}
+
+\paragraph{Independent of Oriented Reparametrisation}
+For $\gamma: [a, b] \to \R^n$ parametrized curve and $\delta: [c, d] \to [a, b]$ with:
+\begin{inparaitem}
+    \item $\in C^1$
+    \item differentiable on $]c, d[$
+    \item strictly increasing
+    \item $\delta(a) = c, \delta(b) = d$
+\end{inparaitem}
+An orientation reparametrisation of $\gamma$ is $\sigma: [c, d] \to \R^n, \sigma = \gamma \circ \delta$.
+
+For $X \subset \R^n$ containing the image of $\gamma$ and $f: X \to \R^n \in C^1$, $\int_{\gamma} f \mathrm{d}s = \int_{\sigma} f \mathrm{d}s$.
+
+\paragraph{Connecting Paths}
+For $\gamma_1: [a, b] \to \R^n, \gamma_2: [c, d] \to \R^n$ parametrized paths, with $\gamma_1(b) = \gamma_2(c)$. For the paths formed by connecting to two paths, it holds $\int_{\gamma_1 + \gamma_2} f \mathrm{d}s = \int_{\gamma_1} f \mathrm{d}s + \int_{\gamma_2} f \mathrm{d}s$.
+
+\paragraph{Reverse Path}
+For $\gamma: [a, b] \to \R^n$ parametrized path and $- \gamma:[a, b] \to \R^n$ the same path traced in opposite direction, then $\int_{-\gamma} f \mathrm{d}s = - \int_{\gamma} f \mathrm{d}s$.
+
+\paragraph{Independent of Path}
+For $X \subset \R^n$, vector field $f: X \to \R^n, g: X \to \R \in C^1$ s.t. $\bigtriangledown g = f$ and parametrized curve $\gamma: [a, b] \to \R^n, \gamma([a, b]) \subset X$ then: $\int_{\gamma} f \mathrm{d}t = \int_{a}^{b} f(\gamma(t)) \cdot \gamma'(t) \mathrm{d}t = \int_{a}^{b} \bigtriangledown g(\gamma(t)) \cdot \gamma'(t) \mathrm{d}t = \int_{a}^{b} \frac{d}{dt} (g \circ \gamma) \mathrm{d}t = (g \circ \gamma)(b) - (g \circ \gamma)(a)$. I.e. the integral only depends on the endpoints of the curve.
+
+\subsubsection{Potential}
+For $X \subset \R^n$, vector field $V: X \to \R^n$ and $f: X \to \R$, where $\bigtriangledown f = V$, then $f$ is a potential for $V$.
+
+\begin{compactitem}
+    \item Does always exists for $n = 1$ and is equivalent to the primitive (Aufleitung) of $f$.
+    \item Necessary condition for existence of $g$: $\partial_j f_i = \partial_i f_j \quad \forall 1 \le i \neq j \le n$.
+        \begin{compactitem}
+            \item If X is star-shapend, then this condition is sufficient.
+        \end{compactitem}
+\end{compactitem}
+
+\recipe{Find Potential for Given Vector Field}
+Given vector field $V = (v_1, v_2, v_3): \R^3 \to \R^3$ find $f(x, y, z): \R^3 \to \R$ with $\bigtriangledown f = V$.
+
+\begin{compactenum}
+    \item Check necessary condition $\partial_j f_i = \partial_i f_j \quad \forall 1 \le i \neq j \le n$.
+\end{compactenum}
+
+$f$ will be of the form $f(x, y, z) = a(x, y, z) + b(y, z) + c(z)$
+
+\begin{compactenum}
+    \item Calculate $a(x, y, z) = \int v_1 \mathrm{d}x$.
+    \item Using $v_2 \overset{!}{=} \partial_y a(x, y, z) + \partial_y b(y, z) + \partial_y H(z)$ find $b(y, z)$.
+    \item Using $v_3 \overset{!}{=} \partial_z a(x, y, z) + \partial_z b(y, z) + \partial_z c(z)$ find $c(z)$.
+\end{compactenum}
+
+\subsubsection{Conservative}
+For $X \subset \R^n$, vector field $f: X \to \R^n \in C^1$. If for any $x_1, x_2 \in X$, the integral $\int_{\gamma} f \mathrm{d}s$ is independent of the curve from $x_1, x_2$ then the vector field $f$ is conservative.
+
+\begin{compactitem}
+    \item $f$ is conservative $\iff \int_{\gamma} f(s) \mathrm{d}s = 0$ for all closed ($\gamma(a) = \gamma(b)$) parametrized curves in $X$.
+    \item if $f$ is conservative, then $\partial_j f_i = \partial_i f_j \quad \forall 1 \le i \neq j \le n$.
+        \begin{compactitem}
+            \item if $f$ is in addition star-shaped, this condition holds in both directions.
+            \item $\implies$ its Jacobian matrix is symmetric.
+        \end{compactitem}
+\end{compactitem}
+
+\recipe{Lineintegral of Conservative Vector Field}
+Given conservative vector field $V: \R^n \to \R^n$ and curve $\gamma$, $a \le t \le b$. Calculate $\int_{\gamma} f \mathrm{d}s$.
+
+\begin{compactitem}
+    \item Calculate potential $g$ with $\bigtriangledown g = V$.
+    \item Calculate boundaries $(a, \gamma(a))$ and $(b, \gamma(b))$
+    \item Calculate $g(b, \gamma(b)) - g(a, \gamma(a))$
+\end{compactitem}
+
+
+\subsubsection{Path Connected}
+For $X \subset \R^n$ open. $X$ is path connected if $\forall x_1, x_2 \in X \quad \exists \gamma: (0, 1] \to X$ with $\gamma(0) = x, \gamma(1) = y$.
+
+If $X$ is path connected and $f: X \to \R^n \in C^1$ then:
+\begin{compactitem}
+    \item $f$ is gradient of $g: X \to \R$. I.e. $f = \bigtriangledown g$, $g$ is potential for $f$.
+    \item The line integral of $f$ is independent of the path between any two points. I.e. $f$ is conservative.
+    \item the line integral of any closed curve is $0$.
+\end{compactitem}
+
+\subsubsection{Star Shaped}
+$X \subset \R^n$ is star shaped if $\exists x_0 \in X$ s.t. $\forall x \in X$ the line segment connecting $x$ and $x_0$ is in $X$.
+
+\begin{compactitem}
+    \item $\R^n$ is star-shaped.
+\end{compactitem}
+
+\subsubsection{curl}
+For $X \in \R^3$ open, $f: X \to \R^3 \in C^1$ vector field. Then $\text{curl } f =
+\begin{pmatrix}
+    \partial_y f_3 - \partial_z f_2\\
+    \partial_z f_1 - \partial_x f_3\\
+    \partial_x f_2 - \partial_y f_1
+\end{pmatrix} = \text{det }
+\begin{vmatrix}
+    e_1 & e_2 & e_3\\
+    \partial_x & \partial_y & \partial_z\\
+    f_1 & f_2 & f_3
+\end{vmatrix}$ is a vector field.
+
+\begin{compactitem}
+    \item $\text{curl } f$ is continuous
+    \item $\text{curl } f = 0 \implies \partial_j f_i = \partial_i f_j \quad \forall 1 \le i \neq j \le n \implies f$ is conservative.
+    \item $\text{curl}(\bigtriangledown f) = 0$
+
+\end{compactitem}
+
+\subsection{Riemann Integral}
+
+\subsubsection{Partition}
+For $Q = I_1 \times \dots \times I_n, I_k = [a_k, b_k]$. A partition $P$ if $Q$ is a sub-collection of rectangular boxes $Q_1, \dots , Q_k$, s.t.:
+\begin{inparaitem}
+    \item $Q = \bigcup_{j = 1}^k Q_j$
+    \item $\text{int } Q_i \cap \text{int }Q_j \neq 0, i \neq j$
+\end{inparaitem}
+
+\begin{compactitem}
+    \item $Q$ is compact.
+\end{compactitem}
+
+\paragraph{Volume}
+$\text{vol}(Q) = \prod_{i = 1}^n (b_i - a_i) = \mu(Q) $
+
+\paragraph{Norm}
+$\text{Norm}(P) = \delta_p := \text{max }_{j = 1}^k(\text{diameter}(Q_j))$
+
+\subsubsection{Riemann Sum}
+For each $Q_j$ we choose a $\xi_i \in Q_j$. The Riemann sum of $f$ for partition $P$ and intermediate point $\{\xi\}$ is $R(f, P, \xi) := \sum_{j=1}^{k} f(\xi_i) \text{vol}(Q_j)$.
+
+\begin{compactdesc}
+    \item[Lower R. Sum:] $L_f(P) = \sum_{j=1}^{k} \text{inf}_{x \in Q_j} (f(x)) \text{vol}(Q_j)$
+    \item[Upper R. Sum:] $U_f(P) = \sum_{j=1}^{k} \text{sup}_{x \in Q_j} (f(x)) \text{vol}(Q_j)$
+\end{compactdesc}
+
+\subsubsection{Riemann Integral}
+\begin{compactdesc}
+    \item[Lower R. Integral:] $\underbar{I}(f) = \int_{\underbar{Q}} f \mathrm{d}x = \text{sup}\{L_f(P) | \forall \text{ partitions } P \text{ of } Q\}$
+    \item[Upper R. Integral:] $\bar{I}(f) = \int_{Q}^{-} f \mathrm{d}x = \text{inf}\{U_f(P) | \forall \text{ partitions } P \text{ of } Q\}$
+    \item[f is integrable:] if $\underbar{I}(f) = \bar{I}(f)$
+        \begin{compactitem}
+            \item it is denoted as $\int_{A} f(x) \mathrm{d}x$
+        \end{compactitem}
+\end{compactdesc}
+
+For $f: \R^n \to \R$ continuous on rectangular box $Q \in \R^n$ then $f$ is integrable.
+
+\subsubsection{Properties}
+For $X \subset \R^n$ compact, $f, g: Q \to \R$ integrable (continuous) and $\alpha, \beta \in \R$. Then:
+
+\begin{compactitem}
+    \item $\int_X \alpha f + \beta g \mathrm{d}x = \alpha \int_X f(x) \mathrm{d}x + \beta \int_X g(x) \mathrm{d}x$
+    \item If $f(x) \le g(x) \quad \forall x \in Q$ then $\int_X f(x) \mathrm{d}x \le \int_X g(x) \mathrm{d}x$.
+    \item If $f(x) \ge 0$ then $\int_X f(x) \mathrm{d}x \ge 0$
+    \item $\left| \int_X f(x) \mathrm{d}x \right| < \int_X |f| \mathrm{d}x \le (\text{sup}_X |f|) \text{vol}(X)$.
+    \item $\left| \int_X f(x) + g(x) \mathrm{d}x \right| < \int_X |f| \mathrm{d}x + \int_X | g(x) | \mathrm{d}x$.
+    \item Fubini: If $Q = I_1 \times \dots \times I_n$ and $f$ continuous on $Q$ then $\int_{Q} f(x_1, \dots x_n) \mathrm{d}x_1,\dots,x_n = \int_{a_1}^{b_1} \int_{a_2}^{b_2} \dots \int_{a_n}^{b_n} f(x_n) \mathrm{d}x_n \dots \mathrm{d}x_2 \mathrm{d}x_1$.
+    \item If $f = 1$ then $\int_X 1 \mathrm{d}x = \text{vol}(X)$
+    \item If $f \ge 0$ then $\int_X f(x) \mathrm{d}x = \text{vol}(\{(x, y) \in X \times \R | 0 \le y \le f(x) \})$.
+\end{compactitem}
+
+\subsubsection{Fubini}
+For $X \subset \R^n$ compact, $f: X \to \R, n = n_1 + n_2, n_i \ge 1$. Let $x_1 \in \R^{n_1}$, then $X_{x_1} = \{x_2 \in \R^{n_2} | (x_1, x_2) \in X\}$. Let $X_1 = \{x_1 \in \R^{n_1} | X_{x_1} \neq \emptyset \}$. The in general $X_1$ is compact in $\R^{n_1}$ and $X_{x_1}$ is compact in $\R^{n_2} \quad \forall x_1 \in X_1$.
+
+If $g(x_1) := \int_{X_1} f(x_1, x_2) \mathrm{d}x_2$ continuous on $X_1$ then $\int_X f(x_1, x_2) \mathrm{d}x = \int_{X_1} g(x_1) \mathrm{d}x_1 = \int_{X_1} \int_{X_{x_1}} f(x_1, x_2) \mathrm{d}x_2 \mathrm{d}x_1$.
+
+Switching $x_1$ and $x_2$ we have 
+$\int_X f(x_1, x_2) \mathrm{d}x = \int_{X_2} \int_{X_{x_2}} f(x_1, x_2) \mathrm{d}x_1 \mathrm{d}x_2$.
+
+\begin{compactdesc}
+    \item[$\mathbf{n = 2}$:] $n_1 = n_2 = 1$:
+        \begin{compactitem}
+            \item $D_1 := \{(x, y) | a \le x \le b, g(x) < y < h(x) \}$
+                \begin{compactitem}
+                    \item $\int_{D_1} f \mathrm{d}x \mathrm{d}y = \int_{a}^{b} \int_{g(x)}^{h(x)} f(x, y) \mathrm{d}y\mathrm{d}x$
+                \end{compactitem}
+            \item $D_2 := \{(x, y) | c \le y \le d, G(y) < x < H(y) \}$
+                \begin{compactitem}
+                    \item $\int_{D_2} f \mathrm{d}x \mathrm{d}y = \int_{c}^{d} \int_{G(x)}^{H(x)} f(x, y) \mathrm{d}y\mathrm{d}x$
+                \end{compactitem}
+        \end{compactitem}
+    \item[$\mathbf{n = 3}$:] 
+        \begin{inparaitem}
+            \item  $n_1 = 1, n_2 = 2$
+            \item  $n_1 = 2, n_2 = 1$
+        \end{inparaitem}
+    \item[$\mathbf{n = 4}$:] 
+        \begin{inparaitem}
+            \item  $n_1 = 1, n_2 = 3$
+            \item  $n_1 = 2, n_2 = 2$
+            \item  $n_1 = 3, n_2 = 1$
+        \end{inparaitem}
+\end{compactdesc}
+
+\begin{compactitem}
+    \item If the lines cross, we have to integrate two regions separately.
+    \item Sometimes we are required to change the order or integration to be able to determine a certain integral.
+    \item If $g(x_1)$ is not continuous on $X_1$ we have to split in into continuous parts and apply Frobini on them.
+\end{compactitem}
+
+\subsubsection{Domain Additivity}
+For $X = A_1 \cup A_2$ where $A_1, A_2 \subset \R^n$ are compact, and $f: X \to \R$ continuous on $X$ then $\int_{X = A_1 \cup A_2} f(x) \mathrm{d}x + \int_{A_1 \cap A_2} f(x) \mathrm{d}x = \int_{A_1} f(x) \mathrm{d}x + \int_{A_2} f(x) \mathrm{d}x$.
+
+\begin{compactitem}
+    \item If $A_1 \cap A_2 = \emptyset$ then $\int_{A_1 \cup A_2} f(x) \mathrm{d}x = \int_{A_1} f(x) \mathrm{d}x + \int_{A_2} f(x) \mathrm{d}x$.
+    \item If $\text{vol}_n(A_1 \cap A_2) = 0$ then $\int_{A_1 \cap A_2} f(x) \mathrm{d}x = 0 \quad \forall f$.
+\end{compactitem}
+
+\subsubsection{Parametrized m-Set}
+For $1 \le m \le n$. The function $\gamma: [a_1, b_1] \times \dots \times [a_m, b_m] \to \R^n$ is a parametrized $m$-set.
+
+\begin{compactitem}
+    \item $\gamma$ is continuous.
+    \item $\gamma \in C^1$ for $(a_1, b_1) \times \dots \times (a_m, b_m)$.
+\end{compactitem}
+
+\subsubsection{Negligible Sets in $\mathbf{\R^n}$}
+$Y \subset \R^n$ is negligible if $\exists$ finitely many $\gamma_i: X_i \to \R^n$ parametrized $m_i$-sets with $m_i < n$, s.t. $Y \subset \bigcup \gamma_i(x_i)$.
+
+For example:
+\begin{compactdesc}
+    \item[$\mathbf{n = 1}$:] $Y \subset$ union of finitely many points.
+    \item[$\mathbf{n = 2}$:] $Y \subset$ union of finitely many images of parametrized curves.
+\end{compactdesc}
+
+If $Y \subset \R^n$ closed and negligible then $\int_{Y} f(x) \mathrm{d}x = 0 \quad \forall f$.
+
+\subsection{Improper Integrals}
+For $X \subset \R^n$ non-compact and $f: X \to \R$ s.t $\int_K f(x) \mathrm{d}x \quad \forall K \subset X$ where $K$ is compact. For a sequence of regions $X_k, k = 1, \dots$ s.t.:
+\begin{inparaitem}
+    \item $x_k$ is compact $\forall k$
+    \item $x_k \subset x_{x + 1}$
+    \item $\bigcup_{k = 1}^{\infty} x_k = X$
+\end{inparaitem}.
+Then $\int_{X} f(x) \mathrm{d}x = \lim_{n \to \infty} \int_{X_n} f(x) \mathrm{d}x$ if the limit exists.
+
+\subsection{Change of Variables}
+For $X = X_0 \cup A, Y = Y_0 \cup B$ where:
+\begin{inparaitem}
+    \item $X, Y \subset \R^n$
+    \item $X, Y$ compact
+    \item $X_0, Y_0$ open 
+    \item $A, B$ negligible
+\end{inparaitem}.
+Let $\gamma: X \to Y \in C^1$ bijective and $\text{det }J_p(x) \neq 0 \quad \forall x \in X_0$. Let $Y = \gamma(X)$ and suppose $f: Y \to \R$ continuous. Then $\int_{Y} f(y) \mathrm{d}y = \int_{X} f(\gamma(x)) | \text{det }J_p(x) | \mathrm{d}x$.
+
+\subsubsection{Special Coordinates}
+\paragraph{Polar Coordinates}
+\begin{inparaitem}
+    \item $f: [0, \infty) \times [0, 2\pi) \to \R^2$
+    \item $(r, \theta) \mapsto (r \cos \theta, r \sin \theta)$
+    \item $\text{det }J_f(r, \theta) = r$
+    \item $\mathrm{d}x\mathrm{d}y = r\mathrm{d}r\mathrm{d}\theta$
+\end{inparaitem}
+
+\paragraph{Cylindrical Coordinates}
+\begin{compactitem}
+    \item $f: [0, \infty) \times [0, 2 \pi) \times \R \to \R^3$
+    \item $(0, \theta, z) \mapsto 
+        \begin{pmatrix}
+            r \cos \theta\\
+            r \sin \theta\\
+            z
+        \end{pmatrix}$
+    \item $\text{det }J_f = r$
+    \item $\mathrm{d}x\mathrm{d}y\mathrm{z} = r\mathrm{d}r\mathrm{d}\theta\mathrm{d}z$
+\end{compactitem}
+
+\paragraph{Spherical Coordinates}
+\begin{compactitem}
+    \item $f: [0, \infty) \times [0, 2 \pi) \times [0, \pi) \to \R^3$
+    \item $(r, \theta, \varnothing) \mapsto
+        \begin{pmatrix}
+            r \cos \theta \sin \varnothing\\
+            r \sin \theta \sin \varnothing\\
+            r \cos \varnothing
+        \end{pmatrix}$
+    \item $\text{det } J_f = -r^2 \sin \varnothing$
+    \item $\mathrm{d}x\mathrm{d}y\mathrm{z} = r^2 \sin(\varnothing)\mathrm{d}r\mathrm{d}\theta\mathrm{z}\varnothing$
+\end{compactitem}
+
+\subsubsection{Area in $n = 3$}
+Given a surface in $S = \{(x, y, z) \in \R^3\}$ by $f: \R^2 \to \R$, then $\text{Area}(S) = \int \int \sqrt{1 + (\partial_x f(x, y))^2 + (\partial_y f(x, y))^2} \mathrm{d}x\mathrm{d}y$ for $X \subset \R^2$.
+
+\begin{compactitem}
+    \item Can also be used to calculate the length of the arc of a curve.
+\end{compactitem}
+
+\recipe{Calculate Arc Length of $\gamma$}
+Given curve $\gamma [a, b] \to \R$, calculate its length.
+
+\begin{compactenum}
+    \item Calculate $\gamma'(t)$
+    \item Evaluate $int_a^b \sqrt{1 + |\gamma'(t)|^2 \mathrm{d}t}$
+\end{compactenum}
+
+\subsection{Green's Formula}
+For:
+\begin{compactenum}
+    \item $X \subset \R^2$:
+        \begin{compactitem}
+            \item $X$ is compact
+            \item $X$ is always on the left hand side of the target vector to the boundary
+        \end{compactitem}
+    \item Curve $\gamma: [a, b] \to \R^2$ forming the boundary (denoted as $\partial X$) of $X$:
+        \begin{compactitem}
+            \item $\gamma$ is closed: $\gamma(a) = \gamma(b)$
+            \item $\gamma$ is simple: $\not\exists a < s < t < b$ s.t. $\gamma(s) = \gamma(t)$ (i.e. $\gamma$ has no cycles)
+        \end{compactitem}
+    \item Vector field $f: X \to \R^2$:
+        \begin{compactitem}
+            \item $f \in C^1$
+            \item $f = (f_1, f_2)$ has components $f_1, f_2$.
+            \item $\partial_x i, \partial_y i, i = 1, 2$ exist and are continuous ($\implies \text{curl }f$ exists and is continuous).
+        \end{compactitem}
+\end{compactenum}
+
+Then $\int\int_X(\underbrace{\partial_x f_2 - \partial_y f_1)}_{\text{curl }f} \mathrm{d}x\mathrm{d}y = \int_{\gamma} f \mathrm{d}s$.
+
+\begin{compactitem}
+    \item A region can be the union of $k$ simple closed curves: $\gamma = \bigcup_{i = 1}^k \gamma_i$
+        \begin{compactitem}
+            \item Then $\int\int_X \text{curl }f \mathrm{d}x\mathrm{d}y = \sum_{k=1}^k \int_{\gamma_i} f \mathrm{d}s$.
+        \end{compactitem}
+\end{compactitem}
+
+\paragraph{Usage}
+\begin{compactenum}
+    \item Calculate area of a region as a line integral.
+    \item Calculate line integral if the double integral of $\text{curl }f$ looks simpler.
+\end{compactenum}
+
+\recipe{Calculate line integral as double integral}
+Given $f = (f_1, f_2): X \to \R^2 \in C^1$ for which both partial derivatives exists and curve $\gamma: [a,  b] \to \R^2$ which forms the boundary of $X$ and is closed and simple.
+
+Goal, calculate $\int_{\gamma} f \mathrm{d}s$
+
+\begin{compactenum}
+    \item Check if $X$ lies on the left of $\gamma$. If it is not, make it do that.
+    \item Calculate partial derivatives $\partial_x f_2$ and $\partial_y f_1$.
+    \item Calculate $\text{curl }f = \partial_x f_2 - \partial_y f_1$
+    \item Calculate $\int \int_X \text{curl }f \mathrm{d}x\mathrm{d}y$
+\end{compactenum}
+
+\recipe{Calculate area enclosed by curve}
+Given curve $\gamma: [a,  b] \to \R^2$ which is closed and simple.
+
+Goal, find the area of $X$ which is enclosed by the curve.
+
+\begin{compactenum}
+\item Select $f = (0, x)$ or $f = (-y, 0)$ or anything else with $\text{curl }f = 1$.
+    \item $\text{Area}(X) = \int_{\partial X} f(x) \mathrm{d}x = \int\int_X 1 \mathrm{d}x\mathrm{y}$.
+\end{compactenum}
+
+\recipe{Curve goes in wrong direction}
+Given curve $\gamma: [a,  b] \to \R^2$ which is closed and simple but the enclosed area is on the right.
+
+\begin{compactitem}
+    \item If curve is symmetric w.r.t. x-axis
+        \begin{compactitem}
+            \item $-\gamma$ parametrizes curve in opposite direction.
+            \item $\int_{-\gamma} f \mathrm{d}s = - \int_{\gamma} f \mathrm{d}s$
+        \end{compactitem}
+\end{compactitem}
+
+Other cases:
+\begin{compactitem}
+    \item Given a two dimensional integral $\int\int_X g(x, y) \mathrm{d}x\mathrm{y}$ which we want to evaluate. If we can find $f = (f_1, f_2)$ with $\text{curl }f = g$ then we can use $\int\int_X g \mathrm{d}x\mathrm{d}y = \int\int_X \text{curl }f \mathrm{d}x\mathrm{y} = \int_{\partial X = \gamma} f \mathrm{d} x$
+\end{compactitem}
