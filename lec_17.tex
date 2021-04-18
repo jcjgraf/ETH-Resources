@@ -38,7 +38,7 @@ The fetch, decode, execute, memory, write back and pc stages are run in sequenti
 The fetch, decode, execute and write-back stages are pipelined. While this allows for better utilisation of the hardware, it yields numerous problems. Most notably are data and control hazards.
 
 \paragraph{Performance}
-The program execution time is $=) \text{IC} \cdot \text{CPI} \cdot CCT$
+The program execution time is $= \text{IC} \cdot \text{CPI} \cdot CCT$
 \begin{description}
     \item[IC:] Instruction count
         \begin{itemize}
@@ -91,14 +91,14 @@ The following table depicts the latency (number of cycles required) and cycles/i
 \includegraphics[width=0.8\textwidth]{17Haswell.png}
 
 \paragraph{Latency vs Throughput}
-For example FP multiplication has a latency of $5$ and cycles/issue of $1$. The execution of $5$ independent multiplications takes thus $7$ cycles to complete. In comparison, the execution of $5$ dependant instructions takes $25$ cyces to complete.
+For example FP multiplication has a latency of $5$ and cycles/issue of $1$. The execution of $5$ independent multiplications takes thus $9$ cycles to complete. In comparison, the execution of $5$ dependant instructions takes $25$ cyces to complete.
 
 \paragraph{Data hazards}
 There are three types of data hazards
 
 \begin{description}
     \item[Read after Write (RAW):]  Only true dependency, we actually need to wait
-    \item[Write afte rWrite (WAW):] Can be fixed with  register renaming
+    \item[Write after Write (WAW):] Can be fixed with  register renaming
     \item[Write after Read (WAR):] Can be fixed with register renaming
 \end{description}
 
@@ -124,7 +124,7 @@ From a functional perspective we can view the execution of instruction as a depe
 \paragraph{Performance Bounds}
 There are two types of bounds.
 \subparagraph{Latency Bound}
-The latency bound limits the performance, when operations must be executed sequentially.
+The latency bound limits the performance, when operations must be executed sequentially. Therefore, the latency bound is simply the latency of the functional unit.
 
 The performance is determined by the latency of the operation. So, the latency bound of our benchmark problem is simply the latency of the designated operation. For a vector of length $8$ and multiplication operation, we get following \textit{dependency graph}:
 
@@ -151,7 +151,7 @@ We can see that only the performance of the integer addition has improved. All o
 \subparagraph{Throughput Bound}
 The throughput bound is the bound of the performance when instructions can execute in parallel.
 
-For our benchmark we get
+Throughput for no parallel execution is calculated as $1 / \text{cycles/issue}$. When multiple instructions are run in parallel, the formula is $\text{throughputSeq} / \text{\#parallelInstruction}$. To get the throughput bound, we have to take the maximum of the throughput of the operation itself and the throughput of the load/store operation. This is because the load/store operation may be the bottleneck.
 
 \includegraphics[width=0.8\textwidth]{17_performanceBoundTable.png}
 
@@ -171,7 +171,7 @@ For our benchmark we get a nearly $2x$ speedup for FP addition and FP and intege
 
 \includegraphics[width=0.8\textwidth]{17_reassocationunrollingtable.png}
 
-\subparagraph{Ĺoop Unrolling with Separate Accumulators ($2x2$)}
+\subparagraph{Loop Unrolling with Separate Accumulators ($2x2$)}
 Another idea is to increase the number of accumulators. This yields a different for of reassociation.
 
 \includegraphics[width=0.8\textwidth]{17_seperateaccumulators.png}

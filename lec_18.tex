@@ -19,7 +19,7 @@ The three fundamental metrics are:
             \item It tells how often to be have to go down the hierarchy to memory.
             \item Typically, it is $3-10$\% for L1 and $< 1$\% L2.
         \end{itemize}
-    \item[Hit Time:] The time it takes to deliver a hit from the cache to the CPU, including the time required to determine of the data is in the cache.
+    \item[Hit Time:] The time it takes to deliver a hit from the cache to the CPU, including the time required to determine if the data is in the cache.
         \begin{itemize}
             \item It is the time he have to stall in ordre to wait for data.
             \item Typically, it is $1 - 2$ clock cycles for L1 and $5 - 20$ clock cycles for L2.
@@ -49,7 +49,7 @@ The following principle can be extended to $n$ level of caches:
 There are three main types of cache misses:
 
 \begin{description}
-    \item[Cold:] Occurs when the cache is empty and we access the first block
+    \item[Cold:] Occurs when we access a block the first time (and not when the cache is empty or something like that!).
     \item[Conflict:] When at the designated location in the cache is a block, but not the one we are looking for
     \item[Capacity:] When the set of active cache blocks is larger than than the cache
 \end{description}
@@ -78,16 +78,16 @@ Each block has:
     \item[Data:] The data of the block.
 \end{description}
 
-The cache has size $S \cdot E \cdot B$ bytes.
+The cache has size $S \cdot E \cdot B$ bytes (but to store it we need more memory because of the valid bit and tag).
 
 \includegraphics[width=1\textwidth]{18_cacheStructure.png}
 
 \subsubsection{Cache Reads}
-Given a memory address: In order to check if the desired block is already in memory, the address is split into three parts
+Given a memory address: In order to check if the desired block is already in cache, the address is split into three parts
 
 \begin{description}
     \item[Block Offset:] Last $b$ bits.
-    \item[Set Index:] The middle $s$s bits.
+    \item[Set Index:] The middle $s$ bits.
     \item[Tag:] The most important $t$ bits.
 \end{description}
 
@@ -124,7 +124,7 @@ Since we know that this is the address of a short int, we would access the bytes
 
 If there is no match, one line in the set gets replaced according to some replacement policies.
 
-While a higher associative cache has , it comes with advantage of being more flexible in what to store, it comes with the cost of more tag comparisons.
+While a higher associative cache comes with advantage of being more flexible in what to store, it also comes with the cost of more tag comparisons (higher HW cost).
 
 \subsubsection{The Memory Hierarchy}
 As the following table shows, there are many different caches responsible for different task
@@ -153,7 +153,7 @@ There are policies on what to do if we write to a block which is also in cache:
 \end{description}
 
 \paragraph{Write Miss}
-These policies describe what do to when we write to a location which is not in memory
+These policies describe what do to when we write to a location which is not in cache:
 
 \begin{description}
     \item[Write-allocate:] Load block into cache and update the entry only in the cache
@@ -171,7 +171,7 @@ These policies describe what do to when we write to a location which is not in m
 \end{description}
 
 \paragraph{Other Features}
-There are other demission to be made when designing a cache:
+There are other decisions to be made when designing a cache:
 
 \begin{description}
     \item[Unified:] Instructions and data is in the same cache
@@ -237,9 +237,8 @@ When doing block matrix multiplication, we try to make better use of locality by
 
 Additionally, to the previous assumptions, we assume that three blocks fit into cache ($3B^2 < C$). So $B$ is a free parameter, but restricted by this assumption.
 
-For one blocks, we have a total of $\frac{B^2}{8}$ misses. The first block iteration we have $\frac{2n}{B} \cdot \frac{b^2}{8} = \frac{nB}{4}$ many misses.
+For one blocks, we have a total of $\frac{B^2}{8}$ misses. The first block iteration we have $\frac{2n}{B} \cdot \frac{B^2}{8} = \frac{nB}{4}$ many misses.
 
 The number of misses for each iteration is equal. Thus, we get a total number of misses of $\frac{nB}{4} \cdot (\frac{n}{B})^2 = \frac{n^3}{4B}$.
 
-
-The reason of the drastic difference between non-blocking ($\frac{9}{8} \cdot n^3$ and blocking ($\frac{1}{4B} \cdot n^3$ is because matrix multiplication has inherent temporal locality.
+The reason of the drastic difference between non-blocking ($\frac{9}{8} \cdot n^3$) and blocking ($\frac{1}{4B} \cdot n^3$) is because matrix multiplication has inherent temporal locality.

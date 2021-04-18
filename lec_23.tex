@@ -9,11 +9,11 @@ Compared to the MESI, MOESI added an \textit{Owner} state.
     \item \textit{Modified}: (same meaning)
     \item \textit{Owner}: there may be several copies of this cache block. We are the only ones who are allowed to modify it but we need to let the others know about the new value.
     \item \textit{Exclusive}: (same meaning)
-    \item \textit{Shared}: there may be several copies of this cache block. Only one other process has the right to modify it.
+    \item \textit{Shared}: there may be several copies of this cache block. Only one process (the owner) has the right to modify it.
     \item \textit{Invalid}: (same meaning)
 \end{itemize}
 
-The owner state allows to share dirty data, additionally to clean cache lines as it it in MESI. So it allows for quickly satisfy read requests for dirty cache blocks without writeback to memory. Accesses to clean data is still done via memory.
+The owner state allows to share dirty data, additionally to clean cache lines as it is in MESI. So it allows for quickly satisfy read requests for dirty cache blocks without writeback to memory. Accesses to clean data is still done via memory.
 
 This protocol is good if going to remote cache is cheaper than going into main memory.
 
@@ -61,7 +61,7 @@ To notify when we need again synchronisation, CPUs provide explicit synchronisat
 \paragraph{Processor Consistency}
 This is a certain relaxation of SC and it is the default for x86-64. It is also referred to as \textit{Total Store Ordering (TOS)}.
 
-It provides the write-to-read relaxation.This means that all processors see writes from one processor in the order they were issued by that processors. But processors can see many different interleaving of writes from different processors.
+It provides the write-to-read relaxation. This means that all processors see writes from one processor in the order they were issued by that processors. But processors can see many different interleaving of writes from different processors.
 
 This provides a noticeable performance improvement.
 
@@ -88,7 +88,7 @@ Memory barriers prevent the CPU from reordering load/store instructions before a
 
 \includegraphics[width=0.8\textwidth]{23_MemoryBarriers.png}
 
-There are also fences for only stores \code{LFENCE} and store \code{SFENCE}.
+There are also fences for only loads \code{LFENCE} and stores \code{SFENCE}.
 
 \subsubsection{Multicore Synchronisation: Test-and-Set}
 There are two different ways so synchronize across processors:
@@ -102,7 +102,7 @@ There are two different ways so synchronize across processors:
 \end{itemize}
 
 \paragraph{Test-And-Set (TAS)}
-TAS is one of the simplest non-trivial atomic registers and is is implemented in HW. Firstly, we read value stored at a certain memory location into a register. Then we store $1$ into that location. This is all done atomically. So the memory bus must be blocked in the meantime.
+TAS is one of the simplest non-trivial atomic registers and it is implemented in HW. Firstly, we read value stored at a certain memory location into a register. Then we store $1$ into that location and return the old value which is stored in a register. This is all done atomically. So the memory bus must be blocked in the meantime.
 
 \subsubsection{Spinlock}
 We can use TAS to implement a spinlock. To acquire a mutex we use
@@ -133,7 +133,7 @@ This provides great improvements over the normal TAS. The inner while loop is no
 In general, we should not use this in practice. Compilers and processors may reorder the instructions and the memory consistency may break the code's semantics too. While TAS is implemented in HW, Test and TAS is not.
 
 \subsubsection{Compare and Swap}
-This is another atomic operations. It is more complex than TAW but also more powerful. It is commonly used for wait-free data structures. It takes three parameters, a address and two values:
+This is another atomic operations. It is more complex than TAS but also more powerful. It is commonly used for wait-free data structures. It takes three parameters, an address and two values:
 
 \includegraphics[width=0.8\textwidth]{23_CompareAndSwap.png}
 
@@ -144,7 +144,7 @@ In general we do a copy of the DS which we modify. When none has changed the ori
 
 \includegraphics[width=0.8\textwidth]{23_CasEx1.png}
 
-Given a DS, a reader and a write. \code{Ref} is the reference count to the DS. The reader increments the ref and starts reading. The writer increments the ref, copies the DS, decrement the ref and then modifies it. When done, it wants to make the copied DS the new original one.
+Given a DS, a reader and a write. \code{Ref} is the reference count to the DS. The reader increments the ref and starts reading. The writer increments the ref, copies the DS, decrements the ref (of the original) and then modifies the copy (ref of copy is $1$). When done, it wants to make the copied DS the new original one.
 
 \includegraphics[width=0.8\textwidth]{23_CasEx2.png}
 
@@ -189,7 +189,7 @@ On this architecture we have:
 
 \includegraphics[width=0.8\textwidth]{23_x86Summary.png}
 
-Atomiv exchange of registers is pretty much TAS.
+Atomic exchange of registers is pretty much TAS.
 
 \subsubsection{Simultaneous Multithreading}
 This is called hyperthreading too (by intel).

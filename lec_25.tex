@@ -2,7 +2,7 @@
 
 \lecture{25}{Week: 13}{Direct Memory Access}
 
-For large data transfers we should not use programmed I/O but direct memory access. This way the data transfer is not routed via the CPU but over a dedicated DMA controller. This way the CPU can do different things in the meantime. The CPU is still responsible for initiating the transfern but once this is done the DMA controller takes over. Then done, the DMA controller interrupts the CPU.
+For large data transfers we should not use programmed I/O but direct memory access. This way the data transfer is not routed via the CPU but over a dedicated DMA controller. This way the CPU can do different things in the meantime. The CPU is still responsible for initiating the transfern but once this is done the DMA controller takes over. When done, the DMA controller interrupts the CPU.
 
 This is build into the south bridge of processors.
 
@@ -32,7 +32,7 @@ Possible disadvantages are that there is a possibility of bus contentions during
 DMA may make memory inconsistent when it change memory blocks which are cached by the CPU. Possible solutions to this issue are:
 
 \begin{itemize}
-    \item We can mark pages as non-cacheable (similarly as we did with regions of memory which correspond to device drivers). This is not a great data since once the transfer is complete we want to be able to cache this data.
+    \item We can mark pages as non-cacheable (similarly as we did with regions of memory which correspond to device drivers). This is not a great idea since once the transfer is complete we want to be able to cache this data.
     \item Since de DMA controller sits on the main memory bus it can snoop and interact with the cache coherency protocol. Obviously, this does only work for SMP systems.
     \item The OS can explicitly flush and invalidate regions of memory. This mean that the OS writes addresses, which are about to get written to disk by the DMA controller back to memory. And it marks regions of memory as invalid when they are going to get overwritten by the DMA.
 \end{itemize}
@@ -50,7 +50,7 @@ Besides the discussed purpose, IOMMU has many other purposes.
     \item Polling is too slow so interrupts are used to notify the CPU for certain actions.
     \item CPU spends too much time copying, therefore DMA controllers were used to offload this task from CPUs and allow them to happen in parallel.
     \item Too many interrupts slow down the controller and CPU and resynchronisation is required (do not know that this means).
-    \item Devices become more complex and are almost a processor themselves.
+    \item Devices become more complex and are almost a processor themselves (e.g. GPU).
 \end{enumerate}
 
 
@@ -82,7 +82,7 @@ Buffer / descriptor rings are visualized as a ring with two pointer to it. The \
 
 The buffer is of limited size and therefore it is crucial to check if the is space. As a data structure, it is implemented as a queue with two pointers and a fixed size. The entries are contiguous in memory. Often, the values of the queue are pointer to other places in memory to allow to store entries of different size.
 
-Each descriptor is either owned by the CPU or the device. The one who own a descriptor is the one who can read it.
+Each descriptor is either owned by the CPU or the device. The one who owns a descriptor is the one who can read it.
 
 Once everything is initialized by the CPU, there is no need for further communication and synchronisation between the device and the CPU (expect for underruns and overruns). When writing or reading, the only thing the two agents have to make is that they read/write a entry which belongs to them (i.e. that they are not causing an overrun or underrun).
 
@@ -104,14 +104,14 @@ The following image shows a buffer ring for receiving (reading) data.
 Most modern systems use such buffer descriptors (instead of reading and writing directly to memory). This pointers provide a level of indirection. In addition to the raw data, also some metadata like error messages are transmitted. So we have to ability to write them to a separate buffer. This way data and metadata is not mixed. Further advantages are that we are much more flexible where data is stored since as we said, the entries of the ring can be pointers them selves. Buffers can be of different size and they can even resize dynamically.
 
 \paragraph{Overruns and Underruns while Receiving}
-While the CPU is receiving data, if the buffer gets full and it does not have space for received packages the device starts to discard new packages which are coming in (it does not overwrite old packages). There may be some other buffers which kind of act like a backup buffer once the "main" buffer is full. In general this is not that bad when packages are lost since there are protocol that detect that and can request resending of this package. The CPU must signal the device must wait (tell the device our status).
+While the CPU is receiving data, if the buffer gets full and the device does not have space for new packages the device starts to discard new packages which are coming in (it does not overwrite old packages). There may be some other buffers which kind of act like a backup buffer once the "main" buffer is full. In general this is not that bad when packages are lost since there are protocol that detect that and can request resending of this package. The CPU must signal the device must wait (tell the device our status).
 
 When the CPU has read all data of the buffer, it must wait. One solution to deal with that is to spin poll, i.e. spin loop and check if there is new data to process. But this keeps to CPU busy and it cannot do anything else in the meantime. Another solution is to signal to the device that is should interrupt the CPU once there is new data is the buffer. This way the CPU can deal with other things in the meantime.
 
 \paragraph{Overruns and Underruns while Transmitting}
 When the CPU is writing to the buffer and the buffer is full, it has to wait for the device to make space on the buffer for further writes. Again, it can spin poll or tell the device that it should interrupt it once there is again space in the buffer.
 
-If there are no more packages for the device to receive it must wait. The device could continue to poll the buffer till there is new data to read or it could signal the CPU to wake it up where there is more data in the buffer and go to sleep.
+If there are no more packages for the device to receive it must wait. The device could continue to poll the buffer till there is new data to read or it could signal the CPU to wake it up when there is more data in the buffer and go to sleep.
 
 \subsubsection{More Complex Devices}
 \paragraph{Network Adapter/Network Interface Card (NIC)}
@@ -180,7 +180,7 @@ On x86 hardware, PCI-based DMA listens to the memory bus and ensures this way th
 
 \begin{itemize}
     \item On DMA read a certain address. Before the DMA reads, we have to make sure that the lastest changes of that address are in memory (DMA reads memory). We do this by flushing (write dirty data back to memory) the addresses. After the DMA read, the CPU invalidates (discard all lines from the cache) the cache for the address. This is done to prevent using outdated descriptors (on a DMA read, the device also writes to memory).
-    \item On DMA write a certain address. Before the DMA write, we flush or invalidate the whole (I guess) cache to make sure that memory has the latest changes. After the write we invalidate to cached whole cache in order to fetch the new data from memory.
+    \item On DMA write a certain address. Before the DMA write, we flush or invalidate the whole (I guess) cache to make sure that memory has the latest changes. After the write we invalidate the whole cache in order to fetch the new data from memory.
 \end{itemize}
 
 \paragraph{IO State Machines; Receive (software side)}
@@ -235,4 +235,4 @@ Then we must program the address translation information. For each device we mus
 \paragraph{PCI Interrupts}
 There are four interrupt lines (INTA, INTB, INTC, INTD). When a PCI bus detects a interrupts, it forwards it to the root bridge which then interrupts the CPU. 
 
-PCIe introduces \textit{message-signaled interrupts (MSIs)}. Instead of settings a physical pin of the CPU, we wan set a certain memory mapped address. This will signal the right interrupt to the CPU. So interrupts are sent to specific addresses and depending on the address a different interrupt is sent. This reduces the need of pins on the CPU.
+PCIe introduces \textit{message-signaled interrupts (MSIs)}. Instead of settings a physical pin of the CPU, we can set a certain memory mapped address. This will signal the right interrupt to the CPU. So interrupts are sent to specific addresses and depending on the address a different interrupt is sent. This reduces the need of pins on the CPU.

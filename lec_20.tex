@@ -2,9 +2,8 @@
 
 \lecture{20}{Week: 11}{Virtual Memory}
 
-
 \subsubsection{Recap: Address Translation}
-On most modern systems programs do not directly interact with the physical memory, but with its own virtual memory space. All these private virtual memory spaces are mapped on he physical memory.
+On most modern systems programs do not directly interact with the physical memory, but with its own virtual memory space. All these private virtual memory spaces are mapped on to physical memory.
 
 \paragraph{Address Space}
 The virtual/physical address space is a ordere set of contagious non-negative integer address from $0$ up to some $N - 1$. Where $N$ is determined by the system (bits) for virtual memory, and for physical memory by the size of the available memory.
@@ -22,7 +21,7 @@ Virtual memory is handles by OS and hardware. We need hardware for a efficient t
 \paragraph{Address Translation}
 The OS operates on memory in blocks called pages. This is similar to caches and cache blocks. The default page size is 4KB. This size determines the granularity of the translation.
 
-The translation is done using the page table. The table itself is stored in XXX and the start address is stored in the page table base register (PTBR). The start address is different for each process. The translation is done as as follows. The virtual address contains two parts, the \textit{Virtual Page Numer (VPN)} and the \textit{Virtual Page Offset (VPO)}. The VPN is taken and used to index into the page table. The entry gives uf the \textit{Physical Page Number (PPN)}. The PPN is concatenated with the unchanged VPO to get the physical address. An additional valid bit tells if the given VPN is valid or if it is not in memory (page fault).
+The translation is done using the page table. The table itself is stored on disk and the start address is stored in the \textit{page table base register (PTBR)}. Each process has its own page table, therefore the PTBR is different for each process. The translation is done as as follows. The virtual address contains two parts, the \textit{Virtual Page Numer (VPN)} and the \textit{Virtual Page Offset (VPO)}. The VPN is taken and used to index into the page table. The entry gives us the \textit{Physical Page Number (PPN)}. The PPN is concatenated with the unchanged VPO to get the physical address. An additional valid bit tells if the given VPN is valid or if it is not in memory (page fault).
 
 \includegraphics[width=0.8\textwidth]{20_translationProcedure.png}
 
@@ -31,7 +30,7 @@ The translation is done using the page table. The table itself is stored in XXX 
 The use of VM has three main advantages:
 
 \subparagraph{Efficient use of limited RAM}
-Using $64$ bit addressing, we can address $16$ Exabytes of data. However, a commons system has only a few GB of RAM. So, VM provides a way to cache data by only storing parts of the virtual address space in disk and only keep active arias of virtual address space on memory. 
+Using $64$ bit addressing, we can address $16$ Exabytes of data. However, a commons system has only a few GB of RAM. VM provides a mapping for these two sets. All used pages are stored on disk and the currently active addresses are "cached" by storing them on main memory.
 
 Memory pages can be in three different stages:
 \begin{description}
@@ -44,20 +43,20 @@ Cached and uncached pages are found on disk. Additionally, cached  pages are als
 
 \includegraphics[width=0.8\textwidth]{20_cachingTool.png}
 
-Since disk access is incredibly expensive, pages are larger then cache blocks to prevent going to cache too often. The process of bringing data (pages) from disk into memory is called paging or swapping. Replacement algorithms are highly sophisticated and therefore implemented in software. To further reduce the number of required paging, write-back policy is used instead of write-through.
+Since disk access is incredibly expensive, pages are larger then cache blocks to prevent going to disk too often. The process of bringing pages from disk into memory is called paging or swapping. Replacement algorithms are highly sophisticated and therefore implemented in software. To further reduce the number of required paging, write-back policy is used instead of write-through.
 
 This works thanks to locality. Meaning, the programs tend to access a set of active virtual pages, called the \textit{working set}. As long as the size of the working set is smaller than the main memory size, we can expect good performance. But as soon as it exceeds the memory size we get a performance meltdown, caused by copying and moving of pages.
 
-Further, the smaller the page size, the more mappings we have. Since the \textit{Translation Lookaside Buffer (TLB)} is very small, only few mappings can be cached there. 
+Further, the smaller the page size, the more mappings we have. Since the \textit{Translation Lookaside Buffer (TLB)} is very small, only few mappings can be cached there.
 
 \subparagraph{Simplified memory management for programmers}
-Each process gets a virtual address space of equal layout (i.e. heap, stack etc are located at the same addresses). The virtual address space is kind of a abstraction of the full memory mode. The linear virtual memory as actually scattered across the physical memory. But it is all managed by the OS.
+Each process gets a virtual address space of equal layout (i.e. heap, stack etc are located at the same addresses). The virtual address space is kind of a abstraction of the full memory mode. The linear virtual memory is actually scattered across the physical memory. But it is all managed by the OS.
 
 \subparagraph{Protection and Sharing}
 Virtual address spaces are isolated from each other different programs cannot interfere which each others memory. Besides that, PTE has some extra bits to tell if a physical memory location is readable, writable, executale or only accessible by superusers. The page fault hander checks these bits before remapping and causes a SIGSEGV exception in case they are violated.
 
 \subparagraph{Simplifies linking and loading}
-Since address spaces share the same layout. Linker precisely know at what address which section starts. This simplifies the implementation of linkers. 
+Since address spaces share the same layout. Linker precisely know at what address which section starts. This simplifies the implementation of linkers.
 
 Pages also allow for on dempand loading, where .data and .text are copied on demand. This improved loading efficiently greatly.
 
@@ -65,7 +64,7 @@ Pages also allow for on dempand loading, where .data and .text are copied on dem
 \subsubsection{Address Translation Process}
 
 \paragraph{Page Hit}
-The steps in case of a page hit are the following:
+The steps in case of a page hit (requested PTE is in memory) are the following:
 \begin{enumerate}
     \item The CPU sends the VM address to the MMU
     \item The MMU does a PTE access in the lookup table in the main memory
@@ -94,9 +93,9 @@ If the page is not cached, but uncached we have a miss (get a page fault) and ha
 The page fault hander is implemented in OS since it is more sophisticated.
 
 \subsubsection{Translation Lookaside Buffers (TLB)}
-Since the page table is stored in memory as all other data, PTEs gets also cached in the cache hierarchy. However, PTEs may get evicted by other data reference. Also, while L1 cache is quite fast, it still takes a few cycles. 
+Since the page table is stored in memory as all other data, PTEs gets also cached in the cache hierarchy. However, PTEs may get evicted by other data reference. Also, while L1 cache is quite fast, it still takes a few cycles.
 
-The \textit{Translation Lookaside Buffer (TLB)} solves this problem. It is a small hardware cache in the MMU and caches mappings of virtual page number ot physical page numbers. For small page tables, it may even contain the complete table.
+The \textit{Translation Lookaside Buffer (TLB)} solves this problem. It is a small hardware cache in the MMU and caches mappings of virtual page number to physical page numbers. For small page tables, it may even contain the complete table.
 
 TLB are very common.
 
@@ -106,8 +105,8 @@ In case the translation mapping in in the TLB, the following steps are executed.
 \begin{enumerate}
     \item The CPU sends the VM address to the MMU
     \item The MMU indexes the TLB using the VPN bits
-    \item From the TLV it receives the PTE bits
-    \item The MMU concatenates the PTE and address offset and accesses and accesses the memory.
+    \item From the TLB it receives the PTE bits
+    \item The MMU concatenates the PPN from the PTE and PPO and accesses memory.
     \item The data is received and send to the CPU.
 \end{enumerate}
 
@@ -120,10 +119,10 @@ If the VPN is not in TLB, me steps are:
 
 \begin{enumerate}
     \item The CPU sends the VM address to the MMU
-    \item The MMU indexedthe LTB using the VPN bits. But VPN is not in the TLB and therefore we do not get anything back.
+    \item The MMU indexes the LTB using the VPN bits. But VPN is not in the TLB and therefore we do not get anything back.
     \item The MMU does a PTE access in the lookup table in the main memory
-    \item The MMU receives the PTE from memory and puts it into the TLB (for further accesses to this page). receives the PTE from memory and puts it into the TLB (for further accesses to this page).
-    \item The MMzu accesses the physical memory using the translated address
+    \item The MMU receives the PTE from memory and puts it into the TLB (for further accesses to this page).
+    \item The MMU accesses the physical memory using the translated address
     \item The data is receive and send to the CPU
 \end{enumerate}
 
@@ -144,7 +143,7 @@ The first $16$ of total $256$ entries of the page table are:
 \includegraphics[width=0.8\textwidth]{20_exPageTable.png}
 
 \paragraph{TLB}
-The TLB contains $16$ entries and is $4$-way associative. The VPN is used to index into the TLB. The $2$ LSB of the VPN, the TLB index (TLBI), are used to determine the set of the TLB to use, and the remaining bits of the VPN, the TLB tyg (TLBT), are used to verify the tag of the TLB entry.
+The TLB contains $16$ entries and is $4$-way associative. The VPN is used to index into the TLB. The $2$ LSB of the VPN, the TLB index (TLBI), are used to determine the set of the TLB to use, and the remaining bits of the VPN, the TLB tag (TLBT), are used to verify the tag of the TLB entry.
 
 \includegraphics[width=0.8\textwidth]{20_ex_Tlb.png}
 
@@ -176,6 +175,3 @@ For the virtual address $0x0020$ we have:
 \includegraphics[width=0.8\textwidth]{20_ex3.png}
 
 While the tag is actually in the TLB, it is invalid and hence we do not get a PPN. Therefore, we check in the page table in memory, which is the case for this example.
-
-
-\textbf{RECHECK: The images of the last two examples are probably wrong}

@@ -23,7 +23,7 @@ and for huge pages:
 
 \includegraphics[width=0.8\textwidth]{22_hugePageEntry.png}
 
-All in all, this simplifies and speeds up the address translation. This is very useful for programs with very large, contiguous working sets. Since the TLB is very small, reducing the number of pages increases the hit rate of the TLB. CPUs can do deal with different page sizes in parallel. In Linux, \code{hugetlbfs} is uses for support of larger tables and they get mounted like a regular file system.
+All in all, this simplifies and speeds up the address translation. This is very useful for programs with very large, contiguous working sets. Since the TLB is very small, reducing the number of pages increases the hit rate of the TLB. CPUs can deal with different page sizes in parallel. In Linux, \code{hugetlbfs} is uses for support of larger tables and they get mounted like a regular file system.
 
 \subsubsection{Optimizing for the TLB}
 Beside caches, we also need to consider the TLB when optimizing code. Lets assume we want to do matrix multiplication followed by a matrix addition.
@@ -36,7 +36,7 @@ But if a block has $800$ rows of size $8$ bits each (i.e. $6400$ bits) is larger
 
 Just looking at L2 blocking at this size looks ideal, but it is not for the TLB. It will cause TLB thrashing. To prevent this, it makes since the shrink the size of a block and copy the contents of each blocks into a contiguous region of memory to make them fit into a small enough number of page such that they can be hold in the TLB.
 
-We assume a TLB size of $128$ size. If $B = 150$ and the copy the content into a contiguous region of a memory we have a contiguous region of memory of size $150 \cdot 150 \cdot 8 \cdot 3$ bytes. Divided by $4$ KB gives about $128$ tage, which will fit into the TLB. Even though the copying cost $O(B^2)$ we do $O(B^3)$ operations on them. We also need extra space.
+We assume a TLB size of $128$ size. If $B = 150$ and copy the content into a contiguous region of a memory we have a contiguous region of memory of size $150 \cdot 150 \cdot 8 \cdot 3$ bytes. Divided by $4$ KB gives about $128$ tage, which will fit into the TLB. Even though the copying cost $O(B^2)$ we do $O(B^3)$ operations on them. We also need extra space.
 
 \subsection*{Multiprocessing}
 \subsubsection{Introduction}
@@ -82,13 +82,13 @@ Cache coherency is about the view on memory by all processors. It means that eve
 The main advantage of this s the ease of programming. But is it more complex to implement.
 
 \paragraph{Consistency}
-Memory consistency is the order in which changes to memory are soon by different processors. It is impotent to to have a clear definition.
+Memory consistency is the order in which changes to memory are seen by different processors. It is impotent to have a clear definition.
 
 \subparagraph{Program Order}
 Program order is the order in which a program on a processor appear to issue read and writes. It only referees to local read and writes, since it is what is seen by other processes. But the CPU my rearrange other instructions (out-of-order execution, write buffers etc.).
 
 \subparagraph{Visibility Order}
-Visibility order it the order in which all reads and writes are seen by other processors. It referees to all operations in the machine. Different processors may have a different visibility order.This means that each processor reads the value written by the last write in visibility order.
+Visibility order it the order in which all reads and writes are seen by other processors. It referees to all operations in the machine. Different processors may have a different visibility order. This means that each processor reads the value written by the last write in visibility order.
 
 \subsubsection{Sequential Consistency}
 It is conceptionally the simplest consistency model. Operation from a processor appear to all other processors in program order. And all processors see (visibility order) the same interleaving of the program orders of the different processors. I.e. the visibility order of each processor is the same.

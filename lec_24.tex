@@ -1,10 +1,10 @@
 %! TEX root = ./main.tex
 
-\lecture{24}{Week: 11}{Non-Uniform Memory Access(NUMA)}
+\lecture{24}{Week: 12}{Non-Uniform Memory Access(NUMA)}
 
 \subsubsection{Non-Uniform Memory Access (NUMA)}
 \paragraph{SMP Limitations}
-SMP is not well suited for scalability. While we may add more cache to compensate for adding more cores, the main bottleneck is the memory bandwidth. Using a memory bus, only one CPU can communicate via the bus at the time. NUMB arises due to theses limitations. In this architecture, the memory bus is replaced by a interconnection network.
+SMP is not well suited for scalability. While we may add more cache to compensate for adding more cores, the main bottleneck is the memory bandwidth. Using a memory bus, only one CPU can communicate via the bus at the time. NUMA arises due to theses limitations. In this architecture, the memory bus is replaced by a interconnection network.
 
 NUMA is pretty common in modern systems (mainly servers).
 
@@ -14,7 +14,7 @@ There are multiple slices, each containing one or multiple CPU cores, own ram an
 \includegraphics[width=0.8\textwidth]{24_DistributedMemoryArch.png}
 
 \paragraph{Non-Uniform Memory Access}
-Since the RAM each slice has is smaller than the main memory in SMP, access times to local memory faster. Access to RAM of other slices is possible to due to the shared address space (there is one single address space), but typically is much slower. The problem is how to figure out where certain data is and depending on its location, access takes non-uniform amount of time.
+Since RAM on each slice is smaller than the main memory in SMP, access times to local memory are faster. Access to RAM of other slices is possible to due to the shared address space (there is one single address space), but typically is much slower. The problem is how to figure out where certain data is and depending on its location, access takes non-uniform amount of time.
 
 Another difficulty which arises from splitting cache is how to keep caches coherent.
 
@@ -28,7 +28,7 @@ CPUs cannot snoop anymore since there is no public bus. Possible solutions to ov
 \paragraph{Bus emulation}
 A shared bus is emulated, which allows CPUs to snoop again. In practice, this requires that each nodes sends a message to all other nodes and waits for a response from them before proceeding. This implementation is rather complex.
 
-Simulate a bus, everyone sends messages to everyone else. 
+Simulate a bus means everyone sends messages to everyone else. 
 
 \paragraph{Cache Directory}
 For each cacheline we have some extra information. Together it is called cache directory. It stored the data itself, as well as things like who owns this data and which CPU node has this line currently. This way we do not need to broadcast messages related to this memory block to everyone but only the nodes which have a copy of this.
@@ -87,7 +87,7 @@ The qnode, on which we spin is thread local.
 \end{enumerate}
 
 \paragraph{Spin Lock Comparison}
-Spin lock to no scale well due to congestion, false sharing etc. 
+Spin lock do no scale well due to congestion, false sharing etc. 
 
 \includegraphics[width=0.8\textwidth]{24_LockPerformance.png}
 
@@ -152,7 +152,7 @@ The following is a very simplified UART driver, containing no initialisation, no
 
 At first we define the base register of the device register. This information is taken from the datasheet.
 
-For sending a character, we first have to make sure that we can actually write a new char to the device by bitmasking the right register. We spin loop fill we are successful and when this is the case, we write our character to a designated device register. To read, we do again spin loop and check the ready bit if there is data to be read. When there is, we read the data from the register.
+For sending a character, we first have to make sure that we can actually write a new char to the device by bitmasking the right register. We spin loop till we are successful and when this is the case, we write our character to a designated device register. To read, we do again spin loop and check the ready bit if there is data to be read. When there is, we read the data from the register.
 
 \includegraphics[width=0.8\textwidth]{24_UartDriver.png}
 

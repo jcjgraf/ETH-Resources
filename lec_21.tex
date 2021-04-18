@@ -3,7 +3,7 @@
 \lecture{21}{Week: 11}{Continue: Virtual Memory}
 
 \paragraph{Terminology}
-\textit{Virtual Page} may refer to a page-aligned region of virtual memory space or to the content of this region. The \textit{Physical Page} reverse to a page-aligned region in physical memory. The \textit{Physical Frame} is the container of the page.
+\textit{Virtual Page} may refer to a page-aligned region of virtual memory space or to the content of this region. The \textit{Physical Page} refers to a page-aligned region in physical memory. The \textit{Physical Frame} is the container of the page.
 
 \subsubsection{Multi-Level Page Tables}
 
@@ -15,7 +15,7 @@ Given:
     \item $8$-byte PTE
 \end{itemize}
 
-The resulting page table has size: $\#\text{PTE} \cdot \text{PTE size}$ and the number of PTE is $\text{address space size} / \text{page size}$. This gives $2^{48} / 2^{12} \cdot 2^3 = 2^{39} \text{bytes} = 512 \text{GB}$.
+The resulting page table has size: $\#\text{PTE} \cdot \text{PTESize}$ and the number of PTE is $\text{address space size} / \text{page size}$. This gives $2^{48} / 2^{12} \cdot 2^3 = 2^{39} \text{bytes} = 512 \text{GB}$.
 
 This page table would never fit into memory. To reduce this size, we use additional levels of indirections.
 
@@ -140,7 +140,7 @@ This is the ideal case for a translation.
 
 \begin{enumerate}
     \item The VPN is split again into TLBT and TLBI.
-    \item The TLBI is used to index the table and simultaneously, the TLBT is used to check for matching layer entries.
+    \item The TLBI is used to index the TLB and simultaneously, the TLBT is used to check for matching layer entries.
     \item On a hit, the permissions are checked and if valid, the PPN is returned.
     \item If no TLBT matches (complete miss) or of not all tags of the $4$ entries matches (partial TLB miss), we have to get the missing data from the PT.
 \end{enumerate}
@@ -167,7 +167,7 @@ First, the PA is split into CT, CI and CO. Using CI we index into the cached and
 
 \includegraphics[width=0.8\textwidth]{21_i7Cache.png}
 
-Even though L1 is rather fast, we can speed up the process even more. Since the CI is part of the PPO and hence does not change during the translation, we can start indexing the cache while address translation takes place. Since TLB hits most of the time, the PPN and with that also the CT bits get available rather quickly to validate cache matches.
+Even though L1 is rather fast, we can speed up the process even more. Since the CI is part of the PPO and hence does not change during the translation. So we can start indexing the cache while address translation takes place. Since TLB hits most of the time, the PPN and with that also the CT bits get available rather quickly to validate cache matches.
 
 \includegraphics[width=0.8\textwidth]{21_i7CacheSpeedup.png}
 

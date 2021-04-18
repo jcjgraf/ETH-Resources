@@ -8,7 +8,7 @@ Jumps and branches, as well as calls and returns are two mechanism which change 
 
 \textit{Exceptional control flow} exists on all levels of a computer system:
 \begin{itemize}
-    \item Low Level mechanisms
+    \item Low Level Mechanisms
         \begin{itemize}
             \item Hardware exception
             \item Combination of HW and OS SW, i.e. malloc
@@ -38,7 +38,7 @@ There are two main types of exceptions:
         \end{description}
     \item[Asynchronous Execption:] Result of an event that are external to the processor.
         \begin{description}
-            \item[Interrupt:] Signal from i/O device
+            \item[Interrupt:] Signal from I/O device
         \end{description}
 \end{description}
 
@@ -52,7 +52,7 @@ The exception vectors for x86 are the following:
 \includegraphics[width=0.8\textwidth]{19_exceptionVectorsx86.png}
 
 \paragraph{Kernel}
-Most OS container a kerne. The kernel is the part of the OS which runs in kernel mode. This means it has some privileges compared the user mode, where programs are run. But on a exception, to content is switched to kernel mode (aka supervisor mode, privileged mode, ring $0$ etc.). In kernel mode a program has access to system states (virtual memory etc.), there are some new instructions and registers available, some exceptions are disabled etc.
+Most OS contain a kerne. The kernel is the part of the OS which runs in kernel mode. This means it has some privileges compared the user mode, where programs are run. But on a exception, to content is switched to kernel mode (aka supervisor mode, privileged mode, ring $0$ etc.). In kernel mode a program has access to system states (virtual memory etc.), there are some new instructions and registers available, some exceptions are disabled etc.
 I.e. the kernel is always:
 \begin{itemize}
     \item a set of trap handling functions
@@ -89,18 +89,20 @@ They are caused by executing instructions.
         \end{itemize}
 \end{description}
 
+On an exception, the CPU gets the \textbf{exception handler} by indexing into the interrupt exception table using the interrupt vector.
+
 \paragraph{Fault Example: Page Fault}
 Code tries to access a location of its address space which is currently not in main memory but on disk. So the page handler must load that page into physical memory. After doing this, it returns to faulting instruction and successfully execute it on the second try.
 
 \includegraphics[width=0.8\textwidth]{19_pageFault.png}
 
 \paragraph{Fault Example: Invalid Memory Reference}
-Code tries to access a location outside of its address space (i.e. an page which we do not have permissions for). The page handler detects the invalid address and sends a \textbf{SIGSEGB} signal to the user process. The user process exits with \textit{segmentation fault}.
+Code tries to access a location outside of its address space (i.e. an page which we do not have permissions for). The page handler detects the invalid address and sends a \textbf{SIGSEGV} signal to the user process. The user process exits with \textit{segmentation fault}.
 
 \includegraphics[width=0.8\textwidth]{19_invalidMemoryReference.png}
 
 \paragraph{Trap Example: Opening a File}
-User opens a file by calling \code{open(filename, options)} which executes a systems call (e.g. \textit{int} instruction). The OS must find or create the file and get it ready for reading or writing. Then it returns an integer integer which uniquely defines this file (required for reading the next time the same file).
+User opens a file by calling \code{open(filename, options)} which executes a systems call (e.g. \textit{int} instruction). The OS must find or create the file and get it ready for reading or writing. Then it returns an integer which uniquely defines this file (required for reading the next time the same file).
 
 \includegraphics[width=0.8\textwidth]{19_openingAFile.png}
 
@@ -114,21 +116,21 @@ Examples:
     \item Soft reset interrupts
 \end{itemize}
 
-These interrupts pins of the processor are connected to interrupt-request lines. They are either edge- or level-triggered. The \textbf{exception handler} is the code, which we get by indexing into the interrupt exception table using the interrupt table.
+These interrupts pins of the processor are connected to interrupt-request lines. They are either edge- or level-triggered.
 
 Interrupt are either \textbf{maskable} or \textbf{non-maskable}. It they are, then the interrupt can be ignored or delayed. This allows to prioritize certain interrupts over others.
 
 The mechanism for handling interrupts is equivalent to the one of exceptions (index into exception table using exception vector etc...).
 
 \subsubsection{x86 interrupts}
-These processors have to interrupt pins:
+These processors have two interrupt pins:
 
 \paragraph{Non-Maskable Interrupt (NMI)}
 Non-maskable means that these interrupts cannot be disabled. So they are used for interrupts of high importance like major hardware faults (e.g. memory parity error), watchdog timer etc.
 
 When asserted, the processor completes the current instruction and then issues the exception \#2 of the exception interrupt table (this is hardcoded).
 
-Since multiple devices are connected to this pin, the exception handler has to figure out which device has cause the interrupt. The OS iterates all possible devices and checks which one has a state which indicates that the device has caused an interrupt. This check is called \textit{pulling} and is something quite inefficient and low. However, since we are very likely to crash anyways, it is not something that happens very often.
+Since multiple devices are connected to this pin, the exception handler has to figure out which device has cause the interrupt. The OS iterates all possible devices and checks which one has a state which indicates that the device has caused an interrupt. This check is called \textit{pulling} and is something quite inefficient and slow. However, since we are very likely to crash anyways, it is not something that happens very often.
 
 NMI does not support nesting. This means that when processing a first interrupt the processor does not listen for any new interrupts which may occurs in the meantime. 
 
@@ -139,7 +141,9 @@ These requests can be disabled by setting certain bit (flags). If asserted, the 
 Using the introduces setup, we have to problem that a device does not know what vector to give. Also, it may cause troubles when multiple devices cause an interrupt at the same time.
 
 \paragraph{Programmable Interrupt Controller (PIC)}
-The PIC solves these problem. It is a device which is connected to the INTR pin and the data bus, and the INTA pin of the processor is connected to the PIC. Further, all devices are no longer connected to the processor directly, but to the PIC via IRQ-lines. This way, the OS can flexibly configure what vector to send on what interrupt of which device. I.e. the PIC maps interrupt pins from devices to interrupt vectors.
+The PIC solves these problem. It is a device which is connected to the INTR pin and the data bus of the processor. Further, all devices are no longer connected to the processor directly, but to the PIC via IRQ-lines. This way, the OS can flexibly configure what vector to send on what interrupt of which device. I.e. the PIC maps interrupt pins from devices to interrupt vectors.
+
+\includegraphics[width=0.8\textwidth]{19_Pic.png}
 
 The PIC can also buffer simultaneous interrupts and deliver each interrupt vector separately. It also allows to prioritize devices over others as well as selectively mask any individual device's interrupts.
 
