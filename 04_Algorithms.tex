@@ -132,6 +132,170 @@
 \end{cases}\]
                     \ides{If we want the shortest path:} $x_{uv} \in \{0,1\}$
                     \ides{If we want the only the length of the shortest path:} $x_{uv} \in [0,1]$
+                        \begin{itemize}
+                            \item I.e. it is okay if the flow is divided among multiple shortest paths (of equal length)
+                        \end{itemize}
+                \end{itemize}
+        \end{itemize}
+\end{itemize}
+
+\subsection{Randomness}
+\begin{itemize}
+    \ides{Load Distribution}
+        \begin{itemize}
+            \item $n$ servers and one or multiple load balancers
+            \item How to distribute client requests?
+            \item Trivial Approaches
+                \begin{itemize}
+                    \ides{Round Robin}
+                        \begin{itemize}
+                            \item Direct $i$-th request to $(i \mod n)$-th server
+                            \icon Non trivial for multiple load balancers
+                            \icon Does not work with sessions
+                        \end{itemize}
+                    \ides{Least Loaded}
+                        \begin{itemize}
+                            \item Send requests to the least loaded server
+                            \icon Overhead to determine least loaded
+                            \icon Non trivial for multiple load balancers
+                            \icon Does not work with sessions
+                        \end{itemize}
+                 \end{itemize}
+            \ides{Random}
+                \begin{itemize}
+                    \item Select one server at random for each request
+                    \item Equivalent to $m$ balls into $n$ bins problem
+                        \begin{itemize}
+                            \item $P[i \text{-th and } j \text{-th ball go into same bin}] = \frac{1}{n}$
+                            \item $\E_{\text{Number of collisions}} =$
+                            \item $\E_{\text{Minimum load on bin } i} = \bigO(\frac{\ln n}{\ln \ln n})$
+
+                            \todo{More formulas}
+                        \end{itemize}
+                    \item Improved Variant
+                        \begin{itemize}
+                            \item Select two at random and take less loaded
+                            \item $\E_{\text{Minimum load on bin } i} = \bigO(\frac{\ln \ln n}{\ln 2})$
+                            \item Logarithmic improvement
+                            \item Selecting more than $2$ servers has diminishing returns
+                                \begin{itemize}
+                                    \item $3$ to $4$ is still reasonable
+                                    \item $\E_{\text{Minimum load on bin } i} = \bigO(\frac{\ln \ln n}{\ln k})$
+                                \end{itemize}
+                        \end{itemize}
+                    \icon Does not work with sessions
+                \end{itemize}
+            \ides{Random with Persist Sessions}
+                \begin{itemize}
+                    \item Send same sessions to same server
+                    \item \verb+server = Hash (user-id) % n+
+                    \icon Hash function is deterministic
+                        \begin{itemize}
+                            \item Not quite random but still good enough
+                        \end{itemize}
+                    \item Hash can be calculated also over other header fields
+                        \begin{itemize}
+                            \item e.g. \verb+hash(src_ip, dest_ip, src_port, dest_port, TCP)+
+                            \item Used for load balancing in data centers
+                        \end{itemize}
+                    \icon Send all request to new server when one crashes
+                \end{itemize}
+            \ides{Random with Persistent Sessions and Consistent Hashing}
+                \begin{itemize}
+                    \item Do not send all session to new server on crash of one server
+                    \item Hash the server IDs to the same space as the client requests
+                    \item Map each client request to the ``next'' server in the hash
+                    \icon Huge load increase on successor server of failed server
+                        \begin{itemize}
+                            \item Fixed by assigning a single server multiple hashes
+                        \end{itemize}
+                \end{itemize}
+        \end{itemize}
+    \ides{Membership Testing and Counting}
+        \begin{itemize}
+            \item Used for
+                \begin{itemize}
+                    \item If object is in my CDN cache
+                    \item If a TLS certificate has been revoked
+                    \item If I have seen this packet before
+                    \item How many packets of a flow have I forwarded (from router perspective)
+                \end{itemize}
+            \ides{Yes/No Hash Table}
+                \begin{itemize}
+                    \item We ignore collisions
+                    \icon Contains false positive
+                        \begin{itemize}
+                            \item No problem for many application
+                                \begin{itemize}
+                                    \item Where a false negative would not in most cases
+                                \end{itemize}
+                            \item No problem as long as rate if low
+                        \end{itemize}
+                \end{itemize}
+            \ides{Hash Table with Bloom Filters}
+                \begin{itemize}
+                    \item We want to represent $n$ object
+                    \item We have $m$ bits of memory in table $T$
+                    \item We have $k$ hash functions $h_n, \dots h_k$
+                        \begin{itemize}
+                            \item With range $\{1, 2, \dots, m\}$
+                        \end{itemize}
+                    \item For each new input, we apply all hash functions and set the value to $1$ in the table
+                    \item $P[T[i] = 0 \text{ after } n \text{ insertions}] = \left( 1 - \frac{1}{m} \right)^{kn} \approx e^{-kn/m}$
+                        \ipro Cannot have false negative
+                        \icon Can have false positive
+                            \begin{itemize}
+                                \item $P[\text{Match is false positive}] = (1 - e^{-kn / m})^k$
+                                \item $k \approx \frac{m}{n} \ln 2$ minimizes the probability
+                                    \begin{itemize}
+                                        \item Minimal $P[\text{Match is false positive}] = 2^{-\frac{m}{n} \ln 2}$
+                                            \begin{itemize}
+                                                \item Which is very small
+                                            \end{itemize}
+                                    \end{itemize}
+                            \end{itemize}
+                \end{itemize}
+            \ides{Ex. Cache on Second Request}
+                \begin{itemize}
+                    \item Most objects are only accessed once
+                    \item But when accessed more than once, it is very likely that it is accessed again
+                    \item First access: Add to bloom filter
+                    \item Second access: Is present in bloom filter $\implies$ add to cache
+                    \ides{Filter fills up:} Maintain primary and secondary filters
+                        \begin{itemize}
+                            \item Once primary reaches threshold use secondary too
+                            \item Once secondary reaches threshold, make secondary to primary and clear old primary (I guess)
+                            \icon Causes false negative
+                        \end{itemize}
+                \end{itemize}
+            \ides{Counting Bloom Filters}
+                \begin{itemize}
+                    \item Allow other cache filters to see that other cache server's caches
+                        \begin{itemize}
+                            \item We need deletion to remove entries we no longer have
+                            \item Count how many packets we have moved
+                        \end{itemize}
+                    \icon Can give false negative
+                \end{itemize}
+        \end{itemize}
+    \ides{Distributed Decision-Making}
+        \begin{itemize}
+            \item Selfish decision making can lead to bad performance for everyone
+            \ides{Braess's Paradox}
+                \begin{itemize}
+                    \item We have start node $S$ and end node $E$ and two distinct $S \to T$ paths:
+                        \begin{itemize}
+                            \item $S \overset{1}{\to} A, A \overset{x}{\to} T$
+                            \item $S \overset{x}{\to} B, B \overset{1}{\to} T$
+                        \end{itemize}
+                     \item Optimum latency for everyone is $1.5$
+                     \item We add edge $B \overset{0}{\to} A$
+                     \item Everyone travels $S, B, A, S$
+                     \item Latency for everyone is $2$
+                \end{itemize}
+            \ides{Hotelling's Law}
+                \begin{itemize}
+                    \item Coop and Migros are always next to each other
                 \end{itemize}
         \end{itemize}
 \end{itemize}
