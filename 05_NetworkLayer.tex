@@ -1,0 +1,345 @@
+%! TEX root = ./main.tex
+
+\section{Network Layer}
+\subsection{General}
+\begin{itemize}
+    \item Builds on link layer and provides service to transport layer
+    \item Transports packets
+    \item Challenges
+        \begin{itemize}
+            \item Scale to a global internet
+            \item Heterogeneity
+            \item Bandwidth control
+            \item Economics
+        \end{itemize}
+    \ides{Routing:} Figure out which path to take
+    \ides{Forwarding:} Send packet on its way
+    \ides{Network Service Models}
+        \begin{itemize}
+            \item Describes what service does it provide to the transport layer
+            \ides{Store-And-Forward Packet Switching:}
+                \begin{itemize}
+                    \item Both are implemented with store-and-forward packet switching
+                    \item Routers receive packages, and store it (if necessary) in a FIFO quere before forwarding it
+                        \begin{itemize}
+                            \item Have a buffer per port (slightly simplified view)
+                        \end{itemize}
+                \end{itemize}
+            \item Provide two different service models
+            \ides{Datagrams (/Connection Less Service)}
+                \begin{itemize}
+                    \item Packets contain a destination address
+                    \item Destination address is used to forward each packet from router to router
+                        \begin{itemize}
+                            \item Possible over different paths
+                        \end{itemize}
+                    \item Like postal letters
+                    \item Prime type used today
+                    \item Used for IP protocol
+                    \ides{Forwarding Table:}
+                        \begin{itemize}
+                            \item Used by each router
+                            \item Keyed by address
+                            \item Gives next hop for each destination address
+                            \item Is dynamic
+                                \begin{itemize}
+                                    \item Changes when new links are created and old are removed
+                                \end{itemize}
+                        \end{itemize}
+                \end{itemize}
+            \ides{Virtual Circuits (Connection-Oriented Service)}
+                \begin{itemize}
+                    \item Uses circuit switching (in a virtual sense)
+                        \begin{itemize}
+                            \item There is no bandwidth reservation
+                            \item But statistical sharing of link
+                        \end{itemize}
+                    \item Like a telephone call
+                    \item Three phases
+                        \begin{itemize}
+                            \item Connection establishment
+                                \begin{itemize}
+                                    \item Circuit is set up
+                                    \item Path is chosen
+                                \end{itemize}
+                            \item Data transfer
+                                \begin{itemize}
+                                    \item Circuit is used
+                                    \item Packets are forwarded
+                                \end{itemize}
+                            \item Connection teardown
+                                \begin{itemize}
+                                    \item Circuit is deleted
+                                    \item Circuit information is removed from all routers
+                                \end{itemize}
+                        \end{itemize}
+                    \item Each packet has a shorter label
+                        \begin{itemize}
+                            \item Used to identify the circuit and not destination
+                        \end{itemize}
+                    \ides{Forwarding Table}
+                        \begin{itemize}
+                            \item Used by each router
+                            \item Keyed by the circuit identifier
+                                \begin{itemize}
+                                    \item Last router name, and label
+                                \end{itemize}
+                            \item Gives next router name and new packet label
+                        \end{itemize}
+                    \ides{Multi-Protocol Label Switching (MPLS)}
+                        \begin{itemize}
+                            \item Virtual-Circuit like
+                            \item Used by many ISPs in their backbone
+                            \item Adds MPLS fields upon entering their network
+                            \item Removed MPLS field upon leaving their network
+                            \item Takes up some digits of the IP
+                            \ipro Allows forwarding on routes not possible using standard IP protocol
+                            \ipro Potential increased switching speed
+                                \begin{itemize}
+                                    \item No longest-prefix matching required
+                                \end{itemize}
+                            \icon Dated
+                            \icon Unflexible
+                            \icon Hard to setup
+                        \end{itemize}
+                \end{itemize}
+            \item Datagrams vs Virtual Circuits
+                \begin{itemize}
+                    \item
+                    \begin{tabular}{| l | l | l |}
+                        Setup phase & \textbf{Not needed} & Required\\
+                        Router State & \textbf{Per destination} & Per connection\\
+                        Addresses & Packet carries full address & \textbf{Packet carries short label}\\
+                        Routing & Per packet & \textbf{Per circuit}\\
+                        Failures & \textbf{Easier to mask} & Difficult to mask\\
+                        Quality of Service & Difficult to add & \textbf{Easier to add}\\
+                    \end{tabular}
+                \end{itemize}
+        \end{itemize}
+    \ides{Internetworking}
+        \begin{itemize}
+            \item Connection different networks together
+            \item Networks are different in:
+                \begin{itemize}
+                    \item Service model
+                    \item Addressing
+                    \item QoS
+                    \item Packet size
+                    \item Security
+                \end{itemize}
+            \item Hides the differences with a common protocol
+            \ides{Internet Protocol (IP):}
+                \begin{itemize}
+                    \item Lowest common denominator
+                    \item Asks for little
+                    \item Provides little
+                \end{itemize}
+        \end{itemize}
+\end{itemize}
+
+\subsection{IPv4}
+\begin{itemize}
+    \ides{IP Datagram}
+        \begin{itemize}
+            \item Each row is $32$ bits
+            \ides{Version:} $4$ or $6$
+            \ides{IHL:}
+            \ides{Type of Service:} distinguish different types of datagrams
+                \begin{itemize}
+                    \item real-time, non-real time etc.
+                    \item For QoS
+                \end{itemize}
+            \ides{Datagram length (bytes):} total length of datagram in bytes
+                \begin{itemize}
+                    \item At most $2^{16}$
+                \end{itemize}
+                \ides{Identification:} \todo{What is identification for?}
+            \ides{Flags:} Used for fragmentation
+            \ides{Fragment Offset:} Used for fragmentation
+            \ides{TTL:} Maximal desired number of hops
+                \begin{itemize}
+                    \item Decreased by one at every hop
+                \end{itemize}
+            \ides{Protocol:} TCP or UDP
+                \begin{itemize}
+                    \item Only considered at final destination
+                \end{itemize}
+            \ides{Header Checksum:} Checksum over header
+            \ides{Source Address:} $32$ bit source
+            \ides{Destination Address:} $32$ bit destination
+            \ides{Options:} Optional fields to set
+        \end{itemize}
+    \ides{IP Addresses and Prefixes}
+        \begin{itemize}
+            \item $32$ bits long
+            \ides{Dotted Nottation:} Split into four parts of $8$ bits length
+                \begin{itemize}
+                    \item $a.b.c.d$
+                \end{itemize}
+            \ides{Prefixes:} Addresses are allocated in blocks
+                \begin{itemize}
+                    \item Blocks are called prefixes
+                    \item All addresses in the same $L$-bit prefix have the same top $L$ bits
+                    \item There are $2^{32 - L}$ addresses in an $L$-bit block
+                    \item The remaining represents the hosts on the network
+                    \item Written as \verb+IP Address / Prefix Length+
+                        \begin{itemize}
+                            \item IP address is the first address in the block
+                        \end{itemize}
+                    \ides{More specific:} longer prefix
+                    \ides{Less Specific:} shorter prefix
+                    \item Fist and last address in of prefix cannot be used
+                        \begin{itemize}
+                            \ides{Network Identifier:} first address in prefix
+                                \begin{itemize}
+                                    \item Hosts bits are all zero
+                                \end{itemize}
+                            \ides{Broadcast Address:} last address in prefix
+                                \begin{itemize}
+                                    \item Host bits are all one
+                                \end{itemize}
+                        \end{itemize}
+                    \ides{Network Mask:} Together with the address give the prefix
+                        \begin{itemize}
+                            \item Bitwise and of mask and address give prefix/network identifier
+                                \begin{itemize}
+                                    \item Network bits are one
+                                    \item Host bits are zero
+                                \end{itemize}
+                        \end{itemize}
+                \end{itemize}
+                \ides{Public Addresses}
+                    \begin{itemize}
+                        \item Assigned by IANA to different RIRs (regional internet registries)
+                        \item RIRs issue ranges to ISP
+                        \item ISP issue to customers
+                        \item Buy IP4 is difficult
+                            \begin{itemize}
+                                \item Rund out of addresses
+                                \item Expensive
+                                \item May have been be misused before
+                                \item Geolocation
+                            \end{itemize}
+                    \end{itemize}
+                \ides{Private Addresses}
+                    \begin{itemize}
+                        \item Only valid within a private network
+                        \item Three prefixes are available
+                            \begin{itemize}
+                                \item $10.0.0.0/8$
+                                \item $172.16.0.0/12$
+                                \item $192.168.0.0/16$
+                            \end{itemize}
+                        \item Need public IP and NAT to connect to global internet
+                    \end{itemize}
+        \end{itemize}
+    \ides{IP Forwarding}
+        \begin{itemize}
+            \item All IP addresses on one network have the same prefix
+            \item Next hop is determined using forwarding table
+                \begin{itemize}
+                    \item Indexed using IP prefix
+                    \item Prefixes may overlap
+                \end{itemize}
+            \ides{Longest Matching Prefix Forwarding Rule:}
+                \begin{itemize}
+                    \item Algorithm
+                        \begin{itemize}
+                            \item For each packet find all matching prefixes
+                            \item Find the longest prefix from that set
+                            \item Forward the packet to the next hop router for that prefix
+                        \end{itemize}
+                    \ides{Compress Forwarding Table:} Remove redundant forwarding rules
+                        \begin{itemize}
+                            \item I.e. rules which are overwritten by more specific ones
+                        \end{itemize}
+                    \item Can provide default behaviour
+                        \begin{itemize}
+                            \item With less specific prefixes
+                        \end{itemize}
+                    \item Can provide special behaviour
+                        \begin{itemize}
+                            \item With more specific prefixes
+                        \end{itemize}
+                    \item Hierarchical addresses allow compact tables
+                    \item Find longest matching prefix is more complex than table lookup
+                \end{itemize}
+            \icon Size of forwarding tables is keep growing
+            \ides{Host Forwarding}
+                \begin{itemize}
+                    \item Host has a lookup table with two entries:
+                        \begin{itemize}
+                            \ides{Network Prefix:} Send all traffic directly to the host
+                            \ides{Default Route:} $0.0.0.0/0$
+                                \begin{itemize}
+                                    \item Matches all addresses
+                                    \item Any more specific address is captured first
+                                \end{itemize}
+                        \end{itemize}
+                \end{itemize}
+            \item At each forward, the router must
+                \begin{itemize}
+                    \item Decrement TTL
+                    \item Check and recalculate header checksum
+                    \item Fragment larger packets if link network MTU is limited
+                    \item Send congestion signals
+                    \item Generate error messages
+                    \item Handle options specified in the IP header
+                \end{itemize}
+        \end{itemize}
+\end{itemize}
+
+\subsection{IP Helper Protocols}
+\begin{itemize}
+    \item IP \textbf{requires} help from other protocols
+    \item There area many of then
+    \item Often involve broadcast
+    \ides{Dynamic Host Configuration Protocol (DHCP)}
+        \begin{itemize}
+            \item How does a host get
+                \begin{itemize}
+                    \item Its IP address
+                    \item Routers IP address
+                    \item Network prefix
+                    \ides{Default gateway}: Local router address
+                    \item DNS Server
+                    \item etc.
+                \end{itemize}
+            \item On connection, only the link MAC address is known
+            \item Introduces in 1993
+            \item Is a client - server application
+            \item Part of the network (router)
+            \item Uses UDP on port 67, 68
+            \item Steps
+                \begin{itemize}
+                    \ides{Broadcast Message:} Client sends \verb+DISCOVER+ message to broadcast address
+                        \begin{itemize}
+                            \item Message is received by all hosts on network
+                            \item \verb+255.255.255.255+ for IP and \verb+ff:ff:ff:ff:ff:ff+ for MAC \todo{Why needed?}
+                        \end{itemize}
+                     \item DHCP server send \verb+OFFER+ and offers certain options
+                     \item Client send \verb+REQUEST+ to accept an offer
+                     \item Server sends \verb+ACK+ an leases IP to client
+                \end{itemize}
+            \item Renewing lease only requires \verb+REQUEST+ followed by \verb+ACK+
+            \icon Does not provide any security
+                \begin{itemize}
+                    \item Malicious host can act as a DHCP server
+                \end{itemize}
+        \end{itemize}
+    \ides{Address Resolution Protocol (ARP)}
+        \begin{itemize}
+            \item Node needs link layer address to send frame but only has destination IP address
+            \item Sits on the link layer
+            \item Only works if node and target are on the same link
+                \todo{What does that mean?}
+            \item Steps
+                \begin{itemize}
+                    \item Nodes sends a \verb+REQUEST+ broadcast message with an IP address
+                    \item Target sees broadcast and notices its IP address
+                    \item Target sends \verb+REPLY+ containing its MAC address
+                    \item Note caches the MAC address in its ARP cache
+                \end{itemize}
+            \item Asks nodes addressed with their IP address to identify themselves
+        \end{itemize}
+\end{itemize}
