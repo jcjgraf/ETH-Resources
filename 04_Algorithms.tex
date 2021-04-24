@@ -166,11 +166,12 @@
                     \item Select one server at random for each request
                     \item Equivalent to $m$ balls into $n$ bins problem
                         \begin{itemize}
-                            \item $P[i \text{-th and } j \text{-th ball go into same bin}] = \frac{1}{n}$
-                            \item $\E_{\text{Number of collisions}} =$
+                            \item $P[i \text{-th and } j \text{-th ball go into same bin}] = P[X_{i,j}] =  \frac{1}{n}$
+                            \item $\E_{\text{Number of collisions}} = \E \left[ \sum_{i,j \in 1, \dots, m, i \neq j} X_{i,j} \right] = \frac{1}{n} {m\choose 2}$
                             \item $\E_{\text{Minimum load on bin } i} = \bigO(\frac{\ln n}{\ln \ln n})$
-
-                            \todo{More formulas}
+                                \begin{itemize}
+                                    \item For $m = n$
+                                \end{itemize}
                         \end{itemize}
                     \item Improved Variant
                         \begin{itemize}
@@ -242,18 +243,19 @@
                         \end{itemize}
                     \item For each new input, we apply all hash functions and set the value to $1$ in the table
                     \item $P[T[i] = 0 \text{ after } n \text{ insertions}] = \left( 1 - \frac{1}{m} \right)^{kn} \approx e^{-kn/m}$
-                        \ipro Cannot have false negative
-                        \icon Can have false positive
-                            \begin{itemize}
-                                \item $P[\text{Match is false positive}] = (1 - e^{-kn / m})^k$
-                                \item $k \approx \frac{m}{n} \ln 2$ minimizes the probability
-                                    \begin{itemize}
-                                        \item Minimal $P[\text{Match is false positive}] = 2^{-\frac{m}{n} \ln 2}$
-                                            \begin{itemize}
-                                                \item Which is very small
-                                            \end{itemize}
-                                    \end{itemize}
-                            \end{itemize}
+                    \item Value is member if $T$ is $1$ for all results of the hash functions
+                    \ipro Cannot have false negative
+                    \icon Can have false positive
+                        \begin{itemize}
+                            \item $P[\text{Match is false positive}] = (1 - e^{-kn / m})^k$
+                            \item $k \approx \frac{m}{n} \ln 2$ minimizes the probability
+                                \begin{itemize}
+                                    \item Minimal $P[\text{Match is false positive}] = 2^{-\frac{m}{n} \ln 2}$
+                                        \begin{itemize}
+                                            \item Which is very small
+                                        \end{itemize}
+                                \end{itemize}
+                        \end{itemize}
                 \end{itemize}
             \ides{Ex. Cache on Second Request}
                 \begin{itemize}
