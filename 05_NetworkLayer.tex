@@ -343,3 +343,239 @@
             \item Asks nodes addressed with their IP address to identify themselves
         \end{itemize}
 \end{itemize}
+
+\subsection{Packet Size}
+\begin{itemize}
+    \ides{Maximum Transmission Unit (MTU)}
+        \begin{itemize}
+            \item Maximal allowed packet size
+        \end{itemize}
+    \item Different networks have different MTUs
+    \item Goal: send packets as large as possible
+        \begin{itemize}
+            \item Less header overhead
+            \item Fever packets required
+        \end{itemize}
+    \icon Hard to figure out appropriate size to send packets
+    \item Two methods to solve this problem
+        \begin{itemize}
+            \ides{Fragmentation}
+                \begin{itemize}
+                    \item If a packet is too large for e given link, the router splits the packet into multiple smaller ones
+                        \begin{itemize}
+                            \item Break data into pieces
+                            \item Copy main IP header into header of pieces
+                            \item Adjust the \verb+length+ in the header
+                            \item Set \verb+fragment offset+ in the header to indicate the position in the packet
+                            \item Set \verb+MF+ (more fragments) \verb+flags+ in IP header on all pieces except the last
+                                \begin{itemize}
+                                    \item If set it means a fragment is following the current one
+                                \end{itemize}
+                        \end{itemize}
+                    \item Receiver reassembles the fragmented packets
+                        \begin{itemize}
+                            \item \verb+Identification+ links pieces together
+                            \item \verb+MF+ tells than all pieces are together
+                        \end{itemize}
+                    \icon Repeated fragmentation is possible $\implies$ messy
+                    \icon Fragmentation is undesirable
+                        \begin{itemize}
+                            \icon More work for routers
+                            \icon Fragment loss $\implies$ packet loss $\implies$ retransmission of whole packet
+                            \icon Security vulnerability
+                        \end{itemize}
+                    \item Not used today anymore
+                \end{itemize}
+            \ides{Path MTU Discovery}
+                \begin{itemize}
+                    \item Host sends largest packets
+                        \begin{itemize}
+                            \item \verb+DF+ flag (do not fragment) set
+                            \item Hosts use heuristisch on which MTUs to try
+                                \begin{itemize}
+                                    \item There are protocols in practice but they are not used
+                                \end{itemize}
+                        \end{itemize}
+                    \item Routers send ICMP and tell their max largest size in case the original packet was too large
+                    \item Hosts adjusts packet size to fit the MTU of the path
+                    \icon Path may change and break the transmission
+                    \ipro Avoids fragmentation
+                    \item Used today
+                \end{itemize}
+        \end{itemize}
+\end{itemize}
+
+\subsection{Internet Control Message Protocol (ICMP)}
+\begin{itemize}
+    \item Sits on top of IP
+    \item Is carried in an IP packet
+    \item Used for:
+        \begin{itemize}
+            \ides{Error:} Router sends ICMP when it encounters an error during forwarding
+            \ides{Testing:} \todo{Not sure what can be tested}
+        \end{itemize} 
+    \ides{Format}
+        \begin{itemize}
+            \item Header contains type, code and checksum
+            \item Payload is often the problematic IP packet
+                \begin{itemize}
+                    \item For the host to identify the problem
+                \end{itemize}
+            \item Types:
+                \begin{itemize}
+                    \item 
+\begin{tabular}{| l | l | l}
+    Dest. Unreachable & 3/0 or 1 & Lack of connectivity\\
+    Dest. Unreachable & 3/4 & Path MTU Discovery\\
+    Time Exceeded (Transit) & 11/0 & Traceroute\\
+    Echo Request or Reply & 8 or 0/0 & Ping
+\end{tabular}
+                \end{itemize}
+        \end{itemize}
+    \ides{Traceroute:}
+        \begin{itemize}
+            \item Allows host to find every router hop
+            \item Sends probe packets with increasing TTL
+                \begin{itemize}
+                    \item Start with $1$ and increase to $N$
+                \end{itemize}
+            \item When TTL is $0$ for a router, it reports that using ICMP
+                \begin{itemize}
+                    \item We can identify the router
+                \end{itemize}
+            \icon Routers can identify probe and behave differently
+        \end{itemize}
+    \icon Has not security measurements
+\end{itemize}
+
+\subsection{Network Address Translation (NAT)}
+\begin{itemize}
+    \item Routers are supposed at only IP headero
+    \ides{Middlebox:} Device which should not but looks at transmission protocol too
+        \begin{itemize}
+            \item Allows for new functionality
+                \begin{itemize}
+                    \item NAT Box
+                    \item Firewall
+                    \item Intrusion detection
+                \end{itemize}
+                \ipro Possible rapid deployment path when there is not other option \todo{What does it mean?}
+            \ipro Control over many hosts
+            \icon Break end-to-end connectivity
+                \begin{itemize}
+                    \item Strange side-effects
+                \end{itemize}
+            \icon Poor vantage point for many tasks
+            \icon Cause internet ossification
+                \begin{itemize}
+                    \item Almost impossible to deploy new transport protocols
+                \end{itemize}
+        \end{itemize}
+    \ides{NAT Box}
+        \begin{itemize}
+            \item Done by a middlebox
+            \item Connects an internal network to an external network
+                \begin{itemize}
+                    \item Does multiplexing
+                        \begin{itemize}
+                            \item Many local hosts - single external IP
+                        \end{itemize}
+                \end{itemize}
+            \item Translates addresses and ports
+        \end{itemize}
+    \ides{How NAT works}
+        \begin{itemize}
+            \item Keeps a internal/external table
+                \begin{itemize}
+                    \item Contains internal to external IP and Port mapping
+                        \begin{itemize}
+                            \item Port mapping is required that incoming packet get to the right host (in case there are multiple hosts with the same port)
+                        \end{itemize}
+                \end{itemize}
+            \ides{Internal $\mathbf{\to}$ external:} When an internal hosts establishes a TCP connection to the outside
+                \begin{itemize}
+                    \item Lookup in table
+                    \item Create new entry if none exists
+                    \item Rewrite source IP/Port of IP header
+                \end{itemize}
+            \ides{External $\mathbf{\to}$ internal:}
+                \begin{itemize}
+                    \item Lookup in table
+                    \item Rewrite address and port
+                    \item If no entry in table the connection is blocked
+                        \begin{itemize}
+                            \item Need to configure entry manually
+                        \end{itemize}
+                \end{itemize}
+        \end{itemize}
+    \icon Connectivity broken
+        \begin{itemize}
+            \item Only works for initial outgoing traffix
+        \end{itemize}
+    \icon Problematic with UDP
+        \begin{itemize}
+            \item Since there is no connection \todo{How is this solved?}
+        \end{itemize}
+    \ipro Multiplexing
+    \ipro Flexible in address space
+    \ipro Useful functionality
+        \begin{itemize}
+            \item Firewall
+            \item Privacy (hides network structure)
+        \end{itemize}
+\end{itemize}
+
+\subsection{IPv6}
+\begin{itemize}
+    \item Replacement for IPv4
+    \item IPv4 address space is exhausted
+    \item Proposed in 1994
+    \item $128$ bits addresses
+    \item Denoted in $8$ groups of $4$ hex digits ($16$ bits)
+    \item Omit leading zeros within each group
+    \item Omit (at most one) group of all zeros
+        \begin{itemize}
+            \item Else unknown how many omitted (or something)
+        \end{itemize}
+    \icon Not backwards compatible
+        \begin{itemize}
+            \item Specific routers required
+        \end{itemize}
+    \item Header
+        \begin{itemize}
+            \item Simpler
+            \item $32$ bits per line
+                \ides{Version:} 6
+                \ides{Traffic Class:} Former type of service
+                \ides{Flow label:} Allow router to identify a flow
+                \begin{itemize}
+                    \item Packets of same flow stay together (same path)
+                \end{itemize}
+                \ides{Payload Length:} Former total length
+                \ides{Next hdr (header):} Former protocol
+                \ides{Hop Limit:} Old TTL
+                \ides{Source Address:} $128$ bits
+                \ides{Destination Address:} $128$ bits
+            \ides{Flow:} Allows router to identify a flow
+            \ides{Payload Length:} Former total length
+            \item Removed
+                \begin{itemize}
+                    \ides{IHL:} 
+                        \begin{itemize}
+                            \ides{Streamlined Header Pressing:} No option fields
+                                \begin{itemize}
+                                    \item Header has fixed $40$ bytes size
+                                    \item Allows for faster processing
+                                \end{itemize}
+                        \end{itemize}
+                    \item Fragmentation related fields were removed
+                        \begin{itemize}
+                            \item Host must ensure that MTU is not exceeded
+                        \end{itemize}
+                    \item Header checksum is removed
+                        \begin{itemize}
+                            \item Rely on transport layer checksum
+                        \end{itemize}
+                \end{itemize}
+        \end{itemize}
+\end{itemize}
