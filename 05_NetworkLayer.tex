@@ -143,7 +143,7 @@
         \begin{itemize}
             \item Each row is $32$ bits
             \ides{Version:} $4$ or $6$
-            \ides{IHL:}
+            \ides{IHL (Internet Header Length):} Length of header
             \ides{Type of Service:} distinguish different types of datagrams
                 \begin{itemize}
                     \item real-time, non-real time etc.
@@ -413,7 +413,7 @@
         \begin{itemize}
             \ides{Error:} Router sends ICMP when it encounters an error during forwarding
             \ides{Testing:} \todo{Not sure what can be tested}
-        \end{itemize} 
+        \end{itemize}
     \ides{Format}
         \begin{itemize}
             \item Header contains type, code and checksum
@@ -423,7 +423,7 @@
                 \end{itemize}
             \item Types:
                 \begin{itemize}
-                    \item 
+                    \item
 \begin{tabular}{| l | l | l}
     Dest. Unreachable & 3/0 or 1 & Lack of connectivity\\
     Dest. Unreachable & 3/4 & Path MTU Discovery\\
@@ -533,9 +533,9 @@
     \item $128$ bits addresses
     \item Denoted in $8$ groups of $4$ hex digits ($16$ bits)
     \item Omit leading zeros within each group
-    \item Omit (at most one) group of all zeros
+    \item Omit one connective group of all zeros
         \begin{itemize}
-            \item Else unknown how many omitted (or something)
+            \item Else original address cannot be reconstructed
         \end{itemize}
     \icon Not backwards compatible
         \begin{itemize}
@@ -560,9 +560,9 @@
             \ides{Payload Length:} Former total length
             \item Removed
                 \begin{itemize}
-                    \ides{IHL:} 
+                    \ides{IHL:}
                         \begin{itemize}
-                            \ides{Streamlined Header Pressing:} No option fields
+                            \ides{Streamlined Header Processing:} No option fields
                                 \begin{itemize}
                                     \item Header has fixed $40$ bytes size
                                     \item Allows for faster processing
@@ -577,5 +577,130 @@
                             \item Rely on transport layer checksum
                         \end{itemize}
                 \end{itemize}
+        \end{itemize}
+    \item Hierarchical organisation
+        \begin{itemize}
+            \ides{Routing Prefix:} First $\ge 48$ bit
+                \begin{itemize}
+                    \item Identifies ISP
+                \end{itemize}
+            \ides{Subnet ID:} Middle $\le 16$ bits
+                \begin{itemize}
+                    \item Subnet or ISP customer
+                \end{itemize}
+            \ides{Interface identifier:} Last $64$ bits
+                \begin{itemize}
+                    \item Can be based on MAC address
+                \end{itemize}
+        \end{itemize}
+    \item Address types
+        \begin{itemize}
+            \item A single host can have multiple addresses for the same interface \todo{What for?}
+            \item Local link address \verb+fe80::/10+
+                \begin{itemize}
+                    \item Every hosts has it
+                    \item Automatically setup
+                    \item Based on MAC address
+                \end{itemize}
+            \ides{Global Unique Address (GUA):} currently \verb+2000::/3+
+                \begin{itemize}
+                    \item globally reachable
+                    \item The \textit{normal} IPv6 address
+                \end{itemize}
+            \ides{Unique Local Address (ULA):} \verb+fc00::/7+
+                \begin{itemize}
+                    \item For local deployments
+                    \item Can be NATed to GUA
+                \end{itemize}
+            \ides{Loopback Address:} \verb+::1/128+
+            \ides{Unspecified Address:} \verb+::0/128+
+            \item etc.
+        \end{itemize}
+    \ides{Neighbor Discovery Protocol (NDP):}
+        \begin{itemize}
+            \item Provides ARP and DHCP functionality
+            \item Hosts can be configured through stateless address autoconfiguration (SLAAC) bases on NDP
+                \begin{itemize}
+                    \item Hosts automatically set their link-local address
+                    \item \textit{Router solicitation} and \textit{router advertisement} provide DHCP-like functionality
+                    \item Host perform \textit{duplicate address detection} based on \textit{neighbor solicitation} and \textit{neighbor advertisement}
+                    \item \textit{Neighbor solicitation} and \textit{neighbor advertisement} replace ARP
+                \end{itemize}
+            \todo{Not sure what this all means}
+        \end{itemize}
+    \item NAT is possible but not needed
+    \item Many routers still block incoming traffic
+        \begin{itemize}
+            \item Manual configuration necessary
+        \end{itemize}
+    \item Transition
+        \begin{itemize}
+            \item Many approaches proposed
+                \ides{Multiple stacks:} Router can talk both
+                \ides{Translators:} Map between both addresses
+                \ides{Tunnels:} Encapsulate packet in an other (IPv6 over IPv4, IPv4 over IPv6 etc.)
+                    \begin{itemize}
+                        \item Hard to know where to start and end a tunnel
+                    \end{itemize}
+                \ides{Happy Eyeballs:} Favour IPv6 over IPv4
+                \begin{itemize}
+                    \item Should dual-stack hosts use IPv4 or IPv6?
+                    \item Issue A (IPv4) and AAAA (IPv6) DNS query simultaneously
+                    \item If AAAA is received, use IPv6 immediately
+                    \item If A is received, wait for some milliseconds for AAAA
+                        \begin{itemize}
+                            \item A is often faster since it is cached
+                        \end{itemize}
+                    \item If first connection attempt to IPv6 (or IPv4) is unsuccessful try with IPv4 (or IPv6)
+                \end{itemize}
+        \end{itemize}
+\end{itemize}
+
+\todo{Possibly split into data and control plane}
+
+\subsection{Routing}
+\begin{itemize}
+    \item Routing allocates network bandwidth adapting to failures
+    \item A Quick comparison of different mechanisms
+        \begin{itemize}
+            \item
+\begin{tabular}{| l | l | l}
+    Mechanism & Timescale & Adaption\\\hline
+    Load-sensitive routing & Seconds & Traffic hotspots\\
+    Routing & Minutes & Equipment failures\\
+    Traffic Engineering & Hours & Network load\\
+    Network Provisioning & Months & Network customers
+\end{tabular}
+        \end{itemize}
+    \item Delivery models
+        \begin{itemize}
+            \ides{Unicast:} One to one
+            \ides{Broadcast:} One to many
+            \ides{Multicast:} One to few
+                \begin{itemize}
+                    \item But not to all
+                \end{itemize}
+            \ides{Anycast:} Many to many
+                \begin{itemize}
+                    \item One source always to one destination
+                \end{itemize}
+        \end{itemize}
+    \item Goals of routing protocols
+        \begin{itemize}
+            \ides{Correctness:} Find paths that work
+            \ides{Efficient paths:} Given path is minimal for some metric
+            \ides{Fair paths:} Does not starve any nodes
+            \ides{Fast convergence:} Recovers quickly after changes
+            \ides{Scalability:} Works well as networks grows large
+        \end{itemize}
+    \item Decentralized, distributed setting
+        \begin{itemize}
+            \item All nodes are alike
+                \begin{itemize}
+                    \item No controller
+                \end{itemize}
+            \item Nodes only know what they learn by exchanging messages with neighbours
+            \item Nodes operate concurrently
+            \item Maybe node/link/message failures
         \end{itemize}
 \end{itemize}
