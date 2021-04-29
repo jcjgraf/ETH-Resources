@@ -1,0 +1,45 @@
+%! TEX root = ./main.tex
+
+\section{Recursive Queries}
+\begin{itemize}
+    \item Repeatedly execute the same query
+    \item Stop when it converges (answer does not change)
+    \item Steps
+        \begin{itemize}
+            \item Set $R =$ Empty
+            \item Run (base query UNION recursive query) and set it as the new R
+            \item Repeat until R does not change
+            \item Query using R
+        \end{itemize}
+    \item SQL
+        \begin{itemize}
+            \item
+\begin{verbatim}
+WITH RECURSIVE MyTable(myAttibute) AS
+    (<base query>
+UNION
+    (recursive query>)
+<Final Query involving MyTable and other relations>
+\end{verbatim}
+                \begin{itemize}
+                    \item \verb+MyTable(myAttribute)+ is the recursive table
+                        \begin{itemize}
+                            \item Can have any number of attributes
+                        \end{itemize}
+                    \item \verb+<base query>+ is run one and populates \verb+MyTable+
+                    \item \verb+<recursive query>+ queries \verb+MyTable+ and updates it
+                    \item \verb+<Final Query>+ run one after \verb+MyTable+ converges
+                \end{itemize}
+        \end{itemize}
+    \item Recursion can be infinite
+        \begin{itemize}
+            \item Will not terminate
+            \item An error will be thrown
+        \end{itemize}
+    \item \verb+UNION ALL+ makes bag semantics and may cause infinite recursion when replaces \verb+UNION+
+    \item Relational model is not well suited for recursion
+        \begin{itemize}
+            \item SQL is based on FOL and FOL cannot express recursion
+            \item Other DBs types support recursion more nicely
+        \end{itemize}
+\end{itemize}
