@@ -704,3 +704,42 @@
             \item Maybe node/link/message failures
         \end{itemize}
 \end{itemize}
+
+\todo{Mention throughput vs goodput}
+
+\subsubsection{Shorted Path Problem}
+\begin{itemize}
+    \item Find shortest path by some metric
+        \begin{itemize}
+            \ides{Latency:} Avoid circuitous paths
+            \ides{Bandwidth:} Avoid small pipes
+            \ides{Money:} Avoid expensive links
+            \ides{Hops:} To reduce switching
+            \item Ideal is a combination of all
+        \end{itemize}
+    \item We ignore workload and only consider topology
+        \begin{itemize}
+            \item Workload is only considered by sophisticated routing protocols
+        \end{itemize}
+    \ides{Optimality Property:} Subpaths of shortest paths are also shortest paths
+    \ides{Source Tree:} All shortest paths from this source to all nodes
+    \ides{Dijkstra's shortest path algorithm}
+        \begin{itemize}
+            \item Mark all nodes tentative
+            \item Set distance from source to $0$ for source
+            \item Set distance to $\infty$ for all nodes
+            \item While tentative nodes remain:
+                \begin{itemize}
+                    \item Find node $N$ with lowest distance
+                    \item Add link to $N$ to the shortest path
+                    \item Potentially relax distances of neighbours of $N$
+                \end{itemize}
+            \ipro Finds shortest path in order of increasing distances from source
+            \item Runtime depends on cost of extracent min-cost node
+            \item Gives complete source tree
+                \begin{itemize}
+                    \item Not required in internet
+                    \item Requires complete topology
+                \end{itemize}
+        \end{itemize}
+\end{itemize}
