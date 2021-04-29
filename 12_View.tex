@@ -1,0 +1,35 @@
+%! TEX root = ./main.tex
+
+\section{Views}
+\begin{itemize}
+    \item It an alias for a query
+    \item Provides higher abstraction than relations
+        \begin{itemize}
+            \item Provides logical data independence
+        \end{itemize}
+    \item Can be used similarly as a table
+    \item Used for
+        \begin{itemize}
+            \ides{Privacy:} Give person access to a limited view and not the whole relation/DB
+            \ides{Usability:} Simplify queries
+        \end{itemize}
+    \ides{Create view:} \verb+CREATE VIEW <NAME> AS <SQL QUERY>+
+    \item DMDB convert statement containing a view into a statement without view
+    \ides{Update View}
+        \begin{itemize}
+            \item For base relation $R_1, \dots , R_n$ and view $V = Q(R_1, \dots , R_n)$
+            \item Update $V$ into $V'$ requires finding a set of updated to the base relation $R'_1, \dots ,R'_n)$ s.t. $Q(R'_1, \dots , R'_n) = V'$
+            \item Not all view can be updated
+                \begin{itemize}
+                    \item Some data is missing
+                    \item Primary key is missing
+                    \item etc.
+                \end{itemize}
+            \item SQL view is updatable iff:
+                \begin{itemize}
+                    \item Involved only one base relation
+                    \item Involves the key of that base relation
+                    \item Does no involve aggregates, group by or duplicate-elimination
+                \end{itemize}
+        \end{itemize}
+\end{itemize}
