@@ -189,13 +189,20 @@ SELECT A, B FROM (SQL1) ORDER BY A DESC, B ASCD
 \begin{verbatim}
 SELECT A, COUNT(*) FROM (SQL1) GROUP BY A
 \end{verbatim}
-    \begin{itemize}
-        \item Can only project to aggregated fields and aggregation function
-            \ides{HAVING:} Filter similar to \verb+WHERE+ but for the aggregated field
-    \end{itemize}
+        \begin{itemize}
+            \item Can only project to aggregated fields and aggregation function
+                \ides{HAVING:} Filter similar to \verb+WHERE+ but for the aggregated field
+        \end{itemize}
     \ides{EXISTS, ANY, ALL, SOME:}
         \begin{itemize}
             \item Useful things
+        \end{itemize}
+    \ides{Snapshot Semantics:}
+        \begin{itemize}
+            \item Problematic when deleting (updating) from a relation which we need in a subquery of that relation
+            \item Would lead to non-determinism
+            \item First all tuples which would get modified are marked
+            \item Then the updates are implemented
         \end{itemize}
 \end{itemize}
 
