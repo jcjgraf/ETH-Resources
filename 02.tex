@@ -15,6 +15,14 @@
         \begin{itemize}
             \item $p_X(x_k) := P[X = x_k] = P[\{\omega \mid X(\omega) = x_k\}], k = 1, 2, \dots$
         \end{itemize}
+        \ides{Indikatorfunktion:} Sein $A$ eine Ereignis, dann ist $Y = I_A$ die Indikatorfunktion von $A$: $Y(\omega)=
+\begin{cases}
+    1 & \text{für } \omega \in A\\
+    0 & \text{für } \omega \notin A
+\end{cases}$
+            \begin{itemize}
+                \item Es gilt $P[Y = 1] = P[A]$
+            \end{itemize}
 \end{itemize}
 
 \subsubsection{Erwartungswert}
@@ -78,3 +86,63 @@
 \end{itemize}
 
 \subsection{Bedingte Verteilungen}
+\begin{itemize}
+    \item Seien $X, Y$ diskrete ZV mit gemeinsamer GF $p(x, y)$. Die bedingte GF von X, gegeben $Y = y$ ist:\\ $p_{X \mid Y} (x \mid y) := P[X = x \mid Y = y] = \frac{P[X = x, Y = y]}{P[Y = y]} = \frac{p(x,y)}{p_Y(y)}$
+        \begin{itemize}
+            \item Falls $p_Y(y) > 0$ sonst $0$
+        \end{itemize}
+    \item Es gilt $\sum_{x_k \in \mc{W}(X)} p_{X \mid Y} (x_k \mid y) = \frac{1}{p_Y(y)} \sum_{x_k \in \mc{W}(X)} p(x_k, y) = 1$
+\end{itemize}
+
+\subsection{Wichtige diskrete Verteilungen}
+\subsubsection{Diskrete Gleichverteilung}
+\begin{itemize}
+    \item Sei $X$ eine ZV $\mc{W}(X) = \{x_1, \dots, x_N\}$ dann ist $p_X(x_k) = P[X = x_k] = \frac{1}{N}, \ k = 1,\dots, N$
+\end{itemize}
+
+\subsubsection{Bernoulli Verteilung}
+\begin{itemize}
+    \item $X \sim Be(p)$
+    \item $p_X(x) = p^x(1-p)^{1-x}, \ x \in \{0,1\} = \mc{W}(X)$
+    \item $E[X] = p$
+    \item $Var[X] = p(1 - p)$
+\end{itemize}
+
+\subsubsection{Binomial Verteilung}
+\begin{itemize}
+    \item $X \sim Bin(n, p)$, $\implies Bin(1, p) = Be(p)$
+    \item $p_X(k) = P[X = k] = {k\choose k} p^k (1 - p)^{n - k}, \ k = 0, \dots, n$
+    \item $\mc{W}(X) = \{0, \dots, n\}$
+    \item $E[X] = \sum_{i=1}^{n} E[Y_i] = np$
+    \item $Var[X] = \sum_{n=1}^{n} Var[Y_i] = np(1 - p)$
+    \item $p(k + 1; n) = \frac{p}{1 - p}\frac{n - k}{k + 1} p(k; n)$
+\end{itemize}
+
+\subsubsection{Geometrische Verteilung}
+\begin{itemize}
+    \item $X \sim Geom(p)$
+    \item $X = \inf \{i \in \N \mid A_i \text{ tritt ein}\} = \inf \{i \in \N \mid Y_i = 1\}$
+    \item $p_X(k) = P[X = k] = p(1 - p)^{k - 1}, \ k = 1, 2, \dots$
+    \item $\mc{W}(X) = \N$
+    \item $E[X] = \sum_{l=0}^{\infty} P[X > l] = \sum_{l=0}^{\infty} (1 - p)^l = \frac{1}{p}$
+    \item $Var[X] = \frac{1 - p}{p^2}$
+\end{itemize}
+
+\subsubsection{Negativbinomial Verteilung}
+\todo{Oli fragen ob Prüfungsrelevant}
+
+\subsubsection{Hypergeometrische Verteilung}
+\todo{Oli fragen ob Prüfungsrelevant}
+
+\subsubsection{Poisson Verteilung}
+\begin{itemize}
+    \item $X \sim \mc{P}(\lambda), \ \lambda \in (0, \infty)$
+    \item $p_X(k) = e^{-\lambda} \frac{\lambda^k}{k!}, \ k = 0, 1, \dots$
+    \item Sein $X_n \sim Bin(n, p_n)$ und $np_n = \lambda$. Lassen wir $n \to \infty$, so geht $p_n = \frac{\lambda}{n} = 0$. Weiter ist $\lim_{n \to \infty} P[X_n = k] = e^{-\lambda} \frac{\lambda^k}{k!} = P[X = k]$, wenn $X \sim \mc{P}(\lambda)$
+        \begin{itemize}
+            \item Gilt auch für $np_n \to \lambda$ für $n \to \infty$
+            \ides{Faustregel:} Approximation ist brauchbar für $np^2 \le 0.05$
+        \end{itemize}
+    \item $E[X] = \sum_{k=0}^{\infty} kp_X(k) = \sum_{k=1}^{\infty} ke^{-\lambda} \frac{\lambda^k}{k!} = \lambda \sum_{k=1}^{\infty} e^{-\lambda} \frac{\lambda^{k - 1}}{(k - 1)!} = \lambda \sum_{j=1}^{\infty} e^{-\lambda} \frac{\lambda^j}{j!} = \lambda$
+    \item $Var[X] = \lambda$
+\end{itemize}
