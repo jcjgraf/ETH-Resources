@@ -1,0 +1,82 @@
+% ! TEX root = ./main.tex
+
+\section{Allgemeine Zufallsvariablen}
+\subsection{Grundbegriffe}
+\begin{itemize}
+    \item VF $F_X$ hat Eigenschaften:
+        \begin{itemize}
+            \item $F_X$ ist wachsend und rechtsstetig; $F_X(s) \le F_X(t)$ für $s \le t$ und $F_X(u) \to F_X(t)$ für $u \to t$ mit $u > t$.
+            \item $\lim_{t \to -\infty} F_X(t) = 0$, $\lim_{t \to \infty} F_X(t) = 1$
+        \end{itemize}
+        \ides{Dichtefunktion (DF):} Eine ZV $X$ mit VF $F_X(t)$ heisst (absolut)stetig mit Dichte(funktion) $f_X: \R \to [0, \infty)$, falls: $F_X(t) = \int_{-\infty}^{t} f_X(s) \mathrm{d}s \ \forall t \in \R$
+    \item DF $f_X$ hat Eigenschaften:
+        \begin{itemize}
+            \item $f_X \ge 0$ und $f_X = 0$ ausserhalb von $\mc{W}(X)$
+            \item $\int_{-\infty}^{\infty} f_X(s) \mathrm{d}s = 1$
+        \end{itemize}
+    \item $P[a < X \le b] = P[X \le b] - P[X \le a] = F_X(b) - F_X(a) = \int_{a}^{b} f_X(s) \mathrm{d}s$.
+    \item Allgemeiner für Mengen $B \subseteq \R$:  $P[X \in B] = \int_{B} f_X(s) \mathrm{d}s$
+    \item Dichtefunktion $=$ Ableitung der Verteilungsfunktion
+    \ides{Erwartungswert:}
+        \begin{itemize}
+            \item Ist ZV $X$ stetig mit DF $f_X(x)$ dann: $E[X] = \int_{-\infty}^{\infty} x f_X(x) \mathrm{d}x$ sofern das Integral absolut konvergiert.
+            \item ZV $X$ und ZV $Y = g(x)$. Ist $X$ stetig mit DF $f_X(x)$, dann: $E[Y] = E[g(x)] = \int_{-\infty}^{\infty}  g(x) f_X(x) \mathrm{d}x$ sofern das Integral abs. konvergiert.
+        \end{itemize}
+\end{itemize}
+
+\subsection{Wichtige stetige Verteilungen}
+\subsubsection{Gleichverteilung}
+\begin{itemize}
+    \item ZV $X \sim \mc{U}(a,b)$ hat $\mc{W}(X) = [a,b]$
+    \item DF $f_X(t) =
+\begin{cases}
+    \frac{1}{b - a} &\text{für } a \le t \le b\\
+    0 & \text{sonst}
+\end{cases}$
+    \item VF $F_X(t) =
+\begin{cases}
+    0 &\text{für } t < a\\
+    \frac{t - a}{b - a} &\text{für } a \le t \le b\\
+    t &\text{ für } t > b
+\end{cases}$
+    \item $E[X] = \int_{a}^{b} x \frac{1}{b - a} \mathrm{d}x = \frac{a + b}{2}$
+
+    \todo{Varianz}
+\end{itemize}
+
+\subsubsection{Exponentialfunktion}
+\begin{itemize}
+    \item ZV $X \sim Exp(\lambda)$ für $\lambda > 0$ und $\mc{W}(X) = [0, \infty)$
+    \item DF $f_X(t) =
+\begin{cases}
+    \lambda e ^{-\lambda} &\text{für } t \ge 0\\
+    0 & \text{für } t < 0
+\end{cases}$
+    \item VF $F_X(t) = \int_{-\infty}^{t} f_X(s) \mathrm{d}s =
+\begin{cases}
+    1 - e^{- \lambda t} &\text{für } t \ge 0\\
+    0 &\text{für } t < 0
+\end{cases}$
+    \ides{Gedächnislosigkeit:} $P[X > t + s \mid X > s] = P[X > t]$
+
+    \todo{Erwartungswert und Varianz}
+\end{itemize}
+
+\subsubsection{Normalverteilung}
+\begin{itemize}
+    \item ZV $X \sim \mc{N}(\mu, \sigma^2), \mu \in \R, \sigma^2 > 0$ hat $\mc{W}(X) = \R$, 
+    \item DF $f_X(t) = \frac{1}{\sigma \sqrt{2 \pi}} e^{- \frac{(t - \mu)^2}{2 \sigma^2}}, \ t \in \R$
+    \item $E[X] = \mu, \ Var[X] = \sigma^2$
+    \ides{Standard-Normalverteilung:} Falls $\mc{N}(0, 1)$
+        \begin{itemize}
+            \ides{DF:} $\phi(t)$
+            \ides{VF:} $\Phi(t) = \int_{-\infty}^{t} \phi(s) \mathrm{d}s = \frac{1}{\sqrt{2 \pi}} \int_{-\infty}^{t} e ^{-\frac{s^2}{2}}\mathrm{d}s$
+        \end{itemize}
+    \item $X \sim \mc{N}(\mu, \sigma^2)$, so ist $\frac{X - \mu}{\sigma} \sim \mc{N}(0, 1)$, also: $F_X(t) = P[X \le t] = P[\frac{X - \mu}{\sigma} \le \frac{t - \mu}{\sigma}] = \Phi(\frac{t - \mu}{\sigma})$
+\end{itemize}
+
+\subsubsection{Cauchy-Verteilung}
+\todo{Oli Fragen ob relevant}
+
+\subsection{Gemeinsame Verteilungen, unabhängige Zufallsvariablen}
+\todo{Seite 95}
