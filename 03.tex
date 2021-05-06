@@ -22,6 +22,7 @@
             \item Ist ZV $X$ stetig mit DF $f_X(x)$ dann: $E[X] = \int_{-\infty}^{\infty} x f_X(x) \mathrm{d}x$ sofern das Integral absolut konvergiert.
             \item ZV $X$ und ZV $Y = g(x)$. Ist $X$ stetig mit DF $f_X(x)$, dann: $E[Y] = E[g(x)] = \int_{-\infty}^{\infty}  g(x) f_X(x) \mathrm{d}x$ sofern das Integral abs. konvergiert.
         \end{itemize}
+    \ides{i.i.d.:} Haben ZVs $X_1, \dots, X_n$ die selbe VF und sind unabhängig nennt man sie i.i.d.
 \end{itemize}
 
 \subsection{Wichtige stetige Verteilungen}
@@ -78,5 +79,46 @@
 \subsubsection{Cauchy-Verteilung}
 \todo{Oli Fragen ob relevant}
 
+\subsubsection{Gamma Verteilung}
+\todo{Oli Fragen ob relevant}
+
 \subsection{Gemeinsame Verteilungen, unabhängige Zufallsvariablen}
-\todo{Seite 95}
+\begin{itemize}
+    \ides{Gemeinsame VF:} Analog zu diskret
+    \ides{Gemeinsame DF:} Falls die gemeinsame VF $F$ von $X_1, \dots, X_n$ sich schreiben lässt als $F(x_1, \dots, x_n) = \int_{-\infty}^{x_1} \dots \int_{-\infty}^{x_n} f(t_1, \dots, t_n) \mathrm{d}t_n \dots \mathrm{d}t_1$ für eine Funktion $f: \R^n \to [0, \infty)$, so heisst $f(x_1, \dots, x_n)$ die gemeinsame Dichte von $X_1, \dots, X_n$. Es gilt:
+        \begin{itemize}
+            \item $f(x_1, \dots, f_n) \ge 0$ und $=0$ ausserhalb von $\mc{W}(X_1, \dots, X_n)$
+            \item $\int_{-\infty}^{\infty} \dots \int_{-\infty}^{\infty} f(x_1, \dots, x_n) \mathrm{d}x_n \dots \mathrm{d}x_1 = 1$
+            \item $P[(X_1, \dots, X_n) \in A] = \int_{A} f(x_1, \dots, x_n) \mathrm{d}x_n \dots \mathrm{d}x_1$ für $A \subseteq \R^n$
+        \end{itemize}
+    \ides{Randverteilung:} Analog zu diskret
+    \ides{Randverteilungsdichte:} Falls $X$ und $Y$ gemeinsame Dichte $f(x,y)$, so haben auch die Randverteilungen von $X$ und $Y$ Dichten $f_X, f_Y: \R \to [0, \infty)$. $f_X(x) = \int_{-\infty}^{\infty} f(x, y) \mathrm{d}y$
+\end{itemize}
+
+\subsubsection{Unabhängigkeit}
+\begin{itemize}
+    \item Die ZV $X_1, \dots, X_n$ heissen Unabhängig falls: $F(x_1, \dots, x_n) = F_{X_1}(x_1) \dots F_{X_n}(x_n)$ bzw. $f(x_1, \dots, x_n) = f_{X_1}(x_1) \dots f_{X_n}(x_n)$
+\end{itemize}
+
+\subsection{Funktionen und Transformationen von ZV}
+\begin{itemize}
+    \item Sei $Z = X + Y$ dann $F_Z(z) = P[Z \le z] = P[X + Y \le z]$. Setzen wir $A_z := \{(x, y) \in \R^2 \mid x + y \le z\}$ so ist $F_Z(z) = P[(X,Y) \in A_z] = \int_{A_z} \int  f(x,y) \mathrm{d}y\mathrm{d}x = \int_{-\infty}^{\infty} \int_{-\infty}^{z - x} f(x,y) \mathrm{d}y\mathrm{d}x$. Mit der Variablentransformation $v = x + y$ wird $y = v - x, \mathrm{d}y = \mathrm{d}v$ und $F_Z(z) = \int_{-\infty}^{\infty} \int_{-\infty}^{z} f(x, v - x) \mathrm{d}v \mathrm{d}x = \int_{-\infty}^{z} \int_{-\infty}^{\infty} f(x, v - x) \mathrm{d}x\mathrm{d}v$. Also hat $Z$ auch eine DF: $f_Z(z) = \frac{d}{dz} F_Z(z) = \int_{-\infty}^{\infty} f(x, z-x) \mathrm{d}x = \int_{-\infty}^{\infty} f(z - y,y) \mathrm{d}y$.
+        \begin{itemize}
+            \item Sind zusätzlich $X$ und $Y$ unabhängig, so ist $f(x,y) = f_X(x) f_Y(y)$, sprich: $f_Z(z) = \int_{-\infty}^{\infty} f_x(x) f_Y(z - x) \mathrm{d}x = \int_{-\infty}^{\infty} f_X(z - y)f_Y(y) \mathrm{d}y =: (f_X * f_Y)(z)$.
+        \end{itemize}
+\end{itemize}
+
+\subsubsection{ZV Transformationen}
+\begin{itemize}
+    \item Sei $X$ ZV mit $F_X$ und $f_X$. Für eine Funktion $g: \R \to \R$ betrachten wir die neue ZV $Y = g(X)$. Wie sehen dann VF und DF von $Y$ aus?
+        \ides{Allgemeiner Ansatz:} $F_Y(t) = P[Y \le t] = P[g(X) \le t] = \int_{A_g} f_X(s) \mathrm{d}x$ mit Menge $A_g := \{s \in \R \mid g(s) \le t\}$. Dann versuchen rechte Seite auszurechnen.
+    \item z.B. für Affine Transformationen $g(x) = ax + b, a > 0, b \in \R$: $F_Y(t) = P[Y \le t] = P[aX + b \le t] = P[X \le \frac{t - b}{a}] = F_X( \frac{t - b}{a} )$ und damit nach der Kettenregel $f_Y(t) = \frac{d}{dt} F_Y(t) = \frac{1}{a} f_X (\frac{t - b}{a})$.
+    \item Analog bis auf Vorzeichen geht das auch mit $a < 0$
+\end{itemize}
+
+\begin{itemize}
+    \item Sei ZV $F$ stetige und streng monoton wachsende VF, mit Umkehrfunktion $F^{-1}$. Falls $X \sim \mc{U}(0, 1)$ und $Y = F^{-1}(X)$ dann hat $Y$ die VF $F$.
+        \begin{itemize}
+            \item Dieser Satz erlaubt die explizite Konstruktion einer ZV $Y$ mit gewünschter VF $F$.
+        \end{itemize}
+\end{itemize}
