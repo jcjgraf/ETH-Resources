@@ -1,0 +1,29 @@
+% ! TEX root = ./main.tex
+
+\section{Ungleichungen und Grenzwertsätze}
+\subsection{Ungleichungen}
+\begin{itemize}
+    \ides{Markov Ungleichung:} Sei ZV $X$ und $g: \mc{W}(X) \to [0, \infty)$ eine wachsende Funktion. Für jedes $c \in \R$ mit $g(x) \ge 0$ gilt dann $P[X \ge c] \le \frac{E[g(X)]}{g(c)}$
+    \ides{Chebyshev-Ungleichung:} Sei ZV $Y$ mit endlicher Var. Für jedes $b > 0$ gilt: $P[|Y - E[Y] \mid \ge b] \le \frac{Var[Y]}{b^2}$.
+    \ides{Chernoff Schranke:}
+        \begin{itemize}
+            \item Die \textit{momenterzeugende} Funktion einer ZV $X$ ist $M_X(t) := E[e^{tX}], t \in \R$. Das ist immer wohldefiniert in $[0, \infty]$, kann aber $+\infty$ werden.
+            \item Seien $X_1, \dots, X_n$ i.i.d. ZV, für welche $M_X(t)$ für alle $t \in \R$ endlich ist. Für jedes $b \in \R$ gilt dann: $P[S_n \ge b] \le \exp(\inf_{t \in \R} (n \log M_x(t) - tb))$
+            \item Seine $X_1, \dots X_n$ unabhängig mit $X_i \sim Be(p_i)$ und $S_n = \sum_{i=1}^{n} X_i$. Sei $\mu_n := E[S_n] = \sum_{i=1}^{n} p_i$ und $\delta > 0$. Dann gilt: $P[S_n \ge (1 + \delta) \mu_n] \le (\frac{e^\delta}{(1 + \delta)^{1 + \delta}})^{\mu_n}$
+        \end{itemize}
+\end{itemize}
+
+\subsection{Grenzwertsätze}
+\begin{itemize}
+    \ides{Schwaches Gesetz der grossen Zahlen:} Sein $X_1, X_2, \dots$ eine Folge von unabhängigen ZV, die alle den gleichen EW $E[X_i] = \mu$ und die Var $Var[X_i] = \sigma^2$ haben. Sei: $\overline{X}_n = \frac{1}{n} S_n = \frac{1}{n} \sum_{i=1}^{n} X_i$. Dann konvergiert $\overline{X}_n$ für $n \to \infty$ gegen $\mu$. D.h. $P[|\overline{X}_n - \mu| > \epsilon] \underset{n \to \infty}{\to} 0, \forall \epsilon > 0$.
+    \ides{Starkes Gesetz der grossen Zahlen:} Seien $X_1, X_2, \dots$ i.i.d. und ihr EW $\mu = E[X_i]$ sei endlich. Für: $\overline{X}_n = \frac{1}{n} S_n = \frac{1}{n} \sum_{i=1}^{n} X_i$, dann gilt: $\overline{X}_n \underset{n \to \infty}{\to} \mu$ \textit{P-fastsicher}. D.h. $P[\{\omega \in \Omega \mid \overline{X}_n(\omega) \underset{n \to \infty}{\to} \mu\}] = 1$.
+    \ides{Zentraler Grenzwertsatz (ZGS):} Sei $X_1, X_2, \dots$ eine Folge von i.i.d. ZV mit $E[X] = \mu$ und $Var[X] = \sigma^2$. Für die Summe $S_n = \sum_{i=1}^{n} X_i$ gilt dann $\lim_{n \to \infty} P[\frac{S_n - n \mu}{\sigma \sqrt{n}} \le x] = \Phi(x) \ \forall x \in \R$.
+        \begin{itemize}
+            \item Es gilt $E[S_n] = n\mu$ und $Var[S_n] = n\sigma^2$. Also gilt $S_n^* = \frac{S_n - n\mu}{\sigma \sqrt{n}}$, $E[S_n^*] = 0$ und $Var[S_n^*] = 1$.
+            \item $P[S_n^* \le x] \approx \Phi(x)$ für $n$ gross
+            \item $S_n^* \overset{\text{approx}}{\sim} \mc{N}(0,1)$ für $n$ gross
+            \item $S_n \overset{\text{approx}}{\sim} \mc{N}(n \mu, n \sigma^2)$
+            \item $\overline{X}_n \overset{\text{approx}}{\sim} \mc{N}(\mu, \frac{1}{n} \sigma^2)$
+        \end{itemize}
+\end{itemize}
+
