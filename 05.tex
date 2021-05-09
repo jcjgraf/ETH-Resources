@@ -6,7 +6,15 @@
         \begin{itemize}
             \item $x_1, \dots, x_n$ sind Daten (in der Regel Zahlen)
             \item $X_1, \dots, X_n$ sind der generierende Mechanismus (ZV)
-            \ides{Strichprobe:} $X_1, \dots, X_n$ nennt man oft auch Strichprobe, $n$ heisst \textbf{Stichprobenumfang}
+            \ides{Stichprobe:} $X_1, \dots, X_n$ nennt man oft auch Stichprobe, $n$ heisst \textbf{Stichprobenumfang}
+        \end{itemize}
+    \item Wir haben einen Datensatz aus einer Stichprobe und suchen dafür ein Modell welches durch einen ggf. hochdimensionalen parameter $\theta \in \Theta$ beschreibbar ist. $P_\theta$ beschreibt das Wahrscheinlichkeitsmass abhängig von $\theta$. Wir versuchen nun über die Daten Rückschlüsse auf $\Theta$ zu ziehen.
+    \item Parametrische Statistische Analyse:
+        \begin{itemize}
+            \item[1.] Aufgrund von Daten/Graphen eine Idee für die Wahl einer geeigneten Modelierung zu finden.
+            \item[2.] \textbf{Wahl eines Modells:} Paremetermenge $\Theta$ und Familie $(P_\Theta)_{\theta \in \Theta}$ von Modellen spezifizieren.
+            \item[3.] Schätzung der Parameter durch Benutzung eines Schätzers
+            \item[4.] Überprüfen ob gewähltes theta bzw. Modell $P_\theta$ gut passt durch geeignete statistische Tests.
+            \item[5.] Aussagen über Zuverlässigkeit der Schätzungen machen. Ev. Bereich in $\Theta$ wählen statt einzelner parameter $\theta$ (Konfidenzbereich)
         \end{itemize}
 \end{itemize}
-\todo{Definiere parameter theta (generelle Idee)}
