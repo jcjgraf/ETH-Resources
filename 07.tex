@@ -1,0 +1,22 @@
+%! TEX root = ./main.tex
+
+\section{Tests}
+\subsection{Grundbegriffe}
+\begin{itemize}
+    \item Wir haben eine Vermutung wo in $\Theta$ der richtige (aber unbekannte) Parameter $\theta$ lieben könnte, und wollten diese mit Hilfe der Daten überprüfen (``testen''). Das Grundproblem ist, eine Entscheidung zwischen zwei konkurrierenden Modellklassen zu treffen: Der \textbf{Hypothese} ($H_0$) $\Theta_0 \subseteq \Theta$ und der \textbf{Alternative} ($H_A$) $\Theta_A \subseteq \Theta$ wobei $\Theta_0 \cap \Theta_A = \emptyset$
+    \item Hypothese/Alternative heissen:
+        \begin{itemize}
+            \ides{Einfach:} falls $\Theta_0/\Theta_A$ aus einzelnem Wert $\theta_0/\theta_A$ bestehen
+            \ides{Zusammengesetzt:} Ansonsten
+        \end{itemize}
+    \ides{Test:} Eine Entscheidungsregel, die zu Daten $x_1, \dots, x_n \ 0$ oder $1$ zurück gibt
+        \begin{itemize}
+            \ides{$1$:} Hypothese $H_0$ wird abgelehnt
+            \ides{$0$:} Hypothese $H_0$ wird akzeptiert
+        \end{itemize}
+        Konkreter: Man hat eine Abbildung $t: \R^n \to \R$ und einen \textbf{kritischen Bereich} oder \textbf{Verwertungsbereich} $K \subseteq \R$. Die ZV $T = t(X_1, \dots, X_n)$ heisst \textbf{Teststatistik}. Die Entscheidungsregel ist $I_{\{t(x_1, \dots, x_n) \in K\}}$
+        \ides{Fehler $\mathbf{1.}$ Art:} Hypothese zu unrecht abgelehnt: Passiert für $\theta \in \Theta_0$ und $T \in K$. $P_\theta[T \in K]$ für $\theta \in \Theta_0$ ist die WS für Fehler $1.$ Art.
+        \ides{Fehler $\mathbf{2.}$ Art:} Hypothese zu unrecht nicht verworfen: Passiert für $\theta \in \Theta_A$ und $T \notin K$. $P_\theta[T \notin K] = 1 - P_\theta[T \in K]$ für $\theta \in \Theta_A$ ist die WS für Fehler $2.$ Art.
+\end{itemize}
+
+\todo{Ende Seite 141}
