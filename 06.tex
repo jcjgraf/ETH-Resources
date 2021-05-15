@@ -37,14 +37,12 @@
 \end{itemize}
 
 \subsection{Momentenschätzer (MM)}
+Seinen $X_1, \dots, X_n$ i.i.d. Für eine Funktion $h: \Theta \to \R^d$ wollen wir die $d$ Grössen $h_j(\theta), j = 1, \dots, d$ schätzen. Um MM $h(\theta)$ zu bestimmen:
 \begin{itemize}
-    \item Seinen $X_1, \dots, X_n$ i.i.d. Für eine Funktion $h: \Theta \to \R^d$ wollen wir die $d$ Grössen $h_j(\theta), j = 1, \dots, d$ schätzen. Um MM $h(\theta)$ zu bestimmen:
-        \begin{itemize}
-            \item[1)] Für $j = 1, \dots, d$ berechnen wir in jedem Modell $P_\theta$ das $j$-te Moment $m_j(\theta) = E_\theta[X^j]$ als Funktion von $\theta$.
-            \item[2)] Für $j = 1, \dots, d$ definieren wir das $j$-Te \textit{empirische Mittel} als $\overset{\sim}{m_j}(x_1, \dots, x_n) := \frac{1}{n} \sum_{i=1}^{n} x_i^j$
-            \item[3)] Betrachten System von $d$ Gleichungen $\overset{\sim}{m_j}(x_1, \dots, x_n) = m_j(\theta), j = 1, \dots, d$ und lösen Gleichungssystem für $d$ Unbekannten $h_1(\theta), \dots h_d(\theta)$.
-            \item Falls eindeutige Lösung existiert, nennen wir diese $t_{MM}(x_1, \dots, x_n)$, $t_{MM}: \R^n \to \R^d$.
-        \end{itemize}
+    \item[1)] Für $j = 1, \dots, d$ berechnen wir in jedem Modell $P_\theta$ das $j$-te Moment $m_j(\theta) = E_\theta[X^j]$ als Funktion von $\theta$.
+    \item[2)] Für $j = 1, \dots, d$ definieren wir das $j$-Te \textit{empirische Mittel} als $\overset{\sim}{m_j}(x_1, \dots, x_n) := \frac{1}{n} \sum_{i=1}^{n} x_i^j$
+    \item[3)] Betrachten System von $d$ Gleichungen $\overset{\sim}{m_j}(x_1, \dots, x_n) = m_j(\theta), j = 1, \dots, d$ und lösen Gleichungssystem für $d$ Unbekannten $h_1(\theta), \dots h_d(\theta)$.
+    \item Falls eindeutige Lösung existiert, nennen wir diese $t_{MM}(x_1, \dots, x_n)$, $t_{MM}: \R^n \to \R^d$.
 \end{itemize}
 
 \subsection{Verteilungsaussagen}
