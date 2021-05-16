@@ -1,3 +1,5 @@
+\ProvidesPackage{cheatsheet}
+
 \usepackage{multicol}
 \setlength{\columnseprule}{0.4pt}
 
@@ -5,7 +7,6 @@
 \usepackage{amsmath, amssymb}
 \usepackage{graphicx}
 \graphicspath{{Figures/}}
-
 
 % Listing
 \usepackage{enumitem}
@@ -21,13 +22,14 @@
 \setlist[itemize,2]{label=--}
 \setlist[itemize,3]{label=*}
 
+\setitemize{leftmargin=0.2cm}
+
 % List commands
 \newcommand{\ipro}{\item[+]}
 \newcommand{\icon}{\item[-]}
 \newcommand{\ides}[1]{\item \textbf{#1}}
 
-%\usepackage{paralist}
-%\setdefaultitem{$\textcolor{red}\bullet$}{\textcolor{red}\textendash}{$\textcolor{red}\textasteriskcentered$}{$\textcolor{red}\textperiodcentered$}
+\usepackage{extsizes}
 
 \usepackage{geometry}
 \geometry{paper=a4paper,left=4.5mm, right=4.5mm, top=4.5mm, bottom=6mm, landscape, nohead, nofoot}
@@ -66,4 +68,3 @@
 
 % Todo
 \newcommand{\todo}[1]{\textcolor{red}{TODO: #1}\PackageWarning{TODO:}{#1!}}
-
