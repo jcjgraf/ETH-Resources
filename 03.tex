@@ -43,8 +43,7 @@
     t &\text{ für } t > b
 \end{cases}$
     \item $E[X] = \int_{a}^{b} x \frac{1}{b - a} \mathrm{d}x = \frac{a + b}{2}$
-
-    \todo{Varianz}
+    \item $Var[X] = E[X^2] - (E[X])^2 = \frac{1}{12}(b - a)^2$
 \end{itemize}
 
 \subsubsection{Exponentialfunktion}
@@ -52,7 +51,7 @@
     \item ZV $X \sim Exp(\lambda)$ für $\lambda > 0$ und $\mc{W}(X) = [0, \infty)$
     \item DF $f_X(t) =
 \begin{cases}
-    \lambda e ^{-\lambda} &\text{für } t \ge 0\\
+    \lambda e ^{-\lambda t} &\text{für } t \ge 0\\
     0 & \text{für } t < 0
 \end{cases}$
     \item VF $F_X(t) = \int_{-\infty}^{t} f_X(s) \mathrm{d}s =
@@ -60,9 +59,9 @@
     1 - e^{- \lambda t} &\text{für } t \ge 0\\
     0 &\text{für } t < 0
 \end{cases}$
+    \item $E[X] = \int_{0}^{\infty} \lambda x e^{-\lambda x} \mathrm{d}x = \frac{1}{\lambda}$
+    \item $Var[X] = \int_{0}^{\infty} (x - \frac{1}{\lambda})^2 \lambda e^{-\lambda x} \mathrm{d}x = \frac{1}{\lambda^2}$
     \ides{Gedächnislosigkeit:} $P[X > t + s \mid X > s] = P[X > t]$
-
-    \todo{Erwartungswert und Varianz}
 \end{itemize}
 
 \subsubsection{Normalverteilung}
@@ -84,7 +83,7 @@
 \subsubsection{Gamma Verteilung}
 \todo{Oli Fragen ob relevant}
 
-\subsection{Gemeinsame Verteilungen, unabhängige Zufallsvariablen}
+\subsection{Gemeinsame Verteilungen, unabhängige ZV}
 \begin{itemize}
     \ides{Gemeinsame VF:} Analog zu diskret
     \ides{Gemeinsame DF:} Falls die gemeinsame VF $F$ von $X_1, \dots, X_n$ sich schreiben lässt als $F(x_1, \dots, x_n) = \int_{-\infty}^{x_1} \dots \int_{-\infty}^{x_n} f(t_1, \dots, t_n) \mathrm{d}t_n \dots \mathrm{d}t_1$ für eine Funktion $f: \R^n \to [0, \infty)$, so heisst $f(x_1, \dots, x_n)$ die gemeinsame Dichte von $X_1, \dots, X_n$. Es gilt:

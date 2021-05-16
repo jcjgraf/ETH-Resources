@@ -4,7 +4,6 @@
 \subsection{Ungleichungen}
 \begin{itemize}
     \ides{Markov Ungleichung:} Sei ZV $X$ und $g: \mc{W}(X) \to [0, \infty)$ eine wachsende Funktion. Für jedes $c \in \R$ mit $g(x) \ge 0$ gilt dann $P[X \ge c] \le \frac{E[g(X)]}{g(c)}$
-    \todo{ABS markov}
     \ides{Chebyshev-Ungleichung:} Sei ZV $Y$ mit endlicher Var. Für jedes $b > 0$ gilt: $P[|Y - E[Y] \mid \ge b] \le \frac{Var[Y]}{b^2}$.
     \ides{Chernoff Schranke:}
         \begin{itemize}
@@ -25,6 +24,7 @@
             \item $S_n^* \overset{\text{approx}}{\sim} \mc{N}(0,1)$ für $n$ gross
             \item $S_n \overset{\text{approx}}{\sim} \mc{N}(n \mu, n \sigma^2)$
             \item $\overline{X}_n \overset{\text{approx}}{\sim} \mc{N}(\mu, \frac{1}{n} \sigma^2)$
+            \item Nützliche Umformung: $P[|S_n^*| \le x] \approx \Phi(x) - \Phi(-x) = 2 \Phi(x) - 1$
         \end{itemize}
 \end{itemize}
 
