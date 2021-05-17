@@ -1,0 +1,16 @@
+%! TEX root = ./main.tex
+
+\section{Konfidenzbereiche}
+Wir suchen aus einer Familie $(P_\theta)_{\theta \in \Theta}$ von Modellen eines, das zu unseren Daten $x_1, \dots, x_n$ passt. Ein Schätzer für $\theta$ gibt und dabei einen einzelnen zufälligen möglichen Parameterwert. Weil es schwierig ist, mit diesem einen Wert dem richtigen Parameter zu treffen, suchen wir nun stattdessen eine Teilmenge des Parameterbereichs, die hoffentlich den wahren Parameter enthält.
+\begin{itemize}
+    \ides{Konfidenzbereiche (KB):} für $\theta$ zu Daten $x_1, \dots, x_n$ eine Menge $C(x_1, \dots, x_n) \subseteq \Theta$; in den meisten Fällen ist das ein Intervall, dessen Endpunkte von $x_1, \dots, x_n$ abhängen. Ersetzen wir die Daten $x_1, \dots, x_n$ durch die sie generierende ZV so ist $\overset{\sim}{C} := C(X_1, \dots, X_n)$ also eine zufällige Teilmenge von $\Theta$, mit Realisierung $\overset{\sim}{C}(\omega) = C(X_1(\omega), \dots, X_n(\omega))$ bei einem festen $\omega$. Ein solches $C$ heisst KB zum Niveau $1 - \alpha$, falls gilt: $P_\theta[X(X_1, \dots, X_n) \ni \theta] \ge 1 - \alpha \quad \forall \theta \in \Theta$, d.h. in jedem Modell erwischt man den Parameter mit grosser WS.
+\end{itemize}
+
+\subsection{Konfidenzbereiche - Test - Dualität}
+\begin{itemize}
+    \item Sei zuerst $C(X_1, \dots, X_n)$ ein KB für $\theta$ zum Niveau $1 - \alpha$. Um die Hypothese $H_0 : \theta = \theta_0$ zu testen, definieren wir einen Test durch $I_{\{\theta_0 \notin C(X_1, \dots, X_n)\} }$, d.h. wie lehnen $H_0$ genau dann ab, wenn $\theta_0$ nicht in $C(X_1, \dots, X_n)$ liegt. Dann ist wegen $\Theta_0 = \{\theta_0\}$ für jedes $\theta \in \Theta_0$:\\
+    $P_\theta[\theta_0 \notin C(X_1, \dots, X_n)] = 1 - P_{\theta_0}[C(X_1, \dots, X_n) \ni \theta_0] \le \alpha$, so dass der Test gerade $\alpha$ als Signifikanzniveau hat. Aus einem KB für $\theta$ erhalten wir also eine ganze Familie von Tests, nämlich einen für jede einfache Hypothese $\Theta_0 = \{\theta_0\}$ mit einen $\theta_0 \in \Theta$.
+\item Sei nun umgekehrt für jede einfache Hypothese $\Theta_0 = \{\theta_0\} $ eine Test zum Niveau $\alpha$ gegeben; für jedes $\theta_0$ haben wir also einen kritischen Bereich $K_{\theta_0}$, so dass $H_0: \theta = \theta_0$ genau dann abgelehnt wird, wenn $(X_1, \dots, X_n) \in K_{\theta_0}$ ist. Zudem gilt wegen Niveau $\alpha$: $P_{\theta_0}[(X_1, \dots, X_n) \in K_{\theta_0}] \le \alpha \ \forall \theta_0 in \Theta$. Nun definieren wir eine Teilmenge $C(X_1, \dots, X_n)$ von $\Theta$ durch die Bedingung\\
+    $\theta \in C(X_1, \dots, X_n) :\iff (X_1, \dots, X_n) \notin K_\theta$. Dann ist das ein KB zum Niveau $1 - \alpha$, denn für jedes $\theta \in \Theta$ gilt\\
+    $P_\theta[C(X_1, \dots, X_n) \ni \theta] = P_\theta[(X_1, \dots, X_n) \notin K_\theta] = 1 - P_\theta[(X_1, \dots, X_n) \in K_\theta] \ge 1 - \alpha$.
+\end{itemize}
