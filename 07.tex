@@ -73,3 +73,13 @@ Sind $X_1, \dots, X_n$ i.i.d. $\sim \mc{N}(\mu_X, \sigma^2)$ und $Y_1, \dots, Y_
 \begin{itemize}
     \item Sei $X_1, \dots, X_n$ eine Stichprobe. Wir wollen eine Hypothese $H_0$ gegen eine Alternative $H_A$ testen. Bei einem Test zum Niveau $\alpha$ wird die Hypothese abgelehnt, wenn $T(\omega) = t(x_1, \dots, x_n)$ einen Wert in $K$ ergibt, und wir haben $P_{\theta_0} [T \in K] \le \alpha$. Alternativ kann man auch den sogenannten \textbf{p-Wert} berechnen. Sei $\overrightarrow{x} = (x_1, \dots, x_n)$ der Vektor unserer Daten und $\overrightarrow{X} = (X_1, \dots, X_n)$ unsere Stichprobe. Wir brauchen zuerst für jedes Niveau $\alpha \in [0, 1]$ einen Test $\phi_\alpha(\overrightarrow{x}) = I_{\{t(\overrightarrow{x}) \in K_\alpha\} }$ mit $T = t(\overrightarrow{X})$ und kritischen Bereich $K_\alpha$ mit $P_\theta[T \in K_\alpha] \le \alpha \ \forall \theta \in \Theta_0$. Zudem muss gelten, dass diese Tests kompatibel sind in dem Sinn, dass aus $\alpha' < \alpha$ immer folgt, dass $\phi_{\alpha'} \le \phi_\alpha$, d.h. falls man die Hypothese auf einem Niveau $\alpha$ nicht verwirft, so kann man sie auf einem kleineren Niveau $\alpha'$ auch nicht verwerfen. Dann definieren wir $\pi(\overrightarrow{x}) := \inf \{\alpha \in [0, 1] \mid \phi_\alpha(\overrightarrow{x}) = 1\}$, und der p-Wert ist dann gegeben durch; p-Wert $= \pi(\overrightarrow{X})$. Wie die Stichprobe ist der p-Wert eine ZV weil er von den Daten abhängt.
 \end{itemize}
+
+\subsection{Test Rezept}
+\begin{itemize}[leftmargin=0.35cm]
+    \item[1)] Wahl des Modells
+    \item[2)] Formulierung von Hypothese und Alternativ
+    \item[3)] Bestimmung der Teststatistik $T$ und der Form des kritischen Bereichs $K$; das kann aus einer Herleitung via verallgemeinerten LQ-Test oder direkt aus einem Statistikbuch stammen.
+    \item[4)] Festlegung des Niveaus $\alpha$ liefert die Grenze für den kritische Bereich $K$; dazu braucht man die Verteilung von $T$ unter $P_\theta$ für alle $\theta \in \Theta_0$ (exakt oder approximativ).
+    \item[5)] Berechnen der Teststatistik $T(\omega)$ aus den Daten; ist $T(\omega) \in K$, so wird die Hypothese abgelehnt, andernfalls wird die Hypothese nicht verworfen.
+    \item[5')] Berechnen von Teststatistik $T(\omega)$ und entsprechendem realisiertem $\text{p-Wert}(\omega)$ aus den Daten; ist letzterer $\le \alpha$, so wird die Hypothese abgelehnt, andernfalls nicht.
+\end{itemize}
