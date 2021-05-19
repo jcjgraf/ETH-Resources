@@ -660,7 +660,8 @@
 
 \subsection{Routing}
 \begin{itemize}
-    \item Routing allocates network bandwidth adapting to failures
+    \item Allocates network bandwidth
+    \item Needs to adapting to failures
     \item A Quick comparison of different mechanisms
         \begin{itemize}
             \item
@@ -675,11 +676,8 @@
     \item Delivery models
         \begin{itemize}
             \ides{Unicast:} One to one
-            \ides{Broadcast:} One to many
-            \ides{Multicast:} One to few
-                \begin{itemize}
-                    \item But not to all
-                \end{itemize}
+            \ides{Broadcast:} One to many (all)
+            \ides{Multicast:} One to few (not all)
             \ides{Anycast:} Many to many
                 \begin{itemize}
                     \item One source always to one destination
@@ -693,7 +691,7 @@
             \ides{Fast convergence:} Recovers quickly after changes
             \ides{Scalability:} Works well as networks grows large
         \end{itemize}
-    \item Decentralized, distributed setting
+    \item Setting is decentralized and distributed:
         \begin{itemize}
             \item All nodes are alike
                 \begin{itemize}
@@ -703,12 +701,64 @@
             \item Nodes operate concurrently
             \item Maybe node/link/message failures
         \end{itemize}
+    \item Apply different methods for different parts/typologies of the network
 \end{itemize}
 
-\todo{Mention throughput vs goodput}
-
-\subsubsection{Shorted Path Problem}
+\subsubsection{Network Typologies}
 \begin{itemize}
+    \ides{Initial Idea:} Each computer is directly accessible via its own IP
+        \begin{itemize}
+            \icon Not scalable as internet grows
+        \end{itemize}
+    \item Multiple techniques to scale routing
+    \ides{IP Prefix}
+        \begin{itemize}
+            \ides{Idea:} Bundle a bunch of devices together
+            \item Hosts attach to routers as IP prefixes
+                \begin{itemize}
+                    \item Multiple hosts are grouped in one prefix
+                \end{itemize}
+            \item Router advertises prefixes for hosts
+            \item Router addresses are in the $/32$ prefix
+                \begin{itemize}
+                    \item They are the only node to contact since they forward the traffic
+                \end{itemize}
+        \end{itemize}
+    \ides{Hierarchical Routing}
+        \begin{itemize}
+            \ides{Idea:} Route to region before routing to more specific prefix
+            \item Builds on top of IP prefixes by bundling many prefixes
+            \item Outside a regions, a single nodes has only one paths to all hosts within a different region
+                \begin{itemize}
+                    \ipro Reduces forwarding table size as it hides region-internal structure
+                \end{itemize}
+            \item Different nodes of one region may use different paths to a certain region
+            \icon May lead to longer paths
+        \end{itemize}
+    \ides{IP Prefix Aggregation (and Subnets)}
+        \begin{itemize}
+            \ides{Idea:} Allow more flexibility in changing the IP prefix size
+            \ides{Subnet}
+                \begin{itemize}
+                    \item Internally split one less specific prefix into multiple more specific prefixes
+                    \item One prefix is advertised to the internet
+                    \item Done by e.g. a company to split different departments
+                \end{itemize}
+            \ides{Aggregate}
+                \begin{itemize}
+                    \item Externally join multiple more specific prefixes into one less specific prefix
+                    \item One prefix is advertised to the internet
+                    \item Done by e.g. ISP
+                \end{itemize}
+            \item We need to take care to not \textit{hide} some prefixes
+            \ipro Reduces the number of prefixes to advertise to the rest of the network
+            \ipro Compressed forwarding table
+        \end{itemize}
+\end{itemize}
+
+\subsubsection{Shorted Path Routing}
+\begin{itemize}
+    \item Naive approach to find routing between two nodes
     \item Find shortest path by some metric
         \begin{itemize}
             \ides{Latency:} Avoid circuitous paths
@@ -736,10 +786,254 @@
                 \end{itemize}
             \ipro Finds shortest path in order of increasing distances from source
             \item Runtime depends on cost of extracent min-cost node
-            \item Gives complete source tree
+            \icon Gives complete source tree
                 \begin{itemize}
                     \item Not required in internet
                     \item Requires complete topology
                 \end{itemize}
+        \end{itemize}
+    \ides{Equal-Cost Multipath (ECMP)}
+        \begin{itemize}
+            \item Extension to shortest path routing
+            \item Allow multiple shortest paths from node to destination to be used at once
+            \item Source tree gets a DAG
+            \item Found using modified Dijkstra
+            \item Different paths have different latencies
+            \item Try to route a flow on the same path
+                \begin{itemize}
+                    \item Else we get jitter
+                \end{itemize}
+            \ipro Better reliability
+            \ipro Better performance
+        \end{itemize}
+\end{itemize}
+
+\subsubsection{Intra-Domain Routing}
+\begin{itemize}
+    \item Routing within an AS
+    \item Setting
+        \begin{itemize}
+            \item Nodes know only the cost to their neighbours
+            \item Nodes communicate only with their neighbours
+            \item All nodes run the same algorithms
+            \item Nodes and links may fail
+            \item Messages may be lost
+        \end{itemize}
+    \item Two main approaches
+    \ides{Distance Vector Routing (DV)}
+        \begin{itemize}
+            \item Solves shortest path problem
+            \item Early approach
+                \begin{itemize}
+                    \item Used by ARPANET and RIP
+                    \item Rarely used anymore
+                \end{itemize}
+            \item Each node maintains a vector of distances to all other nodes
+            \item Steps
+                \begin{itemize}
+                    \item Initialize vector with $0$ cost to self and $\infty$ to all others
+                    \item Periodically send vector to neighbours
+                    \item Add distance to neighbour to all values heard from that neighbour
+                    \item For each vector received, compute the distance to all other nodes by adding the distance to that node to the vector
+                    \item Update distance vector by selecting minimal distance for each destination
+                \end{itemize}
+            \item News travels one hop per exchange
+            \item After $n$ exchanges every node know the shortest path of up to $n$ hops
+            \ipro Simple
+            \ipro Works well
+            \ipro Good news travels quickly
+            \icon Bad news travels slowly
+                \begin{itemize}
+                    \item Slow adoption on failures
+                \end{itemize}
+            \icon \textbf{Count to infinity problem:} After certain nodes becomes unreachable, the other nodes hear from each other that there is still a connection
+                \begin{itemize}
+                    \item Some solutions exists
+                        \begin{itemize}
+                            \item Do not work in all conditions
+                        \end{itemize}
+                    \ides{Split Horizon:} Omit routers learned from neighbours $A$ in updates sent to $A$
+                    \ides{Poisoned Reverse:} Set metric $=\infty$ for routers learned from $A$ in updates sent to $A$
+                \end{itemize}
+            \ides{Routing Information Protocol (RIP)}
+                \begin{itemize}
+                    \item Introduces in 1988
+                    \item DV protocol
+                    \item Used hop-count as metric
+                    \item Supported networks with longest distance of $15$ hops
+                    \item Vector is send out every $30$ sec
+                    \item Timeout of $180$ sec to detect failure of nodes
+                    \item Included split horizon and poison reverse
+                    \item Builds on UDP
+                \end{itemize}
+        \end{itemize}
+    \ides{Link-State Routing (LS)}
+    \begin{itemize}
+        \item Replaced DV
+        \ides{Flooding}
+            \begin{itemize}
+                \item Required for link-state routing to work
+                \item Sends message to every host in the network
+                \item Similar to broadcast but less controlled
+                \item Each node:
+                    \begin{itemize}
+                        \item sends incoming message on to all other neighbours
+                        \item remembers forwarded messages to prevent resending
+                            \begin{itemize}
+                                \item Implemented using sequence number
+                                \item Each source node has a own sequence number space
+                            \end{itemize}
+                    \end{itemize}
+                \ides{Stop-and-wait}
+                    \begin{itemize}
+                        \item Makes flooding reliable
+                        \item Receiver acknowledges receipt else it is resent
+                    \end{itemize}
+                \item Each link carries the message at least once
+                \ipro Simple
+                \icon Inefficient
+                    \begin{itemize}
+                        \item One node may receive the same message multiple times
+                    \end{itemize}
+            \end{itemize}
+        \item Working
+            \begin{itemize}
+                \item Two phases
+                \item[1)] Modes flood topology in the form of \textbf{link state packets (LSP)}
+                    \begin{itemize}
+                        \item LSP contains:
+                            \begin{itemize}
+                                \item Nodes name
+                                \item Distances to all adjacent nodes
+                                \item Sequence number to identify the flood
+                            \end{itemize}
+
+                        \item Each nodes learns full topology by combining all LSPs
+                    \end{itemize}
+                \item[2)] Each node computes its own forwarding table
+                    \begin{itemize}
+                        \item Using Dijkstra or equivalent
+                        \item All nodes optimize on same metric
+                        \item Neighbours agree on shared link's cost
+                            \begin{itemize}
+                                \item Can by dynamic
+                            \end{itemize}
+                        \item Link cost should be larger than zero
+                    \end{itemize}
+                \item Topology changes
+                    \begin{itemize}
+                        \item Update LSP and flood to network
+                        \item Node re-compute routes
+                        \item Covers multiple scenarios
+                            \begin{itemize}
+                                \ides{Link Failure}
+                                    \begin{itemize}
+                                        \item Both nodes notice and update their LPS
+                                            \todo{Is dead node removed or set to infty?}
+                                    \end{itemize}
+                                \ides{Node failure}
+                                    \begin{itemize}
+                                        \item Adjacent nodes notice failure of link and update their LPS
+                                        \item Failed node got disconnected
+                                    \end{itemize}
+                                \ides{Adding Link or Node}
+                                    \begin{itemize}
+                                        \item All adjacent nodes update their LPS
+                                        \item Potential new node sends LPS
+                                    \end{itemize}
+                            \end{itemize}
+                    \end{itemize}
+            \end{itemize}
+        \icon Certain nodes may ignore flooded LSPs due to:
+            \begin{itemize}
+                \icon Sequence number reach max or gets corrupted
+                \icon Node may crash and loose sequence number
+                \icon Network partitions and heals again
+            \end{itemize}
+        \item Can be fixed by including an age on LSP and forget old information
+        \icon More computation than DV
+        \ipro Better dynamics than DV
+        \ides{IS-IS and OSPF}
+            \begin{itemize}
+                \item LS protocols
+                \item Widely used in enterprise
+                \ides{Intermediate System to Intermediate System (IS-IS)}
+                    \begin{itemize}
+                        \item Introduces in 1987
+                        \item Very similar to OSPF
+                        \item Network can be separated into areas
+                    \end{itemize}
+                \ides{Open Shortest Path First (OSPF)}
+                    \begin{itemize}
+                        \item Introduces in 1989
+                        \item Loosely based on IS-IS
+                        \item Splits AS's network into different areas
+                            \begin{itemize}
+                                \ipro Scalability
+                            \end{itemize}
+                        \ides{Internal routers:} Any router inside an area which is \textbf{not} connected to the backbone
+                            \begin{itemize}
+                                \item Only run the LS algorithm with routers belonging to the same area
+                            \end{itemize}
+                        \ides{Area border routers:} Any backbone router connecting to an area
+                            \begin{itemize}
+                                \item Run the LS algorithm for all connected areas
+                                \item Condenses topological information of their connected areas and distributes it to the backbone
+                            \end{itemize}
+                        \ides{Backbone routers:} Any router which is part of the backbone
+                        \ides{AS border router:} Any router connected to a different AS
+                            \begin{itemize}
+                                \item Can be a internal or backbone router
+                                \item Advertise external routing information throughout the AS
+                            \end{itemize}
+                        \item Areas are identified by $32$-bit number
+                            \begin{itemize}
+                                \item Formatted as IP addresses
+                            \end{itemize}
+                        \item Areas topology is hidden to other areas
+                        \item All networks are exclusively connected via the backbone
+                            \begin{itemize}
+                                \item Has IP $0.0.0.0$
+                            \end{itemize}
+                        \item Algorithm
+                            \begin{itemize}
+                                \item Each router keeps a LS database storing the areas topology
+                                \item Routers send LS advertisements (LSA)
+                                    \begin{itemize}
+                                        \item Send as IP packets
+                                        \item Contain originating router ID and its interface with respective cost
+                                        \item Area border routers and AS boundary routers distribute additional LSAs containing information of their connected area or AS
+                                    \end{itemize}
+                                \item LS database in a collection of all LSAs
+                                    \begin{itemize}
+                                        \item Should be identical for all routers in the same area
+                                    \end{itemize}
+                            \end{itemize}
+                        \ipro Support ECMP
+                        \ipro Extensible
+                    \end{itemize}
+                \ides{IS-IS vs OSPF}\\
+\begin{tabular}{| l | l | l |}
+    & OSPF & IS-IS\\\hline
+    Purpose & Designed for IP traffic & Neutral towards level-3 protocols\\
+    Encapsulation & Runs on top of IP & Runs directly on layer 2\\
+    Area boundaries & On routers & On links \\
+                    & Router belong to mult. area & Router belong to single area\\
+    Backbone area & Yes & No\\
+    IPv6 support & Yes & Implicitly
+\end{tabular}
+            \end{itemize}
+    \end{itemize}
+    \ides{DV vs LS}\\
+\begin{tabular}{| l | l | l |}
+    Goal & DV & LS\\\hline
+    Correctness & Distributed Bellman-Ford & Replicated Dijkstra\\
+    Efficient paths & Approx. with shortest paths & Approx. with shortest paths\\
+    Fair paths & Approx. with shortest paths & Approx. with shortest paths\\
+    Fast convergence & Slow - many exchanges & \textbf{Fast - flood and compute}\\
+    Scalability & \textbf{Excellent - storage/computation} & Moderate: storage/computation
+\end{tabular}
+        \begin{itemize}
+            \item Tradeoff between scalability and speed of convergence\\
         \end{itemize}
 \end{itemize}
