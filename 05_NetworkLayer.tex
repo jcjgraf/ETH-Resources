@@ -1037,3 +1037,271 @@
             \item Tradeoff between scalability and speed of convergence\\
         \end{itemize}
 \end{itemize}
+
+\subsubsection{Inter-Domain Routing}
+\begin{itemize}
+    \item Routing between multiple ASes
+    \ides{Autonomous System (ASes):} Independently administered network
+        \begin{itemize}
+            \item Define their topology
+            \item Decide on the protocols to use
+        \end{itemize}
+    \item Challenges
+        \begin{itemize}
+            \ides{Scalability:} Keep networks reliable while $\#$ prefixes and $\#$ networks is growing
+            \ides{Privacy:} Companies do not want that their network topology gets public
+            \ides{Policy Enforcement:} We want to follow certain policies
+        \end{itemize}
+    \item Intra-Domain Routing protocols no not fulfil all requirements
+        \begin{itemize}
+            \ides{LS:} Does not fulfil any
+            \ides{DV:} Only privacy is fulfilled
+        \end{itemize}
+    \ides{Border Gateway Protocol (BGP)}
+        \begin{itemize}
+            \item Announces prefixes which certain ASes can reach directly or indirectly
+            \ides{Idea:} Advertise entire AS-level path instead of distances
+            \ides{Path-vector routing}
+                \begin{itemize}
+                    \item Advertise AS-path
+                    \item ASes prepend themselves to the path when the path propagates announcements
+                \end{itemize}
+            \ides{Policies}
+                \begin{itemize}
+                    \item Money is key
+                    \ides{Business Relationship}
+                        \begin{itemize}
+                            \item 2 ASes only connect if they have a business relationships
+                            \item Two main relationships
+                            \ides{Customer/Provider}
+                                \begin{itemize}
+                                    \item Provider provides service to customer
+                                    \item Customer pays provider
+                                    \item Different payment methods
+                                        \begin{itemize}
+                                            \ides{95-th Percentile}
+                                                \begin{itemize}
+                                                    \item Most popular for ISPs/companies
+                                                    \item Measure traffic every $5$ minutes in Mbps
+                                                    \item Order data
+                                                    \item Pay according to the $95$-th percentile
+                                                \end{itemize}
+                                            \ides{By Usage:}
+                                                \begin{itemize}
+                                                    \item Pay for what you need
+                                                \end{itemize}
+                                            \ides{Flatrate:}
+                                                \begin{itemize}
+                                                    \item Mostly for consumers
+                                                \end{itemize}
+                                        \end{itemize}
+                                \end{itemize}
+                            \ides{Peer/Peer}
+                                \begin{itemize}
+                                    \item Both have a common interest
+                                    \item Not money is paid
+                                \end{itemize}
+                        \end{itemize}
+                    \ides{Routing Policies}
+                        \begin{itemize}
+                            \item Key rules
+                                \begin{itemize}
+                                    \item[1)] Providers transit traffic for their customers
+                                    \item[2)] Peers do not transit traffic between each other
+                                    \item[3)] Customers do not transit between their providers
+                                \end{itemize}
+                            \item Traffic is only forwarded if one makes money by doing so
+                            \ides{Selection:} Which path should an AS use?
+                                \begin{itemize}
+                                    \item Controls \textit{outbound traffic}
+                                    \item AS prefer sending to:
+                                        \begin{itemize}
+                                            \item[1)] \textbf{Customers:} Get money
+                                            \item[2)] \textbf{Peers:} Use for free
+                                            \item[3)] \textbf{Providers:} Pay yourself
+                                        \end{itemize}
+                                \end{itemize}
+                            \ides{Export:} Which paths should an AS advertise?
+                                \begin{itemize}
+                                    \item Defines allowed \textit{inbound traffic}
+                                    \item
+\begin{tabular}{| c r | c c c |}
+    &&& \textit{send to} &\\
+    &&customer & peer & provider\\\hline
+    & customer & $\checkmark$ & $\checkmark$ & $\checkmark$\\
+    \textit{from} & peer & $\checkmark$ & - & -\\
+         &provider & $\checkmark$ & - & -\\
+\end{tabular}
+                                    \item Controlled through advertisements
+                                    \item To prevent partition of the network, Tier-1 ASes must be connected through a full-mesh of peers
+                                \end{itemize}
+                        \end{itemize}
+                \end{itemize}
+            \ides{Protocol}
+                \begin{itemize}
+                    \item Simple protocol
+                    \item Two sessions flavours
+                        \begin{itemize}
+                            \ides{external BGP (eBGP)}
+                                \begin{itemize}
+                                    \item Connect border routers in different ASes
+                                    \item Used to learn routes to external destinations
+                                    \item Used to announce internally disseminated routes
+                                    \item TCP based BGP session
+                                \end{itemize}
+                            \ides{internal BGP (iBGP)}
+                                \begin{itemize}
+                                    \item Connect routers in the same AS
+                                    \item Used to disseminate externally-learned routes internally
+                                \end{itemize}
+                        \end{itemize}
+                    \item Contains four basic message types
+                        \begin{itemize}
+                            \item Are carried in an IP packet
+                            \item Composed of IP prefix and attributes
+                            \ides{OPEN}
+                                \begin{itemize}
+                                    \item Establish TCP-based BGP session
+                                \end{itemize}
+                            \ides{NOTIFICATION}
+                                \begin{itemize}
+                                    \item Report unusual conditions
+                                \end{itemize}
+                            \ides{UPDATE}
+                                \begin{itemize}
+                                    \item Inform neighbour about:
+                                        \begin{itemize}
+                                            \item change in best route
+                                            \item new best route
+                                            \item removal of best route
+                                        \end{itemize}
+                                    \item Four different attributes:
+                                        \begin{itemize}
+                                            \item Describe route properties
+                                            \item Used in route selection
+                                            \item Can be:
+                                                \begin{itemize}
+                                                    \ides{Local:} Only seed by iBGP
+                                                    \ides{Global:} Seen by iBGP and eBGP
+                                                \end{itemize}
+                                            \ides{NEXT-HOP}
+                                                \begin{itemize}
+                                                    \item Global
+                                                    \item Indicates where to send the traffic next (indicates the egress point)
+                                                    \item Set when the route enters an AS
+                                                        \begin{itemize}
+                                                            \item Not changed within the AS
+                                                        \end{itemize}
+                                                \end{itemize}
+                                            \ides{AS-PATH}
+                                                \begin{itemize}
+                                                    \item Global
+                                                    \item Lists all the ASes a route has traversed
+                                                    \item AS prepends itself
+                                                    \item Prevents loops
+                                                    \item Controls inbound/outbound traffic
+                                                \end{itemize}
+                                            \ides{LOCAL-PREF}
+                                                \begin{itemize}
+                                                    \item Local
+                                                    \item Set at the border
+                                                    \item Represents how \textit{preferred} a route is
+                                                    \item Routers select the route with the highest value (if they are able to choose)
+                                                    \item May lead to longer intra-domain routing distances
+                                                \end{itemize}
+                                            \ides{MED}
+                                                \begin{itemize}
+                                                    \item Multi-Exit Discriminator
+                                                    \item Global
+                                                    \item Set by the announce
+                                                    \item Indicates the relative proximity of a prefix with respect to the announcer
+                                                    \item Closer proximity $\implies$ lower MED $\implies$ preferred
+                                                    \item If often ignored by the sender
+                                                    \item Can only influence inbound traffic from a single AS and not prefer traffic from one AS over another
+                                                \end{itemize}
+                                        \end{itemize}
+                                \end{itemize}
+                            \ides{KEEPALIVE}
+                                \begin{itemize}
+                                    \item Inform neighbour that the connection is alive
+                                \end{itemize}
+                        \end{itemize}
+                    \item Route selection
+                        \begin{itemize}
+                            \ides{Single Path Protocol:} BGP selects a single route
+                                \begin{itemize}
+                                    \icon Optimisation not possible
+                                \end{itemize}
+                            \item Selects routes according to: (select next lower if we have a tie)
+                                \begin{itemize}
+                                    \item higher LOCAL-PREF
+                                    \item shorter AS-PATH length
+                                    \item lower MED
+                                    \item select route learned from eBGP over iBGP
+                                    \item lower IGP metric to the next-hop
+                                        \begin{itemize}
+                                            \item Based on some intra-domain routing protocol
+                                        \end{itemize}
+                                    \item smaller egress IP address (breaks tie)
+                                \end{itemize}
+                            \ides{Hot Potato Routing:} Dump traffic as soon as possible to someone else
+                                \begin{itemize}
+                                    \item ASes are selfish
+                                    \item Leads to asymmetric routing
+                                        \begin{itemize}
+                                            \item Traffic often does not flow on same path in both directions
+                                        \end{itemize}
+                                \end{itemize}
+                        \end{itemize}
+                    \item ASes enforce their policy using:
+                        \begin{itemize}
+                            \ides{Import Rules:} Enforced using input filters
+                                \begin{itemize}
+                                    \item Assign LOCAL-PREF for different route types
+                                \end{itemize}
+                            \ides{Export Rules:} Enforced using input and output filters
+                                \begin{itemize}
+                                    \item Assigned tags to routes and use only routes with certain tags
+                                \end{itemize}
+                        \end{itemize}
+                \end{itemize}
+            \ides{Problems}
+                \begin{itemize}
+                    \ides{Reachability}
+                        \begin{itemize}
+                            \item Is not guaranteed
+                            \item Connection may exists but it is not allowed to be used due to policies
+                        \end{itemize}
+                    \ides{Security}
+                        \begin{itemize}
+                            \item No security measurements in place
+                            \item ASes can advertise any prefixes
+                            \item ASes can arbitrary modify route content like AS-PATH
+                            \item ASes can forward traffic along different paths than advertised
+                        \end{itemize}
+                    \ides{Convergence}
+                        \begin{itemize}
+                            \item Route may never converges due to policy osculation
+                            \item We get route updates all the time
+                            \item Only happens if there are nonsensical cycles
+                            \item Caused by arbitrary policies by the ASes
+                                \ides{Gao-Rexford Rule:} If all AS policies follow the cost/provider rules, BGP is guaranteed to converge
+                            \item Happens rarely
+                        \end{itemize}
+                    \ides{Performance}
+                        \begin{itemize}
+                            \item Selection is based on economy not performance
+                        \end{itemize}
+                    \ides{Anomalies}
+                        \begin{itemize}
+                            \item Bloated and underspecified
+                            \item Configuration is hard and often done manually by humans
+                            \item Principle is fundamentally flawed
+                        \end{itemize}
+                    \ides{Relevance}
+                        \begin{itemize}
+                            \item Policies are rapidly changing
+                        \end{itemize}
+                \end{itemize}
+        \end{itemize}
+\end{itemize}
