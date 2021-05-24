@@ -1,0 +1,239 @@
+%! TEX root = ./main.tex
+
+\section{Link Layer}
+\begin{itemize}
+    \item Transfers messages over one or more established links
+    \item Messages are frames
+    \item Frames have a limited size
+    \item Adds header and sometimes trailer to network packet
+    \item Link layer is split in two piece
+        \begin{itemize}
+            \item OS driver
+            \item Network interface card (NIC)
+                \begin{itemize}
+                    \item Interface to physical layer
+                \end{itemize}
+        \end{itemize}
+\end{itemize}
+
+\subsection{Framing}
+\begin{itemize}
+    \item Physical layer provides stream of bits
+    \item Need to figure out where a frame starts and ends
+    \item Different methods
+    \ides{Byte Count}
+        \begin{itemize}
+            \ides{Idea:} Add length field to header
+            \ipro Simple
+            \icon Hard to re-synchronize after error to length field
+        \end{itemize}
+    \ides{Byte Stuffing}
+        \begin{itemize}
+            \ides{Idea:} Byte length flag \verb+Flag+ which indicates start and end of frame
+            \icon Flag may be part of the payload
+                \begin{itemize}
+                    \item Must be escaped: \verb+ESC FLAG+
+                    \item Escape may be part of the payload too
+                        \begin{itemize}
+                            \item Must be escaped itself: \verb+ESC ESC+
+                        \end{itemize}
+                \end{itemize}
+            \icon Problematic on bitflip of flags/escapes
+            \ides{Worst case}: Frame size gets double
+            \ides{Average case}: $\approx 0.6$ or $1/28$ or something, not sure \todo{Find average case}
+        \end{itemize}
+    \ides{Bit Stuffing}
+        \begin{itemize}
+            \item Same principle as byte stuffing
+            \item $6$ consecutive $1$s are a \verb+FLAG+
+            \ides{On transmit:} Insert a $0$ after $5$ consecutive $1$s
+            \ides{On receive:} delete each $0$ which occurs after $5 \ 1$s
+            \ides{Worst case:} Size gets longer by $20\%$
+            \ides{Average case:} \todo{Find average case}
+        \end{itemize}
+\end{itemize}
+
+
+\subsection{Error Detection and Correction}
+\begin{itemize}
+    \item Get bit-errors due to signal attenuation and noise
+        \begin{itemize}
+            \item We assume the bit flips are random
+        \end{itemize}
+    \ides{Goal:} Detect and possibly recover from such errors
+    \ides{Error Codes}
+        \begin{itemize}
+            \item Code word consists of $D + R$ bits
+                \begin{itemize}
+                    \ides{D:} Data bits which if our message
+                    \ides{R:} Check bits which are computed as $R = \text{fn}(D)$
+                \end{itemize}
+            \ides{Sender:}
+                \begin{itemize}
+                    \item Computes $R = \text{fn}(D)$
+                    \item Sets $R$ and sends frame of
+                \end{itemize}
+            \ides{Receiver:}
+                \begin{itemize}
+                    \item Takes $D'$ and computes $R'= \text{fn}(D')$
+                        \begin{itemize}
+                            \ides{$\mathbf{D'}$:} is $D$ with possible, unknown errors
+                        \end{itemize}
+                    \item Compare $R = R'$
+                \end{itemize}
+            \item Set of correct codewords should be a tiny fraction of the set of all codewords
+                \begin{itemize}
+                    \item Reduces probability of a getting a correct codeword by randomly selection
+                \end{itemize}
+        \end{itemize}
+    \ides{Hamming Distance}
+        \begin{itemize}
+            \ides{Distance:} Number of bit flips required to turn $D + R_1$ into $D + R_2$
+            \ides{Hamming Distance} for a code is the minimal distance between any pair of codewords
+            \ides{Error Detection:} Code of hamming distance $d + 1$ can detect up to $d$ errors
+            \ides{Error Correction:} Code of hamming distance $2d + 1$ can correct up to $d$ errors
+        \end{itemize}
+    \ides{Error Detection}
+        \begin{itemize}
+            \item Add check bits to the message
+            \item Different methods
+            \ides{Duplicate Send of Message}
+                \begin{itemize}
+                    \ides{Idea:} Send each message twice
+                    \item Error if both are different
+                    \item Can only detect a single error
+                    \item Fails if same bit is flipped in both copies
+                \end{itemize}
+            \ides{Parity Bit}
+                \begin{itemize}
+                    \item $R$ has length $1$
+                    \item For $D$ date bits, $R$ is the sum (modulo or XOR) of the all bits of $D$
+                        \begin{itemize}
+                            \item I.e. $R \equiv_2 \sum_{i=1}^{D} d_i$
+                        \end{itemize}
+                    \ides{Distance:} $2$
+                        \begin{itemize}
+                            \item Can detect $1$
+                            \item Can correct $0$
+                        \end{itemize}
+                    \item Detect errors with $50\%$ chance
+                    \icon Fails for systematic errors where bits of the $D$ are swapped
+                \end{itemize}
+            \ides{Checksum}
+                \begin{itemize}
+                    \item $R$ has length $N$
+                    \ides{Internet Checksum:} Production example
+                        \begin{itemize}
+                            \item Used in TCP, UDP etc.
+                            \ides{Sender side:}
+                                \begin{itemize}
+                                    \item Arrange data in $16$-bit words
+                                    \item Put zero in checksum position
+                                    \item Add numbers
+                                    \item Add any carry-over back
+                                    \item Calculate $ffff -$ res
+                                \end{itemize}
+                            \ides{Receiver side:}
+                                \begin{itemize}
+                                    \item Arrange data in $16$-bit words
+                                    \item Add numbers (including checksum)
+                                    \item Add any carry-over back
+                                    \item Checksum will be non-zero, add
+                                    \item Calculate $ffff -$ res
+                                    \item If $0$ ok, else error
+                                \end{itemize}
+                            \item Distance is $2$
+                                \begin{itemize}
+                                    \item Can detect $1$
+                                    \item Can correct $0$
+                                \end{itemize}
+                            \item Often errors occur in consecutive bits
+                                \begin{itemize}
+                                    \ipro Errors are always detected if first and last error bit are within $16$ bit range
+                                \end{itemize}
+                            \icon Vulnerable to systematic errors (switching of blocks)
+                        \end{itemize}
+                    \ipro Easy and simple
+                    \ipro Stronger than parity
+                \end{itemize}
+            \ides{Cyclic Redundancy Check (CRC)}
+                \begin{itemize}
+                    \item Widely used: Ethernet, WIFI, ADSL
+                    \ides{Generator:} bit pattern of length $k + 1$
+                        \begin{itemize}
+                            \item Both sides agree on a specific one
+                            \item Can be expressed as a polynomial over $GF(2)$
+                        \end{itemize}
+                    \ides{Sender side:}
+                        \begin{itemize}
+                            \item Extend the $len(D) = d$ date bits with $k$ zeros
+                            \item Divide by the generator $C$
+                                \begin{itemize}
+                                    \item If $1$ in leading position, take XOR
+                                    \item If $0$ in leading position, take new value down and drop leading $0$
+                                \end{itemize}
+                            \item Add insert remainder as check bits
+                        \end{itemize}
+                    \ides{Receiver side:}
+                        \begin{itemize}
+                            \item Divide received message by $C$
+                            \item If $0$ no error, else error
+                        \end{itemize}
+                    \item Protection depends on the generator $C$
+                    \item Distance $4$
+                        \begin{itemize}
+                            \item For standard CRC-32 generator
+                            \item Can detect $3$
+                            \item Can correct $1$
+                        \end{itemize}
+                    \item Detect odd number of errors
+                    \item Not vulnerable to systemanis errors
+                    \item Detect consecutive bit errors of length $\le k$
+                \end{itemize}
+        \end{itemize}
+    \ides{Error Correction}
+        \begin{itemize}
+            \item Add more check bits to recover from error
+            \item Hard because check bits can contain errors too
+            \ides{Hamming Code}
+                \begin{itemize}
+                    \item Has hamming distance $3$
+                    \ides{Sender side:}
+                        \begin{itemize}
+                            \item Calculate minimal $k$ such that the equation is fulfilled $n \le 2^k - k - 1$
+                                \begin{itemize}
+                                    \ides{n:} Message length
+                                    \ides{k:} Number of check bits
+                                \end{itemize}
+                            \item Insert check bits into original message at positions $2^i, i \in \N_0$
+                            \item Check bit $i$ is a parity for values with a $2^i$ in their value
+                                \begin{itemize}
+                                    \item $2^i = 1$ iff sum of all values which contain $2^i$ $\equiv_2 1$, else $0$
+                                \end{itemize}
+                        \end{itemize}
+                    \ides{Receiver side:}
+                        \begin{itemize}
+                            \item Recompute check bit sums
+                            \ides{Syndrome:} Result of sums arranged as binary number
+                            \item No error if syndrome is $0$
+                            \item Bit flip at position $i =$ ``syndrome'' if syndrome $\neq 0$
+                                \begin{itemize}
+                                    \item Undo bit flip and get correct data
+                                \end{itemize}
+                        \end{itemize}
+                \end{itemize}
+            \item Practically used error correcting codes are much more involved
+        \end{itemize}
+    \ides{Detection vs Correction}
+        \begin{itemize}
+            \item Which is better depends on the pattern of errors
+            \ides{Error Detection:} more efficient if no errors are expected and they are large when they occur
+                \begin{itemize}
+                    \item Heavily used in link layer and application layer
+                \end{itemize}
+            \ides{Error Correction:} needed when we expect errors (small number only) or if there is not time to retransmit
+                \begin{itemize}
+                    \item Heavily used in physical layer
+                \end{itemize}
+        \end{itemize}
+\end{itemize}
