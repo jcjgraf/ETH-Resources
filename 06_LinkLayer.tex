@@ -462,3 +462,139 @@
                 \end{itemize}
         \end{itemize}
 \end{itemize}
+
+
+\subsection{Contention-Free Multiple Access}
+\begin{itemize}
+    \ides{Turn-Taking Multiple Access Protocols}
+        \begin{itemize}
+            \ides{Idea:} Order nodes and each can send (or pass) if it is their turn
+            \item Different possible orderings
+            \ides{Token Ring}
+                \begin{itemize}
+                    \item Arrange nodes in a ring
+                    \item ``Send permission'' token rotates to each node in turn
+                    \ipro Fixed overhead
+                    \ipro No collision
+                    \ipro Regular change to send
+                    \icon Complexity
+                        \begin{itemize}
+                            \item Who controls the rotation and what if controller does?
+                            \item What if token is lost?
+                        \end{itemize}
+                    \icon Higher overhead at low load
+                \end{itemize}
+        \end{itemize}
+    \item Random multiple access is dominant and hard to beat
+\end{itemize}
+
+\subsection{LAN Switches}
+\begin{itemize}
+    \item Used in modern Ethernet instead of a shared wire
+    \item Hosts are wired to a switch ports using a twisted pair cables
+    \item There are three types of devices:
+        \begin{itemize}
+            \ides{Hub or Repeater:} On physical layer
+                \begin{itemize}
+                    \item All ports are wired together
+                    \item Signals are amplified among all ports
+                    \item Similar to classic Ethernet but more convenient and reliable
+                \end{itemize}
+            \ides{Switch:} Up to link layer
+            \ides{Router:} Up to network layer
+        \end{itemize}
+    \ides{Inside a Switch}
+        \begin{itemize}
+            \item Uses frame addresses to connect input port to the right output port
+                \begin{itemize}
+                    \item Done by a \textit{fabric}
+                \end{itemize}
+            \item Multiple frames may be switched in parallel
+            \ides{Full-Duplex:} Traffic can flow in both direction
+            \item Not multiple access control, hosts can just send
+            \item Need buffers at input and output ports
+        \end{itemize}
+    \ides{Forwarding}
+        \begin{itemize}
+            \item Need to find the right output port based on the destination address in the Ethernet frame (MAC address)
+            \ides{Backward Learning}
+                \begin{itemize}
+                    \item Possible solution to forwarding problem
+                    \ides{Idea:} Use table to map MAC address to port
+                    \item Works in two steps
+                        \begin{itemize}
+                            \ides{Receive frame:} ``Learn'' mapping my looking at source address and port on which the frame was received
+                                \begin{itemize}
+                                    \item Insert new mapping into table
+                                \end{itemize}
+                            \ides{Sending frame:} Index into table to get port, if not existing, broadcast frame on all ports
+                        \end{itemize}
+                    \ipro Also works if multiple addresses are behind one port (e.g. another switch)
+                        \begin{itemize}
+                            \item If there are no forwarding loops
+                        \end{itemize}
+                    \icon Table is of fixed size and can get overflow
+                        \begin{itemize}
+                            \item E.g. due to a hack
+                            \item Switch acts equivalent to a repeater (broadcasts every message)
+                        \end{itemize}
+                \end{itemize}
+            \ides{Forwarding Loops}
+                \begin{itemize}
+                    \item Loop in a topology
+                    \item Used for reliability or by mistake
+                    \item Cheap switches do not have a duplicate detection
+                    \item Frame will loop infinitely
+                \end{itemize}
+            \ides{Spanning Tree}
+                \begin{itemize}
+                    \item Forwarding method fixing forwarding loops
+                    \ides{Idea:}
+                        \begin{itemize}
+                            \item Switches collectively find a spanning free for the topology
+                            \item Frames are forwarded along the tree and not all links
+                            \item Broadcasts will go up to the root and down to all branches
+                            \item Use backward learning on the tree
+                        \end{itemize}
+                    \ides{Spanning Tree Algorithm}
+                        \begin{itemize}
+                            \item Required
+                                \begin{itemize}
+                                    \item All switches run the same algorithm
+                                    \item They start with no information
+                                    \item Operate in parallel and send messages
+                                    \item Always search for the best solution
+                                \end{itemize}
+                            \item Steps
+                                \begin{itemize}
+                                    \item Elect a root node of the tree
+                                        \begin{itemize}
+                                            \item Switch with the lowest address
+                                            \item At the beginning, each nodes selects itself
+                                        \end{itemize}
+                                    \item Grow tree as shortest distance from the root
+                                        \begin{itemize}
+                                            \item On tie, select the one with the lower MAC address
+                                        \end{itemize}
+                                    \item Turn of ports for forwarding if they are not part of the tree
+                                \end{itemize}
+                            \ides{Root Port (RP):} Outgoing port towards the root node
+                            \ides{Designated Port (DP):} Incoming port to a switch
+                            \ides{Blocked Ports (BP):} Do not forward any traffic
+                            \ides{Note:} When we have to run the algo on a network, we do not have to to it step-by-step but more directly
+                                \begin{itemize}
+                                    \item[1)] Select node with lowest address ($\implies$ root node)
+                                    \item[2)] Find shortest-path tree from root
+                                \end{itemize}
+                            \item Nodes send periodic updates to neighbours
+                                \begin{itemize}
+                                    \item Contains own address, address of the root and distance in hops to the root
+                                    \item Done to detect failure
+                                \end{itemize}
+                            \icon Final topology may not be optimal for some nodes
+                        \end{itemize}
+                    \icon Tree may break when a link fails
+                \end{itemize}
+        \end{itemize}
+\end{itemize}
+
