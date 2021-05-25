@@ -237,3 +237,228 @@
                 \end{itemize}
         \end{itemize}
 \end{itemize}
+
+\subsection{Retransmission} \todo{Merge into error detection and recover?}
+\begin{itemize}
+    \item How to deal with:
+        \begin{itemize}
+            \item lost messages
+            \item messages with unrecoverable errors
+        \end{itemize}
+    \ides{Automatic Repeat reQuest (ARQ)}
+        \begin{itemize}
+            \item Used when errors are common or must be corrected
+            \ides{Receiver side:}
+                \begin{itemize}
+                    \item Sends ACK iff receives message and it is correct
+                \end{itemize}
+            \ides{Sender side:}
+                \begin{itemize}
+                    \item Resends message if no ACK received within a set timeout
+                \end{itemize}
+            \ides{Stop-And-Wait:} implementation of ARQ
+        \end{itemize}
+\end{itemize}
+
+\subsection{Multiplexing}
+\begin{itemize}
+    \ides{Multiplexing:} Share a limited resource
+    \item One of the core goals in networking
+    \item Two main principles
+        \begin{itemize}
+            \ides{Time-Division Multiplexing (TDM):} User sends at fixed schedule
+                \begin{itemize}
+                    \item Send high rate at a fraction of time
+                \end{itemize}
+            \ides{Frequency-Division Multiplexing (FDM):} Users send at different frequencies
+                \begin{itemize}
+                    \item Send low rate all the  time
+                \end{itemize}
+        \end{itemize}
+    \ides{Multiple Access}
+        \begin{itemize}
+            \item Network traffic is bursty
+            \item Infeasible to use TDM or FDM for every user
+            \ides{Statistical Multiplexing:} Method of oversubscribing a limited resource
+                \begin{itemize}
+                    \item Assume that not everyone will use the resource at the same time
+                \end{itemize}
+            \item Need Multiple Access protocols to allocate users according to their demand
+            \item Two main principles
+                \begin{itemize}
+                    \ides{Randomized Multiple Access}
+                        \begin{itemize}
+                            \item Nodes randomize their resource access attempts
+                            \ipro Low load situations
+                        \end{itemize}
+                    \ides{Contention-Free Multiple Access}
+                        \begin{itemize}
+                            \item Nodes order their resource access attempts
+                            \ipro High load or guaranteed QoS
+                        \end{itemize}
+                \end{itemize}
+        \end{itemize}
+\end{itemize}
+
+\subsubsection{Randomized Multiple Access}
+\begin{itemize}
+    \item Assume we have a distributed system w/o leader
+    \ides{ALOHA}
+        \begin{itemize}
+            \item Used in late 1960s
+            \item Send when there is data
+            \item On collision (no ACK received), drop packet
+            \item Try to resend after a random timeout
+            \ipro Works well when little traffic
+        \end{itemize}
+    \ides{Carrier Sense Multiple Access (CSMA)}
+        \begin{itemize}
+            \item Improves ALOHA
+            \item Listens before sending to reduce collision probability
+            \item Called \textbf{1-persistent} CSMA since once channel is free, it sends with probability $1$
+            \icon Collisions can still happen:
+                \begin{itemize}
+                    \item Two nodes listen at the same time and here nothing and start sending at the same time
+                    \item One node is sending, another is listening, but not hearing anything due to delay
+                \end{itemize}
+            \icon Upon collision, time is lost since some sending nodes may keep sending
+        \end{itemize}
+    \ides{CSMA with Collision Detection (CSMA/CD)}
+        \begin{itemize}
+            \item Upon collision, abort sending and jam the wire
+                \begin{itemize}
+                    \item Make everyone sending aware of the collision so that they abort sending \end{itemize}
+            \ides{Jam:} Send for a short amount of time to make every sender aware of the collision
+            \ides{Contention Slot / Slot time:} Time a node must wait before it can be sure that no other node's tarnmission has collided with its transmission
+                \begin{itemize}
+                    \item Is $2D$
+                        \begin{itemize}
+                            \ides{D:} Longest transmission delay possible in the network
+                        \end{itemize}
+                    \item Imposes a minimal frame size such that sending takes at least $2D$ seconds
+                    \item Else a sender may not detect a collision
+                \end{itemize}
+            \end{itemize}
+    \ides{CSMA ``Persistence''}
+        \begin{itemize}
+            \item Problem:
+                \begin{itemize}
+                    \item While one node is sending, other nodes which want to send will queue up
+                    \item Once the wire is free, all try to send and will collide
+                \end{itemize}
+            \ides{Binary Exponential Backoff (BEB)}
+                \begin{itemize}
+                    \ides{Idea:} When $N$ nodes are queued, each will send with a probability of $\frac{1}{N}$
+                    \item Working
+                        \begin{itemize}
+                            \item Initially, node directly sends
+                            \item On first collision, node sends directly or $1$ frame later with each $50\%$ chance
+                            \item On second collision, node waits either $0, 1, 2, 3$ frames (with same probability) before sending
+                            \item On $i$-th collision, node waits either $0, \dots, 2^i-1$ frames
+                        \end{itemize}
+                    \ipro Highly efficient
+                    \item Used by Ethernet
+                \end{itemize}
+        \end{itemize}
+    \ides{Classical Ethernet}
+        \begin{itemize}
+            \item Introduced in 1973
+            \item Hosts share a single coaxial cable
+            \item Allowed for $10$ Mbps
+            \item Uses CSMA/CD with BEB
+            \item $2D$ is $64$ bytes
+            \ides{Frame Format}
+                \begin{itemize}
+                    \item Contains source and destination MAC address
+                    \item Puts the IP package into the DATA field
+                        \begin{itemize}
+                            \item Has size $0 - 1500$ bytes
+                        \end{itemize}
+                    \item Padding is added in PAD to mache frame reach minimal $64$ byte size
+                    \item CRC-32 checksum for error detection
+                \end{itemize}
+        \end{itemize}
+    \ides{Modern Ethernet}
+        \begin{itemize}
+            \item Based on switches
+            \item No multiple access
+            \item No problems of collisions anymore
+        \end{itemize}
+    \ides{Wireless Multiple Access}
+        \begin{itemize}
+            \item Main challenges
+                \begin{itemize}
+                    \item Nodes cannot hear while sending
+                        \begin{itemize}
+                            \item Cannot detect collisions
+                            \item Send full frame and only realize after that there was a collision
+                        \end{itemize}
+                    \item Nodes may have different coverage areas
+                        \begin{itemize}
+                            \ides{Signal to Noise Ration (SNR):} Node can receive signal only if SNR is large enough
+                            \ides{Hidden Terminal:} Two nodes are hidden terminals iff they cannot reach each other but can collide at an intermediate station
+                            \ides{Exposed Terminal:} Two nodes are exposed terminals iff they can hear each other but do not collide
+                                \begin{itemize}
+                                    \item Both sender think there is a collision but there is actually none
+                                    \item Want to send concurrently to increase performance
+                                \end{itemize}
+                        \end{itemize}
+                \end{itemize}
+            \ides{Multiple Access with Collision Avoidance (MACA)}
+                \begin{itemize}
+                    \item Alternative approach to CSMA
+                    \ides{Idea:} Send short handshake to ask if allowed to send
+                    \item Rules
+                        \begin{itemize}
+                            \ides{Request-to-Send (RTS):} Send by sender node to ask for allowance
+                                \begin{itemize}
+                                    \item Contains the frame length the sender wants to send
+                                \end{itemize}
+                            \ides{Clear-to-Send (CTS):} Send by receiver if sender is allowed to send frame
+                                \begin{itemize}
+                                    \item Contains the frame length the sender wants to send
+                                \end{itemize}
+                            \item Sender transmits frame
+                        \end{itemize}
+                    \item Hidden terminal does not receive senders RTS but receivers CTS
+                        \begin{itemize}
+                            \item Terminal knows that it should not send to receiver
+                            \item Terminal knows from the frame length of the CTS how long the transmission will take
+                        \end{itemize}
+                    \item Exposed terminal does receive RTS but not CTS
+                        \begin{itemize}
+                            \item Terminal knows that it should not send to sender but is free to send to any receiver
+                        \end{itemize}
+                    \icon Collision still possible
+                        \begin{itemize}
+                            \item But less likely
+                        \end{itemize}
+                \end{itemize}
+            \ides{WiFi}
+                \begin{itemize}
+                    \item Started in 1990s
+                    \item Clients are wireless connected to wired AP
+                    \ides{Physical Layer}
+                        \begin{itemize}
+                            \item Uses $20/40$ MHz channels on ISM (public available but only very local) band
+                            \item Different frequencies depending on the WiFi Version
+                        \end{itemize}
+                    \ides{Link Layer}
+                        \begin{itemize}
+                            \item Multiple access using CSMA/CA
+                            \item RTS/CTS is optional
+                            \item Uses ARQ
+                            \item Funky addressing due to AP \todo{What does it mean?}
+                            \item Errors detection with a $32$-bit CRC
+                            \item MTU is larger than for Ethernet
+                            \item Can have many additional features
+                        \end{itemize}
+                    \ides{CSMA with Collision Avoidance (CSMA/CA):}
+                        \begin{itemize}
+                            \item After link gets free, queued sender select a random backoff (gap)
+                            \item Node with smallest backoff goes first
+                            \item Prevent starvation by always using the rest of the backoff and only select a new backoff after having send
+                        \end{itemize}
+                \end{itemize}
+        \end{itemize}
+\end{itemize}
