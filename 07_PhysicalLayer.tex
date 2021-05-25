@@ -1,0 +1,256 @@
+%! TEX root = ./main.tex
+
+\section{Physical Layer}
+\begin{itemize}
+    \item How to send digital signals in an analog way
+    \item Convert to digital bits
+\end{itemize}
+
+\subsection{Link Model}
+\begin{itemize}
+    \item Abstraction
+    \item Physical channel is characterized by:
+        \begin{itemize}
+            \ides{Rate R} in bps
+                \begin{itemize}
+                    \item Also called \textbf{bandwidth}, \textbf{capacity} or \textbf{speed}
+                \end{itemize}
+            \ides{Delay D} in seconds
+                \begin{itemize}
+                    \item Depends on message length and media length
+                    \item Also called \textbf{latency}
+                \end{itemize}
+            \item Other properties like \textit{is channel broadcast} and its error rate
+        \end{itemize}
+    \ides{Latency L:} Delay to send a message over a link
+        \begin{itemize}
+            \item Composed of two parts
+                \begin{itemize}
+                    \ides{Transmission Delay T:} Time to put $M$-bit message on the wire \begin{itemize}
+                            \item $T = \frac{M \text{[bits]}}{R \text{[bits/sec]}} = \frac{M}{R} \text{[sec]}$
+                            \item Dominant today
+                        \end{itemize}
+                    \ides{Propagation Delay P:} Time for bits to propagate across the wire
+                        \begin{itemize}
+                            \item $P = \frac{\text{Length}}{\text{speed of signal}} = \frac{\text{Length}}{\frac{2}{3}c} = D \text{[sec]}$
+                        \end{itemize}
+                \end{itemize}
+            \item $L = \frac{M}{R} + D$
+            \item High of slow rate or long link
+        \end{itemize}
+    \ides{Bandwidth-Delay (BD) Product:} Amount of data in flight
+        \begin{itemize}
+            \item $\text{BD} = R \cdot D$
+            \item Measured in bits or messages
+        \end{itemize}
+\end{itemize}
+
+\subsection{Types of Media}
+\begin{itemize}
+    \ides{Wires - Twisted Pair}
+        \begin{itemize}
+            \item Very common
+            \item Twists can reduce radiated signal or reduce effect of external interference
+                \begin{itemize}
+                    \item Subtracting the signal of both wires cancels out interference \todo{Or something like that}
+                \end{itemize}
+            \ipro Cheap
+        \end{itemize}
+    \ides{Wire - Coaxial Cable}
+        \begin{itemize}
+            \item Also common
+            \item Copper core shielded with multiple layers of insulation and protection
+            \ipro Better performance due to better shielding
+        \end{itemize}
+    \ides{Wire - Fiber}
+        \begin{itemize}
+            \item Strands of glass inside multiple layer of protection
+            \item Transmit light captured inside tue to total reflection
+            \ipro Enormous bandwidth
+            \ipro Usable for long distances
+            \item Two variants
+                \begin{itemize}
+                    \ides{Multi-Mode:} Send multiple wavelength of light simultaneously
+                        \begin{itemize}
+                            \item For shorter links
+                            \item Cheaper
+                        \end{itemize}
+                    \ides{Single-Mode:} Send a single wavelength
+                        \begin{itemize}
+                            \item Up to $\sim 100$km
+                        \end{itemize}
+                \end{itemize}
+        \end{itemize}
+    \ides{Wireless}
+        \begin{itemize}
+            \item Sender radiates signal over a region
+            \item Send to potentially many receivers
+            \item Nearby signals may interfere at a receiver
+                \begin{itemize}
+                    \item Coordination required
+                \end{itemize}
+            \ides{Industry Science Medicine (ISM):} Bandwidth for everyone but only locally
+                \begin{itemize}
+                    \item Used by WiFi, Bluetooth etc.
+                \end{itemize}
+        \end{itemize}
+\end{itemize}
+
+\subsection{Signals}
+\begin{itemize}
+    \item Analog signals encode digital bits
+    \item A signal over time can be represented by its frequency components (Fourier analysis)
+    \item More spectrum available the more data one can send
+    \item Different frequencies have different properties (e.g. influence by rain etc.)
+     \item Fewer frequencies $\implies$ less bandwidth $\implies$ degraded signal
+        \begin{itemize}
+            \item High frequencies carry a great deal of the data
+        \end{itemize}
+    \ides{Bandwith:} information carrying capacity
+        \begin{itemize}
+            \item Measured in bits/sec
+            \item In electrical engineering it is measured in Hz
+        \end{itemize}
+    \ides{Signal on Wire}
+        \begin{itemize}
+            \item It is delayed since it propagates at $\frac{2}{3}c$
+            \item It is attenuated
+                \begin{itemize}
+                    \item Especially signals above a cutoff are highly attenuated
+                \end{itemize}
+            \item Noise is added to the signal
+        \end{itemize}
+    \ides{Signal on Fiber}
+        \begin{itemize}
+            \item Light propagates with very low loss in three very wide frequency bands
+                \begin{itemize}
+                    \item Attenuation is low at these frequencies
+                \end{itemize}
+        \end{itemize}
+    \ides{Signal over Wireless}
+        \begin{itemize}
+            \item Travel at speed of light
+            \item Attenuation increases quadratically over distance from the sender
+            \item Interference at the receiver if multiple senders use the same frequencies
+                \begin{itemize}
+                    \ides{Spatial Reuse:} Interference leads to notion of spatial reuse
+                \end{itemize}
+            \ides{Multipath:} Signals bounce of objects and interferes with itself
+        \end{itemize}
+\end{itemize}
+
+\subsection{Modulation}
+\begin{itemize}
+    \item How to represents bits as signals?
+    \item Multiple methods
+    \ides{Baseband Modulation}
+        \begin{itemize}
+            \item Signal is sent directly onto the wire
+                \begin{itemize}
+                    \item Not working for fiber and wireless
+                \end{itemize}
+            \ides{Non-Return to Zero (NRZ)}
+                \begin{itemize}
+                    \item High voltage ($+1$ V) represents $1$, low voltage ($-V$) represents $0$
+                    \item Average voltage is $0$ and therefore no current is flowing
+                    \icon Clock recovery is hard
+                \end{itemize}
+            \ides{Clock Recovery}
+                \begin{itemize}
+                    \item Hard to count how many consecutive $1$s (or $0$s) were transmitted if the signal does not change for a longer time
+                \end{itemize}
+            \ides{Non-Return to Zero Inverse (NRZI)}
+                \begin{itemize}
+                    \item Invert signal level on a $1$
+                    \ipro Breaks long runs of $1$
+                    \icon Does not break long runs of $0$
+                \end{itemize}
+            \ides{Manchester coding:}
+                \begin{itemize}
+                    \item To send a $1$ switch from $0$ to $1$
+                    \item To send a $0$ switch from $1$ to $0$
+                    \item Value between clock holds the actual value
+                    \ipro No clock recovery
+                    \item There is also inverse manchester encoding
+                \end{itemize}
+            \ides{4B5B}
+                \begin{itemize}
+                    \item Translate $4$ bits pattern into specific $5$ bits pattern
+                        \begin{itemize}
+                            \item Done according to some translation dictionary
+                        \end{itemize}
+                    \item Has at most $3$ consecutive $0$s
+                    \item Has at most $8$ consecutive $1$s
+                \end{itemize}
+            \ides{More Signal Levels}
+                \begin{itemize}
+                    \item All introduced methods use $2$ levels
+                    \item By increasing it to e.g. $4$ we could use $2$ bits per symbol \todo{What does it mean?}\todo{What are the cons?}
+                \end{itemize}
+        \end{itemize}
+    \ides{Passband Modulation}
+        \begin{itemize}
+            \item Take a baseband modulation and apply passband modulation on top of it \todo{Is this correct?}
+            \item Carries signal by modulating a carrier
+                \begin{itemize}
+                    \ides{Carrier:} Some base signal oscillating at a desired frequency
+                    \item Modify this carrier to indicate $1$s or $0$s
+                \end{itemize}
+            \item Can module different things
+                \begin{itemize}
+                    \ides{Amplitude Shift Keying:} Shift amplitude when sending $0$
+                        \begin{itemize}
+                            \item I.e. stop oscillation of carrier while sending $0$
+                        \end{itemize}
+                    \ides{Frequency Shift Keying:} Increase/decrease frequency depending if sending $0$ or $1$
+                    \ides{Phase Shift Keying:}  Uncontinuous at change of single
+                \end{itemize}
+            \item Can also combine multiple modulations
+        \end{itemize}
+\end{itemize}
+
+\subsection{Limits}
+\begin{itemize}
+    \item Channel is characterized by bandwidth $B$, signal strength $S$ and noise $N$
+        \begin{itemize}
+            \item $B$ limits the rate of transmissions
+            \item $S$ and $N$ limit how many signals levels we can distinguish
+        \end{itemize}
+    \ides{Nyquist Limit:} Maximum symbol rate is $2B$
+        \begin{itemize}
+            \item If there are $V$ signal levels the maximum bit rate is $R = 2B \log_2 V \ \text{[bits/s]}$
+            \item Ignores noise
+        \end{itemize}
+    \ides{Shannon Capacity}
+        \begin{itemize}
+            \item Considers noise
+                \ides{Signal-to-Noise Ration (SNR):} Limits the number of levels we can distinguish
+                    \begin{itemize}
+                        \item Measure in decibels
+                    \end{itemize}
+            \item SNR given as: $\text{SNR}_{dB} = 10 \log_{10} (S/N) \ \text{[dB]}$
+            \ides{Capacity C:} is the maximum information carrying rate of the channel
+                \begin{itemize}
+                    \item $C = B \log_2 (1 + \frac{S}{N}) \ \text{[bits/sec]}$
+                \end{itemize}
+        \end{itemize}
+    \ides{Conclusion Wired/Wireless}
+        \begin{itemize}
+            \ides{Wires and Fiber:} For fixed R, engineers link to have required SNR and B
+            \ides{Wireless:} For fixed B, SNR varies greatly
+                \begin{itemize}
+                    \item Designe R for worst SNR is wasteful
+                    \item Must adopt R dynamically
+                \end{itemize}
+        \end{itemize}
+    \ides{Digital Subscriber Line (DSL)}
+        \begin{itemize}
+            \item Used passband modulation
+                \begin{itemize}
+                    \item Modulate amplitude and phase
+                \end{itemize}
+            \item Uses separate bands for up- and downstream
+            \item On high SNR, use up to $15$ bits/symbol
+            \item On low SNR, use $1$ bit/symbol
+        \end{itemize}
+\end{itemize}
