@@ -1,0 +1,125 @@
+%TEX root = ./main.tex
+
+\section{Routing Security}
+\begin{itemize}
+    \item Can be divided into intra and inter-domain routing
+\end{itemize}
+
+\subsection{Terminology}
+\begin{itemize}
+    \ides{Secrecy:} Keep something hidden from unintended receivers
+        \begin{itemize}
+            \item Most general term
+        \end{itemize}
+    \ides{Confidentiality:} Keeps someone else's data secret
+    \ides{Privacy:} Keep data about a person secret
+    \ides{Anonymity:} Keep identity of a person secret
+        \begin{itemize}
+            \item More specific than privacy
+        \end{itemize}
+    \ides{Data Integrity:} Ensure data is correct
+        \begin{itemize}
+            \item Correct syntax and unchanged
+            \item Prevents unauthorized or improper changes
+            \item For local data
+        \end{itemize}
+    \ides{Data Authenticity:} Ensure that data originates from claimed senders
+        \begin{itemize}
+            \item For data send over network
+        \end{itemize}
+    \ides{Entity authentication/identification:} Verify the identify of a protocol participant
+    \ides{Encryption:}
+        \begin{itemize}
+            \ides{Asymmetric:} Public-private key
+                \begin{itemize}
+                    \ides{Encryption Key/Public Key:} $K$
+                        \begin{itemize}
+                            \item Publicly known
+                        \end{itemize}
+                    \ides{Decryption Key/Secret Key:} $K^{-1}$
+                        \begin{itemize}
+                            \item Kept secret
+                        \end{itemize}
+                    \ides{Encrypt:} $E_K(\text{plaintext}) = \{\text{plaintext}\}_K = \text{ciphertext}$
+                    \ides{Decryption:} $D_{K^{-1}}(\text{ciphertext}) = \text{plaintext}$
+                    \item Diffie-Hellman Key
+                    \item Public-key encryption
+                    \item Digital signature
+                        \begin{itemize}
+                            \ides{Signature Generation:} $S_{K^{-1}}(\text{msg}) = \text{sig}$
+                            \ides{Signature Verification:} $S_K(\text{msg}, \text{sig}) = \text{true/false}$
+                        \end{itemize}
+                    \item 3072 bit key for high security
+                    \icon Decryption and verification are computationally very expensive
+                \end{itemize}
+            \ides{Symmetric:} Shared-Key
+                \begin{itemize}
+                    \ides{Encryption key:} $K$
+                        \begin{itemize}
+                            \item Shared with recipient
+                        \end{itemize}
+                    \ides{Decryption key:} $K$
+                        \begin{itemize}
+                            \item Shared with recipient
+                        \end{itemize}
+                    \ides{Encrypt:} $E_K(\text{plaintext}) = \{\text{plaintext}\}_K = \text{ciphertext}$
+                    \ides{Decryption:} $D_K(\text{ciphertext}) = \text{plaintext}$
+                    \ides{Block cipher:} Encryption/decryption functions
+                    \item $128$ bit key for high security
+                    \ipro Encryption/decryption is computationally cheap
+                \end{itemize}
+            \ides{Others:} Unkeyed symmetric
+                \begin{itemize}
+                    \item One-way function
+                    \item Cryptographic hash function
+                \end{itemize}
+        \end{itemize}
+\end{itemize}
+
+\subsection{Intra-Domain Routing}
+\begin{itemize}
+    \item It is assumed that attacks come from the outside (inter-domain)
+        \begin{itemize}
+            \item Therefore the is not much security in intra-domain
+        \end{itemize}
+    \item Compromise node (/router)
+        \begin{itemize}
+            \item Flood any message we want
+        \end{itemize}
+    \item Compromise link
+        \begin{itemize}
+            \item Act as a man-in-the-middle (MITM)
+        \end{itemize}
+    \item In both cases we are able to:
+        \begin{itemize}
+            \item View to whole network topology
+            \item Inject any message they want
+        \end{itemize}
+    \item We can do:
+        \begin{itemize}
+            \ides{Interception}
+                \begin{itemize}
+                    \item Aims at eavesdropping, dropping, modifying, injection or delaying packages
+                    \item By injecting fake information, we can precisely control the network-wide behaviour
+                        \begin{itemize}
+                            \item Done by flooding about non-existing (virtual) nodes and links of arbitrary cost
+                        \end{itemize}
+                \end{itemize}
+            \ides{Denial-of-Service (DoS)}
+                \begin{itemize}
+                    \item Many different strategies
+                    \item Induce churn to overload routers by announcing and withdrawing routes at a fast pace
+                    \item Flood routers link-state database by injecting thousands of prefixes
+                    \item Induce congestion/high delay by steering traffic along fewer or low-throughput paths
+                    \item Prevent reachability by steering traffic along black holes or loops
+                \end{itemize}
+                    \begin{itemize}
+                        \item Problem, routers are often underspecified and certificate validation takes lot of time
+                    \end{itemize}
+        \end{itemize}
+    \ides{Problem:} Bogus advertisements can be injected or legitimate ones can be altered
+    \ides{Solution:} Use cryptic authentication
+        \begin{itemize}
+            \icon Routers are often underspecified for computationally  expensive verification
+        \end{itemize}
+\end{itemize}
