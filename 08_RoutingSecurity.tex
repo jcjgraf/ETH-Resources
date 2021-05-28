@@ -123,3 +123,211 @@
             \icon Routers are often underspecified for computationally  expensive verification
         \end{itemize}
 \end{itemize}
+
+\subsection{Inter-Domain Routing}
+\begin{itemize}
+    \item Are regularly attacked
+    \item BGP lacks any security measures
+    \item Problems
+        \begin{itemize}
+            \item Advertisement Origin Verification
+                \begin{itemize}
+                    \ides{Problem:} No-one checks that a AS own the prefixes it advertises
+                    \item Used for
+                        \begin{itemize}
+                            \ides{Blackhole:} Data traffic is discarded
+                            \ides{Snooping:} Data traffic is inspected, then redirected
+                            \ides{Impersonation:} Traffic sent to bogus destinations
+                        \end{itemize}
+                    \ides{IP Prefix Hijacking}
+                        \begin{itemize}
+                            \item AS advertises a prefix it does not own
+                            \item Some traffic is redirected to a bogus destination
+                        \end{itemize}
+                    \ides{Sub-Prefix Hijacking}
+                        \begin{itemize}
+                            \item More specific prefix is announced
+                            \item Longest prefix matching selects the most specific prefix
+                            \item Bogus route is picked up by everyone
+                        \end{itemize}
+                    \icon Difficult to detect and debug
+                        \begin{itemize}
+                            \item Often, no loss of connectivity but only performance degradation
+                        \end{itemize}
+                    \item Requirements
+                        \begin{itemize}
+                            \item Access to router with BGP session
+                                \begin{itemize}
+                                    \item Local PC would not work
+                                \end{itemize}
+                            \item Getting access to the router
+                                \begin{itemize}
+                                    \item Configuration mistake
+                                    \item Operator himself launches the attack
+                                    \item Outsider breaks into
+                                \end{itemize}
+                        \end{itemize}
+                \end{itemize}
+            \item Advertisement Content Verification
+                \begin{itemize}
+                    \ides{Problem:} No-one checks the content an AS sends
+                    \item Possible attacks
+                        \begin{itemize}
+                            \ides{Remove ASes from the AS path}
+                                \begin{itemize}
+                                    \item Motivation
+                                        \begin{itemize}
+                                            \item Attract source ASes which try to avoid the AS we have removed to send traffic to us
+                                            \item Pretend to some outer AS that it is closer to the core of the internet
+                                        \end{itemize}
+                                    \item Hard or impossible to figure out
+                                        \begin{itemize}
+                                            \item The AS who would route to the AS we have removed may realize that the link does not exists
+                                        \end{itemize}
+                                \end{itemize}
+                            \ides{Added ASes to the AS path}
+                                \begin{itemize}
+                                    \item Called \textbf{BGP Path Poisoning}
+                                    \item Motivation
+                                        \begin{itemize}
+                                            \item Trigger loop detection in newly added AS
+                                                \begin{itemize}
+                                                    \item DoS on added link
+                                                    \item Blocking unwanted traffic
+                                                \end{itemize}
+                                            \item Make you AS look like it has richer connectivity
+                                        \end{itemize}
+                                    \item Inserted link or one of the adjacent could notice
+                                \end{itemize}
+                            \ides{Add ASes to the end of the path}
+                                \begin{itemize}
+                                    \item Motivation
+                                        \begin{itemize}
+                                            \item Evade detection for bogus routes by adding a real AS to the end
+                                        \end{itemize}
+                                    \item Hard to detect
+                                \end{itemize}
+                            \ides{Advertise invalid paths}
+                                \begin{itemize}
+                                    \item Called \textbf{Route Leak}
+                                    \item Valid sequence but BGP policy gets violated
+                                    \item E.g. valley routing
+                                    \item Detected and defenced by filter of routes by prefixes and AS paths
+                                \end{itemize}
+                            \ides{Export missing/inconsistent paths}
+                                \begin{itemize}
+                                    \item Do not advertise all links to connected AS
+                                    \ides{Cold Potato Routing:} Make the other AS route the traffic from longer instead of us
+                                    \item Detected by analysis of BGP updates or inconsistencies in traffic
+                                \end{itemize}
+                        \end{itemize}
+                \end{itemize}
+        \end{itemize}
+    \item BGP Today
+        \begin{itemize}
+            \item Based on best common practices (BCPs)
+                \begin{itemize}
+                    \item Secure BPG session
+                    \item Filter routes
+                    \item Filter packets
+                \end{itemize}
+            \item Not good enough
+        \end{itemize}
+    \item Proposed Enhancements
+        \begin{itemize}
+            \item Multiple solutions
+            \ides{$\mathbf{\text{BGP}_{\text{SEC}}}$}
+                \begin{itemize}
+                    \item Should replace BGP
+                    \ides{Address Attestations}
+                        \begin{itemize}
+                            \item ASes need to claim the right to advertise prefixes
+                            \item Keys are signed and distributed out-of-band (not via the network)
+                            \item It is checked through the delegation chain from ICANN that prefixes are advertise by rightful ASes
+                        \end{itemize}
+                    \ides{Route Attestations}
+                        \begin{itemize}
+                            \item Routes are signed by each AS as the route traverses the network
+                        \end{itemize}
+                    \ides{Resource Public Key Infrastructure (RPKI)}
+                        \begin{itemize}
+                            \item Per-prefix certificate are issued by Regional Internet Registries (RIR)
+                            \item Used to authenticate first AS hop through Route Origin Authorization (ROA)
+                        \end{itemize}
+                    \item Can validate
+                        \begin{itemize}
+                            \item The path was not reordered
+                            \item No intermediate AS was added or removed to/from a path
+                        \end{itemize}
+                    \ides{Challenges}
+                        \begin{itemize}
+                            \icon Need complete and accurate overview of prefix owner
+                            \icon Need public key infrastructure to know and validate the keys of ASes
+                            \icon Support for cryptographic operations is required
+                            \icon All operations need to be performed quickly
+                            \icon Incremental deployment is hard
+                                \begin{itemize}
+                                    \item Would need backwards compatibility
+                                \end{itemize}
+                        \end{itemize}
+                \end{itemize}
+            \ides{Detecting Suspicious Routes}
+                \begin{itemize}
+                    \item Monitoring BGP update messages and use history to detect anomalies in the router's behaviour
+                    \icon High probability for false positive
+                    \icon Does not work well
+                \end{itemize}
+            \ides{Avoiding Suspicious Routes}
+                \begin{itemize}
+                    \item Soft response to suspicious routes
+                    \item Prefer routes that were used in the past and delay adoption of unfamiliar routes when possible
+                    \ipro Attacks will go away over time
+                    \ipro Gives operators time to investigate
+                    \item Why is this good enough?
+                    \item How well would it work?
+                \end{itemize}
+        \end{itemize}
+    \item Data Plane Attacks
+        \begin{itemize}
+            \item Routers should forward packets along the path chosen by the control plane
+                \begin{itemize}
+                    \item No checking mechanism
+                \end{itemize}
+            \item Attacker must get access of a router along the path (or hijack a prefix)
+            \item Attacks
+                \begin{itemize}
+                    \ides{Drop Packets} but still send announcement packets
+                        \begin{itemize}
+                            \item Can filter for certain application
+                            \item Hard to detect
+                        \end{itemize}
+                    \ides{Slow Down Traffic} but let traceroute through quickly
+                        \begin{itemize}
+                            \item Hard to debug
+                        \end{itemize}
+                    \ides{Send packets to bogus destination:}
+                        \begin{itemize}
+                            \item Packages can be snooped
+                            \item After they are forwarded along the right path
+                            \item Hard to detect
+                        \end{itemize}
+                \end{itemize}
+
+            \item Data-Plane Attacks
+                \begin{itemize}
+                    \item Adversary must control a route along the path or hijack prefix
+                    \item How to gain control of a router
+                \end{itemize}
+            \item Drop packets in the data plane
+            \item Easier to evade detection
+            \item Evade easier if you just slow done some traffic
+
+
+        \end{itemize}
+    \item BGO is Very hard to fix
+        \begin{itemize}
+            \item Complex system
+            \item Hard to reach agreement on the right solution
+            \item Hard to deploy
+        \end{itemize}
+\end{itemize}
