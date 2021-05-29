@@ -1,0 +1,253 @@
+%! TEX root = ./main.tex
+
+\section{DMDB System}
+\begin{itemize}
+    \item Complex application
+    \item Simplification we consider
+        \begin{itemize}
+            \item All data are stored on disk
+            \item Disk is larger than memory
+            \item Disk is slower than memory
+            \item Disk flavors different access pattern
+            \item Single CPU
+            \item One relation is stored in a single file
+        \end{itemize}
+\end{itemize}
+
+\subsection{Storage Hierarchy}
+\begin{itemize}
+    \item Storage is a hierarchy
+    \item Challenge: keep CPU busy
+    \item Rapidly changing
+    \item Different hierarchies lead to different DB design
+    \ides{Hard Drive}
+        \begin{itemize}
+            \item Plates spin
+            \item Plate is split into sectors of fixed size
+            \item Arm assembly is moved in or out to position a head on a desired track
+            \item Tracks under head makes a cylinder (kind off)
+            \item Only one head reads/writes at any time
+            \item Block size is a multiple of sector size
+            \item Performance
+                \begin{itemize}
+                    \ides{Seek time $t_s$:} Moving arm to position disk head on track
+                        \begin{itemize}
+                            \item $10 - 20 ms$
+                        \end{itemize}
+                    \ides{Rotate time $t_r$:} waiting for block to rotate under head
+                        \begin{itemize}
+                            \item $10 - 20 ms$
+                        \end{itemize}
+                    \ides{Transfer time $t_{tr}$:} actually moving data to/from disk surface
+                        \begin{itemize}
+                            \item $8KB / 0.1  ms$
+                        \end{itemize}
+                    \ides{Random access $\mathbf{D}$ times:} $D(t_s + t_r + t_{tr})$
+                    \ides{Sequential access $\mathbf{D}$ time:} $t_s + t_r + Dt_{tr}$
+                \end{itemize}
+        \end{itemize}
+    \item We consider abstraction HD $\to$ DRAM $\to$ CPU
+    \item DRAM $\to$ CPU is much faster than HD $\to$ DRAM
+        \begin{itemize}
+            \item We only consider HD $\to$ DRAM optimisation
+        \end{itemize}
+\end{itemize}
+
+\subsection{Disk Manager}
+\begin{itemize}
+    \item Lowest level
+    \item Used by higher levels for
+        \begin{itemize}
+            \item Allocate/de-allocate pages
+            \item Read/Write pages
+        \end{itemize}
+    \item Requests for sequential allocation must be satisfied
+    \item Responsible for maintaining a database's files
+    \item DB content is stored as one or multiple files
+    \item Many DMDBs use the file system provided by the OS
+        \begin{itemize}
+            \item People used to build custom file systems for DMDBs
+        \end{itemize}
+    \ides{Files} contain a collection of pages
+    \ides{Page} is a fixed-size block of data
+        \begin{itemize}
+            \item Contains a collection of tuples
+            \ides{page id:} unique identifier of each page
+        \end{itemize}
+    \item A relation is stored as a collection of pages
+\end{itemize}
+
+\subsubsection{File Layout}
+\begin{itemize}
+    \item How does a file manage all its pages?
+    \item Unordered collection of pages
+    \item Support record level operations
+    \item We must keep track of:
+        \begin{itemize}
+            \item the pages in the file
+            \item the records on each page
+            \item free space on each page
+        \end{itemize}
+    \ides{Heap file:} One/multiple header files
+    \item Two ways to implement it
+    \ides{Linked List}
+        \begin{itemize}
+            \ides{Header Page:} One single page
+                \begin{itemize}
+                    \item Kind of the root
+                    \item Has to pointer to two linked lists
+                        \begin{itemize}
+                            \item Free pages list
+                            \item Data pages list
+                        \end{itemize}
+                \end{itemize}
+            \icon No global view on data
+            \item Performance
+                \begin{itemize}
+                    \item Assume
+                        \begin{itemize}
+                            \item Directory fits in and is in memory
+                            \item $\# Pages = D$
+                            \item Pages are randomly allocated on disk
+                                \begin{itemize}
+                                    \item Models worst-case
+                                \end{itemize}
+                        \end{itemize}
+                    \ides{Insert:} $t_{s + r}  + 2 t_{trans}$
+                        \begin{itemize}
+                            \item If page 1 has slot available
+                        \end{itemize}
+                    \ides{Find Record:} By non-RID value (RID is a pair page, id and slot id)
+                        \begin{itemize}
+                            \item $\frac{D}{2}(t_{r+s} + t_{trans})$
+                        \end{itemize}
+                    \ides{Scan:}
+                        \begin{itemize}
+                            \item $D(t_{s+r} + t_{trans})$
+                        \end{itemize}
+                \end{itemize}
+        \end{itemize}
+    \ides{Page Directory}
+        \begin{itemize}
+            \ides{Header Page:} Multiple pages
+                \begin{itemize}
+                    \item Each contains a list of pointer to data pages
+                \end{itemize}
+            \item Performance
+                \begin{itemize}
+                    \item Assume
+                        \begin{itemize}
+                            \item Directory fits in and is in memory
+                            \item $\#Pages = D$
+                            \item Pages are sequentially allocated on disk
+                                \begin{itemize}
+                                    \item Models best case
+                                \end{itemize}
+                        \end{itemize}
+                    \ides{Insert:} $t_{s+r} + 2t_{trans}$
+                    \ides{Find Record:} By non-RID value (RID is a pair page, id and slot id)
+                        \begin{itemize}
+                            \item $t_{s+r} + \frac{D}{2}t_{trans}$
+                        \end{itemize}
+                    \ides{Scan:}
+                        \begin{itemize}
+                            \item $t_{s+r} + Dt_{trans}$
+                        \end{itemize}
+                \end{itemize}
+            \end{itemize}
+\end{itemize}
+
+\subsubsection{Page Layout}
+\begin{itemize}
+    \item Page consists of
+        \begin{itemize}
+            \ides{Header:} Contains metadata like
+                \begin{itemize}
+                    \item Page size
+                    \item DBMS version
+                    \item Compression information
+                    \item Encryption information
+                    \item Checksum
+                \end{itemize}
+            \ides{Data:} Actual tuples
+        \end{itemize}
+    \item Header is at top of page
+    \item Data starts after header
+    \item Multiple strategies
+    \ides{Naive Strategy}
+        \begin{itemize}
+            \item Page is split into slots of fixed size
+                \begin{itemize}
+                    \item One tuple goes into one slot
+                \end{itemize}
+            \item Header keeps track of occupied/free slots
+            \icon Lots of space wasted when tuples are of different length
+        \end{itemize}
+    \ides{Slotted Page}
+        \begin{itemize}
+            \item Record id = $<\text{page id}, \text{slot \#}>$
+            \ides{Slot array:} Array of pointers and size of occupied slots
+                \begin{itemize}
+                    \item Comes right after the header
+                \end{itemize}
+            \ipro Can move tuples on page without changing record id
+        \end{itemize}
+\end{itemize}
+
+\subsubsection{Tuple layout}
+\begin{itemize}
+    \item Data access methods:
+        \ides{On-line transaction processing (OLTP):}
+            \begin{itemize}
+                \item Simple query
+                \item Reads/writes a small amount of data related to a single entry
+            \end{itemize}
+        \ides{On-line analytical processing (OLAP):}
+            \begin{itemize}
+                \item Complex queries
+                \item Read large portions of the DB spanning multiple entries
+            \end{itemize}
+        \item Multiple methods
+    \ides{Row Storage}
+        \begin{itemize}
+            \item Store tuple together
+            \item Divided into
+                \begin{itemize}
+                    \ides{Bitmap:} \todo{What is this?}
+                    \ides{Fixed-Length:}
+                        \begin{itemize}
+                            \item Contains fixed-length fields
+                            \item Arrangement and sizes are equal for all tuples
+                            \item Can directly access the $i$-th field
+                        \end{itemize}
+                    \ides{Variable-Length:}
+                        \begin{itemize}
+                            \item Contains variable-length fields
+                            \item Two implementation
+                            \ides{Field Delimited:} Special characters mark the end/start of fields
+                                \begin{itemize}
+                                    \icon Access $i$-th fields requires scann of list
+                                \end{itemize}
+                            \ides{Field Offset Array:} Array where $A[i]$ contains the start of the $i$-th field
+                                \begin{itemize}
+                                    \item Stored at the beginning of the tuple
+                                    \ipro Direct access to $i$-th field
+                                \end{itemize}
+                        \end{itemize}
+                \end{itemize}
+            \ipro All tuple information are together
+            \ipro Good for OLTP
+            \icon Bad for OLAP
+                \begin{itemize}
+                    \item Read lots of data we do not care
+                \end{itemize}
+        \end{itemize}
+    \ides{Column Storage}
+        \begin{itemize}
+            \item Store a whole column together
+            \ipro Good for OLAP
+            \icon Slow for point queries (look for a single value), inserts, updates and deletes
+            \icon Bad for OLTP
+            \ipro Easier data compression
+        \end{itemize}
+\end{itemize}
