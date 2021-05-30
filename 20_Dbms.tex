@@ -251,3 +251,64 @@
             \ipro Easier data compression
         \end{itemize}
 \end{itemize}
+
+\subsection{Buffer Pool Management}
+\begin{itemize}
+    \item Buffer manager acts like the intermediate layer between the system and disk manager
+    \item On fetch, check if desired page is in RAM. If not, bring to RAM and returns. Else directly return it.
+    \ides{Goal:} Provide illusion that all data in in RAM
+    \item Page Replacement
+        \begin{itemize}
+            \item If RAM is full, we need to evict a page
+            \item Eviction policy if of key importance
+            \ides{Future access pattern known}
+                \begin{itemize}
+                    \ides{Idea:} Evict block whose next access is farthest in the future
+                    \item Called Belady's MIN algorithm
+                    \ipro Optimal under this assumption
+                \end{itemize}
+            \ides{Future access pattern unknown}
+                \begin{itemize}
+                    \item Rarely know about the future access pattern
+                    \item Different strategies
+                    \ides{Least Recently Used (LRU):} Evict the least recently used page
+                        \begin{itemize}
+                            \ipro Works well for repeated access to popular pages
+                            \icon $100\%$ miss under sequential flooding
+                                \begin{itemize}
+                                    \ides{Sequential Flooding:} Access in a repeated pattern but such that not all pages fit into RAM
+                                \end{itemize}
+                            \item At most twice as bad compared to optimal when LRU has twice the memory \todo{What does this mean?}
+                        \end{itemize}
+                    \ides{Most Recently Used (MRU):} Evict the most recently used page
+                        \begin{itemize}
+                            \icon Frequently accessed page has to be fetched often
+                                \begin{itemize}
+                                    \item E.g. Index scan
+                                \end{itemize}
+                        \end{itemize}
+                    \item Access patterns
+                        \begin{itemize}
+                            \ides{Sequential:} Table Scan: $1 \to 2 \to 3 \to 4 \to \dots$
+                            \ides{Hierarchical:} Index Scan: $1 \to 4 \to 11 \to 1 \to 4 \to 12 \to 1 \to 3 \to 8 \dots$
+                            \ides{Random:} Index Lookup: $12 \to 9 \to 4 \to 21 \to 55 \to 6 \to 42 \to \dots$
+                            \ides{Cyclic:} Nested-Loop: $1 \to 2 \to 3 \to 4 \to 1 \to 2 \to 3 \to 4 \to \dots$
+                        \end{itemize}
+                    \item Depending on the pattern different strategies perform differently well
+                    \item If we have some information about pattern, we can select an optimal policy
+                        \begin{itemize}
+                            \item This is the key different from the OS RAM manager
+                        \end{itemize}
+                \end{itemize}
+        \end{itemize}
+    \item OS vs DB
+        \begin{itemize}
+            \item Principles are similar, but in DB we know more what is going on
+            \item Allows for better optimisation
+            \item DB uses own buffer
+            \item DB uses OS's filesystem
+                \begin{itemize}
+                    \item Has own buffer which can cause problems
+                \end{itemize}
+        \end{itemize}
+\end{itemize}
