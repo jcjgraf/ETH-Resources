@@ -312,3 +312,195 @@
                 \end{itemize}
         \end{itemize}
 \end{itemize}
+
+\subsection{Access Methods}
+\begin{itemize}
+    \item Used by upper layer to access information in tables
+    \item Provides different was of accessing data from a relation
+    \item Goal: find a tuple whose attribute $X$ equals $Y$
+    \ides{Sequential Scan:}
+        \begin{itemize}
+            \item Bring page 1 and scan, bring page 2 and scan etc.
+            \item Cost:
+                \begin{itemize}
+                    \item When pages are sequentially allocated: $t_{s+r} + D(t_{tr})$
+                    \item When pages are randomly allocated: $D(t_{s+r} + t_{tr}$
+                    \item When write back on scan pay extra: $t_{tr}$
+                \end{itemize}
+        \end{itemize}
+    \item Improve: build data structure $f$ over relation, which can easily answers our scan
+        \begin{itemize}
+            \item Evaluation of $f$ is usually cheaper than sequential scan
+        \end{itemize}
+    \ides{B-Tree (B+ Tree)}
+        \begin{itemize}
+            \item Self-balancing tree that keeps data sorted
+            \item Properties
+                \begin{itemize}
+                    \item $M$-way search tree
+                        \begin{itemize}
+                            \item Like a binary search tree but each node has up to $M$ children
+                        \end{itemize}
+                    \item Perfectly balanced
+                    \item Every inner node (except root) is at least half-full
+                    \item Every inner node with $k$ keys has $k + 1$ non-null children
+                    \item Each page is represented as a node
+                    \item $\bigO(\log n)$ for search, insertion, deletion
+                \end{itemize}
+            \item Two flavours
+                \begin{itemize}
+                    \ides{Unclustered B+ Tree:} Leaf node contains RID (PageID, SlotID), pointing to the relation
+                    \ides{Clustered B+ Tree:} Lead node contains the actual tuple
+                        \begin{itemize}
+                            \item Can have only one clustered B+ Tree per relation
+                        \end{itemize}
+                \end{itemize}
+            \ides{Point query}
+                \begin{itemize}
+                    \item Find single key
+                    \item Node size $= M$, $\#$ Tuples $= N$
+                    \item Depth $\bigO(\log_M N)$
+                    \item Num I/O
+                        \begin{itemize}
+                            \item Unclustered: $\underbrace{\log_M N}_{\text{search tree}} + \underbrace{1}_{\text{access actual tuple}}$
+                            \item Clustered: $\underbrace{\log_M n}_{\text{search tree}}$
+                        \end{itemize}
+                    \item Much faster than sequential scan
+                \end{itemize}
+            \ides{Range query}
+                \begin{itemize}
+                    \item Find all tuples in range
+                    \item Node size $= M$, $\#$ Tuples $= N$
+                    \item Depth $\bigO(\log_M N)$
+                    \item Num I/O
+                        \begin{itemize}
+                            \item Unclusered: $\underbrace{\log_M N}_{\text{search tree}} + \underbrace{\frac{\text{\#tuples}}{\text{tuples-per-page1}}}_{\#\text{ leafs to read to get all RIDs}} + \underbrace{\# \text{tuples}}_{\text{cost of reading}}$
+                            \item Clustered: $\underbrace{\log_M N}_{\text{search tree}} + \underbrace{\frac{\text{\#tuples}}{\text{tuple-per-page2}}}_{\# \text{ leafs to read to bet all RIDs}}$
+                            \item $\text{tuple-per-page2} < \text{tuple-per-page1}$ since clustered contains the actual tuples (which are larger than RID)
+                        \end{itemize}
+                \end{itemize}
+            \ides{Insert}
+                \begin{itemize}
+                    \item Insert a tuple
+                    \item Algorithm
+                        \begin{itemize}
+                            \item Find the right leaf node $L$
+                            \item Put data in $L$
+                                \begin{itemize}
+                                    \item If $L$ has enough space we are done
+                                    \item Otherwise, split $L$, insert key to the parent of $L$
+                                \end{itemize}
+                        \end{itemize}
+                \end{itemize}
+            \ides{Delete}
+                \begin{itemize}
+                    \item Delete a tuple
+                    \item Algorithm
+                        \begin{itemize}
+                            \item Find the right leaf node $L$
+                            \item Remove data in $L$
+                                \begin{itemize}
+                                    \item If $L$ is at least half full we are done
+                                    \item Otherwise, merge two leaf nodes or borrow one tuple from neighbours, update parents
+                                \end{itemize}
+                        \end{itemize}
+                \end{itemize}
+            \item Heap file vs B+ Tree
+                \begin{itemize}
+                    \ides{Heap file:}
+                        \begin{itemize}
+                            \ipro Lot of sequential scans
+                        \end{itemize}
+                    \ides{B+ Tree:}
+                        \begin{itemize}
+                            \ipro Small number of random access
+                        \end{itemize}
+                    \item Tradeoff, between few expensive, or many cheap accesses
+                \end{itemize}
+            \item Use Btree: \verb+CREATE INDEX name ON table USING btree(column);+
+            \item Bulk build
+                \begin{itemize}
+                    \item Different approaches
+                    \item Insert tuple by tuple
+                        \begin{itemize}
+                            \icon Slow
+                        \end{itemize}
+                    \item Sort and insert tuple bottom-up
+                \end{itemize}
+            \ipro Query time is independent of data distribution
+        \end{itemize}
+    \ides{Hash Table}
+        \begin{itemize}
+            \item Goal: Do better than B+ Trees for point queries
+            \ides{Hash Function $\mathbf{f(x)}$:} Maps each object into a entry in the table
+                \begin{itemize}
+                    \item E.g. or integer: $h(x) = (ax + b) \mod p$
+                    \item E.g. or Strigs: $h(s_1, \dots, s_n) = (\sum_{i} s_ia^i) \mod p$
+                    \item Hard to find ideal hash function
+                \end{itemize}
+            \item Ideally $a \neq b \implies f(a) \neq f(b)$
+                \begin{itemize}
+                    \item Else we get a collision
+                \end{itemize}
+            \item Different approaches to prevent collisions
+            \ides{Closed Hashing:} We know how many elements are trying to index
+                \begin{itemize}
+                    \ides{Linear Probe}
+                        \begin{itemize}
+                            \item Working
+                                \begin{itemize}
+                                    \item Compute hash to find right slot
+                                    \item Insert object into next empty slot
+                                        \begin{itemize}
+                                            \icon Deletion is non-trivial
+                                                \begin{itemize}
+                                                    \item We have to insert special marker into delete position to mark that this is a contiguous block
+                                                \end{itemize}
+                                        \end{itemize}
+                                \end{itemize}
+                            \item Search/Insert: $\bigO(\text{size of largest cluster})$
+                                \begin{itemize}
+                                    \ides{Cluster:} Largest consecutive sequence of occupied slots
+                                \end{itemize}
+                            \item For hash table:
+                                \begin{itemize}
+                                    \item Size $m$
+                                    \item Contains $n = \lambda m$ keys
+                                    \item Full to $\lambda \%$
+                                \end{itemize}
+                                on average:
+                                \begin{itemize}
+                                    \ides{Insert:} $\frac{1}{2} (1 + \frac{1}{(1 - \lambda)^2})$
+                                \ides{(Successful) search:} $\frac{1}{2} (1 + \frac{1}{(1 - \lambda)})$
+                                        \begin{itemize}
+                                            \item Good if $\lambda \approx 50\%$ full
+                                        \end{itemize}
+                                \end{itemize}
+                            \ipro Very cache-efficient
+                            \icon Very sensitive to hash function
+                                \begin{itemize}
+                                    \item Hash function must be ``good''
+                                \end{itemize}
+                        \end{itemize}
+                \end{itemize}
+            \ides{Open Hashing:} We do not know how many elements are there
+                \begin{itemize}
+                    \ides{Chained Hashing}
+                        \begin{itemize}
+                            \item Working
+                                \begin{itemize}
+                                    \item Compute hash to find right slot
+                                    \item Insert if no collision
+                                    \item Else append to linked list
+                                \end{itemize}
+                            \item Expected length of chain for
+                                \begin{itemize}
+                                    \item $h(x)$ is uniformly random
+                                    \item $m = \bigO(N)$
+                                    \item $N$: Number of slots
+                                \end{itemize}
+                            is $\bigO(1)$
+                        \end{itemize}
+                \end{itemize}
+        \end{itemize}
+\end{itemize}
