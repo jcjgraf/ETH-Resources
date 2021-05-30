@@ -504,3 +504,157 @@
                 \end{itemize}
         \end{itemize}
 \end{itemize}
+
+\subsection{Operator Execution}
+\begin{itemize}
+    \item Execute a relational algebra operator
+    \item Used different access methods to implement these operators
+    \ides{Select $\mathbf{\sigma_C(R)}$:}
+        \begin{itemize}
+            \item Input $R$, condition $C$
+            \item Assume
+                \begin{itemize}
+                    \item $R$ has $|R|$ tuples and $B(R)$ pages
+                    \item Buffer size: $M$ pages
+                \end{itemize}
+            \ides{Selectivity:} $\alpha(C, R)$
+                \begin{itemize}
+                    \item Is a constant
+                    \item Number of tuples in $R$ that satisfy condition $C$ divided by $|R|$
+                \end{itemize}
+            \ides{Sequential Scan (Clustered) Heap File}
+                \begin{itemize}
+                    \item Bring pages to RAM one by one
+                    \item Scan each tuple and check for the predicate $C$
+                    \item If true, output tuple
+                    \item Total cost: $\bigO(\underbrace{B(R)}_{\text{read}} + \underbrace{\alpha(C, R)B(R)}_{\text{write}})$
+                    \item Cost is different for each query
+                \end{itemize}
+            \ides{Index Scan}
+                \begin{itemize}
+                    \item If $C \in \{<, >, =\}$
+                    \ides{Unclustered B+ Tree}
+                        \begin{itemize}
+                            \item Steps
+                                \begin{itemize}
+                                    \item Find the right leaf node
+                                    \item Scan the index
+                                    \item Fetch and return corresponding tuple from heap file
+                                \end{itemize}
+                            \item Total Cost: $\bigO(\underbrace{\log |R|}_{\text{find leaf}} + \underbrace{\alpha(C, R) |R|}_{\text{fetch tuple}} + \underbrace{\alpha(C, R)B(R)}_{\text{write}})$
+                        \end{itemize}
+                    \ides{Clustered B+ Tree}
+                        \begin{itemize}
+                            \item Steps
+                                \begin{itemize}
+                                    \item Find the right leaf node
+                                    \item Scan the index
+                                    \item Return tuple
+                                \end{itemize}
+                            \item Total Cost: $\bigO(\underbrace{\log |R|}_{\text{find leaf}} + \underbrace{\alpha(C, R) B(R)}_{\text{fetch tuple}} + \underbrace{\alpha(C, R)B(R)}_{\text{write}})$
+                        \end{itemize}
+                \end{itemize}
+        \end{itemize}
+    \ides{Sort}
+        \begin{itemize}
+            \item \verb+Sort(R, Attribute A)+
+            \ides{Clustered B+ Tree}
+                \begin{itemize}
+                    \item Sorted leaves and constant access time
+                \end{itemize}
+            \ides{Unclustered B+ Tree}
+                \begin{itemize}
+                    \item Sorted leafs but one random access per tuple
+                \end{itemize}
+            \item Different sorting algorithms
+            \item Assume: Data $N$ is much larger than buffer $B$
+            \ides{External Sort}
+                \begin{itemize}
+                    \item If $B = 3$ we can sort $2$ pages
+                    \item Working
+                        \begin{itemize}
+                            \item If $N < B$
+                                \begin{itemize}
+                                    \item Run quicksort
+                                \end{itemize}
+                            \item Otherwise
+                                \begin{itemize}
+                                    \item Phase 1: Sorting
+                                        \begin{itemize}
+                                            \item Partition file into smaller chunks that fit into memory
+                                            \item Sort smaller junks
+                                        \end{itemize}
+                                    \item Phase 2: Merging
+                                        \begin{itemize}
+                                            \item Combine smaller, sorted chunks into large file
+                                        \end{itemize}
+                                \end{itemize}
+                        \end{itemize}
+                    \item \todo{Add Cost}
+                \end{itemize}
+        \end{itemize}
+    \ides{Join $\mathbf{S \bowtie_\theta S}$}
+        \begin{itemize}
+            \ides{Nested Loop Join}
+                \begin{itemize}
+                    \item
+\begin{verbatim}
+foreach tuple r in R:
+    foreach tuple s in S:
+        if Theta(r, s):
+            output r, s
+\end{verbatim}
+                    \item $M = 3$: $\bigO(B(R) + |R| B(S) + \text{print IO})$
+                    \item Order of tables matters
+                        \begin{itemize}
+                            \item Depends on table size, buffer size
+                            \item Small $M$: Better if smaller relation is in outer loop
+                            \item Large $M$ (assume smaller table is fully cached): Better if smaller relation is in the inner loop
+                        \end{itemize}
+                \end{itemize}
+            \ides{Block Nested Loop Join}
+                \begin{itemize}
+                    \item
+\begin{verbatim}
+foreach block BR in R:
+    foearch block BS in S:
+        foreach tuple r in BR:
+            foreach tuple s in BS:
+                if Theta(r, s):
+                    output r, s
+\end{verbatim}
+                    \item $M = 3$: $\bigO(B(R) + B(R) B(S))$
+                    \item $M > 3$: $B(S) + B(R) \frac{B(S)}{M - 2})$
+                    \item Partition $S$ into $a = \frac{B(S)}{M - 2}$ junks
+                        \begin{itemize}
+                            \item Fully cache junk
+                            \item Pay $B(R)$ to join this junk with $R$: $(M - 2) + B(R)$
+                            \item Repeat $\frac{B(S)}{M - 2}$ times \todo{Not sure what this means}
+                        \end{itemize}
+                \end{itemize}
+            \ides{Sort Merge Join}
+                \begin{itemize}
+                    \item Assume both relations are sorted
+                    \item Working
+                        \begin{itemize}
+                            \item Scan both relation
+                            \item Compare to head
+                        \end{itemize}
+                    \item Cost $\bigO(B(R) + B(S) + \text{Sort}(R) + \text{Sort}(S))$
+                \end{itemize}
+            \ides{Hash Join}
+                \begin{itemize}
+                    \item \todo{Add algo}
+                    \item Cost $\bigO(B(S) + B(R))$
+                        \begin{itemize}
+                            \item Assumed hash table fits into memory
+                        \end{itemize}
+                \end{itemize}
+            \ides{Grace Hash Join}
+                \begin{itemize}
+                    \ipro Deals with the case where the hash table does not fit into memory
+                    \item \todo{Add algo}
+                    \item Cost $\bigO(3B(R) + 3B(S))$
+                \end{itemize}
+        \end{itemize}
+\end{itemize}
