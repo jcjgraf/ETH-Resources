@@ -658,3 +658,216 @@ foreach block BR in R:
                 \end{itemize}
         \end{itemize}
 \end{itemize}
+
+\subsubsection{Query Optimizer}
+\begin{itemize}
+    \item Given a SQL query generate a good execution plan.
+        \begin{itemize}
+            \ides{Execution Plan:} Tree of relational algebra operators
+        \end{itemize}
+    \item Used query executor to actually execute the relational algebra operators
+    \item Terminology
+        \begin{itemize}
+            \ides{Logical Plan:} What the user logically wants
+            \ides{Physical Plan:} What the DMBS can understand and run
+        \end{itemize}
+    \item Steps
+        \begin{itemize}
+            \item User gives SQL query
+            \item Parse SQL to logical plan
+            \item Convert to physical plan
+            \item Run each operator using the operator execution
+        \end{itemize}
+    \ides{Execution Model:} How different operators are gut together
+        \begin{itemize}
+            \item Different ways to put operators together
+            \ides{Iterator Model}
+                \begin{itemize}
+                    \item Each operator is an iterator
+                        \begin{itemize}
+                            \ides{Input:} Set of streams of tuples
+                            \ides{Output:} Stream of tuples
+                            \item Calling \verb+next()+ on a iterator returns its result
+                        \end{itemize}
+                    \ides{Query Plan:} Is tree of iterators
+                        \begin{itemize}
+                            \item Result s returned by calling \verb+root.next()+ over and over
+                        \end{itemize}
+                    \ides{Volcano Model:} Data flow flow bottom to top
+                    \ipro Generic interface for all operators
+                    \ipro Easy to implement iterators
+                    \ipro No overheads in terms of main memory
+                    \ipro Supports pipelining
+                    \ipro Supports parallelism and distribution
+                    \icon High overhead of method calls
+                    \icon Poor instruction cache locality
+                \end{itemize}
+            \ides{Materialization Model}
+                \begin{itemize}
+                    \item Each operator processes its inputs all at once and then emits its output all at once
+                        \begin{itemize}
+                            \ides{Input:} Full relation
+                            \ides{Output:} Full relation
+                        \end{itemize}
+                    \item Good when the intermediate result is not too much larger than the final result
+                        \begin{itemize}
+                            \ipro Good for OLTP
+                            \icon Bad for OLAP
+                        \end{itemize}
+                \end{itemize}
+            \ides{Vectorization Model:}
+                \begin{itemize}
+                    \item Simian to iterator model
+                    \item Each operator returns a batch of tuples
+                        \begin{itemize}
+                            \item Instead of a single tuple
+                        \end{itemize}
+                    \ipro Good for OLAP
+                    \ipro Allows for vectored instructions to process batches of tuples
+                \end{itemize}
+        \end{itemize}
+    \ides{Cost Model:} How to estimate the cost of each physical plan given our execution model
+        \begin{itemize}
+            \item Cannot be calculated but only estimate
+            \item Estimated based on lower level (operator execution)
+            \item Key variable to estimate is selectivity
+                \begin{itemize}
+                    \item Hard to estimate selectivity
+                \end{itemize}
+            \ides{Cardinality Estimation}
+                \begin{itemize}
+                    \item How many tuples does a query involve?
+                    \ides{Histogram}
+                        \begin{itemize}
+                            \item Create histograms from the data
+                            \item Lookup histograms to get an estimate of the number of tuples
+                            \item Hard to combine multiple histograms into one
+                                \begin{itemize}
+                                    \item Due to missing correlation
+                                    \item Assume they are independent
+                                \end{itemize}
+                            \item For continuous values use bins
+                            \item We can also create multidimensional histograms
+                        \end{itemize}
+                    \item Can benefit form machine learning
+                \end{itemize}
+        \end{itemize}
+    \ides{Space Space:} What are the logically equivalent sets of physical plans?
+        \begin{itemize}
+            \item Given an input logical plane, there are different was that one construct a physical plan
+                \begin{itemize}
+                    \item I.e. different orders of operators
+                \end{itemize}
+            \ides{Query rewriting Rules:} Set of transformations
+            \ides{Input:} Relational algebra expression $E$
+            \ides{Output:} Relational algebra expression $E'$
+            \ides{Property:} $E$ is equivalent to $E'$
+                \begin{itemize}
+                    \item $\forall I \in \underbrace{\mathbf{I}}_{\text{Set of possible DB instances}}, E(I) = E'(I)$
+                \end{itemize}
+            \item Many different rules are possible
+                \begin{itemize}
+                    \item[1)] Conjunctive selection operations can be deconstructed into a sequence of individual selections
+                        \begin{itemize}
+                            \item $\sigma_{\theta_1 \wedge \theta_2}(E) = \sigma_{\theta_1}(\sigma_{\theta_2}(E))$
+                        \end{itemize}
+                    \item[2)] Selection operations are commutative
+                        \begin{itemize}
+                            \item $\sigma_{\theta_1}(\sigma_{\theta_2}(E)) = \sigma_{\theta_2}(\sigma_{\theta_1}(E))$
+                        \end{itemize}
+                    \item[3)] Only the last in a sequence of projections operations is needed
+                        \begin{itemize}
+                            \item $\Pi_{t_1}(\Pi_{t_2}(E)) = \Pi_{t_1}(E)$
+                        \end{itemize}
+                    \item[4)] Selections can be combined with Cartesian products and theta joins
+                        \begin{itemize}
+                            \item $\sigma_\theta(E_1 \times E_2) = E_1 \bowtie_\theta E_2$
+                            \item $\sigma_{\theta_1}(E_1 \bowtie_{\theta_2} E_2) = E_1 \bowtie_{\theta_1 \wedge \theta_2} E_2$
+                        \end{itemize}
+                    \item[5)] Theta-join and natural join operations are commutative
+                        \begin{itemize}
+                            \item $E_1 \bowtie_\theta E_2 = E_2 \bowtie_\theta E_1$
+                        \end{itemize}
+                    \item[6)] Natural join operations are associative
+                        \begin{itemize}
+                            \item $(E_1 \bowtie E_2) \bowtie E_3 = E_1 \bowtie (E_2 \bowtie E_3)$
+                        \end{itemize}
+                    \item[6b)] Theta join operators are associative
+                        \begin{itemize}
+                            \item $(E_1 \bowtie_{\theta_1} E_2) \bowtie_{\theta_2 \wedge \theta_3} E_3 = E_1 \bowtie_{\theta_1 \wedge \theta_3}(E_2 \bowtie_{\Theta_2} E_3)$ when $\theta_2$ involves only attributes from $E_2$ and $E_3$
+                        \end{itemize}
+                    \item[7)] Pushdown Selection
+                        \begin{itemize}
+                            \item $\sigma_\theta(E_1 \bowtie E_2) = \sigma_\theta(E_1) \bowtie (E_2)$ if $\theta$ only involves attributes in $E_1$
+                        \end{itemize}
+                    \item[8)] The projections operation distributes over the theta join operation
+                        \begin{itemize}
+                            \item $\Pi_{L_1 \cup L_2}(E_1 \bowtie_\theta E_2) = (\Pi_{L_1}(E_1)) \bowtie_\theta(\Pi_{L_2}(E_2))$ if $\theta$ only involves attributes from $L_1 \cup L_2$
+                        \end{itemize}
+                    \item[9)] The set operations union and intersection are commutitive
+                        \begin{itemize}
+                            \item $E_1 \cup E_2 = E_2 \cup E_1$
+                            \item $E_1 \cap E_2 = E_2 \cap E_1$
+                        \end{itemize}
+                    \item[10)] Set union and intersection are associative
+                        \begin{itemize}
+                            \item $(E_1 \cup E_2) \cup E_3 = E_1 \cup (E_2 \cup E_3)$
+                            \item $(E_1 \cap E_2) \cap E_3 = E_1 \cap (E_2 \cap E_3)$
+                        \end{itemize}
+                    \item[11)] Selection operation distrubites over $\cup, \cap$ and $\setminus$
+                        \begin{itemize}
+                            \item $\sigma_\theta(E_1 \setminus E_2) = \sigma_\theta(E_1) \setminus \sigma_\theta(E_2)$
+                            \item $\sigma_\theta(E_1 \cup E_2) = \sigma_\theta(E_1) \cup \sigma_\theta(E_2)$
+                            \item $\sigma_\theta(E_1 \cap E_2) = \sigma_\theta(E_1) \cap \sigma_\theta(E_2)$
+                            \item $\sigma_\theta(E_1 \setminus E_2) = \sigma_\theta(E_1) \setminus E_2$
+                            \item $\sigma_\theta(E_1 \cap E_2) = \sigma_\theta(E_1) \cap E_2$
+                            \item $\sigma_\theta(E_1 \cup E_2) \neq \sigma_\theta(E_1) \cup E_2$
+                        \end{itemize}
+                    \item[12)] Projection operation distributes over union
+                        \begin{itemize}
+                            \item $\Pi_L(E_1 \cup E_2) = (\Pi_L(E_1)) \cup (\Pi_L(E_2))$
+                        \end{itemize}
+                \end{itemize}
+        \end{itemize}
+    \ides{Search Algorithm:} How can we search the best physical plan, given cost model?
+        \begin{itemize}
+            \item Searching for the optimal query is hard
+            \ides{Compromise 1:} Constraint search space
+                \begin{itemize}
+                    \item Only consider left-deep join trees
+                    \item Allows fully pipelined plans
+                        \begin{itemize}
+                            \item Intermediate values do not need to be written to temporary files
+                            \item Not all trees are fully pipelined (e.g. Sort Merge Join)
+                        \end{itemize}
+                    \item Process:
+                        \begin{itemize}
+                            \item Enumerate join orders
+                                \begin{itemize}
+                                    \item Only different left deep trees
+                                \end{itemize}
+                            \item Enumerate plans for each operator
+                            \item Enumerate access method for each operator
+                        \end{itemize}
+                    \item Complexity $\bigO(n!), \ n$ is $\#$ relations
+                    \item Can be done with DP
+                \end{itemize}
+            \ides{Compromise 2:} Heuristic-based Optimisation
+                \begin{itemize}
+                    \item Optimize query-tree by dappling a set of rules that typically improve execution performance
+                        \begin{itemize}
+                            \item Early selection
+                            \item Early projection
+                            \item Restrictive selections and joins before other similar operators
+                        \end{itemize}
+                    \item Search algorithm that enables pipelining
+                \end{itemize}
+        \end{itemize}
+    \item \verb+EXPLAIN+ gives actual physical model
+\end{itemize}
+
+\subsection{Tuning}
+\begin{itemize}
+    \item DBMS have many internal parameters
+    \item Improve performance
+\end{itemize}
