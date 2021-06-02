@@ -1,0 +1,208 @@
+% ! TEX root = ./main.tex
+
+\section{Transaction}
+\begin{itemize}
+    \ides{Motivation}
+        \begin{itemize}
+            \item Assume:
+                \begin{itemize}
+                    \item DB is a collection of objects
+                        \begin{itemize}
+                            \item I.e. one tuple is one object
+                        \end{itemize}
+                    \item Objects are fixed
+                        \begin{itemize}
+                            \item We cannot create new ones or delete old ones
+                        \end{itemize}
+                    \item System has only a single CPU
+                        \begin{itemize}
+                            \item CPU can only run one instruction at the time
+                        \end{itemize}
+                \end{itemize}
+            \item If not dealt with correctly, simultaneous transactions may get mixed and we get wrong results
+            \ides{Concurrent DB Access}
+                \begin{itemize}
+                    \ides{Schedule:} One way of mixing instructions
+                        \begin{itemize}
+                            \item Different schedules may result in different results
+                        \end{itemize}
+                    \item Result of one query may be overwritten partly or completely
+                    \ides{Attribute-level Inconsistency:} Concurrent change of a full object
+                    \ides{Tuple-level Inconsistency:} Concurrent change of part of an object
+                    \ides{Table-level Inconsistency:} Concurrent change of full relation
+                    \ides{Multi-statement Inconsistency:} Interleaving of concurrent queries
+                    \item When multiple groups of SQL statements are running at the same time, we want the effect as if they are executed sequentially
+                \end{itemize}
+            \ides{System Failure}
+                \begin{itemize}
+                    \item Many thing which can break in a real system
+                    \item We want that all or none changes apply, but not partial application
+                \end{itemize}
+        \end{itemize}
+    \ides{Transaction:} Collection of instructions which should not mix with other transactions
+        \begin{itemize}
+            \item Concurrent transactions appear to run in isolation
+            \item On a crash, transaction changes appear entirely or not at all
+            \item \verb+BEGIN; ..... COMMIT+: Encapsulates a transaction
+                \begin{itemize}
+                    \item Transaction has finished, database confirms to client whan all changes of the transaction have been made persistent
+                    \item Transaction may also fail. Database rollback all changes done by the transaction
+                        \begin{itemize}
+                            \item Written as \verb+BEGIN; ..... ABORT;+
+                            \item Can be initiated by the user or DBMS
+                        \end{itemize}
+                \end{itemize}
+            \ides{Autocommit:} Turns each SQL into a transition
+                \begin{itemize}
+                    \item Activated by default, can be deactivated
+                \end{itemize}
+        \end{itemize}
+\end{itemize}
+
+\subsection{ACID:}
+\begin{itemize}
+    \item Desired properties of transaction
+    \ides{Atomicity}
+        \begin{itemize}
+            \item Transaction is executed in its entirety or not at all
+        \end{itemize}
+    \ides{Consistency}
+        \begin{itemize}
+            \item A committed transaction goes from one consistent state to another consistent state
+                \begin{itemize}
+                    \item Before and after a transaction all integrity constraints must hold
+                \end{itemize}
+            \item Within a transaction constraints may be violated
+            \item Transaction leads from consistent state to consistent state
+            \item Granularity depends on the integrity constrains
+                \begin{itemize}
+                    \item I.e. some constrains re checked at commit level some at \todo{???}
+                    \item Can be controlled and influenced to some degree
+                \end{itemize}
+        \end{itemize}
+    \ides{Isolation}
+        \begin{itemize}
+            \ides{Ideally:} Transaction executes as if it were alone in the system
+                \begin{itemize}
+                    \item I.e. enforce serializability
+                    \item Much to hard to enforce
+                \end{itemize}
+            \item Implies that integrity constraints always hold if each transaction is correct
+            \item DMDB picks one execution order at random (if there are multiple)
+                \begin{itemize}
+                    \item If not desired, application must enforce this
+                \end{itemize}
+        \end{itemize}
+    \ides{Durability}
+        \begin{itemize}
+            \item If system crashes after a transaction, the changes of the transaction must still remain in the DB
+                \begin{itemize}
+                    \item Or somehow recoverable
+                \end{itemize}
+        \end{itemize}
+\end{itemize}
+
+\subsection{Isolation}
+\begin{itemize}
+    \item One of the key properties
+    \item DBMS provides different levels of isolation
+        \begin{itemize}
+            \ides{Anomaly:} Misbehaviour of the DB
+                \begin{itemize}
+                    \ides{Dirty Read:} If we read from a different transaction which was not yet committed we have a dirty read
+                        \begin{itemize}
+                            \item May contain values which were/are never in the DB
+                                \begin{itemize}
+                                    \item When the other transaction aborts
+                                \end{itemize}
+                        \end{itemize}
+                    \ides{Non-repeatable Reads:} Reading the same tuple twice any we may not get the same value both times
+                    \ides{Phantoms:} Tuples which get changed ad the tuple-level
+                \end{itemize}
+            \ides{Isolation Level:} Defines for each transaction what isolation level it should have
+                \begin{itemize}
+                    \item Each level is defined by the anomalous behaviour that is allowed
+                \end{itemize}
+            \item $\left.\left.
+\begin{tabular}{l | c | c | c}
+                     & Dirty Reads  & Non-Repeatable Reads & Phantoms\\\hline
+Read Uncommitted     & $\checkmark$ & $\checkmark$        & $\checkmark$\\
+Read Committed       & $\times$     & $\checkmark$        & $\checkmark$\\
+Repeatable Read      & $\times$     & $\times$            & $\checkmark$\\
+Serializable         & $\times$     & $\times$            & $\times$
+\end{tabular} \right\downarrow \rotatebox[origin=c]{90}{overhead}\ \right\uparrow\rotatebox[origin=c]{90}{concurrency}$
+        \end{itemize}
+\end{itemize}
+
+\subsection{More on Serializable}
+\begin{itemize}
+    \ides{Serializable:} Schedule that leads to the same answer as some serial schedule
+        \begin{itemize}
+            \item Only depends on final result and not I/O pattern along 
+            \item Not all sequential orders necessarily lead to the same result
+            \icon Hard or impossible to enforce
+        \end{itemize}
+    \ides{Conflicts}
+        \begin{itemize}
+            \ides{Def Conflict}
+                \begin{itemize}
+                    \ides{Same Transaction:}
+                        \begin{itemize}
+                            \item Two operations are always conflicting
+                            \item $\implies$ Reordering within transaction is not allowed
+                        \end{itemize}
+                    \ides{Different Transaction $O_1$ in $T_1$ and $O_2$ in $T_2$:}
+                        \begin{itemize}
+                            \item $O_1$ and $O_2$ are conflicting if one of them is a write to the same location
+                        \end{itemize}
+                \end{itemize}
+            \ides{Types}
+                \begin{itemize}
+                    \ides{Read-Write:} 
+                        \begin{itemize}
+                            \item Leads to unrepeatable reads
+                        \end{itemize}
+                    \ides{Write-Read:}
+                        \begin{itemize}
+                            \item Leads to dirty read
+                        \end{itemize}
+                    \ides{Write-Write:}
+                        \begin{itemize}
+                            \item Leads to overwriting of uncommitted data
+                        \end{itemize}
+                \end{itemize}
+        \end{itemize}
+    \ides{Conflict Equivalent} are two schedules iff:
+        \begin{itemize}
+            \item They involve the same actions on the same transactions
+            \item Every pair of conflicting actions is ordere in the same way
+        \end{itemize}
+    \ides{Conflict Serializable:} Schedule if it is conflict equivalent to some serial schedule
+        \begin{itemize}
+            \item I.e. schedule which can be translated into a serial schedule with a sequence of non-conflicting swaps of adjacent actions
+            \item Stronger than serializable
+            \item Only depends on the read/write pattern
+                \begin{itemize}
+                    \item And not what we are writing
+                \end{itemize}
+            \item Easier than serializability for DB to handle as it does require the DB to understand what each operator is doing
+            \item Enforced by most DBMSs
+            \ides{Decide}
+                \begin{itemize}
+                    \item Each transaction is a node
+                    \item $\exists$ edge $T_i$ to $T_j$ if
+                        \begin{itemize}
+                            \item Operator $o_i$ in $T_i$ is in conflict with operator $o_j$ in $T_j$
+                            \item $o_j$ appears earlier than $o_i$ in same transaction
+                        \end{itemize}
+                    \item Schedule is conflict serializable iff its dependency graph is acyclic
+                \end{itemize}
+        \end{itemize}
+    \item Serializability and conflict serializability only concern committed transactions
+        \begin{itemize}
+            \item Operations can be in conflict with \verb+ABORT+
+                \begin{itemize}
+                    \item E.g. \verb+READ(X)+/ \verb+WRITE(X)+ before or after \verb+ABORT+ of other transaction may lead to different results (only if the other transaction did \verb+WRITE(X)+)
+                \end{itemize}
+        \end{itemize}
+\end{itemize}
