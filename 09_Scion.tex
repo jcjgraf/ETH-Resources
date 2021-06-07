@@ -1,0 +1,309 @@
+%! TEX root = ./main.tex
+
+\section{SCION} \todo{Improve this section}
+\begin{itemize}
+    \item It has been known for a long time that the internet could be better
+    \item Many projects started over 25 years ago
+    \item Weaknesses
+        \begin{itemize}
+            \item DoS
+            \item Path hijacking
+            \ides{Kill Switch:} Something wich can partly or completely shut down the internet
+            \item Faking certificates
+            \item Non-scalability of trust
+        \end{itemize}
+    \item Architecture Principles
+        \begin{itemize}
+            \item Stateless packet forwarding
+                \begin{itemize}
+                    \item No inconsistent forwarding state
+                    \item Solves many problems
+                \end{itemize}
+            \item Instant convergence routing
+            \item Path-aware networking
+            \item Multi-path communication
+            \item High security through design and formal verification
+            \item Sovereignty and transparency for trust roots
+        \end{itemize}
+    \item Control plane
+        \begin{itemize}
+            \item Structure
+                \begin{itemize}
+                    \ides{Isolation Domain:} grouping of ASes
+                    \ides{ISD core:} ASes that manage the ISD
+                    \ides{Core AS:} AS that is part of ISD core
+                    \item Control plan for intra and inter ISD is organized hierarchically
+                    \ides{Trust Rooter Configuration (TRC):} Elected router for each ISD which verify ISD operations
+                        \begin{itemize}
+                            \item Defined by each IDS
+                        \end{itemize}
+                    \item Allows for scalability
+                    \ides{Path Servers:}
+                        \begin{itemize}
+                            \item Run by core ASes and normal ASes
+                            \item One or multiple per AS
+                            \ides{Core AS}
+                                \begin{itemize}
+                                    \item Consistent, replicated store of down-path segments and core-path segments
+                                \end{itemize}
+                            \ides{Normal AS}
+                                \begin{itemize}
+                                    \item Serves up-path segments to local clients
+                                    \item Resolved and caches response of remote AS lookup \todo{What is this?}
+                                \end{itemize}
+                        \end{itemize}
+                    \ides{Beacon Server}
+                        \begin{itemize}
+                            \item Run by core ASes and normal ASes
+                            \item One or multiple per AS
+                            \item Forward PCBs to downstream ASes
+                        \end{itemize}
+                \end{itemize}
+            \item Intra-ISD Path Exploration
+                \begin{itemize}
+                    \ides{Path-segment Construction Beacons (PCBs):} Build up communication path to communicate with the core ASes
+                        \begin{itemize}
+                            \item Contains a field with its creation time
+                            \item Send by core ASes
+                            \item Send via SCION service anycast packets
+                            \item Traverse ISD as a flood to reach downstream ASes
+                            \item Forwarded to downstream ASes by the beacon servers of ASes
+                            \item Each AS on paths adds:
+                                \begin{itemize}
+                                    \item AS name
+                                    \item Hop fields
+                                        \begin{itemize}
+                                            \item Link identifiers
+                                            \item Expiration time
+                                            \item Message Authentication Code (MAC)
+                                        \end{itemize}
+                                        used for data-plane forwarding
+                                    \item AS signature
+                                \end{itemize}
+                                \ides{Up-Path Segment:} From AS to core AS
+                                \ides{Down-Path Segment:} From core AS to AS
+                        \end{itemize}
+                \end{itemize}
+            \item Inter-ISD Path Exploration
+                \begin{itemize}
+                    \item Only between core ASes of ISDs
+                \end{itemize}
+            \ides{Up-Path Segment Registration}
+                \begin{itemize}
+                    \item AS selects path segment to announce as up-path segments to all local hosts
+                    \item Registered at local path serversAS select path segment to announce as up-path segments to all local hosts
+                    \item Registered at local path servers
+                \end{itemize}
+            \ides{Down-Path Segment Registration}
+                \begin{itemize}
+                    \item AS selects path segment to announce as down-path segments to all other which use the AS
+                    \item Down-path segments are uploaded to core path server in core AS
+                \end{itemize}
+        \end{itemize}
+    \item Data Plane
+        \begin{itemize}
+            \ides{Path Lookup}
+                \begin{itemize}
+                    \item Host obtains path segment
+                        \begin{itemize}
+                            \item Host contacts RAINS server with a name
+                            \item Host contacts local path server to query path segments
+                            \item Host combines path segments to obtain end-to-end paths
+                        \end{itemize}
+                    \item Local ISD
+                        \begin{itemize}
+                            \item Client request path segment to \verb+<ISD, AS>+ from local path server
+                            \item Local path server sends request to core path server
+                                \begin{itemize}
+                                    \item Only if down-path segments are not locally cached
+                                \end{itemize}
+                            \item Local path server replies
+                                \begin{itemize}
+                                    \item Up-path segment to local ISD core ASes
+                                    \item Down-path segment to \verb+<ISD, AS>+
+                                    \item Core-path segments are needed to connect to up-path and down-path segments 
+                                \end{itemize}
+                        \end{itemize}
+                    \item Remote ISD
+                        \begin{itemize}
+                            \item Host request path segment to \verb+<ISD, AS>+ from local path server
+                            \item Local path server contacts core path server
+                                \begin{itemize}
+                                    \item Only if not cached
+                                \end{itemize}
+                            \item Core path server contacts remote core path server
+                                \begin{itemize}
+                                    \item Only if not cached
+                                \end{itemize}
+                            \item Host receives up-segment, down-segment and core-segment
+                        \end{itemize}
+                    \item Path combination
+                        \begin{itemize}
+                            \item After the path is evaluated, ASes may take a number of shortcuts (e.g. peering links)
+                        \end{itemize}
+                    \item Path segments compared to current internet
+                        \begin{itemize}
+                            \ides{Up-Path Segment:} Traverse lower-tier ISPs to reach tier-1 ISP
+                            \ides{Core-Path Segment:} Tier-1 ISPs path close to destination
+                            \ides{Down-Path Segment:} Traverse lower-tier ISPs to reach destination
+                            \ides{Peering Links:} Same
+                        \end{itemize}
+                \end{itemize}
+            \item Packet
+                \begin{itemize}
+                    \item Header
+                        \begin{itemize}
+                            \item Version
+                            \item Destination and Source access types
+                            \item Total packet and header length
+                            \item Point to current info and hop fiel
+                            \item Next header type field
+                            \item Source address
+                            \item Destination address
+                            \item Info field (info about path segment)
+                                \begin{itemize}
+                                    \item Several flags
+                                    \item Timestamp
+                                        \begin{itemize}
+                                            \item Contains the creation time
+                                        \end{itemize}
+                                    \item ISD identifier
+                                    \item Path segment length
+                                    \item Consists of one or multiple hop fields
+                                \end{itemize}
+                            \item Hop field
+                                \begin{itemize}
+                                    \item Several flags
+                                    \item Expiration time
+                                        \begin{itemize}
+                                            \item Relative to timestamp in info field
+                                        \end{itemize}
+                                    \item Ingress and egress interface identifiers
+                                    \item Message Authentication Code (MAC)
+                                \end{itemize}
+                        \end{itemize}
+                    \item Path
+                        \begin{itemize}
+                            \item \todo{Add path encoding}
+                        \end{itemize}
+                    \item Ingress and Egress Interface Identifiers
+                        \begin{itemize}
+                            \item Each AS assigns a unique integer identifier to each interface that connects to a neighbouring AS
+                            \item Interface identifies identity ingress/egress links for traversing AS
+                            \item ASes use internal routing protocol to find route from ingress SCION border router to egress SCION border router
+                        \end{itemize}
+                    \item Hop field MAC Versification
+                        \begin{itemize}
+                            \item MAC computation and verification of Hop Field MAC value is based on local AS secret
+                            \item Computed as $\text{MAC}_{\text{Key}}(\text{Timestamp}, \text{Some Flags}, \text{ExpTime}, \text{Ingress ID}, \text{Egress ID}, \text{Hop field of previous AS}$
+                            \ipro Can quickly be computed
+                                \begin{itemize}
+                                    \item SCION forwarding is faster and used less energy and IP forwarding
+                                \end{itemize}
+                        \end{itemize}
+                \end{itemize}
+        \end{itemize}
+    \item Observations
+        \begin{itemize}
+            \item SCION provides a rich set of path choices
+            \item SCION is highly scalable
+            \item SCION provides much lower connection time
+        \end{itemize}
+    \item Deployment
+        \begin{itemize}
+            \item Core AS Deployment
+                \begin{itemize}
+                    \item Duties
+                        \begin{itemize}
+                            \item Manage and distribute the ISD's TRC
+                            \item Sign TRCs of neighbouring ISDs and endorse other ISDs
+                            \item Maintain a list of all recognized ISDs
+                            \item Issue certificates to all ASes in the ISD
+                            \item Provide connectivity to neighbouring ISDs
+                            \item Generate and disseminate inter-ISD path-segment construction beacons (core PCBs)
+                            \item Generate and disseminate intra-ISD PCBs
+                            \item Provide highly available service: beacon, name (RAINS), path, certificate, COLIBRI, and time server
+                        \end{itemize}
+                    \item Need core service and border routers
+                    \item SCION reuses existing intra-domain networking infrastructure
+                \end{itemize}
+            \item Normal AS Deployment
+                \begin{itemize}
+                    \item Duties
+                        \begin{itemize}
+                            \item Provide connectivity to neighbouring ASes
+                            \item Disseminate PCBs
+                            \item Provide available service: beacon, name (RAINS), path, certificate, and COLIBRI server
+                        \end{itemize}
+                \end{itemize}
+            \item ISP Business Models
+                \begin{itemize}
+                    \item Premium link offerings
+                        \begin{itemize}
+                            \item E.g. low earth orbit satellite links
+                        \end{itemize}
+                    \item Geofencing
+                        \begin{itemize}
+                            \item I.e. traffic does not leave Switzerland
+                        \end{itemize}
+                    \item High availability
+                    \item Presude-leased line
+                    \item Low latency path
+                \end{itemize}
+            \item ISP Advantages
+                \begin{itemize}
+                    \item Additional offerings
+                    \item Less network management overhead
+                    \item Increased Network capacity
+                    \item Fine-graded traffic engineering
+                    \item CO2 based routing and accounting
+                \end{itemize}
+            \item Leaf AS Deployment
+                \begin{itemize}
+                    \item Steps
+                        \begin{itemize}
+                            \item Obtain AS certificate from core AS
+                            \item Deploy beacon, RAINS, path, certificate and COLIBRI server
+                        \end{itemize}
+                \end{itemize}
+            \item End Domain Deployment
+                \begin{itemize}
+                    \item Also easy
+                \end{itemize}
+        \end{itemize}
+    \item Use Case
+        \begin{itemize}
+            \item IoT Protection
+                \begin{itemize}
+                    \item Can have hidden paths which cannot be seen by intruders
+                \end{itemize}
+            \item DDOS Defense
+                \begin{itemize}
+                    \item Build-in DDoS defense system
+                        \begin{itemize}
+                            \item High-speed source authentifikation
+                            \item Multi-path communication to circumvent congested areas
+                            \item Hidden paths to prevent flooding 
+                            \item COLIBRI as QoS system
+                        \end{itemize}
+                    \ipro Guaranteed communication during attacks
+                \end{itemize}
+            \item Hinterdomdomain Failover
+                \begin{itemize}
+                    \item SCION has backup paths already available
+                \end{itemize}
+            \item Low-Latency Connectivity
+                \begin{itemize}
+                    \item Can use multiple paths at the same time
+                \end{itemize}
+            \item Internet Sovereignty
+                \begin{itemize}
+                    \item ISD are isolated
+                    \item Transparency on which entities need to be trusted
+                \end{itemize}
+            \item Low Earth Orbit Satellite Network
+                \begin{itemize}
+                    \item BGP is not scalable enough to handle the number of satellites
+                \end{itemize}
+        \end{itemize}
+\end{itemize}
