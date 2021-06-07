@@ -94,3 +94,42 @@
                 \end{itemize}
         \end{itemize}
 \end{itemize}
+
+\section{Relational Calculus}
+\begin{itemize}
+    \item Declarative
+        \begin{itemize}
+            \item Say what we want
+        \end{itemize}
+    \item More powerful than RA
+    \ides{Database Schema:} $S = (R_1, \dots, R_m), R_i$ is a relation
+    \ides{Relation Schema:} $R(A_1:D_1, \dots , A_n:D_n)$
+    \ides{Domain:} $\text{dom} = \bigcup_i D_i$
+        \begin{itemize}
+            \item Infinite set of constants
+        \end{itemize}
+    \ides{Instance of Relation $\mathbf{R(A_1:D_1, \dots, A_n:D_n)}$:} $I_R \subseteq \text{dom}^n$
+        \begin{itemize}
+            \item $I_R$ is finite
+            \item Set of facts over the relation
+        \end{itemize}
+    \ides{Instance of DB $\mathbf{S(R_1, \dots , R_m)}$:} Function $\mathcal{I}$ that maps relation to an instance of that relation
+        \begin{itemize}
+            \item $\mathcal{I}: R_i \mapsto \mathcal{I}(R_i)$
+            \item Finite
+            \item Set of facts over all relations
+        \end{itemize}
+    \ides{Query $Q_\phi$:} Has the form $Q_\phi = \{(x_1, \dots, x_k) \mid \phi\}$
+        \begin{itemize}
+            \ides{$\mathbf{\phi}$:} First order formula (predicate) with free variables $x_1, \dots, x_k$ \todo{Is this correct?}
+        \end{itemize} \todo{Full mathematical definition}
+    \item Output of queries may be infinite
+    \ides{Safe:} Query $Q_\phi$ which is finite for all $\mathcal{I}$
+        \begin{itemize}
+            \item I.e. Result must be subset of the domain of the formula
+            \item Undecidable problem
+        \end{itemize}
+    \ides{Domain Independent Relational Calculus:} Query whose result does not depend on the interpretation of the relation and not on the domain
+    \ides{Active Domain:} $\text{adom}(Q_\phi, \mathcal{I}) = \text{all constaints in } Q_\phi \text{ and } \mathcal{I}$
+\end{itemize}
+
