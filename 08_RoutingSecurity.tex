@@ -192,8 +192,14 @@
                                         \begin{itemize}
                                             \item Trigger loop detection in newly added AS
                                                 \begin{itemize}
-                                                    \item DoS on added link
+                                                    \item DoS on added AS
+                                                        \begin{itemize}
+                                                            \item Because this path gets dropped due to loop detection
+                                                        \end{itemize}
                                                     \item Blocking unwanted traffic
+                                                        \begin{itemize}
+                                                            \item E.g. reroute traffic but in the end route traffic to right destination and thanks to loop detection nodes between us and destination ignore our announcement
+                                                        \end{itemize}
                                                 \end{itemize}
                                             \item Make you AS look like it has richer connectivity
                                         \end{itemize}
@@ -203,7 +209,7 @@
                                 \begin{itemize}
                                     \item Motivation
                                         \begin{itemize}
-                                            \item Evade detection for bogus routes by adding a real AS to the end
+                                            \item Route traffic to bogus AS and from there to the actual destination
                                         \end{itemize}
                                     \item Hard to detect
                                 \end{itemize}
