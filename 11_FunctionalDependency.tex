@@ -1,0 +1,54 @@
+%! TEX root = ./main.tex
+
+\section{Functional Dependency}
+\begin{itemize}
+    \ides{Redundancy}
+        \begin{itemize}
+            \item Keep same data in multiple relations and/or multiple tuples
+            \icon Waste of storage space
+            \icon Additional work to keep consistent
+                \begin{itemize}
+                    \item Else we get anomalies
+                \end{itemize}
+            \icon Hard to keep consistent
+            \icon Additional code to keep consistent
+            \ipro Improve locality
+            \ipro Better performance
+            \ipro Fault tolerance
+            \ipro Availability
+        \end{itemize}
+    \item FD is one way to model and understand redundancy
+    \item Models and helps to reason about redundant data
+    \ides{FD Definition}
+        \begin{itemize}
+            \item For:
+                \begin{itemize}
+                    \ides{Relation Schema:} $R(A:D_A, B:D_B, C:D_C, D:D_D)$
+                    \ides{Instance:} $R \subseteq D_A \times D_B \times D_C \times D_D$
+                \end{itemize}
+            \item Let $\alpha \subseteq R, \beta \subseteq R$
+                \begin{itemize}
+                    \item Subset of columns
+                \end{itemize}
+                \ides{Functional Dependency $\mathbf{\alpha \to \beta}$:} iff $\forall r, s \in R.\ r.\alpha = s.\alpha \implies r.\beta = s.\beta$
+                    \begin{itemize}
+                        \item I.e. $\alpha \to \beta \iff$ for any two tuples $r$ and $s$ in DB instance $R$, if $r$ and $s$ share the same values on columns $\alpha$, then they share the same values on column $\beta$
+                        \item I.e. there is a mapping values in columns $\alpha$ to values in columns in $\beta$
+                        \ides{Notation:} $R \models \alpha \to \beta$ if $R$ satisfies $\alpha \to \beta$
+                    \end{itemize}
+        \end{itemize}
+        \ides{FD $\mathbf{\alpha \to \beta}$ is \textbf{minimal}:} iff $\forall A \in \alpha.\ (\alpha \setminus \{A\}) \not \to \beta$
+            \begin{itemize}
+                \ides{Notation:} $\alpha \to \overset{.}{} \beta$
+            \end{itemize}
+    \ides{Keys}
+        \begin{itemize}
+            \ides{Superkey} is $\alpha \subseteq \mc{R} \iff \alpha \to \mc{R}$
+                \begin{itemize}
+                    \item I.e. if we know the value of columns $\alpha$ we know all values of all columns
+                \end{itemize}
+                \ides{Candidate Key} is $\alpha \subseteq \mc{R} \iff \alpha \to \overset{.}{} \mc{R}$
+        \end{itemize}
+    \item Cardinalities define FD
+    \item FD determine keys
+\end{itemize}
