@@ -7,24 +7,27 @@
         \begin{itemize}
             \item Provides logical data independence
         \end{itemize}
+    \ides{Syntax:} \verb+CREATE VIEW some_name AS some_query+
     \item Can be used similarly as a table
+    \item DMDB convert statement containing a view into a statement without view
     \item Used for
         \begin{itemize}
             \ides{Privacy:} Give person access to a limited view and not the whole relation/DB
             \ides{Usability:} Simplify queries
         \end{itemize}
-    \ides{Create view:} \verb+CREATE VIEW <NAME> AS <SQL QUERY>+
-    \item DMDB convert statement containing a view into a statement without view
+    \item DMDB converts view to a select query
     \ides{Update View}
         \begin{itemize}
             \item For base relation $R_1, \dots , R_n$ and view $V = Q(R_1, \dots , R_n)$
-            \item Update $V$ into $V'$ requires finding a set of updated to the base relation $R'_1, \dots ,R'_n)$ s.t. $Q(R'_1, \dots , R'_n) = V'$
+            \item Update $V$ into $V'$ requires finding a set of updated to the base relation $R'_1, \dots ,R'_n$ s.t. $Q(R'_1, \dots , R'_n) = V'$
             \item Not all view can be updated
                 \begin{itemize}
                     \item Some data is missing
                     \item Primary key is missing
+                    \item Update aggregates result
                     \item etc.
                 \end{itemize}
+            \item SQL tries to avoid indeterminism
             \item SQL view is updatable iff:
                 \begin{itemize}
                     \item Involved only one base relation
