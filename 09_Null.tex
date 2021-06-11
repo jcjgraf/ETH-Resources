@@ -4,25 +4,25 @@
 \begin{itemize}
     \item \verb+NULL+ is a state and not a value
         \begin{itemize}
-            \item Check \verb+a IS NULL+
+            \item Check: \verb+some_value IS NULL+
                 \begin{itemize}
                     \item \verb+(NULL IS NULL) -> TRUE+
                 \end{itemize}
-            \item And not \verb+a = NULL+
+            \item And not: \verb+some_value = NULL+
                 \begin{itemize}
                     \item \verb+(NULL = NULL) -> UNKNOWN+
                 \end{itemize}
+            \item We cannot compare \verb+NULL+, but we can check if it is \verb+NULL+
         \end{itemize}
-    \ides{Arithmetic:} Gives always \verb+NULL+
-    \ides{Comparison:} Gives always \verb+UNKNOWN+
+    \ides{Arithmetic:} Always gives \verb+NULL+ if an operand is \verb+NULL+
+    \ides{Comparison:} Always gives \verb+UNKNOWN+ if one of the comparators is \verb+NULL+
     \ides{Logical operator:} Treats \verb+NULL+ as \verb+UNKNOWN+
         \begin{itemize}
-            \item Returns \verb+UNKNOWN+ when the value cannot be fully determined
+            \item Returns \verb+UNKNOWN+ when the result depends on the concrete value of the variable assigned to \verb+NULL+
         \end{itemize}
-    \item We cannot compare \verb+NULL+, but we can check if it is \verb+NULL+
     \ides{Aggregation}
         \begin{itemize}
-            \item All \verb+NULL+ will be in one group
+            \item If \verb+group by+ a columns containing \verb+NULL+s, \verb+NULL+ will be in one group
             \item Most aggregation functions ignore the \verb+NULL+
             \item \verb+Count(*)+ ignores \verb+NULL+ not, \verb+Count(column)+ ignores it
         \end{itemize}
