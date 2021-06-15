@@ -1,0 +1,101 @@
+%! TEX root = ./main.tex
+
+\section{Appendix}
+\begin{itemize}
+    \ides{This section is not exam relevant}
+\end{itemize}
+
+\subsection{Basic Tools}
+\begin{itemize}
+    \ides{ping}
+        \begin{itemize}
+            \item \verb+ping some_address+
+            \item Check connectivity and measure RTT
+            \item \verb+-c some_num+ limits the number of pings
+            \item Sends ARP packets
+        \end{itemize}
+    \ides{dig}
+        \begin{itemize}
+            \item \verb+dig some_domain+
+            \item Queries DNS
+            \item The anders is in the `ANSWER SECTION` on the right
+            \item The `SERVER` at the bottom is who answered (DNS server address I guess)
+        \end{itemize}
+    \ides{ip}
+        \begin{itemize}
+            \item \verb+ip addr+
+            \item Gives Local IP information
+        \end{itemize}
+    \ides{iftop}
+        \begin{itemize}
+            \item \verb+iftop -i some_interface+
+            \item Displays all traffic over the given interface
+            \item \verb+Tx:+ stands for send
+            \item \verb+Rx:+ stands for receive
+            \item Columns on the right display average over $2, 10, 40$ seconds
+        \end{itemize}
+    \ides{Wireshark}
+        \begin{itemize}
+            \item Monitor network
+            \item Has UI
+        \end{itemize}
+    \ides{tcpdump}
+        \begin{itemize}
+            \item Similar to wireshark
+            \item Cli application
+            \ides{-w:} write output to file
+            \ides{-c N:} stop after N packages
+            \ides{-i some\_interface:} listen on specified interface
+            \ides{-n:} do not convert names to ip
+        \end{itemize}
+    \ides{netcat}
+        \begin{itemize}
+            \item Allows for quick communication between two hosts
+            \item Send text
+                \begin{itemize}
+                    \item Server: \verb+netcat -l 4444+
+                    \item Client: \verb+netcat localhost 4444+
+                \end{itemize}
+            \item Send file
+                \begin{itemize}
+                    \item Server: \verb+netcat -l 4444 >  received.txt+
+                    \item Client: \verb+netcat -l 4444 <  send.txt+
+                \end{itemize}
+        \end{itemize}
+    \ides{ss}
+        \begin{itemize}
+            \item Displays sockets
+            \item \verb+ss -at+: show TCP services
+            \item \verb+ss -au+: show UDP services
+            \item \verb+-n+: show port instead of service name
+        \end{itemize}
+\end{itemize}
+
+\subsection{DNS Stuff}
+\begin{itemize}
+    \item Figure out where data comes from
+        \begin{itemize}
+            \item I.e. if from content delivery or directly
+            \item \verb+curl -Ls -o /dev/null -w %{url_effective} some_resource+
+        \end{itemize}
+    \item Get IP we are actually talking to
+        \begin{itemize}
+            \item \verb+sudo hping3 -c 1 -S --tcp-mss 1460 --tcp-timestamp -L 0 -w 1024 -s 39826 -p 443 microsoft.com+
+        \end{itemize}
+    \item Reverse DNS Query
+        \begin{itemize}
+            \item \verb|dig +noall +answer -x some_ip|
+        \end{itemize}
+    \item Reverse DNS Query
+        \begin{itemize}
+            \item \verb+whois some_ip+
+        \end{itemize}
+\end{itemize}
+
+\subsection{Congestion Control}
+\begin{itemize}
+    \item \verb+/lib/modules/$(uname -r)/kernel/net/ip4+ contains all available congestion control algorithms
+    \item \verb+/proc/sys/net/ipv4/tcp_congestion_control+ contains the current algorithm
+    \item \verb+tcp_bbr+ is a good algorithm
+    \item \verb+iperf+ or \verb+iperf3+ can be used to speed measurements
+\end{itemize}
