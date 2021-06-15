@@ -208,4 +208,6 @@ SELECT A, COUNT(*) FROM (SQL1) GROUP BY A
 
 \begin{itemize}
     \item \verb+substring(<string>, <base1startindex>, <length>+
+    \item \verb+SELECT column FROM table+ gives a bag
+    \item \verb+SELECT DISTINCT column FROM table+ gives a set. We can also apply this to multiple columns. In that case the entries are combined and then duplicates filtered.
 \end{itemize}
