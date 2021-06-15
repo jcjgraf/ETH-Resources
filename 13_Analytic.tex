@@ -1,0 +1,195 @@
+%! TEX root = ./main.tex
+
+\section{Analytic}
+\begin{itemize}
+    \ides{This section is not exam relevant!} \todo{Finish summarizing this section}
+    \item Look at DB from a statistical view
+    \item Useful for
+        \begin{itemize}
+            \item Data mining
+            \item Machine Learning
+        \end{itemize}
+\end{itemize}
+
+\subsection{Associated Rule Mining}
+\begin{itemize}
+    \item Aka Data Mining
+    \ides{Frequent Itemsets $\mathbf{I}$:} Items appearing at least in $s$ transaction together
+        \begin{itemize}
+            \ides{$s$:} Support threshold
+        \end{itemize}
+    \ides{Support:} Number of transactions containing all items of $I$
+    \ides{Association Rules}
+        \begin{itemize}
+            \item We can say what item is likely in a transaction knowing parts of the transaction
+            \ides{$\mathbf{\{i_1, \dots i_k\}  \to j}$}: If $i_1, \dots i_k$ in transaction, then $j$ in transaction
+            \item Allows creating suggestions/recommendations
+            \item There are many more such rules
+                \begin{itemize}
+                    \item Only interesting in relevant ones
+                \end{itemize}
+            \ides{Confidence $c$:} Probability that transaction contains $j$ given $i_1, \dots, i_k$
+                \begin{itemize}
+                    \item $\text{conf}(I \to j) = \frac{\text{support}(I \cup j)}{\text{support}(I)}$
+                    \item Number of transaction with $i_1, \dots, i_k, j$ divided by the number of transaction with $i_1, \dots, i_k$
+                \end{itemize}
+            \item Not all high-confidence rules are interesting
+                \begin{itemize}
+                    \item An item may be in many transaction anyways
+                \end{itemize}
+            \ides{Interest:} Difference between its confidence and the fraction of baskets that contain $j$
+                \begin{itemize}
+                    \item $| \text{ confidence } - \text{\# baskets with } j |$
+                    \item Rules are interesting if value is $\ge \sim 5$
+                \end{itemize}
+        \end{itemize}
+    \ides{Mining Association Rules}
+        \begin{itemize}
+            \item Find all frequent itemsets $I$
+                \begin{itemize}
+                    \ides{Naive Algorithm:}
+                        \begin{itemize}
+                            \item Brute force
+                            \item Each itemset is a candidate
+                            \icon Time: $\bigO{NMw}$
+                            \icon Space: $\bigO{M}$
+                                \begin{itemize}
+                                    \item $M = 2^d$
+                                \end{itemize}
+                        \end{itemize}
+                    \ides{A-Priori}
+                        \begin{itemize}
+                            \ides{Idea:}
+                                \begin{itemize}
+                                    \item If itemset is frequent, then all of its subsets must also be frequent
+                                    \item If itemset is not frequent, then no superset will be frequent
+                                    \item Support of itemset never exceeds the support the its subsets
+                                \end{itemize}
+                            \ides{$C_k$:} candidate itemset of size $k$
+                            \ides{$L_k$:} frequent itemset of size $k$
+                            \item Steps
+                                \begin{itemize}
+                                    \ides{Initial:} $k = 1, C_1 =$ all items
+                                    \item While $C_k$ is not empty
+                                        \begin{itemize}
+                                            \item Scan DB do find which itemsets in $C_k$ are frequent and put them into $L_k$
+                                            \item Use $L_k$ to generate a collection of candidate itemsets $C_{k + 1}$ of size $k+1$
+                                                \begin{itemize}
+                                                    \item Join two itemsets of size $k$ that share the first $k-1$ items
+                                                    \item Use principles to filter
+                                                \end{itemize}
+                                            \item $k = k + 1$
+                                        \end{itemize}
+                                \end{itemize}
+                            \item There are libraries for that
+                        \end{itemize}
+                \end{itemize}
+            \item For every subset $A$ of $I$, generate a rule $A \to I / A$
+            \item Output rules above the confidence threshold
+        \end{itemize}
+\end{itemize}
+
+\subsection{Clustering}
+\begin{itemize}
+    \item Group objects into different categories
+    \item Each cluster is a subset of \todo{?}
+    \ides{Clustering:} Set of clusters
+    \ides{Partition of Clustering:}
+        \begin{itemize}
+            \item A division date objects into subsets (clusters) such that each data object is in exactly one subset
+        \end{itemize}
+    \ides{Hierarchical Grouping:}
+        \begin{itemize}
+            \item Tree
+        \end{itemize}
+    \ides{Traditional Hierarchical Clustering:} Each is a subset of each other
+    \ides{Non-Traditional Hierarchical Clustering:} Different groups
+    \item Types
+        \ides{Well-Separated Clusters:}
+            \begin{itemize}
+                \item
+            \end{itemize}
+        \ides{Center-Based:}
+            \begin{itemize}
+                \item Elements are closest to center of their own cluster
+            \end{itemize}
+        \ides{Contiguity-Base:}
+            \begin{itemize}
+                \item Set of points such that a point in a cluster is closer to one or more other points in the cluster that to any points not in the cluster
+            \end{itemize}
+        \ides{Density-Based:}
+            \begin{itemize}
+                \item
+            \end{itemize}
+        \ides{Conceptual Clusters:}
+            \begin{itemize}
+                \item Cluster of objects which share, or not share a certain object
+            \end{itemize}
+        \ides{K-Means}
+            \begin{itemize}
+                \item Partitional clustering approach
+                \item Each cluster is associated with a centroid
+                \item Each point is assigned to the cluster with the closest centroid
+                \item Number of clusters $K$ is given
+                \item
+
+                \item Often uses Euclidean distance
+                \item Minimizing the Sum of Sqzuare Error (SSE)
+                \item NP-Hard if $d \ge 2$
+                \item Polynomial if $d = 1$
+                \item Can be estimated
+                \item Iterative algorithm
+\begin{verbatim}
+Randomly select K point is the initial centroids
+repeat
+    From K clusters by assigning all points to the closest centrid
+    Recompute
+\end{verbatim}
+                \item Initial starting chaise results in different results
+                    \begin{itemize}
+                        \item Do multiple runs and choose best result
+                    \end{itemize}
+                \item Centroid depends on distance function
+                    \begin{itemize}
+                        \item NP-hard to find centroid for some functions
+                    \end{itemize}
+                \ipro Will always converge
+                \ipro Quick convergence
+                \item $\bigO{nKId}$
+                    \begin{itemize}
+                        \ides{n:} number of points
+                        \ides{I:} number of iterations
+                        \ides{K:} number of clusters
+                        \ides{d:} dimension
+                    \end{itemize}
+                \icon Problematic under certain conditions
+                \item Better control if start with many clusters and merge then later on into fewer
+                \item MADlib for SQL support
+            \end{itemize}
+\end{itemize}
+
+\subsection{Classification}
+\begin{itemize}
+    \item Different from clustering
+    \item Learning a target function $f$ that maps attribute set $x$ to one of the predefined class labels $y$
+    \item Traiing set consits of records with known class labels
+    \item Traiing set is used to build classigication model
+    \item
+    \item
+    \ides{Instance-Based Learning:}
+        \begin{itemize}
+            \item
+        \end{itemize}
+    \ides{Nearest Neighbour Classifier:}
+        \begin{itemize}
+            \item Requirements
+                \begin{itemize}
+                    \item Set of stored records
+                    \item Distance metrics to compute distance between records
+                    \item The value of $k$
+                        \begin{itemize}
+                            \item Number of nearest neighbours
+                        \end{itemize}
+                \end{itemize}
+        \end{itemize}
+\end{itemize}
