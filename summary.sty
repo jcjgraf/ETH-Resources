@@ -6,15 +6,17 @@
 \usepackage{graphicx}
 \graphicspath{{Figures/}}
 \usepackage{fancyhdr}
+\pagestyle{fancy}
 %\usepackage{shortvrb}
 %\MakeShortVerb`
 
+% Listing
 \usepackage{enumitem}
 
 % Make list compact
 \setlist{nolistsep}
 
-% Increase listing depth
+% Increase list depth
 \setlistdepth{20}
 \renewlist{itemize}{itemize}{20}
 
@@ -23,16 +25,19 @@
 
 % customize the first 3 levels
 \setlist[itemize,1]{label=\textbullet}
-\setlist[itemize,2]{label=--}
-\setlist[itemize,3]{label=*}
-
-\usepackage{geometry}
-\geometry{paper=a4paper,left=32mm,right=23mm,top=35mm, bottom=35mm}
-
-% Todo
-\newcommand{\todo}[1]{\textcolor{red}{TODO: #1}\PackageWarning{TODO:}{#1!}}
+\setlist[itemize,2]{label=$\diamond$}
+\setlist[itemize,3]{label=$\ast$}
+\setlist[itemize,4]{label=$\circ$}
+\setlist[itemize,5]{label=$\triangleright$}
 
 % List commands
 \newcommand{\ipro}{\item[+]}
 \newcommand{\icon}{\item[-]}
 \newcommand{\ides}[1]{\item \textbf{#1}}
+
+\usepackage{geometry}
+\geometry{paper=a4paper,left=30mm,right=20mm,top=30mm, bottom=30mm}
+
+% Todo
+\newcommand{\todo}[1]{\textcolor{red}{TODO: #1}\PackageWarning{TODO:}{#1!}}
+
