@@ -1,12 +1,17 @@
 %! TEX root = ./main.tex
 
 \section{Application Layer}
+\begin{itemize}
+    \item Top-most layer
+    \item Used by user-applications as well as core internet applications
+\end{itemize}
+
 \subsection{Domain Name Service (DNS)}
 \begin{itemize}
     \item Provides core functionality for the internet
     \item Human identify hosts using hostnames, while internet uses IPs
     \item DNS provides hostnames to IP mapping
-    \item Not one-to-one
+    \item It is not one-to-one mapping:
         \begin{itemize}
             \ides{Load Balancing:} One hostname maps to multiple IP
             \ides{Reuse hardware:} Multiple hostnames map to same IP
@@ -41,9 +46,9 @@
         \begin{itemize}
             \ides{Naming Structure}
                 \begin{itemize}
-                    \ides{Root:} After the TLD
+                    \ides{Root:}
                         \begin{itemize}
-                            \item Imaginary dot
+                            \item Imaginary dot after the TLD in the URL
                         \end{itemize}
                     \ides{Top Level Domain (TLD):} Sit at the top
                     \ides{Domain:} Subtree of the TLD
@@ -61,7 +66,10 @@
                         \end{itemize}
                     \item TLDs are managed by private or federal organisations
                     \item Domains are managed by private organisations
-                    \item Name collision is trivially avoided
+                        \begin{itemize}
+                            \item I.e. Hosting companies and ISPs
+                        \end{itemize}
+                    \ipro Name collision is trivially avoided
                 \end{itemize}
             \ides{Infrastructure}
                 \begin{itemize}
@@ -84,6 +92,7 @@
                     \item Not necessarily the shortest
                 \end{itemize}
             \item Used by the roots servers for load balancing
+            \item Allows DNS system to scale
         \end{itemize}
     \item For the system to work, we need
         \begin{itemize}
@@ -93,7 +102,11 @@
         \end{itemize}
     \ides{DNS Server}
         \begin{itemize}
-            \item Each domain must have at least two DNS server to ensure availability
+            \item Each domain must have at least two DNS server
+                \begin{itemize}
+                    \item Ensure availability
+                    \item Load-balancing
+                \end{itemize}
             \item Stores \textit{Resource Records} as tuples \verb+(name, value, type, TTL)+
                 \begin{itemize}
                     \ides{Name:} The variable which we want to map
@@ -109,7 +122,7 @@
                             CNAME & alias & canonical name\\
                             PTR & IP address & corresponding hostname
                         \end{tabular}
-                    \ides{Time-to-Life (TTL):} How long the mapping is value
+                    \ides{Time-to-Life (TTL):} How long the mapping is valid
                         \begin{itemize}
                             \item Used for caching
                         \end{itemize}
@@ -126,10 +139,7 @@
     \ides{Main Steps}
         \begin{itemize}
             \item Browser wants to access a domain name
-            \item OS triggers resolution process
-                \begin{itemize}
-                    \item OS sends request to local DNS server
-                \end{itemize}
+            \item OS triggers resolution process by sending request to local DNS server
             \item DNS systems translates domain
         \end{itemize}
     \ides{Local DNS Server}
@@ -155,7 +165,7 @@
         \end{itemize}
     \ides{Query Type}
         \begin{itemize}
-            \ides{Recursive Query:}
+            \ides{Recursive Query}
                 \begin{itemize}
                     \item Client offloads task of resolving to the next server
                     \item Not done in practice
@@ -173,9 +183,9 @@
                             \item Root server returns domain IP to DNS server
                             \item DNS server return domain IP to DNS client
                         \end{itemize}
-                        \todo{Add query image}
+                    \includegraphics[width=0.8\textwidth]{dns_recursivequery.png}
                 \end{itemize}
-            \ides{Iterative Query:}
+            \ides{Iterative Query}
                 \begin{itemize}
                     \item Each server only returns address to next server
                     \item Steps
@@ -189,7 +199,7 @@
                             \item Domain server returns domain IP to DNS server
                             \item DNS server return IP to DNS client
                         \end{itemize}
-                        \todo{Add query image}
+                    \includegraphics[width=0.8\textwidth]{dns_iterativequery.png}
                     \item Somehow we sometimes say that CNS client is recursively (makes only one request) while the DNS server is iteratively (makes many requests)
                 \end{itemize}
         \end{itemize}
@@ -205,15 +215,15 @@
 
 \subsubsection{Problems}
 \begin{itemize}
-    \item DNS is vital for the internet
+    \icon DNS is vital for the internet
         \begin{itemize}
             \item Server not accessible when DNS server not available
         \end{itemize}
-    \item DNS servers can see the sites one visits
+    \icon DNS servers can see the sites one visits
         \begin{itemize}
             \item Sell data
         \end{itemize}
-    \item Vulnerable to different security breaches
+    \icon Vulnerable to different security breaches
 \end{itemize}
 
 \subsection{Web}
@@ -230,7 +240,7 @@
 \subsubsection{URL}
 \begin{itemize}
     \ides{Uniform Resource Locator (URL):} address to a internet source
-    \item $\text{protocol}://\text{hostname}[:\text{port}]/\text{directory\_path}/\text{resource}$
+    \item \verb+protocol://hostname[:port]/directory_path/resource+
         \begin{itemize}
             \ides{Protocol:} e.g. HTTP(S), FTP, SMTP etc.
             \ides{Hostname:} DNS name or IP address
@@ -245,11 +255,14 @@
 \subsubsection{HTTP}
 \begin{itemize}
     \ides{Hypertext Transfer Protocol (HTTP)}
-    \item Simple
-    \item Synchronous Request-Response: make request and wait
-    \item Layered over a bidirectional byte stream: Build on TCP (most of the times)
-    \item Text-Based: Human readable
-    \item State-Less: No info about past client requests
+    \ipro Simple
+    \item Properties
+        \begin{itemize}
+            \item Synchronous Request-Response: make request and wait
+            \item Layered over a bidirectional byte stream: Build on TCP (most of the times)
+            \item Text-Based: Human readable
+            \item State-Less: No info about past client requests
+        \end{itemize}
     \ides{Request}
         \begin{itemize}
             \item Message is composed of header and body
@@ -381,7 +394,10 @@
                         \end{itemize}
                     \item Use parallel requests/responses
                         \begin{itemize}
-                            \item Fetch $n$ objects costs $n$ RTT
+                            \item Fetch $n$ objects costs $2$ RTT
+                                \begin{itemize}
+                                    \item Assume that the packets are not too large
+                                \end{itemize}
                             \item Pack multiple requests into one large
                         \end{itemize}
                 \end{itemize}
@@ -444,26 +460,26 @@
 
 \end{itemize}
 
-\subsection{CDN}
+\subsection{Content Delivery Network / Content Distribution Network (CDN)}
 \begin{itemize}
-    \ides{Content Delivery Network / Content Distribution Network}
     \item Not an application itself but used by web and video
-    \item Spread popular content among datacenters around the world
-    \item Interconnect CDN
+    \item Spread popular content among data centres around the world
+    \item Interconnect CDN server
     \item Direct clients to CDN instead of original server
         \begin{itemize}
             \item Done using either:
                 \begin{itemize}
                     \ides{DNS-Based}
                         \begin{itemize}
-                            \item Returns different IP addresses
+                            \item Returns different IP addresses for same domain
                             \item Based on geo-location
-                            \item Requires rewriting of URL (I guess somehow)
-                                \icon May not result in good experience when using external DNS resolvers
+                            \item Requires rewriting of URL in the source files
+                            \icon May not result in good experience when using external DNS resolvers
                         \end{itemize}
                     \ides{BGP Anycast}
                         \begin{itemize}
                             \item Always give same IP
+                            \item BGP directs traffic to ``closest'' CDN server
                             \ipro Easy
                             \icon Less flexible
                             \icon Less control
@@ -475,7 +491,6 @@
             \ides{Pull Caching:} Cache whatever clients request
             \ides{Pull Replication:} Cache popular content before user request it
         \end{itemize}
-
     \ipro Load balancing
     \ipro Better reliability
         \begin{itemize}
