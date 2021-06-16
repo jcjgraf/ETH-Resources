@@ -63,10 +63,11 @@
     \ides{Goal:} Detect and possibly recover from such errors
     \ides{Error Codes}
         \begin{itemize}
-            \item Code word consists of $D + R$ bits
+            \ides{Codeword:} Original data concatenated (`+`) with correction bits
                 \begin{itemize}
-                    \ides{D:} Data bits which if our message
-                    \ides{R:} Check bits which are computed as $R = \text{fn}(D)$
+                    \item Consists of \verb|len(D) + len(R)| bits
+                    \ides{Original data D:} Data bits which if our message
+                    \ides{Check bits R:} Check bits which are computed as $R = \text{fn}(D)$
                 \end{itemize}
             \ides{Sender:}
                 \begin{itemize}
@@ -88,7 +89,10 @@
         \end{itemize}
     \ides{Hamming Distance}
         \begin{itemize}
-            \ides{Distance:} Number of bit flips required to turn $D + R_1$ into $D + R_2$
+            \ides{Distance:} Number of bit flips required to turn $D_1 + R_1$ into $D_2 + R_2$
+                \begin{itemize}
+                    \item Where $D_1 \neq D_2$ and $R_1 = \text{fn}(D_1), R_2 = \text{fn}(D_2)$
+                \end{itemize}
             \ides{Hamming Distance} for a code is the minimal distance between any pair of codewords
             \ides{Error Detection:} Code of hamming distance $d + 1$ can detect up to $d$ errors
             \ides{Error Correction:} Code of hamming distance $2d + 1$ can correct up to $d$ errors
@@ -121,7 +125,7 @@
                 \end{itemize}
             \ides{Checksum}
                 \begin{itemize}
-                    \item $R$ has length $N$
+                    \item $\text{len}(R) = N$
                     \ides{Internet Checksum:} Production example
                         \begin{itemize}
                             \item Used in TCP, UDP etc.
@@ -131,6 +135,9 @@
                                     \item Put zero in checksum position
                                     \item Add numbers
                                     \item Add any carry-over back
+                                        \begin{itemize}
+                                            \item I.e. $abbbb \implies 000a + bbbb$
+                                        \end{itemize}
                                     \item Calculate $ffff -$ res
                                 \end{itemize}
                             \ides{Receiver side:}
@@ -142,7 +149,7 @@
                                     \item Calculate $ffff -$ res
                                     \item If $0$ ok, else error
                                 \end{itemize}
-                            \item Distance is $2$
+                            \ides{Distance:} $2$
                                 \begin{itemize}
                                     \item Can detect $1$
                                     \item Can correct $0$
@@ -180,14 +187,14 @@
                             \item If $0$ no error, else error
                         \end{itemize}
                     \item Protection depends on the generator $C$
-                    \item Distance $4$
+                    \ides{Distance:} $4$
                         \begin{itemize}
                             \item For standard CRC-32 generator
                             \item Can detect $3$
                             \item Can correct $1$
                         \end{itemize}
                     \item Detect odd number of errors
-                    \item Not vulnerable to systemanis errors
+                    \ipro Not vulnerable to systemanis errors
                     \item Detect consecutive bit errors of length $\le k$
                 \end{itemize}
         \end{itemize}
@@ -208,13 +215,22 @@
                             \item Insert check bits into original message at positions $2^i, i \in \N_0$
                             \item Check bit $i$ is a parity for values with a $2^i$ in their value
                                 \begin{itemize}
-                                    \item $2^i = 1$ iff sum of all values which contain $2^i$ $\equiv_2 1$, else $0$
+                                    \item $2^i = 1$ iff ``sum of all values which contain $2^i$'' $\equiv_2 1$, else $0$
                                 \end{itemize}
                         \end{itemize}
                     \ides{Receiver side:}
                         \begin{itemize}
                             \item Recompute check bit sums
+                                \begin{itemize}
+                                    \item Including the check bit value itself
+                                \end{itemize}
                             \ides{Syndrome:} Result of sums arranged as binary number
+                                \begin{itemize}
+                                    \item $\dots + p_3 + p_3 + p_1$
+                                        \begin{itemize}
+                                            \ides{+:} Concatenation operator
+                                        \end{itemize}
+                                \end{itemize}
                             \item No error if syndrome is $0$
                             \item Bit flip at position $i =$ ``syndrome'' if syndrome $\neq 0$
                                 \begin{itemize}
@@ -238,7 +254,7 @@
         \end{itemize}
 \end{itemize}
 
-\subsection{Retransmission} \todo{Merge into error detection and recover?}
+\subsection{Retransmission}
 \begin{itemize}
     \item How to deal with:
         \begin{itemize}
@@ -294,7 +310,7 @@
                     \ides{Contention-Free Multiple Access}
                         \begin{itemize}
                             \item Nodes order their resource access attempts
-                            \ipro High load or guaranteed QoS
+                            \ipro High load situation or when guaranteed QoS required
                         \end{itemize}
                 \end{itemize}
         \end{itemize}
@@ -322,6 +338,9 @@
                     \item One node is sending, another is listening, but not hearing anything due to delay
                 \end{itemize}
             \icon Upon collision, time is lost since some sending nodes may keep sending
+                \begin{itemize}
+                    \item Because they may not realize that there was a collision
+                \end{itemize}
         \end{itemize}
     \ides{CSMA with Collision Detection (CSMA/CD)}
         \begin{itemize}
@@ -359,13 +378,14 @@
                     \ipro Highly efficient
                     \item Used by Ethernet
                 \end{itemize}
+            \item Called \textbf{P-persistent} CSMA
         \end{itemize}
     \ides{Classical Ethernet}
         \begin{itemize}
             \item Introduced in 1973
             \item Hosts share a single coaxial cable
             \item Allowed for $10$ Mbps
-            \item Uses CSMA/CD with BEB
+            \item Uses 1-persistent CSMA/CD with BEB
             \item $2D$ is $64$ bytes
             \ides{Frame Format}
                 \begin{itemize}
@@ -393,11 +413,11 @@
                             \item Cannot detect collisions
                             \item Send full frame and only realize after that there was a collision
                         \end{itemize}
-                    \item Nodes may have different coverage areas
+                    \ides{Signal to Noise Ration (SNR):} Node can receive signal only if SNR is large enough
+                    \item Nodes may have different coverage areas. Two nodes are:
                         \begin{itemize}
-                            \ides{Signal to Noise Ration (SNR):} Node can receive signal only if SNR is large enough
-                            \ides{Hidden Terminal:} Two nodes are hidden terminals iff they cannot reach each other but can collide at an intermediate station
-                            \ides{Exposed Terminal:} Two nodes are exposed terminals iff they can hear each other but do not collide
+                            \ides{Hidden Terminals:} iff they cannot reach each other but can collide at an intermediate station
+                            \ides{Exposed Terminals:} iff they can hear each other but do not collide
                                 \begin{itemize}
                                     \item Both sender think there is a collision but there is actually none
                                     \item Want to send concurrently to increase performance
@@ -413,10 +433,16 @@
                             \ides{Request-to-Send (RTS):} Send by sender node to ask for allowance
                                 \begin{itemize}
                                     \item Contains the frame length the sender wants to send
+                                        \begin{itemize}
+                                            \item This prevents hidden terminals
+                                        \end{itemize}
                                 \end{itemize}
                             \ides{Clear-to-Send (CTS):} Send by receiver if sender is allowed to send frame
                                 \begin{itemize}
                                     \item Contains the frame length the sender wants to send
+                                        \begin{itemize}
+                                            \item This prevents exposed terminals
+                                        \end{itemize}
                                 \end{itemize}
                             \item Sender transmits frame
                         \end{itemize}
@@ -436,6 +462,7 @@
                 \end{itemize}
             \ides{WiFi}
                 \begin{itemize}
+                    \item Standard 802.11
                     \item Started in 1990s
                     \item Clients are wireless connected to wired AP
                     \ides{Physical Layer}
@@ -505,13 +532,13 @@
         \end{itemize}
     \ides{Inside a Switch}
         \begin{itemize}
-            \item Uses frame addresses to connect input port to the right output port
+            \item Uses frame addresses (MAC address) to connect input port to the right output port
                 \begin{itemize}
                     \item Done by a \textit{fabric}
                 \end{itemize}
             \item Multiple frames may be switched in parallel
             \ides{Full-Duplex:} Traffic can flow in both direction
-            \item Not multiple access control, hosts can just send
+            \item Not multiple access control, so hosts can just send
             \item Need buffers at input and output ports
         \end{itemize}
     \ides{Forwarding}
@@ -519,7 +546,6 @@
             \item Need to find the right output port based on the destination address in the Ethernet frame (MAC address)
             \ides{Backward Learning}
                 \begin{itemize}
-                    \item Possible solution to forwarding problem
                     \ides{Idea:} Use table to map MAC address to port
                     \item Works in two steps
                         \begin{itemize}
@@ -530,14 +556,12 @@
                             \ides{Sending frame:} Index into table to get port, if not existing, broadcast frame on all ports
                         \end{itemize}
                     \ipro Also works if multiple addresses are behind one port (e.g. another switch)
-                        \begin{itemize}
-                            \item If there are no forwarding loops
-                        \end{itemize}
                     \icon Table is of fixed size and can get overflow
                         \begin{itemize}
                             \item E.g. due to a hack
                             \item Switch acts equivalent to a repeater (broadcasts every message)
                         \end{itemize}
+                    \icon Not working if there are forwarding loops
                 \end{itemize}
             \ides{Forwarding Loops}
                 \begin{itemize}
@@ -551,7 +575,7 @@
                     \item Forwarding method fixing forwarding loops
                     \ides{Idea:}
                         \begin{itemize}
-                            \item Switches collectively find a spanning free for the topology
+                            \item Switches collectively find a spanning tree for the topology
                             \item Frames are forwarded along the tree and not all links
                             \item Broadcasts will go up to the root and down to all branches
                             \item Use backward learning on the tree

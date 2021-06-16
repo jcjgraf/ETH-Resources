@@ -108,19 +108,16 @@
             \ides{Denial-of-Service (DoS)}
                 \begin{itemize}
                     \item Many different strategies
-                    \item Induce churn to overload routers by announcing and withdrawing routes at a fast pace
+                    \item Induce chunk to overload routers by announcing and withdrawing routes at a fast pace
                     \item Flood routers link-state database by injecting thousands of prefixes
                     \item Induce congestion/high delay by steering traffic along fewer or low-throughput paths
                     \item Prevent reachability by steering traffic along black holes or loops
                 \end{itemize}
-                    \begin{itemize}
-                        \item Problem, routers are often underspecified and certificate validation takes lot of time
-                    \end{itemize}
         \end{itemize}
     \ides{Problem:} Bogus advertisements can be injected or legitimate ones can be altered
     \ides{Solution:} Use cryptic authentication
         \begin{itemize}
-            \icon Routers are often underspecified for computationally  expensive verification
+            \icon Routers are often underspecified for computationally expensive verification
         \end{itemize}
 \end{itemize}
 
@@ -314,23 +311,20 @@
                     \ides{Send packets to bogus destination:}
                         \begin{itemize}
                             \item Packages can be snooped
-                            \item After they are forwarded along the right path
+                            \item After, they are forwarded along the right path
                             \item Hard to detect
                         \end{itemize}
                 \end{itemize}
-
-            \item Data-Plane Attacks
+            \item How to
                 \begin{itemize}
                     \item Adversary must control a route along the path or hijack prefix
-                    \item How to gain control of a router
+                    \item How to gain control of a router?
                 \end{itemize}
             \item Drop packets in the data plane
             \item Easier to evade detection
             \item Evade easier if you just slow done some traffic
-
-
         \end{itemize}
-    \item BGO is Very hard to fix
+    \item BGP is Very hard to fix
         \begin{itemize}
             \item Complex system
             \item Hard to reach agreement on the right solution

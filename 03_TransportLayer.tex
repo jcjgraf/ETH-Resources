@@ -1,7 +1,6 @@
 %! TEX root = ./main.tex
 
 \section{Transport Layer}
-\subsection{General}
 \begin{itemize}
     \item Link between network and application layer
         \begin{itemize}
@@ -12,6 +11,7 @@
                             \item Lost
                             \item Corrupted
                             \item Reordered
+                            \item Delayed
                             \item Duplicated
                         \end{itemize}
                 \end{itemize}
@@ -49,6 +49,7 @@
     \item Incrementally build up a reliable transmission protocol
     \ides{Lossy Channel}
         \begin{itemize}
+            \ides{Goal:} Lossless transmission
             \item
 \begin{verbatim}
 # Sender side
@@ -91,6 +92,7 @@ else:
         \end{itemize}
     \ides{Improve Timeliness}
         \begin{itemize}
+            \ides{Goal:} Improve timeliness and efficiency
             \item Send multiple packets at the same time
             \item Add sequence number to each packet
             \item Add buffers to sender and receiver:
@@ -110,12 +112,14 @@ else:
                     \item By sending too many packets
                 \end{itemize}
         \end{itemize}
-    \ides{Flow Control}
+    \ides{Flow and Congestion Control}
         \begin{itemize}
-            \ides{Sliding Window:} Restrict to sender and receiver buffer to a certain size
+            \ides{Goal:} Prevent overwhelmingness of receiver and of network
+            \ides{Sliding Window:} Restrict the sender and receiver buffer to a certain size
             \ides{Sending Window:} List of sequence numbers the sender is allowed to send
                 \begin{itemize}
                     \item Move forward iff the lowest packet number in the windows was acknowledged
+                    \ides{Congestion Control:} Prevent overwhelming network
                 \end{itemize}
             \ides{Receiving Window:} List of sequence numbers the receiver is allowed to receive
                 \begin{itemize}
@@ -124,6 +128,7 @@ else:
                             \item Send acknowledgement for that packet
                             \item Move sending window forward
                         \end{itemize}
+                    \ides{Flow Control:} Prevent overwhelming receiver
                 \end{itemize}
             \item \verb+size(sending window) <= size(receiving windows)+
             \item Window size is exchanged during handshake
@@ -141,7 +146,7 @@ else:
                 \begin{itemize}
                     \item Acknowledge every single packet received
                     \item Losses are indicated implicitly by the missing ACK for that number
-                    \item Resend missing packet after $k$ subsequent ACKs
+                    \item Resend missing packet after $k$ subsequent ACKs of other packets
                     \ipro \textbf{Known Fate:} We have feedback for every single packet
                     \ipro Simple algorithm
                     \ipro Not sensitive to reordering
@@ -149,10 +154,10 @@ else:
                 \end{itemize}
             \ides{Cumulative ACKs}
                 \begin{itemize}
-                    \item Acknowledge highest sequence number for which all previous packets were received
-                    \ipro Not obvious which packets were lost
+                    \item Acknowledge each packet but send the highest sequence number for which all previous packets were received
+                    \icon Not obvious which packets were lost
                         \begin{itemize}
-                            \item Duplicate ACKs is a sign of loss
+                            \item Duplicate ACKs (same sequence number acknowledged) is a sign of loss
                             \item We know some packets were delivered but not which one
                             \item We do not know which packet to retransmit
                         \end{itemize}
@@ -160,10 +165,13 @@ else:
             \ides{Full Information ACKs}
                 \begin{itemize}
                     \item Combine individual and commutative ACKs
+                        \begin{itemize}
+                            \item I.e. say up to which were all received in-order and which were received out of order
+                        \end{itemize}
                     \ipro Complete information
                     \icon Overhead
                         \begin{itemize}
-                            \item Then lots of gaps in the receiver window
+                            \item When large of gaps in the receiver window
                             \item Lower efficiency
                         \end{itemize}
                 \end{itemize}
@@ -179,8 +187,8 @@ else:
                         \begin{enumerate}
                             \item Start with all flows at $0$
                             \item Increase all flows till there is a new bottleneck
-                            \item Fix the flows which are bottlenecked
-                            \item Repeat from step 2
+                            \item Hold the rate of the flows which are bottlenecked
+                            \item Repeat from step 2 for the remaining flows
                         \end{enumerate}
                     \item We do not know the available bandwidth in practice
                     \item Approximate it by repeatedly increasing window size and decreasing if upon a loss
@@ -198,10 +206,11 @@ else:
                 \end{itemize}
             \ides{Reordering}
                 \begin{itemize}
+                    \item Creates duplicate ACKs
                     \item Depends on applies ACKing mechanism
                     \item Only a problem for commutative ACKs
                         \begin{itemize}
-                            \item Creates duplicate ACKs
+                            \item Sender may think that the packet was lost and resends
                         \end{itemize}
                 \end{itemize}
             \ides{Delays}
@@ -212,50 +221,51 @@ else:
             \ides{Duplication:}
                 \begin{itemize}
                     \item May me detected by the receiver
-
-                    \todo{So why does it even cause duplicate ACKs?}
                     \item Created duplicate ACKs
                     \item Depends on applied ACKing machanism
-                    \item Only problematic for commutative ACKs
+                    \item Only a problem for commutative ACKs
+                        \begin{itemize}
+                            \item Sender may think that the packet was lost and resends
+                        \end{itemize}
                 \end{itemize}
         \end{itemize}
 \end{itemize}
 
-\subsubsection{Go-Back-N}
+\subsubsection{Example Protocols}
 \begin{itemize}
     \ides{Go-Back-N (GBN)}
-    \item Sliding window protocol
-    \item Uses cumulative ACKs
-    \item Receiver should be as simple as possible
-    \ides{Receiver}
         \begin{itemize}
-            \item Delivers packets in-order to the application
-            \item Uses commutative ACKss
-        \end{itemize}
-    \ides{Sender}
-        \begin{itemize}
-            \item Uses a single timer to detect loss
+            \item Sliding window protocol
+            \item Uses cumulative ACKs
+            \ides{Goal:} Receiver should be as simple as possible
+            \ides{Receiver}
                 \begin{itemize}
-                    \item Is reset at each ACK
+                    \item Delivers packets in-order to the application
+                    \item Uses commutative ACKss
                 \end{itemize}
-            \item Upon timeout, resent the whole window starting with the lost one
+            \ides{Sender}
+                \begin{itemize}
+                    \item Uses a single timer to detect loss
+                        \begin{itemize}
+                            \item Is reset at each ACK
+                        \end{itemize}
+                    \item Upon timeout, resent the whole window starting with the lost one
+                \end{itemize}
         \end{itemize}
-\end{itemize}
-
-\subsection{Selective Repeat}
-\begin{itemize}
     \ides{Selective Repeat (SR)}
-\item Sliding window protocol
-\item Uses individual ACKs
-\item Tries to avoid unnecessary retransmissions
-    \ides{Receiver}
         \begin{itemize}
-            \item Uses individual ACKss
-        \end{itemize}
-    \ides{Sender}
-        \begin{itemize}
-            \item Uses a per-packet timer to detect loss
-            \item Upon timeout, resent the lost packet
+            \item Sliding window protocol
+            \item Uses individual ACKs
+            \item Tries to avoid unnecessary retransmissions
+            \ides{Receiver}
+                \begin{itemize}
+                    \item Uses individual ACKs
+                \end{itemize}
+            \ides{Sender}
+                \begin{itemize}
+                    \item Uses a per-packet timer to detect loss
+                    \item Upon timeout, resent the lost packet
+                \end{itemize}
         \end{itemize}
 \end{itemize}
 
@@ -263,7 +273,7 @@ else:
 \begin{itemize}
     \item Two main protocols
     \item
-        \begin{tabular}{p{0.3 \textwidth} | p{0.3 \textwidth} | c}
+        \begin{tabular}{p{0.3 \textwidth} | p{0.3 \textwidth} | l}
             Property & TCP & UDP\\
             \hline
             Data delivery to the correct application & Demultiplexing using port & Demultiplexing using port\\
@@ -286,9 +296,8 @@ else:
         \end{itemize}
 \end{itemize}
 
-\subsubsection{User Datagram Protocol}
+\subsubsection{User Datagram Protocol (UDP)}
 \begin{itemize}
-    \ides{User Datagram Protocol (UDP)}
     \item Unreliable, connection less, out-of-order data transfer protocol
     \item Simple extension of IP
     \ides{Header}
@@ -318,17 +327,21 @@ else:
             \item No flow and congestion control
             \item Just send it
         \end{itemize}
+    \ides{Halve-Duplex:} One-way channel
 \end{itemize}
 
-\subsubsection{Transmission Control Protocol}
+\subsubsection{Transmission Control Protocol (TCP)}
 \begin{itemize}
-    \ides{Transmission Control Protocol (TCP)}
     \item Connection-oriented, reliable, in-order byte-stream transport protocol
+    \item Connection / session is a single bytestream
+        \begin{itemize}
+            \item State is stored in host and not network
+        \end{itemize}
     \item Design
         \begin{itemize}
             \ides{ACKs:}
                 \begin{itemize}
-                    \item Byte sequence number to identify payloads
+                    \item Sequence number for each byte of the payload
                     \item Cumulative ACKs
                 \end{itemize}
             \ides{Checksum:} On data and pseudoheader
@@ -351,6 +364,7 @@ else:
                     \item Dynamic adaption to network paths's capacity
                 \end{itemize}
         \end{itemize}
+    \ides{Full Duplex:} Two-way channel
 \end{itemize}
 
 \paragraph{Structure}
@@ -381,6 +395,7 @@ else:
     \ides{Data Section}
         \begin{itemize}
             \item Called TCP segment
+            \item Contains multiple consecutive bytes of the byte stream
             \item Variable length $\le \text{MSS}$
                 \begin{itemize}
                     \ides{Maximum Transmission Unit (MTU):} Maximal size of a IP packet
@@ -523,7 +538,10 @@ else:
 
 \paragraph{Timeouts and Retransmissions}
 \begin{itemize}
-    \item Timer is set of last ACKed packet
+    \item Timer is set for last ACKed packet
+        \begin{itemize}
+            \item I.e. if $n$ is ACKed, we set the timer for $n$
+        \end{itemize}
     \item Timer is reset whenever new data is ACKed
         \begin{itemize}
             \item Duplicate ACKs do not reset the timer
@@ -542,8 +560,10 @@ else:
         \end{itemize}
     \item We have to estimate RTT to set an appropriate timeout
         \begin{itemize}
+            \item Different algorithms
             \ides{Exponential Averaging}
                 \begin{itemize}
+                    \ides{Idea:} Measure RTT in regular intervals and combine it with previous measurements
                     \item $\text{SampleRTT} = \text{AckRcvdTime} - \text{SendPacketTime}$
                     \item $\text{EstimatedRTT} = \alpha \cdot \text{EstimatedRTT} + (1 - \alpha) \cdot \text{SampleRTT}$
                         \begin{itemize}
@@ -600,16 +620,17 @@ else:
                 \end{itemize}
             \item Characterized by
                 \begin{itemize}
-                    \ides{Knee}: From this point on:
+                    \ides{Knee:} With increasing load:
                         \begin{itemize}
                             \item Throughput only increases slowly
                             \item Delay increases quickly
                         \end{itemize}
-                    \ides{Cliff:} From this point on:
+                    \ides{Cliff:} With increasing load:
                         \begin{itemize}
                             \item Throughput decreases quickly
                             \item Delay tends to infinity
                         \end{itemize}
+                    \includegraphics[width=0.6\textwidth]{tcp_congestion.png}
                 \end{itemize}
         \end{itemize}
     \item Solves the following:
@@ -663,16 +684,16 @@ else:
             \ides{Fairness}
                 \begin{itemize}
                     \item Two identical flows should end up with the same bandwidth
-                    \item The sum of both flow should we close to the available bandwidth
+                    \item The sum of both flow should be close to the available bandwidth
                         \ides{Trajectory Plot:} We want the bandwidth to be on the intersection of the efficiency and fairness line
                 \end{itemize}
-            \ides{Additive Increase Multiplicative Decrease}
+            \ides{Additive Increase Multiplicative Decrease (AIMD)}
                 \begin{itemize}
-                    \ides{Additive Increase Multiplicative Decrease (AIMD)}
                     \ides{Increase:} Add a constant to the point
                         \begin{itemize}
-                            \item In TCP increment CWND by $1 / \text{CWND}$
-                            \item $\implies$ Increment at most by $1$ in an iteration
+                            \item $(x, y) \to (\alpha + x, \alpha + y)$
+                            \item In TCP $\alpha = 1 / \text{CWND}$
+                            \item $\implies$ Increment at most by $1$ per RTT
                         \end{itemize}
                     \ides{Decrease:} Take a fraction of the point
                         \begin{itemize}
@@ -691,8 +712,9 @@ else:
                     \ides{Fast Recovery}
                         \begin{itemize}
                             \item Reset CWND back to $0$ is wasteful
-                            \item Try to react before network gets congested
-                            \item Switch to AIMD after fast retransmit
+                            \item Try to react before network gets congested and we get a timeout
+                            \item Switch to AIMD
+                            \item Done after $3$ consecutive duplicate ACKs
                         \end{itemize}
                     \item Full code:
 \begin{verbatim}
@@ -743,7 +765,7 @@ Duplicate ACKs received:
                 \begin{itemize}
                     \item Sliding window can not continue
                     \item Happens with HTTP/2
-                    \item Quick prevents this problem
+                    \item QUIC has multiple streams to prevent that
                 \end{itemize}
             \ides{Handshake}
                 \begin{itemize}
@@ -774,20 +796,23 @@ Duplicate ACKs received:
                 \end{itemize}
             \ides{Change of IP}
                 \begin{itemize}
-                    \item TCP requires source IP
-                        \begin{itemize}
-                            \item To identify a connection
-                        \end{itemize}
-                    \item UDP only needs destination IP
+                    \item TCP requires source IP to identify a connection
+                    \item UDP does not do that
                     \item QUIC adds connectionID to identify a connection
                         \begin{itemize}
                             \item Initialized randomly at handshake
                         \end{itemize}
                 \end{itemize}
+            \ides{Flow Control}
+                \begin{itemize}
+                    \item Performed at two levels
+                        \ides{Connection Level:} Prevent stream from over-running the receivers buffer
+                        \ides{Stream Level:} Prevent individual streams from dominating the connection
+                \end{itemize}
             \ides{Evolve TCP}
                 \begin{itemize}
                     \item Not really possible
-                    \item Dropping certain package attributes looks suspicious and get dropped
+                    \item Dropping certain package attributes looks suspicious and such packets get dropped
                         \begin{itemize}
                             \item Network is conservative
                         \end{itemize}
@@ -809,7 +834,6 @@ Duplicate ACKs received:
             \item Determine right destination application (demultiplexing) for a packet
             \item 16 bit long
             \item Source port and destination port are carried in the transport header
-            \item \verb+lsof -Pn -i4+ shows used ports
             \item Different address space for TCP and UDP
             \ides{Well Known Ports:} $0 - 1023$
                 \begin{itemize}

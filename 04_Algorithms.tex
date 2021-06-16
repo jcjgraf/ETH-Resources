@@ -226,24 +226,21 @@
                     \item We ignore collisions
                     \icon Contains false positive
                         \begin{itemize}
-                            \item No problem for many application
-                                \begin{itemize}
-                                    \item Where a false negative would not in most cases
-                                \end{itemize}
                             \item No problem as long as rate if low
+                            \item No problem for many application
                         \end{itemize}
                 \end{itemize}
             \ides{Hash Table with Bloom Filters}
                 \begin{itemize}
                     \item We want to represent $n$ object
                     \item We have $m$ bits of memory in table $T$
-                    \item We have $k$ hash functions $h_n, \dots h_k$
+                    \item We have $k$ hash functions $h_1, \dots h_k$
                         \begin{itemize}
                             \item With range $\{1, 2, \dots, m\}$
                         \end{itemize}
                     \item For each new input, we apply all hash functions and set the value to $1$ in the table
                     \item $P[T[i] = 0 \text{ after } n \text{ insertions}] = \left( 1 - \frac{1}{m} \right)^{kn} \approx e^{-kn/m}$
-                    \item Value is member if $T$ is $1$ for all results of the hash functions
+                    \item Value is member, if $T[i] = 1$ for all results of the hash functions
                     \ipro Cannot have false negative
                     \icon Can have false positive
                         \begin{itemize}
@@ -262,7 +259,7 @@
                     \item Most objects are only accessed once
                     \item But when accessed more than once, it is very likely that it is accessed again
                     \item First access: Add to bloom filter
-                    \item Second access: Is present in bloom filter $\implies$ add to cache
+                    \item Second access (if present in bloom filter): Add to cache
                     \ides{Filter fills up:} Maintain primary and secondary filters
                         \begin{itemize}
                             \item Once primary reaches threshold use secondary too
@@ -272,7 +269,7 @@
                 \end{itemize}
             \ides{Counting Bloom Filters}
                 \begin{itemize}
-                    \item Allow other cache filters to see that other cache server's caches
+                    \item Allow other cache filters to see what other cache servers cache
                         \begin{itemize}
                             \item We need deletion to remove entries we no longer have
                             \item Count how many packets we have moved

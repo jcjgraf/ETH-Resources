@@ -296,7 +296,7 @@
     \item Often involve broadcast
     \ides{Dynamic Host Configuration Protocol (DHCP)}
         \begin{itemize}
-            \item How does a host get
+            \ides{Problem:} How does a host get
                 \begin{itemize}
                     \item Its IP address
                     \item Routers IP address
@@ -306,7 +306,7 @@
                     \item etc.
                 \end{itemize}
             \item On connection, only the link MAC address is known
-            \item Introduces in 1993
+            \item Introduced in 1993
             \item Is a client - server application
             \item Part of the network (router)
             \item Uses UDP on port 67, 68
@@ -330,6 +330,9 @@
     \ides{Address Resolution Protocol (ARP)}
         \begin{itemize}
             \item Node needs link layer address to send frame but only has destination IP address
+                \begin{itemize}
+                    \item Provides IP to MAC mapping
+                \end{itemize}
             \item Sits on the link layer
             \item Only works if node and target are on the same link
                 \todo{What does that mean?}
@@ -338,8 +341,9 @@
                     \item Nodes sends a \verb+REQUEST+ broadcast message with an IP address
                     \item Target sees broadcast and notices its IP address
                     \item Target sends \verb+REPLY+ containing its MAC address
-                    \item Note caches the MAC address in its ARP cache
+                    \item Node caches the MAC address in its ARP cache
                 \end{itemize}
+            \item Done using a table
             \item Asks nodes addressed with their IP address to identify themselves
         \end{itemize}
 \end{itemize}
@@ -364,7 +368,7 @@
                     \item If a packet is too large for e given link, the router splits the packet into multiple smaller ones
                         \begin{itemize}
                             \item Break data into pieces
-                            \item Copy main IP header into header of pieces
+                            \item Copy main IP header into the headers of all pieces
                             \item Adjust the \verb+length+ in the header
                             \item Set \verb+fragment offset+ in the header to indicate the position in the packet
                             \item Set \verb+MF+ (more fragments) \verb+flags+ in IP header on all pieces except the last
@@ -393,10 +397,10 @@
                             \item \verb+DF+ flag (do not fragment) set
                             \item Hosts use heuristisch on which MTUs to try
                                 \begin{itemize}
-                                    \item There are protocols in practice but they are not used
+                                    \item There are protocols but they are not used in practice
                                 \end{itemize}
                         \end{itemize}
-                    \item Routers send ICMP and tell their max largest size in case the original packet was too large
+                    \item Routers send ICMP and tell their max largest size in case the original packet was too large for this router
                     \item Hosts adjusts packet size to fit the MTU of the path
                     \icon Path may change and break the transmission
                     \ipro Avoids fragmentation
@@ -450,8 +454,8 @@
 
 \subsection{Network Address Translation (NAT)}
 \begin{itemize}
-    \item Routers are supposed at only IP headero
-    \ides{Middlebox:} Device which should not but looks at transmission protocol too
+    \item Routers are supposed to look at only the IP header
+    \ides{Middlebox:} Device which should not, but look at transmission protocol header too
         \begin{itemize}
             \item Allows for new functionality
                 \begin{itemize}
@@ -514,7 +518,8 @@
         \end{itemize}
     \icon Problematic with UDP
         \begin{itemize}
-            \item Since there is no connection \todo{How is this solved?}
+            \item Since there is no connection
+            \item Need special randezvous server for both parties to meet and both create internal to external mappings
         \end{itemize}
     \ipro Multiplexing
     \ipro Flexible in address space
@@ -533,9 +538,9 @@
     \item $128$ bits addresses
     \item Denoted in $8$ groups of $4$ hex digits ($16$ bits)
     \item Omit leading zeros within each group
-    \item Omit one connective group of all zeros
+    \item Omit one group of all zeros
         \begin{itemize}
-            \item Else original address cannot be reconstructed
+            \item Not more than one, else original address cannot be reconstructed
         \end{itemize}
     \icon Not backwards compatible
         \begin{itemize}
@@ -545,19 +550,18 @@
         \begin{itemize}
             \item Simpler
             \item $32$ bits per line
-                \ides{Version:} 6
-                \ides{Traffic Class:} Former type of service
-                \ides{Flow label:} Allow router to identify a flow
-                \begin{itemize}
-                    \item Packets of same flow stay together (same path)
-                \end{itemize}
-                \ides{Payload Length:} Former total length
-                \ides{Next hdr (header):} Former protocol
-                \ides{Hop Limit:} Old TTL
-                \ides{Source Address:} $128$ bits
-                \ides{Destination Address:} $128$ bits
-            \ides{Flow:} Allows router to identify a flow
+            \ides{Version:} 6
+            \ides{Traffic Class:} Former type of service
+            \ides{Flow label:} Allow router to identify a flow
+            \begin{itemize}
+                \item Packets of same flow stay together (same path)
+            \end{itemize}
             \ides{Payload Length:} Former total length
+            \ides{Next hdr (header):} Former protocol
+            \ides{Hop Limit:} Old TTL
+            \ides{Source Address:} $128$ bits
+            \ides{Destination Address:} $128$ bits
+            \ides{Flow:} Allows router to identify a flow
             \item Removed
                 \begin{itemize}
                     \ides{IHL:}
@@ -776,7 +780,7 @@
     \ides{Dijkstra's shortest path algorithm}
         \begin{itemize}
             \item Mark all nodes tentative
-            \item Set distance from source to $0$ for source
+            \item Set distance for source to $0$
             \item Set distance to $\infty$ for all nodes
             \item While tentative nodes remain:
                 \begin{itemize}
@@ -833,8 +837,13 @@
                 \begin{itemize}
                     \item Initialize vector with $0$ cost to self and $\infty$ to all others
                     \item Periodically send vector to neighbours
-                    \item Add distance to neighbour to all values heard from that neighbour
-                    \item For each vector received, compute the distance to all other nodes by adding the distance to that node to the vector
+                    \item Add locally stored ``distance to neighbour'', to all values heard from that neighbour
+                        \begin{itemize}
+                            \item Do that for all vectors received
+                                \begin{itemize}
+                                    \item I.e. for all nodes
+                                \end{itemize}
+                        \end{itemize}
                     \item Update distance vector by selecting minimal distance for each destination
                 \end{itemize}
             \item News travels one hop per exchange
@@ -886,8 +895,9 @@
                     \end{itemize}
                 \ides{Stop-and-wait}
                     \begin{itemize}
-                        \item Makes flooding reliable
                         \item Receiver acknowledges receipt else it is resent
+                        \item Makes flooding reliable
+                        \item Only one packet is send at the time
                     \end{itemize}
                 \item Each link carries the message at least once
                 \ipro Simple
@@ -929,7 +939,6 @@
                                 \ides{Link Failure}
                                     \begin{itemize}
                                         \item Both nodes notice and update their LPS
-                                            \todo{Is dead node removed or set to infty?}
                                     \end{itemize}
                                 \ides{Node failure}
                                     \begin{itemize}
@@ -959,7 +968,7 @@
                 \item Widely used in enterprise
                 \ides{Intermediate System to Intermediate System (IS-IS)}
                     \begin{itemize}
-                        \item Introduces in 1987
+                        \item Introduced in 1987
                         \item Very similar to OSPF
                         \item Network can be separated into areas
                     \end{itemize}
@@ -977,6 +986,7 @@
                             \end{itemize}
                         \ides{Area border routers:} Any backbone router connecting to an area
                             \begin{itemize}
+                                \item Belong to the backbone and the area
                                 \item Run the LS algorithm for all connected areas
                                 \item Condenses topological information of their connected areas and distributes it to the backbone
                             \end{itemize}
@@ -1052,7 +1062,7 @@
             \ides{Privacy:} Companies do not want that their network topology gets public
             \ides{Policy Enforcement:} We want to follow certain policies
         \end{itemize}
-    \item Intra-Domain Routing protocols no not fulfil all requirements
+    \item Intra-Domain Routing protocols do not fulfil all requirements
         \begin{itemize}
             \ides{LS:} Does not fulfil any
             \ides{DV:} Only privacy is fulfilled
@@ -1063,8 +1073,10 @@
             \ides{Idea:} Advertise entire AS-level path instead of distances
             \ides{Path-vector routing}
                 \begin{itemize}
+                    \item Construct AS-paths as vectors
                     \item Advertise AS-path
                     \item ASes prepend themselves to the path when the path propagates announcements
+                    \item Loops are detected and omitted by routers
                 \end{itemize}
             \ides{Policies}
                 \begin{itemize}
@@ -1109,6 +1121,9 @@
                                     \item[1)] Providers transit traffic for their customers
                                     \item[2)] Peers do not transit traffic between each other
                                     \item[3)] Customers do not transit between their providers
+                                        \begin{itemize}
+                                            \item No valley routing
+                                        \end{itemize}
                                 \end{itemize}
                             \item Traffic is only forwarded if one makes money by doing so
                             \ides{Selection:} Which path should an AS use?
@@ -1213,7 +1228,7 @@
                                                 \begin{itemize}
                                                     \item Multi-Exit Discriminator
                                                     \item Global
-                                                    \item Set by the announce
+                                                    \item Set by the announcer
                                                     \item Indicates the relative proximity of a prefix with respect to the announcer
                                                     \item Closer proximity $\implies$ lower MED $\implies$ preferred
                                                     \item If often ignored by the sender
@@ -1238,7 +1253,7 @@
                                     \item shorter AS-PATH length
                                     \item lower MED
                                     \item select route learned from eBGP over iBGP
-                                    \item lower IGP metric to the next-hop
+                                    \item lower iBGP metric to the next-hop
                                         \begin{itemize}
                                             \item Based on some intra-domain routing protocol
                                         \end{itemize}
