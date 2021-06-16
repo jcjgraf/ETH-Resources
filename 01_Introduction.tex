@@ -1,6 +1,6 @@
 %! TEX root = ./main.tex
 
-\section{Computer Networks}
+\section{Introduction}
 \subsection{Components}
 \begin{itemize}
     \item Are composed of three basic components
@@ -12,7 +12,7 @@
                     \item Huge diversity of such devices
                 \end{itemize}
             \ides{Switches/Routers:} Forward data to the destination
-            \item{Links:} Interconnect switches/routers and end-systems
+            \ides{Links:} Interconnect switches/routers and end-systems
         \end{itemize}
     \ides{Last Mile:} Link which connects user to their ISP
         \begin{itemize}
@@ -21,7 +21,7 @@
                     \begin{itemize}
                         \item Used telephone lines
                             \begin{itemize}
-                                \item Cheap because lines were already there
+                                \ipro Cheap because lines were already there
                             \end{itemize}
                         \item Composed of:
                             \begin{itemize}
@@ -44,7 +44,7 @@
                         \item Asynchronous
                         \item Many households share the same connection
                             \begin{itemize}
-                                \item Vulnerable to hacks
+                                \icon Vulnerable to hacks
                             \end{itemize}
                     \end{itemize}
                 \ides{Enterprise Access}
@@ -58,7 +58,7 @@
                         \item Twisted pair copper
                         \item Symmetric (same speed in both direction)
                     \end{itemize}
-                \ides{Unsersea Cable}
+                \ides{Undersea Cable}
                     \begin{itemize}
                         \item Different hardening depending on the environment
                     \end{itemize}
@@ -97,44 +97,46 @@
         \begin{itemize}
             \ides{P:} Peak rate
             \ides{A:} Average rate
-            \ides{A/P:} Level of utilisation
+            \ides{A/P:} Level of utilisation in $\%$
         \end{itemize}
     \item Two main principles
-\end{itemize}
-
-\subsubsection{Circuit Switching/Reservation}
-\begin{itemize}
-    \item Reserve the bandwidth $P$ for all switches on the path in advance
-    \item Only required $A/P$
-    \item Good when $P/A$ small
-    \item Multiplexed at flow-level
-    \item Two different methods
-    \ides{Time-base:} Periodic timeslots which are reserved
-    \ides{Frequency-base:} Specific frequencies are reserved
-    \item Both methods can be combined
-    \ipro Predictable performance
-    \icon Does not routes around failed switches
+    \ides{Circuit Switching/Reservation}
         \begin{itemize}
-            \item Setup of new path required
+            \item Reserve the bandwidth $P$ for all switches on the path in advance
+            \item Only use $A/P\%$
+            \item Good when $P/A$ small
+            \item Multiplexed at flow-level
+            \item Two different methods
+            \ides{Time-base:} Periodic timeslots are reserved
+            \ides{Frequency-base:} Specific frequencies are reserved
+            \item Both methods can be combined
+            \ipro Predictable performance
+            \icon Does not routes around failed switches
+                \begin{itemize}
+                    \item Setup of new path required
+                \end{itemize}
+            \icon Long setup and take down of the link
+                \begin{itemize}
+                    \item Not suited for short communication
+                \end{itemize}
+            \item Used in phone networks
         \end{itemize}
-    \icon Long setup and take down of the link
+    \ides{Packet Switching/On-Demand}
         \begin{itemize}
-            \item Not suited for short communication
+            \item Send data when needed
+            \item Good when $P/A$ large
+            \item Multiplexed at packet-level
+            \ipro Efficient use of resource
+            \ipro Routes around failed switches
+            \icon Unpredictable performance
+            \icon Packets can clash
+                \begin{itemize}
+                    \item I.e. arrive at a switch/router at the same time
+                    \item Requires buffers
+                \end{itemize}
+            \icon Network can ``overflow'' (congestion)
+            \item Used by the internet
         \end{itemize}
-    \item Used in phone networks
-\end{itemize}
-
-\subsubsection{Packet Switching/On-Demand}
-\begin{itemize}
-    \item Send data when needed
-    \item Good when $P/A$ large
-    \item Multiplexed at packet-level
-    \ipro Efficient use of resource
-    \ipro Routes around failed switches
-    \icon Unpredictable performance
-    \icon Packets can clash
-    \icon Network can ``overflow'' (congestion)
-    \item Used by the internet
 \end{itemize}
 
 \subsection{Network Layer}
@@ -161,7 +163,7 @@
         \end{itemize}
     \ides{Transport Layer:}
         \begin{itemize}
-            \item Provides end-to-end delivery (reliable of not)
+            \item Provides end-to-end delivery (reliable or not)
             \item Transports \textit{segments}
         \end{itemize}
     \ides{Application Layer:}
@@ -182,7 +184,7 @@
 \begin{itemize}
     \item Network is unreliable, but try to make it as reliable as possible
         \begin{itemize}
-            \item Else we have many end-to-end retries
+            \item Else we have too many end-to-end retries
         \end{itemize}
     \item End-to-end check \textbf{always} necessary
     \ides{Fate-Sharing Principle:} Acceptable to loose state but only if the entity is lost too
@@ -194,79 +196,82 @@
 \subsection{Characteristics and Performance}
 \begin{itemize}
     \item Network is characterized by delay, loss and throughput
-\end{itemize}
-
-\subsubsection{Delay}
-\begin{itemize}
-    \item Total delay is sum of:
+    \ides{Delay}
         \begin{itemize}
-            \ides{Transmission Delay}
+            \item Total delay is sum of:
                 \begin{itemize}
-                    \item Time to push all bits onto the link
-                    \item $\text{transmission delay [sec]} = \frac{\text{packet size [\# bits]}}{\text{line bandwith [\# bits/sec]}}$
-                    \item Due to link properties
-                \end{itemize}
-            \ides{Propagation Delay}
-                \begin{itemize}
-                    \item Time for a bit to travel through the link
-                    \item $\text{Propagation delay [sec]} = \frac{\text{link length [m]}}{\text{propagation speed [m/sec]}}$
-                    \item Propagation speed is a fraction of $c$ (speed of light)
-                    \item Due to link properties
-                \end{itemize}
-            \ides{Processing Delay}
-                \begin{itemize}
-                    \item Time to process a request
-                    \item Due to traffic and switch internals
-                    \item Tiny; can be neglected
-                \end{itemize}
-            \ides{Queuing Delay}
-                \begin{itemize}
-                    \item Time a packet waits in the buffer for transmission
-                    \item Varies from packet to packet
+                    \ides{Transmission Delay}
                         \begin{itemize}
-                            \item Hard to predict
-                            \item Analysis requires statistical measures
+                            \item Time to push all bits onto the link
+                            \item $\text{Transmission delay [sec]} = \frac{\text{packet size [\# bits]}}{\text{line bandwith [\# bits/sec]}}$
+                            \item Due to link properties
                         \end{itemize}
-                    \item Depends on:
+                    \ides{Propagation Delay}
                         \begin{itemize}
-                            \item Arrival rate of new pack
-                            \item Transmission rate of outgoing link
-                            \item Traffic burstiness
+                            \item Time for a bit to travel through the link
+                            \item $\text{Propagation delay [sec]} = \frac{\text{link length [m]}}{\text{propagation speed [m/sec]}}$
+                            \item Propagation speed is a fraction of $c$ (speed of light)
+                            \item Due to link properties
                         \end{itemize}
-                    \ides{Analysis}
+                    \ides{Processing Delay}
                         \begin{itemize}
-                            \ides{a [packets/sec]:} average packet arrival rate
-                            \ides{R [bit/sec]:} transmission rate on outgoing link
-                            \ides{L [bit]:} fixed packet length
-                            \ides{La [bit/sec]:} average bits arrival rate
-                            \ides{La/R:} traffic intensity
-                            \item Queuing delay is exponential with increasing traffic intensity
-                            \item Diverges at $1$
-                            \item Increases fast if traffic is bursty
-                            \item Goal: operate far from critical point
+                            \item Time to process a request
+                            \item Due to traffic and switch internals
+                            \item Tiny
+                                \begin{itemize}
+                                    \item Can be neglected
+                                \end{itemize}
                         \end{itemize}
-                    \item Due to traffic and switch internals
+                    \ides{Queuing Delay}
+                        \begin{itemize}
+                            \item Time a packet waits in the buffer for transmission
+                            \item Varies from packet to packet
+                                \begin{itemize}
+                                    \item Hard to predict
+                                    \item Analysis requires statistical measures
+                                \end{itemize}
+                            \item Depends on:
+                                \begin{itemize}
+                                    \item Arrival rate of new pack
+                                    \item Transmission rate of outgoing link
+                                    \item Traffic burstiness
+                                \end{itemize}
+                            \ides{Analysis}
+                                \begin{itemize}
+                                    \ides{a [packets/sec]:} average packet arrival rate
+                                    \ides{R [bit/sec]:} transmission rate on outgoing link
+                                    \ides{L [bit]:} fixed packet length
+                                    \ides{La [bit/sec]:} average bits arrival rate
+                                    \ides{La/R:} traffic intensity
+                                    \item Queuing delay is exponential with increasing traffic intensity
+                                    \item Diverges at $1$
+                                    \item Increases fast if traffic is bursty
+                                    \item Goal: operate far from critical point
+                                \end{itemize}
+                            \item Due to traffic and switch internals
+                        \end{itemize}
+                \end{itemize}
+            \item Cannot predict which delay dominates
+        \end{itemize}
+    \ides{Loss}
+        \begin{itemize}
+            \item Queue can hold at most $N$ packets in their buffer
+                \begin{itemize}
+                    \item $N + 1$ packet gets dropped
+                \end{itemize}
+            \item Upper bound $= N \cdot L / R$
+            \item Loss may be acceptable or not
+                \begin{itemize}
+                    \item Can resend redundant information as $A, B, A \oplus B$
                 \end{itemize}
         \end{itemize}
-    \item Cannot predict which delay dominates
-\end{itemize}
-
-\subsubsection{Loss}
-\begin{itemize}
-    \item Queue can hold at most $N$ packets in their buffer
+    \ides{Throughput}
         \begin{itemize}
-            \item $N + 1$ packet gets dropped
+            \item Rate at which a host receives data
+            \item $\text{Average throughput [\# bits/sec]} = \frac{\text{data size [\# bits]}}{\text{transfer time [sec]}}$
+            \item End-to-end throughput is equal to the throughput of the bottleneck
+                \begin{itemize}
+                    \item I.e. the min of the throughputs of all links
+                \end{itemize}
         \end{itemize}
-    \item Upper bound $= N \cdot L / R$
-    \item Loss may be acceptable of not
-        \begin{itemize}
-            \item Can resend redundant information as $A, B, A \oplus B$
-        \end{itemize}
-\end{itemize}
-
-\subsubsection{Throughput}
-\begin{itemize}
-    \item Rate at which a host receives data
-    \item $\text{Average throughput [\# bits/sec]} = \frac{\text{data size [\# bits]}}{\text{transfer time [sec]}}$
-    \item End-to-end throughput is the throughput of the bottleneck
 \end{itemize}
