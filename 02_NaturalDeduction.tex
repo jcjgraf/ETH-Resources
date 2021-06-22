@@ -7,10 +7,10 @@
 
 \subsection{Natural Deduction}
 \begin{itemize}
-    \item Rules allow to derive from assumptions $A_1, \dots , A_n \vdash A$
+    \item \textbf{Rules} allow to derive from assumptions $A_1, \dots , A_n \vdash A$
     \item Derivations model trees
     \item Can construct derivation bottom-up or top-down
-    \item Proof is a derivation without assumptions in the root
+    \item \textbf{Proof} is a derivation without assumptions in the root
     \item Can be read as:
         \begin{itemize}
             \ides{Top-Down:} From the upper statement, the lower follows according to some rule
@@ -29,17 +29,17 @@
             \item $A \vee B \in \mathcal{L}_p \text{ if } A \in \mathcal{L}_p \text{ and } B \in \mathcal{L}_p$
             \item $A \to B \in \mathcal{L}_p \text{ if } A \in \mathcal{L}_p \text{ and } {L}_p \text{ and } B \in \mathcal{L}_p$
         \end{itemize}
+    \item Convention: $X$ stands for variables, $A, B$ for formulae
 \end{itemize}
 
-\subsubsection{Semitics}
+\subsubsection{Semantics}
 \begin{itemize}
-    \ides{Valuation:}
+    \ides{Valuation $\mathbf{\sigma}$:} Mapping assigning truth values to all variables
         \begin{itemize}
             \item $\sigma: \mathcal{V} \to \{True, False\}$
-            \item Assign truth values to all variables
             \ides{Valuations:} set of valuations
         \end{itemize}
-    \ides{Satisfiability:} Smallest relation $\models \ \subseteq \text{ Valuations } \times \mathcal{L}_p$ such that:
+    \ides{Satisfiability $\mathbf{\models}$:} Smallest relation $\subseteq \text{ Valuations } \times \mathcal{L}_p$ such that:
         \begin{itemize}
             \item $\sigma \models X \text{ if } \sigma(X) = \text{True}$
             \item $\sigma \models A \wedge B \text{ if } \sigma \models A \text{ and } \sigma \models B$
@@ -48,7 +48,7 @@
         \end{itemize}
     \ides{Satisfiable:} is formula $A \in \mathcal{L}_p$ if $\exists \sigma, \sigma \models A$
     \ides{Valid/Tautology:} is formula $A \in \mathcal{L}_p$ if $\forall \sigma, \sigma \models A$
-    \ides{Semantic Entailment:} $A_1, \dots , A_n \models A$ if $\forall \sigma$ it holds that, if $\sigma \models A_i, \ \forall i \in [1, n]$ then $\sigma \models A$
+    \ides{Semantic Entailment:} $A_1, \dots , A_n \models A$ if $\forall \sigma$ for which $\sigma \models A_i, \ \forall i \in [1, n]$ then $\sigma \models A$
 \end{itemize}
 
 \subsubsection{Requirements for Deductive System}
@@ -58,26 +58,71 @@
             \ides{Soundness:} If $H \vdash A$ can be derived, then $H \models A$
             \ides{Completeness:} If $H \models A$ then $H \vdash A$ can be derived
         \end{itemize}
+    \item Decidability is also a desired property
+        \begin{itemize}
+            \item I.e. is some formula satisfiable, tautology, satisfied by a valuation etc.
+        \end{itemize}
 \end{itemize}
 
 \subsubsection{Natural Deduction}
 \begin{itemize}
     \ides{Sequent:} Assertion of the form $A_1, \dots , A_n \vdash A$, where $A, A_i$ are propositional formulae
+        \begin{itemize}
+            \item If deduction system is sound, this is a semantic entailment
+        \end{itemize}
     \ides{Axiom:} Leaves of a derivation tree
+        \begin{itemize}
+            \item Starting point for derivation trees
+            \item \[\Inf[\color{blue}\text{axiom}]{\dots A, \hdots \vdash A}\]
+        \end{itemize}
     \item{Proof} of $A$ if root is $\vdash A$
+        \begin{itemize}
+            \item If deduction system is sound, then $A$ is a tautology
+        \end{itemize}
     \ides{Rules:}
         \begin{itemize}
+            \item Each rule must be sound
+                \begin{itemize}
+                    \item I.e. is must preserve semantic entailment
+                \end{itemize}
+            \item If each rule is sound, then the logic is sound
+                \ides{Safe} is rule if we only enlarge $\Gamma$ or we can get back the conclusion
+            \ides{And:}
+                \[
+                    \Inf[\color{blue}\wedge \text{-I}]{\Gamma \vdash A}{\Gamma \vdash B}{\Gamma \vdash A \wedge B} \quad
+                    \Inf[\color{red}\wedge \text{-EL}]{\Gamma \vdash A \wedge B}{\Gamma \vdash A} \quad
+                    \Inf[\color{red}\wedge \text{-ER}]{\Gamma \vdash A \wedge B}{\Gamma \vdash B}
+                \]
+            \ides{Or:}
+                \[
+                    \Inf[\color{red}\vee \text{-IL}]{\Gamma \vdash A}{\Gamma \vdash A \vee B} \quad
+                    \Inf[\color{red}\vee \text{-IR}]{\Gamma \vdash B}{\Gamma \vdash A \vee B} \quad
+                    \Inf[\vee \text{-E}]{\Gamma \vdash A \vee B}{\Gamma, A \vdash C}{\Gamma, B \vdash C}{\Gamma \vdash C}
+                \]
+            \ides{Implies:}
+                \[
+                    \Inf[\to \text{-I}]{\Gamma, A \vdash B}{\Gamma \vdash A \to B} \quad
+                    \Inf[\to \text{-E}]{\Gamma \vdash A \to B}{\Gamma \vdash A}{\Gamma \vdash B}
+                \]
             \ides{Negation:} Define $\neg A$ as $A \to \perp$
-        \end{itemize}
-
-    \todo{List rule and mark safe/unsafe}
-    \ides{Proof Strategy:} Apply safe rules first
-
-    \item Not all statements can be proven using these rules. In addition we need
-        \begin{itemize}
+                \[
+                    \Inf[\neg \text{-E}]{\Gamma \vdash \neg A}{\Gamma \vdash A}{\Gamma \vdash B}
+                \]
+            \ides{Falsity:}
+                \[
+                    \Inf[\perp \text{-E}]{\Gamma \vdash \perp}{\Gamma \vdash A}
+                \]
             \ides{tertium non datur:}
+                \[
+                    \Inf[\text{TND}]{\Gamma \vdash A \vee \neg A}
+                \]
             \ides{reductio ad adsurdum:}
+                \[
+                    \Inf[\text{RAA}]{\Gamma, \neg A \vdash \perp}{\Gamma \vdash A}
+                \]
         \end{itemize}
+    \todo{Make safe/unsafe}
+    \ides{Proof Strategy:} Apply safe rules first
 \end{itemize}
 
 \subsection{First-Order Logic}
@@ -102,16 +147,29 @@
     \item Quantifier extend as far as possible (EOL or closing outer bracket)
     \item Occurrence of a variable is either free or bound
         \begin{itemize}
+            \item Variable $x$ is bound in formula $A$ if it occurs within a subformula $B$ of $A$ of the form $Qx.B,\ Q \in \{\exists, \forall\}$
+            \item Names of bound variables are irrelevant
             \ides{$\alpha$-Conversion:} Rename bound variables
                 \begin{itemize}
                     \item Keep binding structure (association between quantifier and variables)
                     \item Prevent capture (renaming to the name of a free variable)
-                    \item Names of bound variables are irrelevant
                 \end{itemize}
             \item $x$ not free $\notimplies$ $x$ bound
                 \begin{itemize}
                     \item $x$ could also just not occur
                 \end{itemize}
+        \end{itemize}
+    \ides{Binding}
+        \begin{itemize}
+            \item[1)] $\neg$
+            \item[2)] $\wedge$
+            \item[3)] $\vee$
+            \item[4)] $\to$
+        \end{itemize}
+    \ides{Associativity}
+        \begin{itemize}
+            \ides{Right:} $\to$
+            \ides{Left:} $\wedge, \vee$
         \end{itemize}
 \end{itemize}
 
@@ -119,7 +177,7 @@
 \begin{itemize}
     \ides{Structure:} Pair $S = \langle U_S, I_S \rangle$
         \begin{itemize}
-            \item $U_S$ is a on-empty universe
+            \item $U_S$ is a non-empty universe
             \item $I_S$ is a mapping which assigns each predicate $p^n \in P$/formulae $f^n \in \mathcal{F}$ its truth value/definition
         \end{itemize}
     \ides{Interpretation:} Pair $\mathcal{I} = \langle S, v \rangle$
@@ -132,7 +190,7 @@
                 \item $\mathcal{I}(x) = v(x), x \in \mathcal{V}$
                 \item $\mathcal{I}(f(t_1, \dots t_n)) = f^S(\mathcal{I}(t_1), \dots , \mathcal{I}(t_n))$
             \end{itemize}
-    \ides{Satisfiability:} Smallest relation $\models \ \subseteq \text{ Interpretations } \times \text{ Form}$ such that:
+    \ides{Satisfiability $\models$:} Smallest relation $\subseteq \text{ Interpretations } \times \text{ Form}$ such that:
         \begin{itemize}
             \item $\langle S, v \rangle \models p(t_1, \dots , t_n) \text{ if } (\mathcal{I}(t_1), \dots , \mathcal{I}(t_n)) \in p^S$
             \item $\langle S, v \rangle \models \forall x. A \text{ if } \langle S, v[x \mapsto a] \rangle \models A, \forall a \in U_S$
@@ -147,35 +205,60 @@
     \item If $\langle S, v \rangle \models A$ and $A$ has no free variables, then $S \models A$
     \ides{Valid:} is $A$ if every suitable interpretation is a model
         \begin{itemize}
-            \item $\models A$
+            \ides{Notation:} $\models A$
         \end{itemize}
     \ides{Satisfiable:} if $\exists$ a model for $A$
-    \ides{Contradictory:} if $\not\exists$ a model for $A$
+    \ides{Contradictory:} if $\not\exists$ model for $A$
 \end{itemize}
 
 \subsubsection{Substitution}
 \begin{itemize}
     \item Replace in $A$ all occurrences of a free variable $x$ with some term $t$
-    \item $A[x/t]$
+    \ides{Notation:} $A[x/t]$
     \item Must avoid capture
         \begin{itemize}
-            \item Free variables of $t$ must stell be free in $A[x/t]$
+            \item Free variables of $t$ must still be free in $A[x/t]$
             \item May need to $\alpha$-convert first
+            \item It is ok if it clashes with another free variable
         \end{itemize}
 \end{itemize}
 
 \subsubsection{Natural Deduction}
-\todo{Add rules}
+\begin{itemize}
+    \item In addition to the propositional logic rules we have
+    \ides{Universal Quantifier:}
+        \[
+            \Inf[\forall \text{-I}][x \text{ not free in any formula in } \Gamma]{\Gamma \vdash A}{\Gamma \vdash \forall x. A} \quad
+            \Inf[\forall \text{-E}]{\Gamma \vdash \forall x. A}{\Gamma \vdash A[x / t]}
+        \]
+    \ides{Existential Quantifier:}
+        \[
+            \Inf[\exists \text{-I}]{\Gamma \vdash A[x/t]}{\Gamma \vdash \exists x. A} \quad
+            \Inf[\exists \text{-E}][x \text{ not free in any formula in } \Gamma \text{ or } B]{\Gamma \vdash \exists x. A}{\Gamma, A \vdash B}{\Gamma \vdash B}
+        \]
+\end{itemize}
 
 \subsection{Equality}
 \begin{itemize}
-    \item Is a logical symbol
-    \item Not just a predicate
+    \item Is a logical symbol and not just a predicate
     \ides{Extend language}
         \begin{itemize}
             \ides{Formula:} $t_1 = t_2 \in \text{Form if } t_1, t_2 \in \text{Term}$
             \ides{Satisfiability:} $\mathcal{I} \models t_1 \underbrace{=}_{\text{syntactic}} t_2 \text{ if } \mathcal{I}(I_1) \underbrace{=}_{\text{semantic}} \mathcal{I}(t_2)$
         \end{itemize}
-    \item Equality proofs are easier in liner way than natural deduction trees
-    \todo{Add rules}
+    \ides{Rules}
+        \begin{itemize}
+            \ides{Equivalence Relation:}
+                \[
+                    \Inf[\text{ref}]{\Gamma \vdash t = t} \quad
+                    \Inf[\text{sym}]{\Gamma \vdash t = s}{\Gamma \vdash s = t} \quad
+                    \Inf[\text{trans}]{\Gamma \vdash t = s}{\Gamma \vdash s = r}{\Gamma \vdash t = r}
+                \]
+            \ides{Congruence Relation:}
+                \begin{gather*}
+                    \Inf[\text{cong}_1]{\Gamma \vdash t_1 = s_1}{\dots}{\Gamma \vdash t_n = s_n}{\Gamma \vdash f(t_1, \dots, t_n) = f(s_1, \dots, s_n)} \\
+                    \Inf[\text{cong}_2]{\Gamma \vdash t_1 = s_1}{\dots}{\Gamma \vdash t_n = s_n}{\Gamma \vdash p(t_1, \dots, t_n)}{\Gamma \vdash p(s_1, \dots, s_n)}
+                \end{gather*}
+        \end{itemize}
+    \item Equality proofs are easier in linear way than using natural deduction trees
 \end{itemize}

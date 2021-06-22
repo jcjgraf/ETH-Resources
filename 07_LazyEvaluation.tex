@@ -2,6 +2,7 @@
 
 \section{Lazy Evaluation}
 \begin{itemize}
+    \item Only evaluate arguments when needed
     \item Substitute arguments without argument evaluation
     \item Some expressions are never evaluated
         \begin{itemize}
@@ -20,12 +21,12 @@
     \ides{Pattern Matching}
         \begin{itemize}
             \item Arguments evaluate as far as needed to determine pattern match
-            \item Start matching the top most pattern (I guess)
+            \item Start matching the top most pattern and on failure go to the next
         \end{itemize}
     \ides{Guards}
         \begin{itemize}
             \item Evaluate only what is required to check if guard is true
-            \item Start with top most guard
+            \item Start matching the top most guard and on failure go to the next
         \end{itemize}
     \ides{Local Definitions}
         \begin{itemize}
@@ -37,7 +38,7 @@
                 \begin{itemize}
                     \item Top-down evaluation in a syntax tree
                 \end{itemize}
-            \ides{Eager Evaluation:} Evaluate from left to right, but consider precedence
+            \item If on same level, evaluate from left to right or according to operator precedence
         \end{itemize}
 \end{itemize}
 

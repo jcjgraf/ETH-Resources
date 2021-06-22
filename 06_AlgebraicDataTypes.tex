@@ -1,0 +1,186 @@
+%! TEX root = ./main.tex
+
+\section{Algebraic Data Types}
+\begin{itemize}
+    \item Declare new data types suitable for the object being modeled
+    \item Algebraic means it is the smallest set
+    \ipro Less error prone
+\end{itemize}
+
+\subsection{Data Types}
+\begin{itemize}
+    \ides{Enumeration Types}
+        \begin{itemize}
+            \item Set of possible types
+                \begin{itemize}
+                    \item Each element is a \textit{type constructor}
+                \end{itemize}
+            \item Initiated by keyword \verb+data+
+            \item Constructors must have unique names
+            \item First letter of each constructor must be upper-case
+            \item \verb+data TypeName = Const1 | Const2 | Const3+
+            \item Function can use this type for pattern matching
+                \begin{itemize}
+                    \item \verb+func :: TypeName -> SomeOtherType+
+                \end{itemize}
+            \item Type class can have type variables as arguments
+                \begin{itemize}
+                    \item For polymorphism
+                    \item \verb+data TypeName a = ...+
+                \end{itemize}
+        \end{itemize}
+    \ides{Product Type}
+        \begin{itemize}
+            \item Consists of a type name and a set of ``attributes''
+                \begin{itemize}
+                    \item Attribute must be a certain type
+                        \begin{itemize}
+                            \item Giving an alias using \verb+type+ adds a layer of abstraction
+                        \end{itemize}
+                \end{itemize}
+            \item \verb+data TypeName = Name Attr1 Attr2+
+                \begin{itemize}
+                    \item \verb+type Attr1 = Sometype+
+                    \item \verb+TypeName+ and \verb+Name+ are often the same
+                \end{itemize}
+            \item Constructor is a function \verb+Name :: Attr1 -> Attr2 -> TypeName+
+            \item Functions can use this type for pattern matching
+                \begin{itemize}
+                    \item
+        \begin{verbatim}
+        func :: TypeName -> SomeOtherType
+        func (Name Attr1 Attr2) = ...
+        \end{verbatim}
+                \end{itemize}
+            \item Could use tuples instead of product types
+                \begin{itemize}
+                    \item \verb+data TypeName = (Attr1, Attr2)+
+                    \icon Makes arguments ambiguous
+                    \ipro Allows application of polymorphic functions like \verb+fst, zip...+
+                    \ipro Shorter definition
+                \end{itemize}
+        \end{itemize}
+    \ides{Enumeration and Product Types}
+        \begin{itemize}
+            \item Enumeration and product types can be combined
+            \item \verb+data TypeName = Name1 Attr1 | Name2 Attr1 Attr2+
+            \item Functions can use this type for pattern matching
+                \begin{itemize}
+                    \item
+        \begin{verbatim}
+        func :: TypeName -> SomeOtherType
+        func (Name1 Attr1)       = ...
+        func (Name2 Attr1 Attr2) = ...
+        \end{verbatim}
+                \end{itemize}
+        \end{itemize}
+\end{itemize}
+
+\subsection{Integration with Classes}
+\begin{itemize}
+    \item Default function are not applicable to our custom data types
+    \item Have to be explicitly created
+        \begin{itemize}
+            \item
+\begin{verbatim}
+data TypeName = Name1 Attr1 | Name2 Attr1 Attr2
+instance TypeClass TypeName where
+ ...
+\end{verbatim}
+        \end{itemize}
+    \item In some cases class instances can be automatically derived
+        \begin{itemize}
+            \item 
+\begin{verbatim}
+data TypeName = Name1 Attr1 | Name2 Attr1 Attr2
+                deriving(TypeClass1, TypeClass2, TypeClass3)
+\end{verbatim}
+        \end{itemize}
+\end{itemize}
+
+\subsection{Recursive Types}
+\begin{itemize}
+    \item Defined using recursive data types
+        \begin{itemize}
+            \item \verb+data Expr = Lit Int | Add Expr Expr+
+        \end{itemize}
+    \item Are evaluated recursively
+        \begin{itemize}
+            \item
+\begin{verbatim}
+eval :: Expr -> Int
+eval (Lit n) = n
+eval (Add a b) = (eval a) + (eval b)
+\end{verbatim}
+        \end{itemize}
+    \ides{Example:} Trees
+        \begin{itemize}
+            \item Are a prime example
+            \item Can describe many data structures
+            \item
+        \begin{verbatim}
+        data Tree t = Leaf | Node t (Tree t) (Tree t)
+                    deriving (Eq, Ord, Show)
+        \end{verbatim}
+        \end{itemize}
+\end{itemize}
+
+\subsection{Algebraic Types and Type Classes}
+\begin{itemize}
+    \item Algebraic types are \textit{fist class} citizens
+        \begin{itemize}
+            \item Fully compatible with polymorphism and type classes
+        \end{itemize}
+    \item Standard types are algebraic data types defined in the prelude
+    \ipro Make program simpler to read and understand
+    \ipro Allow reusability
+\end{itemize}
+
+\subsection{Correctness}
+\begin{itemize}
+    \ides{Natural Number}
+        \begin{itemize}
+            \item \verb+data Nat = Zero | Succ Nat deriving (Eq, Ord, Show)+
+            \item Isomorphic to \verb+{Zero, Succ Zero, Succ (Succ Zero), ...}+
+            \item Build step by step
+            \item Allows structural induction proofs
+        \end{itemize}
+    \ides{Lists}
+        \begin{itemize}
+            \item \verb+data L t = Nil | Cons t (L t)+
+            \item Elements in $L \ t$ are build in steps
+                \begin{itemize}
+                    \item $\{\text{Nil}\}$
+                    \item $\{\text{Cons } a \text{ Nil} \in L \ t \mid a \in t\}$
+                    \item $\{\text{Cons } b (\text{Cons } a \text{ Nil}) \in L \ t \mid a,b \in t\}$
+                    \item $\vdots$
+                \end{itemize}
+            \item $l \in L \ t$ iff $l$ appears in some of the construction step
+            \item Rule
+                \[
+                    \Inf[\text{IND on List}][y, ys \text{ not free in } \Gamma, P]{\Gamma \vdash P[xs / \text{Nil}]}{\Gamma, P[xs / ys] \vdash P[xs / \text{Cons } y \ ys]}{\Gamma \vdash \forall xs \in L\ t. P}
+                \]
+        \end{itemize}
+    \ides{Trees}
+        \begin{itemize}
+            \item \verb+data Tree t = Leaf | Node t (Tree t) (Tree t)+
+            \item Elements in $Tree \ t$ are build in steps
+                \begin{itemize}
+                    \item $\{\text{Leaf}\}$
+                    \item $\{\text{Node } a \text{ Leaf Leaf} \in Tree \ t \mid a \in t\}$
+                    \item $\vdots$
+                    \item Trees in step $i$ are of form $\text{Node }a \ l \ r$ where $a \in t$, and $l$ and $r$ were constructed in the previous step
+                \end{itemize}
+            \item $s \in Tree \ t$ iff $s$ appears in some of the construction step
+            \item Rule
+                \[
+                    \Inf[\text{IND on Tree}][a, l, r \text{ not free in } \Gamma, P]{\Gamma \vdash P[x / \text{Leaf}]}{\Gamma, P[x / l], P[x / r] \vdash P[x / \text{Node } a \ l \ r]}{\Gamma \vdash \forall x \in \text{Tree } t. P}
+                \]
+        \end{itemize}
+    \ides{General Idea}
+        \begin{itemize}
+            \item Adopt induction to the structure of the algebraic data type
+            \item Proof non-recursively step $0$
+            \item Proof recursively how to get from step $i - 1$ to $i$
+        \end{itemize}
+\end{itemize}

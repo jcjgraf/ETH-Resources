@@ -7,14 +7,14 @@
         \begin{itemize}
             \item Is a new type constructor
         \end{itemize}
-    \ides{Empty List:} \verb+[] :: [T]+ is of type \verb+[T]+
+    \ides{Empty List:} \verb+[] :: [T]+
     \ides{Non-Empty List:} \verb+(x : xs) :: [T]+ iff \verb+x :: T+ and \verb+xs :: [T]+
         \begin{itemize}
             \ides{Cons Operator:} \verb+:+ prepends an element to a list
                 \begin{itemize}
                     \ides{Concatenate:} \verb|++| concatenates two lists
                 \end{itemize}
-            \item \verb+[a, b, c] = a : (b : (c : []))+ can be seen as a tree
+            \item \verb+[a, b, c]+ is syntactic sugar for \verb+a : (b : (c : []))+
         \end{itemize}
     \item \verb+[n, p .. m]+ constructs a list from \verb+n+ to \verb+m+ with step \verb+p - n+
         \begin{itemize}
@@ -22,42 +22,9 @@
             \item Can be seen as, ``First element is \verb+n+, second element is \verb+p+, continue like this till \verb+m+''
             \item \verb+m+ is not necessarily included
         \end{itemize}
-\end{itemize}
-
-\subsection{Pattern Matching}
-\begin{itemize}
-    \item Is used for:
+    \item String is a list of chars
         \begin{itemize}
-            \item Check if argument has proper type
-            \item Bind values to variables
-        \end{itemize}
-    \ides{Pattern}
-        \begin{itemize}
-            \item Inductively defined
-            \item Pattern are
-                \begin{itemize}
-                    \item Constants
-                    \item Variables
-                    \item Wild Card (\verb+_+)
-                    \item Tuples $(p_1, p_2, ... , p_k)$ where $p_i$ is a pattern
-                    \item Non-Empty Lists $(p_1 : p_2)$ where $p_i$ is a pattern
-                \end{itemize}
-            \item Must be \textbf{linear}
-                \begin{itemize}
-                    \item I.e. each variable cannot occur more than once
-                    \item Does not count for wild card
-                \end{itemize}
-        \end{itemize}
-    \ides{Pattern Matching}
-        \begin{itemize}
-            \item Pattern \verb+p+ matches term \verb+a+ by the following recursion on \verb+p+:
-                \begin{itemize}
-                    \ides{Constant:} \verb+p = c+ if \verb+c = a+
-                    \ides{Variable:} \verb+p = x+ always succeeds with binding \verb+x = a+
-                    \ides{Wild Card:} \verb+p = _+ always success but without binding
-                    \ides{Tuple:} $p = (p_1, \dots , p_k)$ succeeds if $a = (a_1, \dots , a_k)$ and $p_i$ matches $a_i \quad \forall i \in \{1, \dots , k\} $
-                    \ides{Non-Empty List:} $p = (p_1 : p_2)$ succeeds if $a = (a_1 : a_2)$ and $p_i$ matches $a_i \quad \forall i \in \{1, 2\}$
-                \end{itemize}
+            \item \verb+['a', 'b'] == "ab"+
         \end{itemize}
 \end{itemize}
 

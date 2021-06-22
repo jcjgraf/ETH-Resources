@@ -6,7 +6,10 @@
         \begin{itemize}
             \item Which cause a runtime error
         \end{itemize}
-    \item Classification of expressions is undecidable
+    \item Classification (good/bad) of expressions is undecidable
+        \begin{itemize}
+            \item Type systems are conservative and only allow what they are sure is good
+        \end{itemize}
     \item Type checker should offer:
         \begin{itemize}
             \item quick, decidable, static analysis
@@ -33,32 +36,63 @@
         \end{itemize}
     \ides{Typing}
         \begin{itemize}
-            \item Set of types $\tau :: = \underbrace{\mathcal{V}_{\tau}}_{\text{Set of Variables}} \mid \text{Bool} \mid \text{Int} \mid \underbrace{(\tau, \tau)}_{\text{Pair Constructor}} \mid \underbrace{(\tau \to \tau)}_{\text{Function Constructor}}$
+            \item Set of types $\tau :: = \underbrace{\mathcal{V}_{\tau}}_{\text{Set of Type Variables } (a, b, \dots)} \mid \text{Bool} \mid \text{Int} \mid \underbrace{(\tau, \tau)}_{\text{Pair Constructor}} \mid \underbrace{(\tau \to \tau)}_{\text{Function Constructor}}$
             \ides{Typing Judgement:} $\Gamma \vdash t :: \tau$
                 \begin{itemize}
-                    \ides{$\Gamma$:} Set of bindings mappings from variables to types)
+                    \ides{$\Gamma$:} Set of bindings mappings from variables to types
                     \ides{$t$:} Term
                     \ides{$\tau$:} Type
-                    \item ``Based on the assignments $\Gamma$, term $t$ is of type $\tau$''
+                    \item ``Given assignments $\Gamma$, term $t$ is of type $\tau$''
                 \end{itemize}
             \ides{Rules}
-                \todo{Add mini Haskell rules}
+                \begin{itemize}
+                    \ides{Basic:}
+                        \[
+                            \Inf[\text{Var}]{\dots, x : \tau, \hdots \vdash x :: \tau} \quad
+                            \Inf[\text{Abs}]{\Gamma, x : \sigma \vdash t :: \tau}{\Gamma \vdash (\lambda x. t) :: \sigma \to \tau} \quad
+                            \Inf[\text{App}]{\Gamma \vdash t_1 :: \sigma \to \tau}{\Gamma \vdash t_2 :: \sigma}{\Gamma \vdash (t_1 \ t_2) :: \tau}
+                        \]
+                    \ides{Base Types:}
+                        \[
+                            \Inf[\text{int}]{\Gamma \vdash n :: \text{Int}} \quad
+                            \Inf[\text{True}]{\Gamma \vdash \text{True} :: \text{Bool}} \quad
+                            \Inf[\text{False}]{\Gamma \vdash \text{False} :: \text{Bool}} 
+                        \]
+                    \ides{Operations} $\text{op} \in \{+, *\}$
+                        \[
+                            \Inf[\text{iszero}]{\Gamma \vdash t :: \text{Int}}{\Gamma \vdash (\text{iszero } t) :: \text{Bool}}\quad
+                            \Inf[\text{BinOp}]{\Gamma \vdash t_1 :: \text{Int}}{\Gamma \vdash t_2 :: \text{Int}}{\Gamma \vdash (t_1 \text{ op } t_2) :: \text{Int}}
+                        \]
+                    \ides{Conditional:}
+                        \[
+                            \Inf[\text{if}]{\Gamma \vdash t_0 :: \text{Bool}}{\Gamma \vdash t_1 :: \tau}{\Gamma \vdash t_2 :: \tau}{\Gamma \vdash (\text{if } t_0 \text{ then } t_1 \text{ else } t_2) :: \tau}
+                        \]
+                    \ides{Tuples:}
+                        \[
+                            \Inf[\text{Tuple}]{\Gamma \vdash t_1 :: \tau_1}{\Gamma \vdash t_2 :: \tau_2}{\Gamma \vdash (t_1, t_2) :: (\tau_1, \tau_2)} \quad
+                            \Inf[\text{fst}]{\Gamma \vdash t :: (\tau_1, \tau_2)}{\Gamma \vdash (\text{fst } t) :: \tau_1} \quad
+                            \Inf[\text{snd}]{\Gamma \vdash t :: (\tau_1, \tau_2)}{\Gamma \vdash (\text{snd } t) :: \tau_2}
+                        \]
+                \end{itemize}
         \end{itemize}
     \ides{Type Inference}
         \begin{itemize}
-            \item Given term $t$ that is its type?
+            \item Given term $t$ what is its type?
             \item Algorithms:
                 \begin{enumerate}
-                    \item Start with judgement $\vdash t :: \tau_0$ where $\tau_0$ is the type variable and $t$ is the expression whose type we want to determine.
-                    \item Build derivation tree bottom-up by applying rules and collect constraints. Introduce fresh type variables if need.
-                    \item Solve constraints to get possible types.
+                    \item Start with judgement $\vdash t :: \tau_0$ where $\tau_0$ is the type variable and $t$ is the expression whose type we want to determine
+                    \item Build derivation tree bottom-up by applying rules and collect constraints. Introduce fresh type variables if need
+                    \item Solve constraints to get possible types
                 \end{enumerate}
             \item Some terms are untypeable
                 \begin{itemize}
-                    \item Type inference fails to build inference tree or solve constraints.
+                    \item Type inference fails to build inference tree or constraints are unsolvable
                 \end{itemize}
         \end{itemize}
     \ides{Type Proof}
+        \begin{itemize}
+            \item Given term $t$ and type $\tau$. Prove that $t :: \tau$
+        \end{itemize}
     \todo{Add Type Proof section}
     \ides{Self Application}
         \begin{itemize}
@@ -80,11 +114,16 @@
             \item Set of types
             \item Set of allowed functions on these types
         \end{itemize}
-    \ides{Monomorphic:} restricted to a single type (base type)
-    \ides{Polymorphic:} restricted by the type set (a type class)
-    \ides{Definition}
+    \item Allow restricted for of type generalisation
+    \ides{Monomorphic:} Restricted to a single type (base type)
+    \ides{Polymorphic:} Restricted by the type set (a type class)
+\end{itemize}
+
+\subsubsection{Type Class}
+\begin{itemize}
+    \item Definition
         \begin{itemize}
-            \ides{Name:} upper-case (I guess)
+            \ides{Name:} upper-case
             \ides{Signature:} Function names with their type
                 \begin{itemize}
                     \item Required to be implemented by instances of this type
@@ -108,8 +147,11 @@ class Eq a where -- Class Name
         \begin{itemize}
             \item Application of a type class to a certain type
             \item Elements of a class are instances
-            \item Keyword \verb+instance+ builds instances by \textit{interpreting} signature functions
-            \item Requires defining all signatures and optionally, overwrite default definitions
+            \item Interprets signature functions
+                \begin{itemize}
+                    \item Requires defining all signatures and optionally, overwrite default definitions
+                \end{itemize}
+            \item Done using keyword \verb+instance+
             \item 
 \begin{verbatim}
 instance Eq Bool where
@@ -117,8 +159,10 @@ instance Eq Bool where
     False == False = True
     _ == _         = False
 \end{verbatim}
-            \item Can be recursive. If \verb+t+ is of type \verb+Eq+ then so is \verb+[Eq]+
+            \item Can be recursive
                 \begin{itemize}
+                    \item If \verb+t+ is of type \verb+Eq+ then so is \verb+[Eq]+
+                    \item I.e. membership depends on membership of other type
                     \item 
 \begin{verbatim}
 instance Eq t => Eq [t]  where
@@ -133,13 +177,14 @@ instance Eq t => Eq [t]  where
 
 \subsubsection{Derived Classes and Class Hierarchies}
 \begin{itemize}
-    \item Type classes can build on top of other type classes.
-    \item If \verb+a+ belongs to the child type it must also belong to the parent type
+    \item Type classes can build on top of other type classes
+    \item If \verb+a+ belongs to the child type, is must also belong to the parent type
     \item All function of the parent type are inherited and some new ones (may be) added
     \item
 \begin{verbatim}
 class Eq a => Ord a where... 
 \end{verbatim}
+    \item Arbitrarily nested classes can be created
 \end{itemize}
 
 \subsection{Overloading}

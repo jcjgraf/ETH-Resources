@@ -8,17 +8,18 @@
     \item Functions are actually values themselves
     \item There is no state
     \ides{Referential Transparency:} Not state $\implies$ expression \textbf{always} evaluate to the same value
+    \item No global variables
+    \item Recursion instead of iteration
     \ipro Easy to parallelize
     \ipro Easy to analyze
-    \item Recursion instead of iteration
     \ipro Flexible type system
 \end{itemize}
 
 \subsection{Haskell}
 \begin{itemize}
-    \ides{Lazy Evaluation:} expression evaluates always leftmost and outermost expression
+    \ides{Lazy Evaluation:} expression evaluates always outermost and leftmost expression
         \begin{itemize}
-            \item But pattern matching forces evaluation
+            \item But pattern matching and some other functions force evaluation
         \end{itemize}
 \end{itemize}
 
@@ -27,15 +28,50 @@
     \ides{Function}
         \begin{itemize}
             \item Function name and arguments start with lower-case
-            \item Contains several cases (\textit{guards})
+            \item Expression after the equal sign is the return value
+            \ides{Pattern Matching}
+                \begin{itemize}
+                    \item Is used for:
+                        \begin{itemize}
+                            \item Check if argument has proper type
+                            \item Bind values to variables
+                        \end{itemize}
+                    \ides{Pattern}
+                        \begin{itemize}
+                            \item Inductively defined
+                            \item Pattern are
+                                \begin{itemize}
+                                    \item Constants
+                                    \item Variables
+                                    \item Wild Card (\verb+_+)
+                                    \item Tuples $(p_1, p_2, ... , p_k)$ where $p_i$ is a pattern
+                                    \item Non-Empty Lists $(p_1 : p_2)$ where $p_i$ is a pattern
+                                \end{itemize}
+                            \item Must be \textbf{linear}
+                                \begin{itemize}
+                                    \item I.e. each variable cannot occur more than once
+                                    \item Does not count for wild card
+                                \end{itemize}
+                        \end{itemize}
+                    \ides{Pattern Matching}
+                        \begin{itemize}
+                            \item Pattern matching is used to determine right definition
+                            \item Pattern \verb+p+ matches term \verb+a+ by the following recursion on \verb+p+:
+                                \begin{itemize}
+                                    \ides{Constant:} \verb+p = c+ if \verb+c = a+
+                                    \ides{Variable:} \verb+p = x+ always succeeds with binding \verb+x = a+
+                                    \ides{Wild Card:} \verb+p = _+ always success but without binding
+                                    \ides{Tuple:} $p = (p_1, \dots , p_k)$ succeeds if $a = (a_1, \dots , a_k)$ and $p_i$ matches $a_i \quad \forall i \in \{1, \dots , k\} $
+                                    \ides{Non-Empty List:} $p = (p_1 : p_2)$ succeeds if $a = (a_1 : a_2)$ and $p_i$ matches $a_i \quad \forall i \in \{1, 2\}$
+                                \end{itemize}
+                            \item Forces evaluation (no longer lazy evaluation)
+                            \item Can define the same function multiple times but with different patterns
+                        \end{itemize}
+                \end{itemize}
+            \item May Contain several cases (\textit{guards})
                 \begin{itemize}
                     \item Boolean expression
-                \end{itemize}
-            \item Expression after the equal sign is the return value
-            \item Pattern matching is used to determine right definition
-                \begin{itemize}
-                    \item Pattern are variables, constants, tuples etc.
-                    \item Forces evaluation (no longer lazy evaluation)
+                    \item \verb+otherwise+ is the default case
                 \end{itemize}
             \ides{Scope}
                 \begin{itemize}
@@ -43,7 +79,7 @@
                     \item Order of declaration does not matter
                     \item \verb+let <local func, var, const decl.> in <expr. using these defs>+
                         \begin{itemize}
-                            \item More powerful that \verb+where+
+                            \item More powerful than \verb+where+
                         \end{itemize}
                     \item \verb+where <local func, var, const decl.>+
                         \begin{itemize}
