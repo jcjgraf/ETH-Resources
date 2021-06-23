@@ -1,3 +1,65 @@
 \ProvidesPackage{math}
 
+% bolds math symbols
+\newcommand{\bs}{\boldsymbol}
+% Shortcut to write caligraphic math symbols
+\newcommand{\mc}{\mathcal}
+% norm
+\newcommand{\norm}[1]{\left| \!\:\! \left| #1 \right| \!\:\! \right|}
+
+% some shortcuts
+\newcommand{\ds}{\displaystyle}
+\newcommand{\arr}{\rightarrow}
+\newcommand{\Arr}{\Rightarrow}
+\newcommand{\LRA}{\Leftrightarrow}
+\newcommand{\LLRA}{\Longleftrightarrow}
+\newcommand{\nop}[1]{}
+\newcommand{\rank}{\operatorname{rank}}
+\newcommand{\cond}{\operatorname{cond}}
+\newcommand{\grad}{\operatorname{grad}}
+\newcommand{\argmin}{\mathop{\mathrm{argmin}}}
+\newcommand{\argmax}{\mathop{\mathrm{argmax}}}
+\newcommand{\mx}{\mathop{\mathrm{max}}}
+\newcommand{\bigcupdot}{\bigcup \hspace{-0.35cm} \cdot}
+
 \newcommand{\notimplies}{\;\not\!\!\!\implies}
+
+% stuff for integrals
+\newcommand{\intl}{\int\limits}
+\newcommand{\rmd}{\mathrm{d}}
+\newcommand{\rmD}{\mathrm{D}}
+
+% number sets
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\K}{\mathbb{K}}
+\newcommand{\M}{\mathbb{M}}
+
+% big-o notation
+\newcommand{\bigO}{\mathcal{O}}
+
+% algorithms
+\usepackage{algorithmic}
+\usepackage{algorithm}
+\algsetup{linenodelimiter=}
+
+% listings
+\definecolor{darkgreen}{RGB}{0,127,14}
+\definecolor{purple}{RGB}{75,0,130}
+\usepackage{listings}
+
+\usepackage{listings}
+\usepackage{xcolor}
+\lstset { %
+    language=Pascal,
+    backgroundcolor=\color{black!5}, % set backgroundcolor
+    basicstyle=\footnotesize,% basic font setting
+    escapeinside={!}{!},
+    tabsize=2,
+}
+
+\def\doubleunderline#1{\underline{\underline{#1}}}
