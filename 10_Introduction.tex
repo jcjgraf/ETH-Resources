@@ -1,0 +1,104 @@
+%! TEX root = ./main.tex
+
+\section{Introduction}
+\begin{itemize}
+    \ides{Transitional SE}
+        \begin{itemize}
+            \item Documentation is incomplete
+            \item Testing is good, but
+                \begin{itemize}
+                    \icon They are insufficient
+                    \icon Detect concurrency issues is e.g. very difficult
+                    \icon Impossible to cover all instances
+                \end{itemize}
+        \end{itemize}
+    \ides{Formal Methods:} Mathematical approaches to software and system development which support the rigorous specification, design, and verification of computer systems
+        \begin{itemize}
+            \item Programs, programming languages, designs etc. are mathematical objects and can be treated by mathematical methods
+            \item Used for
+                \begin{itemize}
+                    \item Proving program properties
+                    \item Formalizing language semantics
+                    \item Proving language properties
+                \end{itemize}
+            \ides{Steps:}
+                \begin{itemize}
+                    \ides{Specification:}
+                        \begin{itemize}
+                            \ides{System Design:} What does the system look like?
+                            \ides{Requirements:} What should the system do?
+                            \ides{Assumptions:} What do we assume?
+                                \begin{itemize}
+                                    \item E.g. an attacker cannot break a encryption
+                                \end{itemize}
+                            \item Described in mathematical notation
+                        \end{itemize}
+                    \ides{Verification:}
+                        \begin{itemize}
+                            \ides{Validate Specifications:} Do the specifications make sense?
+                            \ides{Proof:} Requirements are fulfilled under the specifications and requirements
+                                \begin{itemize}
+                                    \item Often simple but tedious
+                                \end{itemize}
+                            \item Done using format logic
+                                \begin{itemize}
+                                    \ides{Deduction:} Proof system
+                                    \ides{Algorithmic:} State space exploration or model checking
+                                \end{itemize}
+                        \end{itemize}
+                \end{itemize}
+            \ides{State Space Exploration:} Enumerate all possible states
+                \begin{itemize}
+                    \item Done very efficiently
+                    \item Check for deadlocks
+                    \icon Problem space may be very large
+                        \begin{itemize}
+                            \item Limit to important properties
+                        \end{itemize}
+                    \icon Gives weaker correctness guarantees than proofs
+                \end{itemize}
+            \item Pro/cons
+                \begin{itemize}
+                    \ipro Strong guarantees
+                        \begin{itemize}
+                            \ipro Proof for all possible constellations
+                            \ipro Unambiguous documentation
+                        \end{itemize}
+                    \icon Writing (correct) specifications is hard
+                    \icon Many properties are undecidable
+                        \begin{itemize}
+                            \item Tools are limited
+                        \end{itemize}
+                    \icon Give often false positive or false negative
+                    \icon FM specialist required
+                    \icon FM application is expensive
+                    \item FM complements testing
+                        \begin{itemize}
+                            \item We need tests for
+                                \begin{itemize}
+                                    \item Validate specifications
+                                    \item Test properties not proven
+                                    \item Detect errors in environment
+                                \end{itemize}
+                            \item FM aids tests
+                                \begin{itemize}
+                                    \item Derive test cases and test data from specifications
+                                    \item Increase test coverage
+                                    \item Replaces tests
+                                \end{itemize}
+                        \end{itemize}
+                \end{itemize}
+        \end{itemize}
+    \ides{Used For}
+        \begin{itemize}
+            \item Verification of design
+            \item Analysis of safety-crucial software
+            \item Detection of security vulnerabilities
+            \item Enforce usage of API and/or protocols
+            \item Analysis of security protocols
+            \item Verification of system implementations
+            \item Design of programming languages
+            \item Implementation of programming languages
+            \item Reasoning about programs
+        \end{itemize}
+\end{itemize}
