@@ -40,6 +40,21 @@
                 \end{itemize}
             \item If on same level, evaluate from left to right or according to operator precedence
         \end{itemize}
+    \ides{Recipe:} Evaluate \verb+t1 t2+ lazily
+        \begin{itemize}
+            \item Evaluate \verb+t1+
+            \item The argument \verb+t2+ is substituted in \verb+t1+ without being evaluated
+            \item No evaluation inside lambda abstractions
+                \begin{itemize}
+                    \item I.e. in an abstraction \verb+(\t -> f t)+, (where \verb+f+ is some arbitrary term), then \verb+f t+ is not evaluated
+                \end{itemize}
+        \end{itemize}
+    \ides{Recipe:} Evaluate \verb+t1 t2+ eagerly
+        \begin{itemize}
+            \item Evaluate \verb+t1+
+            \item \verb+t2+ is evaluated prior to substitution in \verb+t1+
+            \item Evaluation is carried out inside lambda abstractions
+        \end{itemize}
 \end{itemize}
 
 \subsection{Application}
