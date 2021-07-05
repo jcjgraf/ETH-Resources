@@ -10,7 +10,7 @@
                 \begin{itemize}
                     \item Create diagram from ``real world''
                     \item We consider Entity Relation (ER) Model in this course
-                    \item Specified all DB instances that are valid/allowed in our application
+                    \item Specifies all DB instances that are valid/allowed in our application
                 \end{itemize}
             \ides{Logical Modeling:} Map concepts to a concrete logical representation
                 \begin{itemize}
@@ -28,7 +28,7 @@
     \ides{Formal Semantics}
         \begin{itemize}
             \item Diagram defines valid DB instances
-            \item All values can take $\mc{D} = \mc{B} \cup \Delta$
+            \item All values we can take $\mc{D} = \mc{B} \cup \Delta$
                 \begin{itemize}
                     \ides{$\mathbf{\mc{B}}$:} Concrete values
                         \begin{itemize}
@@ -65,7 +65,7 @@
                 \end{itemize}
         \end{itemize}
     \ides{Building Blocks}
-        \begin{description}
+        \begin{itemize}
             \ides{Entity:} Instance of an entity set which is distinguishable from other instances of the same set
             \ides{Entity Set:} Set of entities of the same "type"
                 \begin{itemize}
@@ -85,46 +85,46 @@
                         \end{itemize}
                 \end{itemize}
             \ides{Key:} Minimal set of attributes which uniquely identify an entity in the entity set
-                \begin{description}
+                \begin{itemize}
                     \ides{Candidate Key:} All possible sets of keys
                     \ides{Primary Key:} One selected key
                         \begin{itemize}
                             \item Every entity set must have one
                             \item Underlined
                         \end{itemize}
-                \end{description}
-        \end{description}
+                \end{itemize}
+        \end{itemize}
     \ides{Cardinality}
         \begin{itemize}
             \item Two main notations
             \ides{N/M-Notation}
-            \begin{description}
-                \ides{One to One (1/1):}
-                    \begin{itemize}
-                        \item $A$ is in a one to one relationship with $B$ if:
-                            \begin{itemize}
-                                \item $1 A$ entity can only have one relation with a $B$ entity and
-                                \item $1 B$ entity can only have one relation with an $A$ entity
-                            \end{itemize}
-                    \end{itemize}
-                \ides{One to Many (1/N):}
-                    \begin{itemize}
-                        \item $A$ is in a one to may relation with $B$ if:
-                            \begin{itemize}
-                                \item $1 A$ can have relationships with multiple $B$ entities and
-                                \item $1 B$ can only have one relation with an $A$ entity
-                            \end{itemize}
-                    \end{itemize}
-                \ides{Many to One (N/1):}
-                \ides{Many to Many (N/M):}
-                    \begin{itemize}
-                        \item $A$ is in a many to many relation with $B$ if:
-                            \begin{itemize}
-                                \item $1 A$ entity can have relationships with multiple $B$ entities and
-                                \item $1 B$ entity can have relationships with multiple $A$ entities
-                            \end{itemize}
-                    \end{itemize}
-            \end{description}
+                \begin{itemize}
+                    \ides{One to One (1/1):}
+                        \begin{itemize}
+                            \item $A$ is in a one to one relationship with $B$ if:
+                                \begin{itemize}
+                                    \item $1 A$ entity can only have one relation with a $B$ entity and
+                                    \item $1 B$ entity can only have one relation with an $A$ entity
+                                \end{itemize}
+                        \end{itemize}
+                    \ides{One to Many (1/N):}
+                        \begin{itemize}
+                            \item $A$ is in a one to may relation with $B$ if:
+                                \begin{itemize}
+                                    \item $1 A$ can have relationships with multiple $B$ entities and
+                                    \item $1 B$ can only have one relation with an $A$ entity
+                                \end{itemize}
+                        \end{itemize}
+                    \ides{Many to One (N/1):}
+                    \ides{Many to Many (N/M):}
+                        \begin{itemize}
+                            \item $A$ is in a many to many relation with $B$ if:
+                                \begin{itemize}
+                                    \item $1 A$ entity can have relationships with multiple $B$ entities and
+                                    \item $1 B$ entity can have relationships with multiple $A$ entities
+                                \end{itemize}
+                        \end{itemize}
+                \end{itemize}
             \ides{(min, max)-Notation}
                 \begin{itemize}
                     \item For a relation we give the min and the max value of relations one entity can have
@@ -145,14 +145,20 @@
             \item Is a $1/M$ relationship
         \end{itemize}
     \ides{Generalisation}
-        \begin{description}
+        \begin{itemize}
             \item Represent that a entity set is is an instance of another entity set
             \item Entity $A$ \textbf{is\_a} entity of $B$
                 \begin{itemize}
+                    \item $A \subseteq B$
                     \item Draw an arrow from $A$ to $B$
                     \item $A$ shares $B$s attributes and primary key
+                    \item Are not enforced
+                        \begin{itemize}
+                            \item I.e. possible that $B \not\in A$
+                        \end{itemize}
+                    \item If $A \textbf{is\_a} B$ and $C \textbf{is\_a} B$ it is possible that $C \in A$ and $C \in B$
                 \end{itemize}
-        \end{description}
+        \end{itemize}
     \item There are many other flavours of ER
     \ides{Design Principles}
         \begin{itemize}
@@ -174,8 +180,8 @@
             \ides{Entity Sets:} Become relations
             \ides{Attributes:} Become attributes of the relation
             \ides{Relationship:}
-                \begin{description}
-                    \ides{Without Cardinality Constrait (or N:M):}
+                \begin{itemize}
+                    \ides{Without Cardinality Constrain (or N:M):}
                         \begin{itemize}
                             \item Become relation containing the attributes of all participating relations
                             \item The primary key of the relation are all the primary keys together
@@ -184,14 +190,14 @@
                         \begin{itemize}
                             \item Very tricky
                             \item Become relation containing the attributes of all participating relations
-                            \item The primary key of the relation are the keys of the entities on the \textit{many} side. Or the relation gets merged into the table on the \textit{many} side.
+                            \item The primary key of the relation are the keys of the entities with which the relation can be uniquely identified.Or the relation gets merged into the table on the \textit{many} side.
                         \end{itemize}
                     \ides{Role:} Can be used to distinguish columns with the same entity type.
                         \begin{itemize}
                             \item Done by renaming the two columns appropriately
                         \end{itemize}
-                \end{description}
-            \ides{Weak Entity:} 
+                \end{itemize}
+            \ides{Weak Entity:}
                 \begin{itemize}
                     \item Can be omitted
                     \item The week entity is modeled as a relation on its own with the primary key of the main relation and its own key
@@ -207,20 +213,26 @@
                             \icon Cannot constraint that entity is only on of them
                         \end{itemize}
                 \end{itemize}
-            \ides{Rezept}
-                \begin{itemize}
-                    \item \todo{Rezept} 
-                        %Convert:
-                        %
-                        %Model Entity:
-                        %Model Relation:
-                        %Merge: if relation has shared primary key (aka. Denormalize)
-                        %
-                        %with `extra key`, indicate other possibilities for primary keys
-                        %
-                        %specialisatuib: specialisation get key from paret
-                    \item Automatically generates at least 3NF
-                \end{itemize}
         \end{enumerate}
+    \ides{Rezept}
+        \begin{enumerate}
+            \item Convert entries to relations
+                \begin{itemize}
+                    \item All attributes of the model get attributes of the relation
+                    \item All keys of the model get keys of the relation
+                \end{itemize}
+            \item Convert relations to relations
+                \begin{itemize}
+                    \item All attributes of the model get attributes of the relation
+                    \item All keys of the participating entries are attributes of the relation
+                    \item Keys are the keys of the entities which uniquely identify the relation
+                    \item Mark alternative keys
+                \end{itemize}
+            \item Merge relation if it is $1:1, 1:N, N:1$ and it has the same key
+            \item Do some other merging
+        \end{enumerate}
+        \begin{itemize}
+            \item Automatically generates at least 3NF
+        \end{itemize}
     \item Can be done (Semi-) automatically
 \end{itemize}
