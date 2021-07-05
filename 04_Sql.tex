@@ -84,9 +84,11 @@ ALTER TABLE Professor DROP COLUMN age;
 
     \ides{Extract, Transform, Load (ETL):} Used to populate DB automatically
         \begin{itemize}
+            \item Technique for populating DB
             \ides{E:} Get data from somewhere
             \ides{T:} Bring in right format
             \ides{L:} Insert into DB
+            \item Manual population is not feasible
         \end{itemize}
     \item Manual population of DB
         \begin{itemize}
@@ -102,20 +104,20 @@ ALTER TABLE Professor DROP COLUMN age;
         \end{itemize}
     \ides{Insert:}
 \begin{verbatim}
-INSERT INTO Student (PersNr, Name
-VALUES (1111, 'Fred')
+INSERT INTO Student (PersNr, Name)
+VALUES (1111, 'Fred');
 \end{verbatim}
 
     \ides{Delete:}
 \begin{verbatim}
 DELETE Student
-WHERE Semester > 13
+WHERE Semester > 13;
 \end{verbatim}
 
     \ides{Update:}
 \begin{verbatim}
 UPDATE Student
-SET Semester = Semester + 1
+SET Semester = Semester + 1;
 \end{verbatim}
 
     \ides{From CSV:}
@@ -137,17 +139,17 @@ COPY Professors FROM '/profs.csv' WITH FORAMT csv;
             \ides{SELECT DISTINCT:} Set semantic over all fields
         \end{itemize}
     \item Every RA expression can we written in \textit{SQL Subset}
-    \item{SQL Subset:}
+    \ides{SQL Subset:}
         \begin{itemize}
             \ides{Base Query:} $\rho_{a_1, \dots , a_n}(\Pi_{A_1, \dots A_n}(\sigma_{P_1 \wedge \dots \wedge P_m}(R_1 \times \dots \times R_k))) \approx$
 \begin{verbatim}
 SELECT A1 as a1 ... An as an
 FROM R1 ... Rk
-WHERE P1 AND P2 ... AND Pm
+WHERE P1 AND P2 ... AND Pm;
 \end{verbatim}
             \ides{Union:} $R_1 \cup R_2$
 \begin{verbatim}
-(SQL1) UNION (SQL2)
+(SQL1) UNION (SQL2);
 \end{verbatim}
                 \begin{itemize}
                     \item Uses set-like semantic
@@ -155,39 +157,39 @@ WHERE P1 AND P2 ... AND Pm
                 \end{itemize}
             \ides{Intersection:} $R_1 \cap R_2$
 \begin{verbatim}
-(SQL1) INTERSECT (SQL2)
+(SQL1) INTERSECT (SQL2);
 \end{verbatim}
             \ides{Difference:} $R_1 - R_2$
 \begin{verbatim}
-(SQL1) EXCEPT (SQL2)
+(SQL1) EXCEPT (SQL2);
 \end{verbatim}
             \ides{Selection:} $\sigma_c(R)$
 \begin{verbatim}
-SELECT * FROM (SQL1) WHERE c
+SELECT * FROM (SQL1) WHERE c;
 \end{verbatim}
             \ides{Projection:} $\Pi_{A_1, \dots , A_n} R$
 \begin{verbatim}
-SELECT A1, ..., An FrOM (SQL1)
+SELECT A1, ..., An FROM (SQL1);
 \end{verbatim}
             \ides{Cross Product:} $R_1 \times R_2$
 \begin{verbatim}
-SELECT * FROM (SQL1), (SQL2)
+SELECT * FROM (SQL1), (SQL2);
 \end{verbatim}
             \ides{Rename:} $\rho_{a, b, c}R$
 \begin{verbatim}
-SELECT A as a, B as b, C as c FROM (SQL1)
+SELECT A as a, B as b, C as c FROM (SQL1);
 \end{verbatim}
         \end{itemize}
     \ides{Sorting}
 \begin{verbatim}
-SELECT A, B FROM (SQL1) ORDER BY A DESC, B ASCD
+SELECT A, B FROM (SQL1) ORDER BY A DESC, B ASCD;
 \end{verbatim}
         \begin{itemize}
             \item ASCD is default
         \end{itemize}
     \ides{Grouping, Aggregation}
 \begin{verbatim}
-SELECT A, COUNT(*) FROM (SQL1) GROUP BY A
+SELECT A, COUNT(*) FROM (SQL1) GROUP BY A;
 \end{verbatim}
         \begin{itemize}
             \item Can only project to aggregated fields and aggregation function
@@ -206,8 +208,10 @@ SELECT A, COUNT(*) FROM (SQL1) GROUP BY A
         \end{itemize}
 \end{itemize}
 
+\subsection{Tips}
 \begin{itemize}
-    \item \verb+substring(<string>, <base1startindex>, <length>+
+    \item Extract substring by index: \verb+substring(<string>, <base1startindex>, <length>)+
     \item \verb+SELECT column FROM table+ gives a bag
     \item \verb+SELECT DISTINCT column FROM table+ gives a set. We can also apply this to multiple columns. In that case the entries are combined and then duplicates filtered.
+    \item \verb+NOW()+ gives current date
 \end{itemize}
