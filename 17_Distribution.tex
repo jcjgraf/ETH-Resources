@@ -15,14 +15,14 @@
                     \ides{Voting Phase:} Coordinator inquires if all nodes are ready and willing to commit
                         \begin{itemize}
                             \item Initiated by coordinator sending \verb+Prepare+
-                            \item If node says *OK* it cannot change its mind anymore
+                            \item If node says \textit{OK} it cannot change its mind anymore
                         \end{itemize}
 
                     \ides{Decision Phase:} Coordinator asks all nodes to commit
                         \begin{itemize}
                             \item Initiated by coordinator sending \verb+Commit+
                             \item Coordinator sends \verb+Abort+ if not all workers are ready
-                            \item Only if all said *OK* in voting phase
+                            \item Only if all said \textit{OK} in voting phase
                             \item If any worker or coordinator dies we have to rolleback
                         \end{itemize}
                     \item If a worker/coordinator is temporarily dead we may continue but let the other know that we were dead
@@ -105,7 +105,7 @@
                             \ipro Worker 1 and 2 can work concurrency
                             \ipro If $R'$ and $S'$ are small the communication is small
                             \icon Problematic if one table is too large for a worker
-                            \ipro Parallelizability of querries (if available) is not exploited
+                            \icon Parallelizability of querries (if available) is not exploited
                         \end{itemize}
                     \ides{Horizontal Partitioning}
                         \begin{itemize}

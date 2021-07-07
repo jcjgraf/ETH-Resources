@@ -17,7 +17,7 @@
         \end{itemize}
     \item Check happen at tuple level and not at the semantic of the command
         \begin{itemize}
-            \item I.e. try to run it and see what happens instead of analysing the quer
+            \item I.e. try to run it and see what happens instead of analysing the query
         \end{itemize}
     \item Some check may fail or succeed depending on the order of the tuples
         \begin{itemize}
@@ -59,7 +59,7 @@
             \item Accept if \verb+True+ or \verb+Unknown+
             \item Some engines treat check somewhat weirdly
             \item Some engines allow subqueries to be part of a check
-            \ides{Syntax:} \verb+check(some_expression_evaluation_to_bool)+
+            \ides{Syntax:} \verb+CHECK(some_expression_evaluation_to_bool)+
         \end{itemize}
     \ides{FOREIGN KEY}
         \begin{itemize}
@@ -68,7 +68,7 @@
             \item The reference field is often a \verb+PRIMARY KEY+ or at least \verb+UNIQUE+
             \ides{Referencing Table:} Table which references a tuple form another table
             \ides{Referenced Table:} Table being referenced by another table
-            \ides{Syntax:} \verb+some_field any_type references some_table(some_field)+
+            \ides{Syntax:} \verb+FOREIGN KEY some_field any_type REFERENCES some_table(some_field)+
             \ides{Maintenance}
                 \begin{itemize}
                     \item Changes to the referenced table influences the referencing table

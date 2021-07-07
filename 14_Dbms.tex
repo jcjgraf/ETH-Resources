@@ -8,7 +8,7 @@
             \item All data are stored on disk
             \item Disk is larger than memory
             \item Disk is slower than memory
-            \item Disk flavors different access pattern
+            \item Disk favours different access pattern
             \item Single CPU
             \item One relation is stored in a single file
         \end{itemize}
@@ -95,73 +95,77 @@
             \item the records on each page
             \item free space on each page
         \end{itemize}
-    \ides{Heap file:} One/multiple header files
-    \item Two ways to implement it
-    \ides{Linked List}
+    \ides{Heap File:}
         \begin{itemize}
-            \ides{Header Page:} One single page
+            \item Unordered collection of pages
+            \item Need to keep track where tuples are stored and of free space
+            \item Two ways to implement it
+            \ides{Linked List}
                 \begin{itemize}
-                    \item Kind of the root
-                    \item Has to pointer to two linked lists
+                    \ides{Header Page:} One single page
                         \begin{itemize}
-                            \item Free pages list
-                            \item Data pages list
-                        \end{itemize}
-                \end{itemize}
-            \icon No global view on data
-            \item Performance
-                \begin{itemize}
-                    \item Assume
-                        \begin{itemize}
-                            \item Directory fits in and is in memory
-                            \item $\# Pages = D$
-                            \item Pages are randomly allocated on disk
+                            \item Kind of the root
+                            \item Has to pointer to two linked lists
                                 \begin{itemize}
-                                    \item Models worst-case
+                                    \item Free pages list
+                                    \item Data pages list
                                 \end{itemize}
                         \end{itemize}
-                    \ides{Insert:} $t_{s + r}  + 2 t_{trans}$
+                    \icon No global view on data
+                    \item Performance
                         \begin{itemize}
-                            \item If page 1 has slot available
-                        \end{itemize}
-                    \ides{Find Record:} By non-RID value (RID is a pair page, id and slot id)
-                        \begin{itemize}
-                            \item $\frac{D}{2}(t_{r+s} + t_{trans})$
-                        \end{itemize}
-                    \ides{Scan:}
-                        \begin{itemize}
-                            \item $D(t_{s+r} + t_{trans})$
+                            \item Assume
+                                \begin{itemize}
+                                    \item Directory fits in and is in memory
+                                    \item $\# Pages = D$
+                                    \item Pages are randomly allocated on disk
+                                        \begin{itemize}
+                                            \item Models worst-case
+                                        \end{itemize}
+                                \end{itemize}
+                            \ides{Insert:} $t_{s + r}  + 2 t_{trans}$
+                                \begin{itemize}
+                                    \item If page 1 has slot available
+                                \end{itemize}
+                            \ides{Find Record:} By non-RID value (RID is a pair page, id and slot id)
+                                \begin{itemize}
+                                    \item $\frac{D}{2}(t_{r+s} + t_{trans})$
+                                \end{itemize}
+                            \ides{Scan:}
+                                \begin{itemize}
+                                    \item $D(t_{s+r} + t_{trans})$
+                                \end{itemize}
                         \end{itemize}
                 \end{itemize}
+            \ides{Page Directory}
+                \begin{itemize}
+                    \ides{Header Page:} Multiple pages
+                        \begin{itemize}
+                            \item Each contains a list of pointer to data pages
+                        \end{itemize}
+                    \item Performance
+                        \begin{itemize}
+                            \item Assume
+                                \begin{itemize}
+                                    \item Directory fits in and is in memory
+                                    \item $\#Pages = D$
+                                    \item Pages are sequentially allocated on disk
+                                        \begin{itemize}
+                                            \item Models best case
+                                        \end{itemize}
+                                \end{itemize}
+                            \ides{Insert:} $t_{s+r} + 2t_{trans}$
+                            \ides{Find Record:} By non-RID value (RID is a pair page, id and slot id)
+                                \begin{itemize}
+                                    \item $t_{s+r} + \frac{D}{2}t_{trans}$
+                                \end{itemize}
+                            \ides{Scan:}
+                                \begin{itemize}
+                                    \item $t_{s+r} + Dt_{trans}$
+                                \end{itemize}
+                        \end{itemize}
+                    \end{itemize}
         \end{itemize}
-    \ides{Page Directory}
-        \begin{itemize}
-            \ides{Header Page:} Multiple pages
-                \begin{itemize}
-                    \item Each contains a list of pointer to data pages
-                \end{itemize}
-            \item Performance
-                \begin{itemize}
-                    \item Assume
-                        \begin{itemize}
-                            \item Directory fits in and is in memory
-                            \item $\#Pages = D$
-                            \item Pages are sequentially allocated on disk
-                                \begin{itemize}
-                                    \item Models best case
-                                \end{itemize}
-                        \end{itemize}
-                    \ides{Insert:} $t_{s+r} + 2t_{trans}$
-                    \ides{Find Record:} By non-RID value (RID is a pair page, id and slot id)
-                        \begin{itemize}
-                            \item $t_{s+r} + \frac{D}{2}t_{trans}$
-                        \end{itemize}
-                    \ides{Scan:}
-                        \begin{itemize}
-                            \item $t_{s+r} + Dt_{trans}$
-                        \end{itemize}
-                \end{itemize}
-            \end{itemize}
 \end{itemize}
 
 \subsubsection{Page Layout}
@@ -214,13 +218,13 @@
                 \item Complex queries
                 \item Read large portions of the DB spanning multiple entries
             \end{itemize}
-        \item Multiple methods
+        \item Multiple implementations
     \ides{Row Storage}
         \begin{itemize}
             \item Store tuple together
             \item Divided into
                 \begin{itemize}
-                    \ides{Bitmap:} \todo{What is this?}
+                    \ides{Bitmap:} Indicates which attributes are \verb+NULL+ (somehow)
                     \ides{Fixed-Length:}
                         \begin{itemize}
                             \item Contains fixed-length fields
@@ -267,7 +271,7 @@
     \item Page Replacement
         \begin{itemize}
             \item If RAM is full, we need to evict a page
-            \item Eviction policy if of key importance
+            \item Eviction policy is of key importance
             \ides{Future access pattern known}
                 \begin{itemize}
                     \ides{Idea:} Evict block whose next access is farthest in the future
@@ -439,10 +443,10 @@
     \ides{Hash Table}
         \begin{itemize}
             \item Goal: Do better than B+ Trees for point queries
-            \ides{Hash Function $\mathbf{f(x)}$:} Maps each object into a entry in the table
+            \ides{Hash Function $\mathbf{f(x)}$:} Maps each object into an entry in the table
                 \begin{itemize}
-                    \item E.g. or integer: $h(x) = (ax + b) \mod p$
-                    \item E.g. or Strigs: $h(s_1, \dots, s_n) = (\sum_{i} s_ia^i) \mod p$
+                    \item E.g. For integer: $h(x) = (ax + b) \mod p$
+                    \item E.g. For Strings: $h(s_1, \dots, s_n) = (\sum_{i} s_ia^i) \mod p$
                     \item Hard to find ideal hash function
                 \end{itemize}
             \item Ideally $a \neq b \implies f(a) \neq f(b)$
@@ -469,13 +473,13 @@
                                 \begin{itemize}
                                     \ides{Cluster:} Largest consecutive sequence of occupied slots
                                 \end{itemize}
-                            \item For hash table:
+                            \item For hash table
                                 \begin{itemize}
                                     \item Size $m$
                                     \item Contains $n = \lambda m$ keys
                                     \item Full to $\lambda \%$
                                 \end{itemize}
-                                on average:
+                                we have on average:
                                 \begin{itemize}
                                     \ides{Insert:} $\frac{1}{2} (1 + \frac{1}{(1 - \lambda)^2})$
                                 \ides{(Successful) search:} $\frac{1}{2} (1 + \frac{1}{(1 - \lambda)})$
@@ -618,25 +622,39 @@ foreach tuple r in R:
                             \item Small $M$: Better if smaller relation is in outer loop
                             \item Large $M$ (assume smaller table is fully cached): Better if smaller relation is in the inner loop
                         \end{itemize}
+                    \ides{Efficient if:} Both relations fit into memory
                 \end{itemize}
             \ides{Block Nested Loop Join}
                 \begin{itemize}
                     \item
 \begin{verbatim}
 foreach block BR in R:
-    foearch block BS in S:
+    foreach block BS in S:
         foreach tuple r in BR:
             foreach tuple s in BS:
                 if Theta(r, s):
                     output r, s
 \end{verbatim}
                     \item $M = 3$: $\bigO(B(R) + B(R) B(S))$
-                    \item $M > 3$: $B(S) + B(R) \frac{B(S)}{M - 2})$
+                    \item $M > 3$: $\bigO(B(S) + B(R) \frac{B(S)}{M - 2})$
                     \item Partition $S$ into $a = \frac{B(S)}{M - 2}$ junks
                         \begin{itemize}
                             \item Fully cache junk
                             \item Pay $B(R)$ to join this junk with $R$: $(M - 2) + B(R)$
                             \item Repeat $\frac{B(S)}{M - 2}$ times \todo{Not sure what this means}
+                        \end{itemize}
+                \end{itemize}
+            \ides{Index Nested Loop Join}
+                \begin{itemize}
+                    \item
+\begin{verbatim}
+foreach tuple r in R:
+    foreach tuple s in IndexScan(S, r, Theta):
+        output r, s
+\end{verbatim}
+                    \item $\bigO(B(R) + |R| C)$
+                        \begin{itemize}
+                            \item $C$ is the cost of lookup in the index
                         \end{itemize}
                 \end{itemize}
             \ides{Sort Merge Join}
@@ -648,19 +666,37 @@ foreach block BR in R:
                             \item Compare to head
                         \end{itemize}
                     \item Cost $\bigO(B(R) + B(S) + \text{Sort}(R) + \text{Sort}(S))$
+                    \ides{Efficient if:} Index in attribute is present
                 \end{itemize}
             \ides{Hash Join}
                 \begin{itemize}
-                    \item \todo{Add algo}
+                    \item
+\begin{verbatim}
+build Hash Table HT for R
+foreach tuple s in S:
+    if h(s) in HT:
+        check forall r where h(r) = h(s) if r = s
+            output
+\end{verbatim}
                     \item Cost $\bigO(B(S) + B(R))$
                         \begin{itemize}
                             \item Assumed hash table fits into memory
                         \end{itemize}
+                    \icon Not good when hash table does not fit into memory
+                    \ides{Efficient if:} Result of join fits into memory
                 \end{itemize}
             \ides{Grace Hash Join}
                 \begin{itemize}
                     \ipro Deals with the case where the hash table does not fit into memory
-                    \item \todo{Add algo}
+                    \item Idea
+                        \begin{itemize}
+                            \item Partition $R$ and $S$ by hashing them using $h1$
+                                \begin{itemize}
+                                    \item Matching tuples of $R$ and $S$ are mapped into the same partition
+                                    \item Only one partition of $R$ and $S$ into memory and compare them
+                                \end{itemize}
+                            \item Rehash the hashes using $h2$ and check for equality
+                        \end{itemize}
                     \item Cost $\bigO(3B(R) + 3B(S))$
                 \end{itemize}
         \end{itemize}
@@ -724,7 +760,7 @@ foreach block BR in R:
                 \end{itemize}
             \ides{Vectorization Model:}
                 \begin{itemize}
-                    \item Simian to iterator model
+                    \item Similar to iterator model
                     \item Each operator returns a batch of tuples
                         \begin{itemize}
                             \item Instead of a single tuple
@@ -748,7 +784,7 @@ foreach block BR in R:
                         \begin{itemize}
                             \item Create histograms from the data
                             \item Lookup histograms to get an estimate of the number of tuples
-                            \item Hard to combine multiple histograms into one
+                            \icon Hard to combine multiple histograms into one
                                 \begin{itemize}
                                     \item Due to missing correlation
                                     \item Assume they are independent
@@ -761,7 +797,7 @@ foreach block BR in R:
         \end{itemize}
     \ides{Space Space:} What are the logically equivalent sets of physical plans?
         \begin{itemize}
-            \item Given an input logical plane, there are different was that one construct a physical plan
+            \item Given an input logical plane, there are different ways that one construct a physical plan
                 \begin{itemize}
                     \item I.e. different orders of operators
                 \end{itemize}
@@ -801,7 +837,7 @@ foreach block BR in R:
                         \end{itemize}
                     \item[6b)] Theta join operators are associative
                         \begin{itemize}
-                            \item $(E_1 \bowtie_{\theta_1} E_2) \bowtie_{\theta_2 \wedge \theta_3} E_3 = E_1 \bowtie_{\theta_1 \wedge \theta_3}(E_2 \bowtie_{\Theta_2} E_3)$ when $\theta_2$ involves only attributes from $E_2$ and $E_3$
+                            \item $(E_1 \bowtie_{\theta_1} E_2) \bowtie_{\theta_2 \wedge \theta_3} E_3 = E_1 \bowtie_{\theta_1 \wedge \theta_3}(E_2 \bowtie_{\theta_2} E_3)$ when $\theta_2$ involves only attributes from $E_2$ and $E_3$
                         \end{itemize}
                     \item[7)] Pushdown Selection
                         \begin{itemize}
@@ -823,12 +859,9 @@ foreach block BR in R:
                         \end{itemize}
                     \item[11)] Selection operation distrubites over $\cup, \cap$ and $\setminus$
                         \begin{itemize}
-                            \item $\sigma_\theta(E_1 \setminus E_2) = \sigma_\theta(E_1) \setminus \sigma_\theta(E_2)$
-                            \item $\sigma_\theta(E_1 \cup E_2) = \sigma_\theta(E_1) \cup \sigma_\theta(E_2)$
-                            \item $\sigma_\theta(E_1 \cap E_2) = \sigma_\theta(E_1) \cap \sigma_\theta(E_2)$
-                            \item $\sigma_\theta(E_1 \setminus E_2) = \sigma_\theta(E_1) \setminus E_2$
-                            \item $\sigma_\theta(E_1 \cap E_2) = \sigma_\theta(E_1) \cap E_2$
-                            \item $\sigma_\theta(E_1 \cup E_2) \neq \sigma_\theta(E_1) \cup E_2$
+                            \item $\sigma_\theta(E_1 \setminus E_2) = \sigma_\theta(E_1) \setminus \sigma_\theta(E_2) = \sigma_\theta(E_1) \setminus E_2$
+                            \item $\sigma_\theta(E_1 \cup E_2) = \sigma_\theta(E_1) \cup \sigma_\theta(E_2) = \sigma_\theta(E_1) \cap E_2$
+                            \item $\sigma_\theta(E_1 \cap E_2) = \sigma_\theta(E_1) \cap \sigma_\theta(E_2) \neq \sigma_\theta(E_1) \cup E_2$
                         \end{itemize}
                     \item[12)] Projection operation distributes over union
                         \begin{itemize}
@@ -861,7 +894,7 @@ foreach block BR in R:
                 \end{itemize}
             \ides{Compromise 2:} Heuristic-based Optimisation
                 \begin{itemize}
-                    \item Optimize query-tree by dappling a set of rules that typically improve execution performance
+                    \item Optimize query-tree by applying a set of rules that typically improve execution performance
                         \begin{itemize}
                             \item Early selection
                             \item Early projection

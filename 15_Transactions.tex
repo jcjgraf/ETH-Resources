@@ -27,8 +27,8 @@
                             \item Different schedules may result in different results
                         \end{itemize}
                     \item Result of one query may be overwritten partly or completely
-                    \ides{Attribute-level Inconsistency:} Concurrent change of a full object
-                    \ides{Tuple-level Inconsistency:} Concurrent change of part of an object
+                    \ides{Attribute-level Inconsistency:} Concurrent change of a single attribute of the same tuple
+                    \ides{Tuple-level Inconsistency:} Concurrent change of different attributes of the same tuple
                     \ides{Table-level Inconsistency:} Concurrent change of full relation
                     \ides{Multi-statement Inconsistency:} Interleaving of concurrent queries
                     \item When multiple groups of SQL statements are running at the same time, we want the effect as if they are executed sequentially
@@ -52,8 +52,9 @@
                             \item Can be initiated by the user or DBMS
                         \end{itemize}
                 \end{itemize}
-            \ides{Autocommit:} Turns each SQL into a transition
+            \ides{Autocommit:} If true, turns each SQL statement into own transition
                 \begin{itemize}
+                    \item SQL option
                     \item Activated by default, can be deactivated
                 \end{itemize}
         \end{itemize}
@@ -76,7 +77,7 @@
             \item Transaction leads from consistent state to consistent state
             \item Granularity depends on the integrity constrains
                 \begin{itemize}
-                    \item I.e. some constrains re checked at commit level some at \todo{???}
+                    \item I.e. some constrains are checked for each tuple, some for each statement and some for a transaction
                     \item Can be controlled and influenced to some degree
                 \end{itemize}
         \end{itemize}
@@ -105,27 +106,29 @@
 \subsection{Isolation}
 \begin{itemize}
     \item One of the key properties
-    \item DBMS provides different levels of isolation
+    \ides{Anomaly:} Misbehaviour of the DB
         \begin{itemize}
-            \ides{Anomaly:} Misbehaviour of the DB
+            \ides{Dirty Read:} Read a value which was updated by another transaction which has not yet committed
                 \begin{itemize}
-                    \ides{Dirty Read:} If we read from a different transaction which was not yet committed we have a dirty read
+                    \item May contain values which were/are never in the DB
                         \begin{itemize}
-                            \item May contain values which were/are never in the DB
-                                \begin{itemize}
-                                    \item When the other transaction aborts
-                                \end{itemize}
+                            \item When the other transaction aborts
                         \end{itemize}
-                    \ides{Non-repeatable Reads:} Reading the same tuple twice any we may not get the same value both times
-                    \ides{Phantoms:} Change to tuple which are only visible during some part of the transaction
                 \end{itemize}
-            \ides{Isolation Level:} Defines for each transaction what isolation level it should have
+            \ides{Non-repeatable Reads:} Reading the same tuple twice gives give us different values both times
                 \begin{itemize}
-                    \item Each level is defined by the anomalous behaviour that is allowed
+                    \item It was updated by another transaction which committed (difference to dirty read)
                 \end{itemize}
+            \ides{Phantoms:} During a transaction, another transaction added or removed tuples
+                \begin{itemize}
+                    \item Similar to non-repeatable reads
+                \end{itemize}
+        \end{itemize}
+    \ides{Isolation Level:} Defines for each transaction what anomalies we allow to happen
+        \begin{itemize}
             \item $\left.\left.
 \begin{tabular}{l | c | c | c}
-                     & Dirty Reads  & Non-Repeatable Reads & Phantoms\\\hline
+             & Dirty Reads  & Non-Repeatable Reads & Phantoms\\\hline
 Read Uncommitted     & $\checkmark$ & $\checkmark$        & $\checkmark$\\
 Read Committed       & $\times$     & $\checkmark$        & $\checkmark$\\
 Repeatable Read      & $\times$     & $\times$            & $\checkmark$\\
@@ -144,7 +147,7 @@ Serializable         & $\times$     & $\times$            & $\times$
         \end{itemize}
     \ides{Conflicts}
         \begin{itemize}
-            \ides{Def Conflict}
+            \ides{Definition}
                 \begin{itemize}
                     \ides{Same Transaction:}
                         \begin{itemize}
@@ -174,23 +177,25 @@ Serializable         & $\times$     & $\times$            & $\times$
         \end{itemize}
     \ides{Conflict Equivalent} are two schedules iff:
         \begin{itemize}
-            \item They involve the same actions on the same transactions
-            \item Every pair of conflicting actions is ordere in the same way
+            \item One can be transformed into the other by swapping non-conflicting operations
         \end{itemize}
     \ides{Conflict Serializable:} Schedule if it is conflict equivalent to some serial schedule
         \begin{itemize}
             \item I.e. schedule which can be translated into a serial schedule with a sequence of non-conflicting swaps of adjacent actions
             \item Stronger than serializable
+                \begin{itemize}
+                    \item Conflict serializable $\subseteq$ serializable
+                \end{itemize}
             \item Only depends on the read/write pattern
                 \begin{itemize}
                     \item And not what we are writing
                 \end{itemize}
-            \item Easier than serializability for DB to handle as it does require the DB to understand what each operator is doing
+            \item Easier than serializability for DB to handle as it does not require the DB to understand what each operator is doing
             \item Enforced by most DBMSs
             \ides{Decide}
                 \begin{itemize}
                     \item Each transaction is a node
-                    \item $\exists$ edge $T_i$ to $T_j$ if
+                    \item $\exists$ edge $T_i$ to $T_j$ if:
                         \begin{itemize}
                             \item Operator $o_i$ in $T_i$ is in conflict with operator $o_j$ in $T_j$
                             \item $o_j$ appears earlier than $o_i$ in same transaction
@@ -198,12 +203,13 @@ Serializable         & $\times$     & $\times$            & $\times$
                     \item Schedule is conflict serializable iff its dependency graph is acyclic
                 \end{itemize}
         \end{itemize}
-    \item Serializability and conflict serializability only concern committed transactions
+    \item Serializability and conflict serializability only concern committed transactions (and not aborted)
         \begin{itemize}
             \item Operations can be in conflict with \verb+ABORT+
                 \begin{itemize}
                     \item E.g. \verb+READ(X)+/ \verb+WRITE(X)+ before or after \verb+ABORT+ of other transaction may lead to different results (only if the other transaction did \verb+WRITE(X)+)
                 \end{itemize}
+            \item But they are somehow still considered as serializable
         \end{itemize}
 \end{itemize}
 
@@ -276,7 +282,7 @@ Serializable         & $\times$     & $\times$            & $\times$
         \end{itemize}
     \ides{Strict Two-Phase Locking (Strict 2PL)}
         \begin{itemize}
-            \item Phase 1 is similar to 2PL
+            \ides{Phase 1:} is similar to 2PL
             \ides{Phase 2:}
                 \begin{itemize}
                     \item All looks are kept until end of transaction
@@ -352,7 +358,7 @@ Serializable         & $\times$     & $\times$            & $\times$
     \item Working
         \begin{itemize}
             \item Transaction receives timestamp $TS(T)$ when it starts
-            \item Reads are carried out as of the DV version of $TS(T)$
+            \item Reads are carried out as of the DB version of $TS(T)$
             \item Writes are carried out on a separate buffer
             \item When transaction commits, abort $T_1$ if $\exists T_2$ such that:
                 \begin{itemize}

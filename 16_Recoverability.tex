@@ -24,21 +24,23 @@
     \ides{Recoverable (RC):}
         \begin{itemize}
             \item If $T_i$ reads from $T_j$ and commits, then $c_j < c_i$
+            \item If $T_i$ reads from $T_j$ and aborts, or if $T_i$ writes etc. it is also RC
             \item No need to undo a committed transaction
-            \ides{If not RS:} Loss of data
+            \ides{If not RC:} Loss of data
         \end{itemize}
     \ides{Avoids Cascading Aborts (ACA):}
         \begin{itemize}
             \item If $T_i$ reads $X$ from $T_j$, then $c_j < r_i[X]$
-     \item Aborting a transaction does not cause aborting others
+            \item If $T_i$ writes $X$ from from $T_j$, it is also ACA
+            \item Aborting a transaction does not cause aborting others
             \ides{If not ACA:} Thrashing behaviour when transactions abort each other
         \end{itemize}
     \ides{Strict (ST):}
         \begin{itemize}
             \item If $T_i$ reads from or writes a value written by $T_j$, then
                 \begin{itemize}
-                    \ides{If $\mathbf{T_i}$ commits:} $(c_j < r_i[X] \wedge c_j < w_i[X])$
-                    \ides{If $\mathbf{T_i}$ aborts:} $(a_j < r_i[X] \wedge a_j < w_i[X])$
+                    \ides{If $\mathbf{T_j}$ commits:} $(c_j < r_i[X] \wedge c_j < w_i[X])$
+                    \ides{If $\mathbf{T_j}$ aborts:} $(a_j < r_i[X] \wedge a_j < w_i[X])$
                 \end{itemize}
             \item Extends ACA to write
             \item Undoing a transaction does not undo the changes of other transactions
@@ -54,7 +56,7 @@
     \ides{Assume:}
         \begin{itemize}
             \item Disk is save
-            \item \verb+Write(A, v)+ only changes object in memory but not buffer
+            \item \verb+Write(A, v)+ only changes object in memory but not disk
             \item \verb+OUTPUT(A)+ writes changes from memory to disk
         \end{itemize}
     \ides{Idea:} Log changes and restore from log if required
@@ -127,8 +129,8 @@
         \end{itemize}
     \ides{Redo Logging}
         \begin{itemize}
-            \item If $T$ modifies DB element $X$ log \verb+<T, X, old value>+ to disk
-            \item Before calling \verb+OUTPUT+, log \verb+COMMIT+ and call \verb+FLUSH+
+            \item If $T$ modifies DB element $X$ log \verb+<T, X, new value>+ to disk
+            \item Log \verb+COMMIT+ and call \verb+FLUSH+, before calling \verb+OUTPUT+
             \item Recovery
                 \begin{itemize}
                     \item Scan log from the beginning

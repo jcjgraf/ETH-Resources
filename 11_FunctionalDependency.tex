@@ -33,7 +33,7 @@
                 \ides{Functional Dependency $\mathbf{\alpha \to \beta}$:} iff $\forall r, s \in R.\ r.\alpha = s.\alpha \implies r.\beta = s.\beta$
                     \begin{itemize}
                         \item I.e. $\alpha \to \beta \iff$ for any two tuples $r$ and $s$ in DB instance $R$, if $r$ and $s$ share the same values on columns $\alpha$, then they share the same values on column $\beta$
-                        \item I.e. there is a mapping values in columns $\alpha$ to values in columns in $\beta$
+                        \item I.e. there is a mapping, mapping values in columns $\alpha$ to values in columns in $\beta$
                         \ides{Notation:} $R \models \alpha \to \beta$ if $R$ satisfies $\alpha \to \beta$
                     \end{itemize}
         \end{itemize}
@@ -46,17 +46,21 @@
             \ides{Superkey} is $\alpha \subseteq \mc{R} \iff \alpha \to \mc{R}$
                 \begin{itemize}
                     \item I.e. if we know the value of columns $\alpha$ we know all values of all columns
+                    \item All columns together are a trivial candidate key
                 \end{itemize}
-                \ides{Candidate Key} is $\alpha \subseteq \mc{R} \iff \alpha \to \overset{.}{} \mc{R}$
+            \ides{Candidate Key} is $\alpha \subseteq \mc{R} \iff \alpha \to \overset{.}{} \mc{R}$
+                \begin{itemize}
+                    \item I.e. a minimal super key
+                \end{itemize}
         \end{itemize}
-    \ides{Implication}
+    \ides{Implication/Inference}
         \begin{itemize}
             \item Given:
                 \begin{itemize}
                     \item Set $F$ of some FDs on schema $\mc{R}$
                     \item FD $\alpha \to \beta$ which is $\not\in F$
                 \end{itemize}
-            \item $F$ \textbf{implies} $\alpha \to \beta$ if every relation instance $R$ o $\mc{R}$ that satisfies all FDs on $F$ also satisfies $\alpha \to \beta$
+            \item $F$ \textbf{implies} $\alpha \to \beta$ if every relation instance $R$ of $\mc{R}$ that satisfies all FDs on $F$ also satisfies $\alpha \to \beta$
             \ides{Notation:} $F \models \alpha \to \beta$
         \end{itemize}
     \ides{Derivation}
@@ -76,7 +80,7 @@
                     \item Set $F$ of some FDs on schema $\mc{R}$
                     \item Set of attributes $\alpha \subseteq \mc{R}$
                 \end{itemize}
-            \item \textbf{Closure} of $\alpha$ is the set of all attributes that are implied by $F$
+            \item \textbf{Closure} of $\alpha$ is the set of all attributes $y \in \mc{R}$, such that $\alpha \to y$ can be derived from $F$
             \ides{Notation:} $\alpha^+$
             \item $\alpha^+ = \{y \in \mc{R} \mid F \vdash \alpha \to y\}$
             \item $F \vdash \alpha \to \beta \iff \beta \subseteq \alpha^+$
@@ -106,7 +110,7 @@
                                 \end{itemize}
                             \item $(G \setminus \{X\alpha \to \beta\}) \cup \{X \to \beta\} \not\equiv G\ \forall X\alpha \to \beta \in G$
                                 \begin{itemize}
-                                    \item I.e. Remove a attribute from a FD
+                                    \item I.e. Remove an attribute from a FD
                                 \end{itemize}
                         \end{itemize}
                 \end{itemize}
@@ -114,8 +118,17 @@
                 \begin{itemize}
                     \item[1)] Set $G$ to the set of FDs obtained from $F$ when decomposing the RHS of each FD to a single attribute
                     \item[2)] Remove trivial FDs
+                        \begin{itemize}
+                            \item I.e. all $a \to b$ where $b \subseteq a$
+                        \end{itemize}
                     \item[3)] Remove all redundant attributes from the LHS of all FDs
+                        \begin{itemize}
+                            \item I.e. if $a \to b$ and $\exists x \in a$ such that $(a \setminus x) \to b$, replace $a \to b$ with $(a \setminus x) \to b$
+                        \end{itemize}
                     \item[4)] Remove all redundant FDs
+                        \begin{itemize}
+                            \item I.e. if $a \to b$ and $\{b\} \subseteq \text{Closure}(F \setminus \{a \to b\}, a)$, remove $a \to b$ from $F$
+                        \end{itemize}
                 \end{itemize}
         \end{itemize}
     \ides{Equivalence}
@@ -160,9 +173,18 @@
                 \begin{itemize}
                     \ides{Bad Relation:} Relation which combine several concepts
                 \end{itemize}
-            \ides{Lossless Decomposition:} $R = R_1 \bowtie R_2 \bowtie \dots \bowtie R_n$
+            \ides{Lossless Decomposition} Of $R$ into $R_1, \dots, R_n$ if $R = R_1 \bowtie R_2 \bowtie \dots \bowtie R_n$
                 \begin{itemize}
                     \item For $\mc{R} = \mc{R}_1 \cup \mc{R}_2$, decomposition $R_1 = \Pi_{\mc{R}_1}(R), R_2 = \Pi_{\mc{R}_2}(R)$ is lossless, if $(\mc{R}_1 \cap \mc{R}_2) \to \mc{R}_1 \vee (\mc{R}_1 \cap \mc{R}_2) \to \mc{R}_2$
+                \end{itemize}
+            \ides{Recipe:} Show given decomposition $R_1, R_2$ is lossy
+                \begin{itemize}
+                    \item Decomposition is lossless iff $R = R_1 \bowtie R_2$
+                    \item Find some instance of the relations which serves as a counterexample
+                \end{itemize}
+            \ides{Recipe:} Show given decomposition $R_1, R_2$ is lossless
+                \begin{itemize}
+                    \item Decomposition is lossless if $(R_1 \cap R_2) \to R_i, i \in \{1, 2\}$
                 \end{itemize}
             \ides{Preservation of Dependencies:} $\text{FD}(R)^+ = [\text{FD}(R_1) \cup \dots \cup \text{FD}(R_n)]^+$
         \end{itemize}

@@ -2,7 +2,7 @@
 
 \section{Views}
 \begin{itemize}
-    \item It an alias for a query
+    \item It is an alias for a query
     \item Provides higher abstraction than relations
         \begin{itemize}
             \item Provides logical data independence
@@ -10,16 +10,18 @@
     \ides{Syntax:} \verb+CREATE VIEW some_name AS some_query+
     \item Can be used similarly as a table
     \item DMDB convert statement containing a view into a statement without view
+        \begin{itemize}
+            \item I.e. DMDB converts view to a select query
+        \end{itemize}
     \item Used for
         \begin{itemize}
             \ides{Privacy:} Give person access to a limited view and not the whole relation/DB
             \ides{Usability:} Simplify queries
         \end{itemize}
-    \item DMDB converts view to a select query
     \ides{Update View}
         \begin{itemize}
             \item For base relation $R_1, \dots , R_n$ and view $V = Q(R_1, \dots , R_n)$
-            \item Update $V$ into $V'$ requires finding a set of updated to the base relation $R'_1, \dots ,R'_n$ s.t. $Q(R'_1, \dots , R'_n) = V'$
+            \item Update $V$ into $V'$ requires finding a set of updated to the base relation $(R'_1, \dots ,R'_n) = f(R_1, \dots, R_n)$ s.t. $Q(R'_1, \dots , R'_n) = V'$
             \item Not all view can be updated
                 \begin{itemize}
                     \item Some data is missing
