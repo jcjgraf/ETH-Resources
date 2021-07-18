@@ -23,8 +23,8 @@
 \begin{itemize}
     \ides{Likelihood-Funktion:} $L(x_1, \dots, x_n; \theta) :=
 \begin{cases}
-    p(x_1, \dots, x_n; \theta &\text{im diskreten Fall}\\
-    f(x_1, \dots, x_n; \theta &\text{im stetigen Fall}
+    p(x_1, \dots, x_n; \theta) = \Pi_{i = 1}^n p_X(x_i; \theta) &\text{diskreten Fall}\\
+    f(x_1, \dots, x_n; \theta) = \Pi_{i = 1}^n f_X(x_i; \theta) &\text{stetigen Fall}
 \end{cases}$
         \begin{itemize}
             \ides{Log-Likelihood:} Often brauchen wir $\log L(x_1, \dots, x_n;\theta)$ damit, wenn ZV i.i.d. sind, rechnen wir mit Summen und nicht Produkten.
@@ -64,6 +64,9 @@
 \begin{itemize}
     \item Diese gehört zu einer stetigen ZV $Y$ mit DF $f_Y(y) = \frac{1}{2^{\frac{n}{2}} \Gamma(\frac{n}{2})}y^{\frac{n}{2} - 1}e^{-\frac{1}{2}y}, \ y \ge 0$.
     \item Entsteht wie folgt: Sind die ZV $X_1, \dots, X_n$ i.i.d. und $\sim \mc{N}(0, 1)$, so ist die Summe $Y := \sum_{i=1}^{n} X_i^2 \sim \mc{X}_n^2$
+        \begin{itemize}
+            \item $E[Y] = n$ \quad -- $Var[Y] = 2n$
+        \end{itemize}
     \item Für $n = 2$ erhält man $\sim Exp(\frac{1}{2})$
 \end{itemize}
 

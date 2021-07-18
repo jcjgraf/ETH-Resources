@@ -5,14 +5,17 @@
 \begin{itemize}
     \item VF $F_X$ hat Eigenschaften:
         \begin{itemize}
-            \item $F_X$ ist wachsend und rechtsstetig; $F_X(s) \le F_X(t)$ für $s \le t$ und $F_X(u) \to F_X(t)$ für $u \to t$ mit $u > t$.
+            \item Wachsend: $F_X(s) \le F_X(t)$ für $s \le t$
+            \item Rechtsstetig: $F_X(u) \to F_X(t)$ für $u \to t$ mit $u > t$
             \item $\lim_{t \to -\infty} F_X(t) = 0$, $\lim_{t \to \infty} F_X(t) = 1$
         \end{itemize}
-        \ides{Dichtefunktion (DF):} Eine ZV $X$ mit VF $F_X(t)$ heisst (absolut)stetig mit Dichte(funktion) $f_X: \R \to [0, \infty)$, falls: $F_X(t) = \int_{-\infty}^{t} f_X(s) \mathrm{d}s \ \forall t \in \R$
-    \item DF $f_X$ hat Eigenschaften:
+    \ides{Dichtefunktion (DF):} Eine ZV $X$ mit VF $F_X(t)$ heisst (absolut)stetig mit Dichte(funktion) $f_X: \R \to [0, \infty)$, falls: $F_X(t) = \int_{-\infty}^{t} f_X(s) \mathrm{d}s \ \forall t \in \R$
         \begin{itemize}
-            \item $f_X \ge 0$ und $f_X = 0$ ausserhalb von $\mc{W}(X)$
-            \item $\int_{-\infty}^{\infty} f_X(s) \mathrm{d}s = 1$
+            \item DF $f_X$ hat Eigenschaften:
+                \begin{itemize}
+                    \item $f_X \ge 0$ und $f_X = 0$ ausserhalb von $\mc{W}(X)$
+                    \item $\int_{-\infty}^{\infty} f_X(s) \mathrm{d}s = 1$
+                \end{itemize}
         \end{itemize}
     \item $P[a < X \le b] = P[X \le b] - P[X \le a] = F_X(b) - F_X(a) = \int_{a}^{b} f_X(s) \mathrm{d}s$.
     \item Allgemeiner für Mengen $B \subseteq \R$:  $P[X \in B] = \int_{B} f_X(s) \mathrm{d}s$
@@ -21,10 +24,16 @@
         \begin{itemize}
             \item Ist ZV $X$ stetig mit DF $f_X(x)$ dann: $E[X] = \int_{-\infty}^{\infty} x f_X(x) \mathrm{d}x$ sofern das Integral absolut konvergiert.
             \item ZV $X$ und ZV $Y = g(x)$. Ist $X$ stetig mit DF $f_X(x)$, dann: $E[Y] = E[g(x)] = \int_{-\infty}^{\infty}  g(x) f_X(x) \mathrm{d}x$ sofern das Integral abs. konvergiert.
+            \item Für beliebige ZV $X_1, \dots, X_n$ ist $E[X_1 \cdot \dots \cdot X_n] = E[X_1] \cdot \dots \cdot E[X_n]$
+            \item Für beliebige ZV $X_1, \dots, X_n$ ist $E[X_1 + \dots + X_n] = E[X_1] + \dots + E[X_n]$
         \end{itemize}
     \ides{i.i.d.:} Haben ZVs $X_1, \dots, X_n$ die selbe VF und sind unabhängig nennt man sie i.i.d.
     \ides{Momente:} Die Momente von $X$ sind definiert als $m_n := E[X^n], n \in \N$ unter der Voraussetzung, dass $E[|X|^n] < \infty$
     \ides{Zentralmomente:} Für $n \in \N$ und falls $E[|X|^n] < \infty$ ist, kann man das $n$-te Zentralmoment von $X$ definieren als $E[(X - E[X])^n]$.
+    \ides{Momenterzeugende Funktion} einer ZV $X$ ist $M_X(t) := E[e^{tX}], t \in \R$
+        \begin{itemize}
+            \item Ist immer wohldefiniert in $[0, \infty]$, kann aber $+\infty$ werden
+        \end{itemize}
 \end{itemize}
 
 \subsection{Wichtige stetige Verteilungen}
@@ -71,24 +80,18 @@
     \item $E[X] = \mu, \ Var[X] = \sigma^2$
     \ides{Standard-Normalverteilung:} Falls $\mc{N}(0, 1)$
         \begin{itemize}
-            \ides{DF:} $\phi(t)$
+            \ides{DF:} $\phi(t) = \frac{1}{\sqrt{2 \pi}} e^{-\frac{t^2}{2}}$
             \ides{VF:} $\Phi(t) = \int_{-\infty}^{t} \phi(s) \mathrm{d}s = \frac{1}{\sqrt{2 \pi}} \int_{-\infty}^{t} e ^{-\frac{s^2}{2}}\mathrm{d}s$
         \end{itemize}
     \item $X \sim \mc{N}(\mu, \sigma^2)$, so ist $\frac{X - \mu}{\sigma} \sim \mc{N}(0, 1)$, also: $F_X(t) = P[X \le t] = P[\frac{X - \mu}{\sigma} \le \frac{t - \mu}{\sigma}] = \Phi(\frac{t - \mu}{\sigma})$
 \end{itemize}
-
-\subsubsection{Cauchy-Verteilung}
-\todo{Oli Fragen ob relevant}
-
-\subsubsection{Gamma Verteilung}
-\todo{Oli Fragen ob relevant}
 
 \subsection{Gemeinsame Verteilungen, unabhängige ZV}
 \begin{itemize}
     \ides{Gemeinsame VF:} Analog zu diskret
     \ides{Gemeinsame DF:} Falls die gemeinsame VF $F$ von $X_1, \dots, X_n$ sich schreiben lässt als $F(x_1, \dots, x_n) = \int_{-\infty}^{x_1} \dots \int_{-\infty}^{x_n} f(t_1, \dots, t_n) \mathrm{d}t_n \dots \mathrm{d}t_1$ für eine Funktion $f: \R^n \to [0, \infty)$, so heisst $f(x_1, \dots, x_n)$ die gemeinsame Dichte von $X_1, \dots, X_n$. Es gilt:
         \begin{itemize}
-            \item $f(x_1, \dots, f_n) \ge 0$ und $=0$ ausserhalb von $\mc{W}(X_1, \dots, X_n)$
+            \item $f(x_1, \dots, x_n) \ge 0$ und $=0$ ausserhalb von $\mc{W}(X_1, \dots, X_n)$
             \item $\int_{-\infty}^{\infty} \dots \int_{-\infty}^{\infty} f(x_1, \dots, x_n) \mathrm{d}x_n \dots \mathrm{d}x_1 = 1$
             \item $P[(X_1, \dots, X_n) \in A] = \int_{A} f(x_1, \dots, x_n) \mathrm{d}x_n \dots \mathrm{d}x_1$ für $A \subseteq \R^n$
         \end{itemize}

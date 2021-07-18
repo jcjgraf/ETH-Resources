@@ -9,9 +9,9 @@
         \end{itemize}
     \ides{Elementarereignisse $w \in \Omega$:} Element aus Ereignisraum
     \ides{Potenzmenge $2^\Omega$:} von $\Omega$ ist die Menge aller Teilmengen von $\Omega$
-    \ides{Ereignis $A \in 2^\Omega$:} Element der Potenzmenge
+    \ides{Prinzipielles Ereignis $A \subseteq \Omega$:} Set von Elementarereignissen
         \begin{itemize}
-            \item $A$ tritt ein, falls $w \in A$
+            \item $A$ tritt ein, falls das realisierte Elementarereignis $w \in A$
         \end{itemize}
     \ides{Beobachtbare Ereignisse $\mathcal{F}$:} Teilmenge der Potenzmenge
         \begin{itemize}
@@ -25,19 +25,19 @@
     \ides{$\bs{\sigma}$-Algebra} ist $\mathcal{F}$ falls
         \begin{itemize}
             \item[(i)] $\Omega \in \mathcal{F}$
-            \item[(ii)] $\forall A \in \mathcal{F}$ ist auch Komplement $A^\complement \in \mathcal{F}$. 
-            \item[(iii)] $\forall$ Folge $(A_n)_{n \in \N}$ mit $A_n \in \mathcal{F}$ für alle $n \in \N$ ist auch $\bigcup_{n=1}^\infty A_n \in \mathcal{F}$.
+            \item[(ii)] $\forall A \in \mathcal{F}$ ist auch Komplement $A^\complement \in \mathcal{F}$
+            \item[(iii)] $\forall$ Folge $(A_n)_{n \in \N}$ mit $A_n \in \mathcal{F}$ für alle $n \in \N$ ist auch $\bigcup_{n=1}^\infty A_n \in \mathcal{F}$
         \end{itemize}
     \ides{Wahrscheinlichkeitsmass $P$:} Abbildung $P: \mathcal{F} \to [0,1]$ mit folgenden Axiomen:
         \begin{itemize}
             \item[A0)] $P[A] \geq 0 \quad \forall A \in \mathcal{F}$
             \item[A1)] $P[\Omega] = 1$
-            \item[A2)] $P\left[ \bigcup_{i=1}^\infty A_i \right] = \sum_{i=1}^\infty P[A_i]$ für disjunkte Ereignisse $A_i$.
+            \item[A2)] $P\left[ \bigcup_{i=1}^\infty A_i \right] = \sum_{i=1}^\infty P[A_i]$ für disjunkte Ereignisse $A_i$
         \end{itemize}
         Daraus folgt
         \begin{itemize}
             \item $P[A^\complement] = 1 - P[A]$
-            \item $P[\emptyset] = 0$ und $P[\Omega] = 1$
+            \item $P[\emptyset] = 0$
             \item $A \subseteq B \implies P[A] \leq P[B]$
             \ides{Additionsregel:} $P[A \cup B] = P[A] + P[B] - P[A\cap B]$
         \end{itemize}
@@ -61,13 +61,12 @@
             \item $P$ ist die \textit{diskrete Gleichverteilung}
         \end{itemize}
     \item $ P[A] = \frac{\mbox{Anz. Elementarereignisse in } A}{\mbox{Anz. Elementarereignisse in } \Omega} = \frac{|A|}{|\Omega|}$
-
 \end{itemize}
 
 \subsection{Bedingte Wahrscheinlichkeit}
 \begin{itemize}
-    \item Falls für $A,B$ Ereignisse und $P[A] > 0$
-    \item Dann $P[B | A] := \frac{P[B \cap A]}{P[A]}$
+    \item Falls für $A,B$ Ereignisse und $P[A] > 0$\\
+    Dann $P[B | A] := \frac{P[B \cap A]}{P[A]}$
      \item Bei fixierter Bedingung $A$ ist $P[\cdot | A]$ wieder ein Wahrscheinlichkeitsmass auf $(\Omega, \mathcal{F})$
         \begin{itemize}
             \item I.e. $P[\cdot | A]$ erfüllt die Axiome A0), A1), A2
@@ -77,14 +76,11 @@
 
 \subsubsection{Satz der totalen Wahrscheinlichkeit}
 \begin{itemize}
-    \item Falls
+    \item Falls: $A_1,\dots,A_n$ eine Zerlegung von $\Omega$ in paarweise disjunkte Ereignisse
         \begin{itemize}
-            \item $A_1,\dots,A_n$ eine Zerlegung von $\Omega$ in paarweise disjunkte Ereignisse
-                \begin{itemize}
-                    \item D.h. $\bigcup_{i=1}^n A_i = \Omega$ und $A_i \cap A_k = \emptyset \: \forall i\neq k$
-                \end{itemize}
+            \item D.h. $\bigcup_{i=1}^n A_i = \Omega$ und $A_i \cap A_k = \emptyset \: \forall i\neq k$
         \end{itemize}
-    \item Dann $ P[B] = \sum_{i=1}^n P[B \mid A_i] \cdot P[A_i]$
+    Dann: $ P[B] = \sum_{i=1}^n P[B \mid A_i] \cdot P[A_i]$
 \end{itemize}
 
 \subsubsection{Satz von Bayes:}
@@ -94,7 +90,7 @@
             \item $A_1,\dots, A_n$ eine Zerlegung von $\Omega$ mit $P[A_i] > 0$ für $i = 1 \dots n$ und
             \item $B$ ein Ereignis mit $P[B] > 0$
         \end{itemize}
-    \item Dann gilt für jedes $k$
+    Dann gilt für jedes $k$
         \begin{itemize}
             \item $ P[A_k \mid B] = \frac{P[B \mid A_k]\cdot P[A_k]}{\sum_{i=1}^n P[B \mid A_i] \cdot P[A_i]}$
             \item $P[A\mid B] =
@@ -117,11 +113,11 @@
 
 \subsubsection{Allgemeine Unabhängigkeit}
 \begin{itemize}
-    \item $A_1, \dots, A_n$ sind stochastisch unabhängig
     \item Falls für jede endliche Teilfamilie die Produktformel gilt
         \begin{itemize}
             \item D.h. für ein $m \in \N$ und $\{k_1,\dots, k_m\} \subseteq \{1, \dots, n\}$ gilt immer $ P \left[ \bigcap_{i=1}^m A_{k_i} \right] = \prod_{i=1}^m P[A_{k_i}]$
         \end{itemize}
+    Dann sind $A_1, \dots, A_n$ stochastisch unabhängig
     \ides{Paarweise Unabhängig:} Falls die definition nur für alle paare gilt
         \begin{itemize}
             \item Allgemeine Unabhängigkeit $\implies$ Paarweise Unabhängigkeit
