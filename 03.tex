@@ -29,7 +29,13 @@
         \end{itemize}
     \ides{i.i.d.:} Haben ZVs $X_1, \dots, X_n$ die selbe VF und sind unabhängig nennt man sie i.i.d.
     \ides{Momente:} Die Momente von $X$ sind definiert als $m_n := E[X^n], n \in \N$ unter der Voraussetzung, dass $E[|X|^n] < \infty$
-    \ides{Zentralmomente:} Für $n \in \N$ und falls $E[|X|^n] < \infty$ ist, kann man das $n$-te Zentralmoment von $X$ definieren als $E[(X - E[X])^n]$.
+        \begin{itemize}
+            \item $m_1 = E[X]$
+        \end{itemize}
+    \ides{Zentralmomente:} Für $n \in \N$ und falls $E[|X|^n] < \infty$ ist, kann man das $n$-te Zentralmoment von $X$ definieren als $\mu_n := E[(X - E[X])^n]$.
+        \begin{itemize}
+            \item $\mu_2 = E[(X - E[X])^2] = Var[X]$
+        \end{itemize}
     \ides{Momenterzeugende Funktion} einer ZV $X$ ist $M_X(t) := E[e^{tX}], t \in \R$
         \begin{itemize}
             \item Ist immer wohldefiniert in $[0, \infty]$, kann aber $+\infty$ werden
