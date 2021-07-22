@@ -98,7 +98,7 @@
 \subsection{Summe von zwei ZV}
 \begin{itemize}
     \item Seien $X, Y$ diskret ZV mit gemeinsamer GF $p(x, y)$, dann ist $Z = X + Y$ diskret. GF von $Z$: $p_Z(z) = P[Z = z] = \sum_{x_k \in \mc{W}(X)} P[X = x_k, Y = z - x_k] = \sum_{x_k \in \mc{W}(X)} p(x_k, z - x_k)$
-    \item Sind $X, Y$ unabhängig ZV, so ist $p(x, y) = p_X(x) p_Y(y)$ und damit: $p_Z(z) = \sum_{x_k \in \mc{W}(X)} p_x(x_k) p_Y(z - x_k)$
+    \item Sind $X, Y$ unabhängig ZV, so ist $p(x, y) = p_X(x) p_Y(y)$ und damit: $p_Z(z) = \sum_{x_k \in \mc{W}(X)} p_x(x_k) p_Y(z - x_k) = p_X * p_Y$
 \end{itemize}
 
 \subsection{Bedingte Verteilungen}
@@ -140,6 +140,8 @@
     \item $X \sim Geom(p)$
     \item $X = \inf \{i \in \N \mid A_i \text{ tritt ein}\} = \inf \{i \in \N \mid Y_i = 1\}$
     \item $p_X(k) = P[X = k] = p(1 - p)^{k - 1}, \ k = 1, 2, \dots$
+    \item $P[X > k] = (1 - p)^k$
+    \item $P[X > k + n | X > n] = P[X > k]$
     \item $\mc{W}(X) = \N$
     \item $E[X] = \sum_{l=0}^{\infty} P[X > l] = \sum_{l=0}^{\infty} (1 - p)^l = \frac{1}{p}$
     \item $Var[X] = \frac{1 - p}{p^2}$
