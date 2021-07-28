@@ -323,11 +323,11 @@ od
                         \begin{itemize}
                             \item Different is that now it is finite
                         \end{itemize}
-                    \ides{$\mathbf{\sigma_i}$:} Internal configuration
+                    \ides{$\mathbf{\sigma_I}$:} Internal configuration
                         \begin{itemize}
                             \item $\sigma_I \in \Gamma$
                             \item Different is that we only consider the initial configuration
-                            \item Terminal configuration can be modelled by introducing a special \textbf{sink state} we cannot be left again
+                            \item Terminal configuration can be modelled by introducing a special \textbf{sink state} which cannot be left again
                         \end{itemize}
                     \ides{$\mathbf{\to}$:} transition relation
                         \begin{itemize}
@@ -338,7 +338,7 @@ od
                 \begin{itemize}
                     \item Configurations are just states
                         \begin{itemize}
-                            \item We no not need statement since this is appointed by by the location counter
+                            \item We no not need statement since this is appointed by the location counter
                         \end{itemize}
                     \item The initial configuration is the initial state
                         \begin{itemize}
@@ -406,11 +406,11 @@ od
                 \end{itemize}
             \ides{Safety Properties}
                 \begin{itemize}
-                    \item I.e. something bas is never allowed to happen
+                    \item I.e. something bad is never allowed to happen
                         \begin{itemize}
                             \item And once it happened, it cannot be fixed
                         \end{itemize}
-                    \item LT-property $P$ is a safety property if for all infinite sequences $t \in \mc{P}(\text{AP})^\omega$: if $t \notin P$, then there is a finite prefix $\hat{t}$ of $t$ such that every infinite sequence $t'$ wich prefix $\hat{t}, t' \notin P$
+                    \item LT-property $P$ is a safety property if for all infinite sequences $t \in \mc{P}(\text{AP})^\omega$: if $t \notin P$, then there is a finite prefix $\hat{t}$ of $t$ such that every infinite sequence $t'$ with prefix $\hat{t}, t' \notin P$
                     \ides{Bad Prefix $\hat{t}$:} Finite sequence which already violates the property
                         \begin{itemize}
                             \item Even if the violation only happens after the sequence
@@ -424,7 +424,7 @@ od
             \ides{Liveness Properties}
                 \begin{itemize}
                     \item I.e. something good will happen eventually
-                    \item LT-property $P$ is a liveness property if for all finite sequences $\hat{t} \in \mc{P}(\text{AP})^*$ is a prefix of an infinite sequence $t \in P$
+                    \item LT-property $P$ is a liveness property if all finite sequences $\hat{t} \in \mc{P}(\text{AP})^*$ are a prefix of an infinite sequence $t \in P$
                         \begin{itemize}
                             \item Every finite prefix can be extended to an infinite sequence which is in $P$
                         \end{itemize}
@@ -463,8 +463,8 @@ od
             \ides{Derived Operators:}
                 \begin{itemize}
                     \item $\text{true, false}, \vee, \implies, \iff$ are defined as usual
-                    \ides{Eventually:} $\diamond \phi \equiv (\text{true U} \phi)$
-                    \ides{Always from now:} $\Box \phi \equiv \neg \diamond \neg \phi$
+                    \ides{Eventually:} $\Diamond \phi \equiv (\text{true U} \phi)$
+                    \ides{Always from now:} $\Box \phi \equiv \neg \Diamond \neg \phi$
                     \ides{Precedence:} Unary over binary
                     \ides{Specification Patterns:}
                         \begin{itemize}
@@ -475,20 +475,20 @@ od
                                 \end{itemize}
                             \ides{Monotone Invariant:} $\Box (\psi \implies \Box \psi)$
                                 \begin{itemize}
-                                    \item Once $\phi$ is true, then $\psi$ is always true
+                                    \item Once $\psi$ is true, then $\psi$ is always true
                                     \item Safety property
                                 \end{itemize}
-                            \ides{Establishing an invariant:} $\diamond \Box \psi$
+                            \ides{Establishing an invariant:} $\Diamond \Box \psi$
                                 \begin{itemize}
                                     \item Eventually $\psi$ will always hold
                                     \item Liveness property
                                 \end{itemize}
-                            \ides{Responsiveness:} $\Box (\psi \implies \diamond \phi)$
+                            \ides{Responsiveness:} $\Box (\psi \implies \Diamond \phi)$
                                 \begin{itemize}
                                     \item Every time that $\psi$ holds, $\phi$ will eventually hold
                                     \item Liveness property
                                 \end{itemize}
-                            \ides{Fairness:} $\Box \diamond \psi$
+                            \ides{Fairness:} $\Box \Diamond \psi$
                                 \begin{itemize}
                                     \item $\psi$ holds infinitely often
                                     \item Liveness property

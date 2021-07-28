@@ -121,6 +121,9 @@
             \ides{Loop Variant:}
                 \begin{itemize}
                     \item Expression that evaluates to a value in a well-founded set before each iteration
+                            \begin{itemize}
+                                \item Normally we use $\N$
+                            \end{itemize}
                     \item Each loop iteration must decrease the value of the invariant
                     \item Loop has to terminate once the minimal value of the well-founded set is reached
                     \item Used to prove termination
@@ -132,8 +135,9 @@
                         \begin{itemize}
                             \item $\Inf[\text{WHTOT}_\text{Ax}][\mathtt{if} \ \ub{b} \wedge \ub{P} \models 0 \le \ub{e} \text{ and } Z \notin \ub{P}]{\{\ub{b} \wedge \ub{P} \wedge \ub{e} = Z\} \ub{s} \{\Downarrow \ub{P} \wedge \ub{e} < Z\}}{\{\ub{P}\} \texttt{while} \ \ub{b} \ \texttt{do} \ \ub{s} \ \texttt{end} \{\Downarrow \neg \ub{b} \wedge \ub{P}\}}$
                         \end{itemize}
+                    \item All other rules are equivalent to before except that we add $\Downarrow$ to the postcondition
                 \end{itemize}
-
+            \item In proof schemas asserts are often pre- and postcondition. Therefore, we do not write an arrow there. For asserts which are only postcondition, we write an arrow
         \end{itemize}
 \end{itemize}
 

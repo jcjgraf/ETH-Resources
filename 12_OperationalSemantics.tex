@@ -289,11 +289,12 @@
                 \begin{itemize}
                     \ides{Semantically Equivalent} are two statements $s_1, s_2$ iff $\forall \sigma$ both:
                         \begin{itemize}
-                            \item $\langle s_1, \sigma \rangle \to_1^* \gamma \iff \langle s_2, \sigma \rangle \to_1^* \gamma$ if $\gamma$ is a stuck or terminal configuration
+                            \item for all stuck or terminal configurations $\gamma$ we have $\langle s_1, \sigma \rangle \to_1^* \gamma \iff \langle s_2, \sigma \rangle \to_1^* \gamma$
                                 \begin{itemize}
                                     \item The length may be different
                                     \item The intermediate configurations may be different
                                 \end{itemize}
+                            \item there is an infinite derivation sequence starting in $\langle s_1, \sigma \rangle$ iff there is one starting in $\langle s_2, \sigma \rangle$
                             \ides{Notation:} $s_1 \simeq s_2$
                         \end{itemize}
                 \end{itemize}
