@@ -50,21 +50,21 @@
     p_t = f(p_{t - 1}, u_t) =
 \]
 \[
-    \begin{pmatrix}
+    \begin{bmatrix}
         x_{t - 1}\\
         y_{t - 1}\\
         \theta_{t - 1}
-    \end{pmatrix} +
-    \begin{pmatrix}
+    \end{bmatrix} +
+    \begin{bmatrix}
         \frac{\Delta S_r + \Delta S_l}{2} \cos(\theta_{t - 1} + \frac{\Delta S_r - \Delta S_l}{2b})\\
         \frac{\Delta S_r + \Delta S_l}{2} \sin(\theta_{t - 1} + \frac{\Delta S_r - \Delta S_l}{2b})\\
         \frac{\Delta S_r - \Delta S_l}{b}
-    \end{pmatrix}
+    \end{bmatrix}
 \]
 \[
 b = \text{Distance between wheels}
 \]
-            \ides{Error Model:} 
+            \ides{Error Model:}
                 \begin{itemize}
                     \ides{Error Propagation:} $\Sigma_{p_t} = F_{p_{t-1}} \Sigma_{p_{t-1}} F_{p_{t-1}}^\transpose + F_{\Delta S} \Sigma_{\Delta S} F_{\Delta S}^\transpose$
                     \ides{Error Model:} $\Sigma_{\Delta S} =
@@ -86,9 +86,9 @@ b = \text{Distance between wheels}
             \ides{$\mathbf{x_t}$:} robot location at time $t$
             \ides{$\mathbf{u_t}$:} proprioceptive sensor reading at time $t$
             \ides{$\mathbf{z_t}$:} exteroceptive sensor reading (observation) at time $t$
-            \ides{$\mathbf{M}$}$= \{m_0, m_1, \dots, m_n\}$ true map of the environment with $n$ features
+            \ides{$\mathbf{M}$}$= \{m_0, m_1, \dots, m_{n-1}\}$ true map of the environment with $n$ features
             \ides{$\mathbf{\text{bel}(x_t)}$}$= p(x_t \mid z_{1 \to t}, u_{1 \to t})$
-        \ides{$\mathbf{\overline{\text{bel}}(x_t)}$}$= p(x_t \mid z_{1 \to t - 1}, u_{1 \to t})$
+            \ides{$\mathbf{\overline{\text{bel}}(x_t)}$}$= p(x_t \mid z_{1 \to t - 1}, u_{1 \to t})$
         \end{itemize*}
     \ides{Requirements}
         \begin{itemize}
@@ -202,4 +202,139 @@ b = \text{Distance between wheels}
     \ipro Precise
     \ipro Efficient
     \icon Robot may get lost
+\end{itemize}
+
+\subsection{Simultaneous Localization and Mapping (SLAM)}
+\begin{itemize}
+    \item Create map and localize in parallel only using proprioceptive and exteroceptive sensor data
+    \ides{Terminology:}
+        \begin{itemize*}
+            \ides{$\mathbf{x_t}$:} robot location at time $t$
+            \ides{$\mathbf{X_t}$}$=\{x_0, x_1, \dots, x_t\}$ robot path till time $t$
+            \ides{$\mathbf{u_t}$:} motion between $t-1$ and $t$
+            \ides{$\mathbf{U_t}$}$=\{u_0, u_1, \dots, u_t\}$ sequence of relative motions till time $t$
+            \ides{$\mathbf{z_t}$:} landmark observation at time $t$
+            \ides{$\mathbf{Z_t}$}$=\{z_0, z_1, \dots, z_t\}$ sequence of landmark observations till time $t$
+            \ides{$\mathbf{z_t}$:} exteroceptive sensor reading (observation) at time $t$
+            \ides{$\mathbf{M}$}$= \{m_0, m_1, \dots, m_{n-1}\}$ true map of the environment with $n$ landmarks
+        \end{itemize*}
+    \ides{Full SLAM:} Reconstruct full path $p(X_t, M \mid Z_t, U_t)$
+    \ides{Online SLAM:} Reconstruct current position $p(x_t, M \mid Z_t, U_t)$
+    \ides{Approaches:}
+        \begin{itemize}
+            \ides{Full Graph Optimisation}
+                \begin{itemize}
+                    \item Eliminate observations and control inputs
+                    \item Solve for constraints between poses and landmarks
+                    \ipro Finds globally consistent solution
+                    \ipro Trajectories can be very smooth
+                    \icon Sparsify graph for real-time application
+                    \\ \includegraphics[width=\linewidth]{./Figures/05_SLAM_FullGraphOptimisation.png}
+                \end{itemize}
+            \ides{Key Frames}
+                \begin{itemize}
+                    \item Retain most representative poses and their dependency links
+                    \item Optimize resulting graph
+                    \item Example: PTAM, OKVIS, ORB-SLAM
+                    \\ \includegraphics[width=\linewidth]{./Figures/05_SLAM_KeyFrames.png}
+                \end{itemize}
+            \ides{Filtering}
+                \begin{itemize}
+                    \item Summarize all experience w.r.t. last pose
+                    \item Done using state vector and covariance matrix
+                    \item Example: MonoSLAM, FastSLAM
+                    \\ \includegraphics[width=\linewidth]{./Figures/05_SLAM_Filtering.png}
+                \end{itemize}
+        \end{itemize}
+\end{itemize}
+
+\subsubsection{EKF SLAM}
+\begin{itemize}
+    \item Example of filtering
+    \item Summarizes past experience:
+        \begin{itemize}
+            \item Extended state vector $y_t =
+                \begin{bmatrix}
+                    x_t,  m_1, \cdots, m_{n-1}
+                \end{bmatrix}^\transpose$
+            \item Corresponding covariance $P_{y_t} =
+                \begin{bmatrix}
+                    P_{xx} & \cdots & P_{xm_{n-1}} \\
+                    \vdots & \ddots & \vdots \\
+                    P_{m_{n-1}x} & \cdots & P_{m_{n-1}m_{n-1}} \\
+                \end{bmatrix}$
+        \end{itemize}
+    \item[S1)] \textbf{Prediction:}
+        \begin{itemize}
+            \item According to EKF equations
+                \begin{itemize}
+                    \item $\hat y_t =
+                        \begin{bmatrix}
+                          \hat x_t \\
+                          m_i
+                        \end{bmatrix} =
+                        \begin{bmatrix}
+                          f(x_{t-1}, u_t) \\
+                          \mathbf 0
+                        \end{bmatrix}$
+                    \item $\hat P_{y_t} = F_y P_{y_{t-1}}F_y^\transpose + F_uQ_tF_u^\transpose$
+                \end{itemize}
+        \end{itemize}
+    \item[S2)] \textbf{Measurement:}
+        \begin{itemize}
+            \item Measurement model $\hat z_i=h_i(\hat x_t, m_i)$ as in EKF localization
+        \end{itemize}
+    \item[S3)] \textbf{Update:}
+        \begin{itemize}
+            \item Update the state with actual observations $Z_{n-1}$:
+            \item $y_t = \hat y_t + K_t (Z_{n-1} - h_{0:n-1}(\hat x_t, M_{n-1}))$
+            \item $P_{y_t} = \hat P_{y_t} - K_t \Sigma_{IN} K_t^\transpose$
+            \item Where
+                \begin{itemize*}
+                    \item $\Sigma_{IN} = H \hat P_{y_t} H^\transpose + R$
+                    \item Kalman gain $K_t = \hat P_{y_t} H (\Sigma_{IN})^{-1}$
+                \end{itemize*}
+        \end{itemize}
+    \item Initially, the covariance matrix is sparse (features are uncorrolated)
+    \item After some time the covariance matrix becomes more dense
+    \item 
+    \ides{MonoSLAM}
+        \begin{itemize}
+            \item EKF SLAM implementation
+            \item Only one camera $\implies$ no proprioceptive data $\implies$ custom motion model
+            \ides{Constant Velocity Motion Model}\\
+                $f_v =
+                \begin{bmatrix}
+                  \mathbf r_\mathrm{new}^W \\
+                  \mathbf q_\mathrm{new}^{WR} \\
+                  \mathbf v_\mathrm{new}^W \\
+                  \mathbf \omega_\mathrm{new}^W
+                \end{bmatrix} =
+                \begin{bmatrix}
+                  \mathbf r^W + (\mathbf v^W + \mathbf V^W)\Delta t \\
+                  \mathbf q^{WR} \times \mathbf q((\omega^W+\mathbf\Omega^W)\Delta t)\\
+                  \mathbf v^W + \mathbf V^W\\
+                  \mathbf \omega^W + \mathbf \Omega^W
+                \end{bmatrix}$
+            \item Unknown linear and angular accelerations cause a velocity impulse in each time step:\\
+                $n =
+                \begin{bmatrix}
+                    \mathbf V^W\\
+                    \mathbf \Omega^W
+                \end{bmatrix} =
+                \begin{bmatrix}
+                    \mathbf a^W\Delta t\\
+                    \mathbf \alpha^W\Delta t
+                \end{bmatrix}$
+        \end{itemize}
+    \ides{Challenges}
+        \begin{itemize*}
+            \item Robust local motion estimation
+            \item Mapping and loop-closure detection
+            \item Map management and optimisation
+            \item Sensitivity to incorrect data associations
+            \item Tradeoff between efficiency and precision
+            \item Dynamic objects
+            \item Collaborative exploration
+        \end{itemize*}
 \end{itemize}
