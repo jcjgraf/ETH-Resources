@@ -280,3 +280,195 @@
             \item For $8$ non-coplanar pts, unique solution is given by the EV of $Q$ corresponding to the smallest Eigenvalue
         \end{itemize}
 \end{itemize}
+
+\subsubsection{Image Filtering}
+\begin{itemize}
+    \ides{Linear:} Replace each pixel by a linear combination of its neighbours
+    \ides{Shift-Invariant:} Same operation is performed on every point on the image
+    \ides{Filter $\mathbf{H}$:} aka. \textit{kernel, mask, window}
+    \ides{Boundaries:} Need to handle specially:
+        \begin{itemize*}
+            \item Ignore
+            \item Zero padding
+            \item Pad with edge value
+            \item Mirror boundary
+            \item Wrap around from other side
+        \end{itemize*}
+    \ides{Normalization:} Prevent img from getting brighter/darker
+    \ides{Correlation:} $J(x) = F \circ I(x,y) = \sum_{i=-N}^N \sum_{j=-M}^M F(i,j) I(x + i, y + j)$
+        \begin{itemize}
+            \item Not associative
+        \end{itemize}
+    \ides{Convolution:} $J(x) = F \ast I(x,y) = \sum_{i=-N}^N \sum_{j=-M}^M F(i,j) I(x - i, y - j)$
+        \begin{itemize}
+            \item Equivalent to correlation except that the filter is flipped before correlating
+            \item Same result to correlation if the filter is symmetric
+            \item Is associative: $F \ast (G \ast I) = (F \ast G) \ast I$
+        \end{itemize}
+    \ides{Correlation Cost: (per pixel)}
+        \begin{itemize}
+            \ides{2D:}
+                \begin{itemize*}
+                    \ides{Mult.:} $(2N + 1)^2$
+                    \ides{Add.:} $(2N - 1)^2 - 1$
+                \end{itemize*}
+            \ides{$\mathbf{2 \times 1D}$:}
+                \begin{itemize*}
+                    \ides{Mult.:} $2(2N + 1)$
+                    \ides{Add.:} $4N$
+                \end{itemize*}
+            \ides{$\mathbf{2 \times 1D}$ with const.:}
+                \begin{itemize*}
+                    \ides{Mult.:} $1$
+                    \ides{Add.:} $4N$
+                \end{itemize*}
+        \end{itemize}
+    \ides{Derivation:} $J(x) = \frac{I(x+1)-I(x-1)}{2}$
+    \ides{Smoothing:}
+        \begin{itemize}
+            \item For blurring or noise detection
+            \ides{1D Gaussian:} $G_\sigma(x) = \frac{1}{\sigma \sqrt{2 \pi}} \mathrm e^{-\frac{x^2}{2 \sigma^2}}$
+            \ides{2D Gaussian:} $G_\sigma(x, y) = \frac{1}{2 \pi \sigma^2} \mathrm e^{-\frac{x^2 + y^2}{2 \sigma ^2}} = g_\sigma(x) \cdot g_\sigma(y) =
+                \tfrac{1}{\sigma \sqrt{2\pi}} \mathrm e^{\frac{-x^2}{2\sigma^2}}
+                \cdot
+                \tfrac{1}{\sigma \sqrt{2\pi}} \mathrm e^{\frac{-y^2}{2\sigma^2}}$
+                \begin{itemize}
+                    \item Is separable
+                \end{itemize}
+        \end{itemize}
+    \ides{Similarity Measure}
+        \begin{itemize}
+            \ides{Sum of Square Diff.:} $\mathrm{SSD}(x) =
+                \sum_i (F(i) - I(x+i))^2 =
+                \sum_i F(i)^2 + \sum_i I(x+i)^2 - 2 \sum_i (F(i) I(x+i))$
+            \ides{Normalized Cross Correlation:} $\mathrm{NCC} =
+                \frac{\sum_i (F(i)I(x + i))}
+                {\sqrt{\sum_i F(i)^2} \sqrt{\sum_i I(x+i)^2}}$
+            \ides{Zero-Mean Normalized Cross Correlation (ZNCC)}: Invariant to local average intensity. Maximize: $\mathrm{ZNCC}(x) =
+                \frac{\sum_i (F(i)- \mu_F)(I(x + i) - \mu_{I_x})}
+                {
+                    \sqrt{\sum_i (F(i) - \mu_F)^2}
+                    \sqrt{\sum_i (I(x+i) - \mu_{I_x})^2}
+                }$
+                \begin{itemize*}
+                    \item $\mu_F = \frac{\sum_i F(i)}{2N + 1}$
+                    \item $\mu_{I_x} = \frac{\sum_i I(x+i)}{2N + 1}$
+                \end{itemize*}
+        \end{itemize}
+    \ides{Template Matching:} Use template as filter and apply similarity measure
+    \ides{Edge Detection:}
+        \begin{itemize*}
+            \item[1)] Noise reduction
+            \item[2)] Gradient $S^\prime = (G_\sigma \ast I)^\prime = G_\sigma^\prime \ast I$
+            \item[3)] Thresholding
+            \item[4)] Non-maximal suppression
+        \end{itemize*}
+        \begin{itemize}
+            \ides{Derivation of Gaussian:} $G_\sigma^\prime(x, y) = \frac{\partial G_\sigma(x, y)}{\partial x} + \frac{\partial G_\sigma(x, y)}{\partial y}$
+                \begin{itemize*}
+                    \item Edges at min/max
+                \end{itemize*}
+            \ides{Laplacian of Gaussian:} $\mathrm{LoG} = G_\sigma^{\prime\prime}(x, y) = \frac{\partial^2 G_\sigma(x, y)}{\partial x^2} + \frac{\partial^2 G_\sigma(x, y)}{\partial y^2}$
+                \begin{itemize*}
+                    \item Edges at zero crossing
+                \end{itemize*}
+        \end{itemize}
+\end{itemize}
+
+\subsubsection{Point Features}
+\begin{itemize}
+    \ides{Harris Corner Detection:} Patch at $(x,y)$ of size $P$ has great difference to all surrounding patches $(x + \Delta x, y + \Delta y)$
+        \begin{itemize}
+            \item $\mathrm{SSD}(\Delta x, \Delta y) = \sum_{x,y \in P}(I(x,y) - I(x + \Delta x, y + \Delta y))^2$
+            \item $\Rightarrow \mathrm{SSD}(\Delta x, \Delta y) \approx \sum_{x,y \in P}(I_x(x,y)x - I_y(x, y)y)^2$
+                \\ \begin{itemize*}
+                    \item $I_{x} = \frac{\partial I(x,y)}{\partial x}$
+                    \item $I_{y} = \frac{\partial I(x,y)}{\partial y}$
+                    \item Using first-order Taylor approx
+                \end{itemize*}
+            \item $\Rightarrow \mathrm{SSD}(\Delta x, \Delta y) \approx [\Delta x, \Delta y]M[\Delta x, \Delta y]^\transpose$
+                \\ \begin{itemize*}
+                    \item $M = \sum_{x,y \in P}
+\begin{bmatrix}
+    I_x^2 & I_xI_y\\
+    I_xI_y & I_y^2
+\end{bmatrix} = R^{-1}
+\begin{bmatrix}
+    \lambda_1 & 0\\
+    0 & \lambda_2
+\end{bmatrix} R$
+                \end{itemize*}
+            \item \begin{itemize*}
+                \ides{$\mathbf{\lambda_1, \lambda_2}$ small:} Flat region
+                \ides{$\mathbf{\lambda_1 >> \lambda_2}$:} Edge
+                \ides{$\mathbf{\lambda_1 << \lambda_2}$:} Edge
+                \ides{$\mathbf{\lambda_1, \lambda_2}$ large:} Corner
+            \end{itemize*}
+            \ides{Cornerness Function:} $C = \text{det} - \kappa \ \text{trace}^2(M)$
+                \\ \begin{itemize*}
+                    \item Extract local minima
+                    \item Used since calculating eigenvalues is expensive
+                    \item $\kappa$ is magic number
+                \end{itemize*}
+            \ides{Invariant to:}
+                \begin{itemize*}
+                    \item Rotation
+                    \item Linear intensity change
+                \end{itemize*}
+            \ides{Not invariant to:} Scale change
+        \end{itemize}
+    \ides{Scale Invariant Feature Transform (SIFT) Features:}
+        \begin{itemize}
+            \item Detect blobs
+            \item Assigns each keypoint a orientation and descriptor
+            \ides{Keypoint Detection:}
+                \begin{itemize*}
+                    \item[1)] Downscale image multiple times
+                    \item[2)] Gaussian blur each at different rates
+                    \item[3)] Calculate \textit{Difference of Gaussian (DoG)} (subtract successive smoothed images)
+                    \item[4)] Find keypoints (local extrema in the DoG)
+                \end{itemize*}
+            \ides{Keypoint Orientation:}
+                \begin{itemize*}
+                    \item[1)] Generate gradient orientation histogram for each keypoint
+                    \item[2)] Orientation is value of highest peak in histogram
+                \end{itemize*}
+            \ides{Keypoint Descriptor:}
+                \begin{itemize*}
+                    \item[1)] Divide neighbourhood into $4 \times 4$ regions
+                    \item[2)] Compute orientation histograms along $8$ orientations
+                    \item[3)] Concatenate $4 \times 4 \times 8 = 128$ values in vector
+                \end{itemize*}
+            \ipro High robustness
+            \ipro Invariant to rotation
+        \end{itemize}
+    \ides{Features from Accelerated Segment Test (FAST) Detector:}
+        \begin{itemize*}
+            \item Detects corners
+            \item Look at $16$ pixels around target pixel
+            \item If they are all significantly darker/brighter, we have a FAST corner
+            \ipro Fast
+            \icon Not robust against noise
+        \end{itemize*}
+    \ides{Binary Robust Independent Elementary Features (BRIEF) Descriptor:}
+        \begin{itemize}
+            \item Detect blobs
+                \begin{itemize*}
+                    \item[1)] ``Random'' (predefined) selection of pixel pairs
+                    \item[2)] Compare intensity of pairs and store result in descriptor
+                    \item[3)] Matching done with Hamming Distance
+                \end{itemize*}
+            \ipro High speed in description and matching
+            \icon Not scale invariant
+            \icon Not rotation invariant
+        \end{itemize}
+    \ides{Binary Robust Invariant Scalable Keypoints (BRISK) Detector}
+        \begin{itemize*}
+            \item Detect blobs
+            \item[1)] Detect corners using FAST
+            \item[2)] Compare intensity similar to BRIEF but in some specific geometric pattern
+            \ipro High speed
+            \ipro Rotation and scale invariant
+            \icon Slower than BRIEF
+        \end{itemize*}
+\end{itemize}
