@@ -1,8 +1,103 @@
 %! TEX root = ./main.tex
 
 \section{Perception}
+\begin{itemize}
+    \item Raw Data $\implies$ Features $\implies$ Objects $\implies$ Places/Situations
+\end{itemize}
+
 \subsection{Sensors}
+\subsubsection{Types of Sensors}
+\begin{itemize}
+    \ides{Proprioceptive (PC):} Measure values internally to the system
+    \ides{Exteroceptive (EC):} Acquire information about the robots environment
+    \ides{Passive (P):} Measure ambient environmental energy
+    \ides{Active (A):} Emit energy into the environment and measure the environments reaction to it
+        \begin{itemize*}
+            \ipro More accurate
+            \icon May interfere
+            \icon May affect the characteristic one wants to measure
+        \end{itemize*}
+    \ides{Common Sensors}
+        \\ \begin{tabular}{l l l}
+            Sensor Type & System & Class\\\hline
+            Tactile & Bumpers & EC, P \\
+            Wheel/motor & Brush encoders & PC, P \\
+            & Optical encoders & PC, A \\
+            Heading & Compass & EC, P \\
+            & Gyroscope & PC, P \\
+            & Inclinometer & EC, A/P \\
+            Acceleration & Accelerometer & PC, P \\
+            Beacons & GPS & EC, A \\
+                & Radio, ultrasonic, & EC, A \\
+                & Reflective Beacons \\
+            Motion/speed & Doppler: radar/sound & EC, A \\
+            Range & Ultrasound, laser, & EC, A \\
+                & struct. light, ToF \\
+            Vision & CCD/CMOS & EC, P
+        \end{tabular}
+    \ides{Encoders:}
+        \begin{itemize*}
+            \item Convert linear/angular motion of a shaft to digital
+            \item For control of motor-driven joints
+        \end{itemize*}
+    \ides{Heading Sensors:}
+        \begin{itemize*}
+            \item Determine orientation and inclination w.r.t some reference
+            \ides{Gyroscope:}
+                \begin{itemize*}
+                    \item Absolute measure for heading
+                    \ides{Mechanical:} Fast spinning wheel
+                    \ides{Optical:} Laser beam in fiber coil; Measure phase shift
+                \end{itemize*}
+        \end{itemize*}
+    \ides{Range Sensors:}
+        \begin{itemize*}
+            \item Traveled distance $d$ of a sound or electromagnetic wave after a \textbf{time of flight} $t$
+            \item $d=ct$
+            \item Sound: $c = 0.3\,\mathrm m / \mathrm{ms}$
+            \item Light: $c = 0.3\,\mathrm m / \mathrm{ns}$
+        \end{itemize*}
+    \todo{More Sensors?}
+\end{itemize}
+
+\subsubsection{Uncertainty Representation}
+\begin{itemize}
+    \ides{Systematic Error:}
+        \begin{itemize*}
+            \item Deterministic
+            \item Can be modelled and calibrated
+        \end{itemize*}
+    \ides{Random Error:}
+        \begin{itemize*}
+            \item Cannot be predicted
+            \item Described statistically
+        \end{itemize*}
+    \item Density function identifies for each possible $x$ of RV $X$ a probability $f(x)$
+        \begin{itemize*}
+            \item $\int_{-\infty}^\infty f(x) \rmd x = 1$
+            \item $\mu = E[X] = \int_{-\infty}^\infty x f(x) \rmd x$
+            \item $\sigma^2 = E[(X - E[X])^2]$
+        \end{itemize*}
+    \ides{Error Propagation Law}
+        \begin{itemize*}
+            \item Error propagation in system with $n$ inputs and $m$ outputs $f: \R^n \to \R^m$, $f: X_1, \dots X_n \mapsto f(X_1, \dots, X_n) = Y_j$
+            \item Uncertainty of $X_i$ is known
+            \item Mapping between input covariance $C_X$ and output covariance $C_Y$: $C_Y = F_X C_X F_X^\transpose$
+            \\\item $F_X = \bigtriangledown f_X =
+                \begin{bmatrix}
+                    \frac{\partial f_1}{\partial X_1} & \dots & \frac{\partial f_1}{\partial X_n}\\
+                    \vdots & \ddots & \vdots\\
+                    \frac{\partial f_m}{\partial X_1} & \dots & \frac{\partial f_m}{\partial X_n}
+                \end{bmatrix}$
+            \ides{$\mathbf{C_{X/Y}}$:} Covariance of input uncertainties/propagated uncertainties of the output
+        \end{itemize*}
+\end{itemize}
+
 \subsection{Computer Vision}
+\begin{itemize}
+    \item
+\end{itemize}
+
 \subsubsection{Camera Model}
 \begin{itemize}
     \ides{Pinhole Model:}
@@ -470,5 +565,98 @@
             \ipro High speed
             \ipro Rotation and scale invariant
             \icon Slower than BRIEF
+        \end{itemize*}
+\end{itemize}
+
+\subsubsection{Place Recognition}
+\begin{itemize}
+    \item Training set of images needed to create structure
+    \ides{Bag of features:} Bag of descriptors of a word
+        \begin{itemize*}
+            \item Image is described by this set
+            \item Sectional information is removed
+        \end{itemize*}
+    \ides{Visual Word:} Single number representing a high-dimensional descriptor
+        \begin{itemize*}
+            \item Done by \textbf{k-means clustering}
+            \item Bag of features $\Rightarrow$ bag of visual words
+        \end{itemize*}
+    \ides{Visual Vocabulary:} DB of visual words created by many training images
+    \item Scene is collection of visual words
+    \item Efficiently find matches:
+        \begin{itemize}
+            \ides{Vocabulary Tree:} Hierarchical arrangement of visual vocabulary (I guess)
+                \begin{itemize*}
+                    \item Leaf holds image which matches the feature
+                    \item By feeding in features of new images, we get a bag of matching images
+                    \item Number of matches determines the probability
+                \end{itemize*}
+            \ides{Inverted File DB:}
+                \begin{itemize*}
+                    \item List of all possible visual words points to list containing all images containing this feature
+                    \item Query DB for all features of a given list and count occurrences of a certain image (using voting array)
+                \end{itemize*}
+        \end{itemize}
+    \ides{Term Frequency-Inverse Document Frequency (tf-idf):} Not all words are equally important
+        \begin{itemize}
+            \item Measure importance of visual word inside image
+            \item Used for voting array
+            \item For word $w_i$ in img $j$:
+                \begin{itemize*}
+                    \item $\text{tf-ids}_{ij} = \mathrm{tf}_{ij} \cdot \mathrm{idf}_i$
+                    \item $\mathrm{tf}_{ij} = \frac{\# \text{occur. of } w_i \text{in } j}{\# \text{words in } j}$
+                    \item $\mathrm{idf}_{i} = \log \frac{|\text{Img}|}{|\{\text{img} \mid w_i \in \text{img}\}|}$
+                \end{itemize*}
+        \end{itemize}
+    \ides{FABMAP}
+        \begin{itemize*}
+            \item Place recognition
+            \item Assume: worlds is set of discrete places
+            \ides{Place:} vector of visual words at that scene
+            \item Calculate probability of being at a know location
+            \item Frequent occurring objects are suppressed
+            \ipro High performance
+        \end{itemize*}
+\end{itemize}
+
+\subsubsection{Line Extraction}
+\begin{itemize}
+    \ides{Task:} Given set of pts, find best fitting line
+        \begin{itemize*}
+            \item Do not have to figure out which pts belong to which line
+        \end{itemize*}
+    \ides{Split-and-Merge:}
+        \begin{itemize}
+            \item[1)] \textbf{Split:}
+                \begin{itemize*}
+                    \item[a)] Fit line through point set (or take end-pts)
+                    \item[b)] Find most distant pt
+                    \item[c)] If distance $>$ threshold, split set and repeat
+                \end{itemize*}
+            \item[2)] \textbf{Merge:} If two consecutive line segments are almost collinear, merge them
+            \icon Sensitive to outliers
+        \end{itemize}
+    \ides{Random Sample Consensus (RANSAC):}
+        \begin{itemize*}
+            \item[1)] Draw line through two randomly selected pts
+            \item[2)] Compute distance of all pts to it
+            \item[4)] Repeat $k = \frac{\log({1 - p)}}{\log(1 - w^2)}$ times
+                \begin{itemize*}
+                    \ides{w:} fraction of inliers
+                    \ides{p:} prob of finding set of pts free of outliers
+                \end{itemize*}
+            \item[5)] Select line with least total error
+        \end{itemize*}
+        \begin{itemize}
+            \icon Non-Deterministic
+        \end{itemize}
+    \ides{Hough-Transform:}
+        \begin{itemize}
+            \item Each pt in image space defines a sinosoid in Hough space
+        \end{itemize}
+        \begin{itemize*}
+            \item[1)] For each pt compute $\rho = x \cos \theta + y \sin \theta, \theta \in [0, 180]$
+            \item[2)] Capture votes for parameters
+            \item[3)] Find $(rho, \theta)$ with most votes
         \end{itemize*}
 \end{itemize}
