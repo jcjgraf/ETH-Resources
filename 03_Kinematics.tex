@@ -1,0 +1,262 @@
+%! TEX root = ./main.tex
+
+\section{Kinematics}
+\subsection{Rigid Body Kinematics}
+\includegraphics[width=\linewidth]{./Figures/03_RigidBodyTransformation.png}
+\begin{itemize}
+    \ides{Translation:} All pts of the body move parallele
+        \begin{itemize}
+            \item Vector from $O$ to $P$ in $I$: ${}_I r_{OP} = {}_I r_{OB} + {}_I r_{BP}$
+            \item Velocity of of pt $P$ in $I$: ${}_I v_P = {}_I \dot r_{OP}$
+        \end{itemize}
+    \ides{Rotation:} One pt is fixed an all other move around it
+        \begin{itemize}
+            \item Vector $r$ in $B$ rotated to $I$: ${}_I r = R_{IB} {}_B r$
+            \item Rotation along $z$: $R_{IB} =
+                \begin{bmatrix}
+                    \cos(\varphi) & -\sin(\varphi) & 0\\
+                    \sin(\varphi) & \cos(\varphi) & 0\\
+                    0 & 0 & 1
+                \end{bmatrix}$
+            \ides{Inverse:} $R_{BI} = R^{-1}_{IB} = R^\transpose_{IB}$
+            \ides{Composition:} $R_{AI} = R_{AB} \cdot R_{BI}$
+            \item Angular velocity of $B$ in $I$ along $z$: ${}_I \omega_{IB} = (0, 0, \dot \varphi)^\transpose$
+                \begin{itemize}
+                    \item Equal for every point in the body
+                \end{itemize}
+            \ides{Transformation:} ${}_I \omega_{IB} = R_{IB} \ {}_B \omega_{IB}$
+            \ides{Composition:} ${}_I \omega_{IC} = {}_I \omega_{IB} + {}_I \omega_{BC}$
+            \item ${}_I \hat \omega_{IB} = \dot R_{IB} R^\transpose_{IB} =
+                \begin{bmatrix}
+                    0 & -{}_I \omega^z_{IB} & {}_I \omega^y_{IB}\\
+                    {}_I \omega^z_{IB} & 0 & -{}_I \omega^x_{IB}\\
+                    -{}_I \omega^y_{IB} & {}_I \omega^x_{IB} & 0
+                \end{bmatrix}, \ {}_I \omega_{IB}
+                \begin{bmatrix}
+                    {}_I \omega^x_{IB}\\
+                    {}_I \omega^y_{IB}\\
+                    {}_I \omega^z_{IB}
+                \end{bmatrix}$
+        \end{itemize}
+    \ides{Homogeneous Transformation:} Rotation $+$ Translation
+        \begin{itemize}
+            \item Vector from $O$ to $P$ in $I$: ${}_I r_{OP} = {}_I r_{OP} + R_{IB} \ {}_B r_{BP}$
+            \item $
+                \begin{pmatrix}
+                    {}_I r_{OP}\\
+                    1
+                \end{pmatrix} = 
+                \begin{bmatrix}
+                    R_{IB} & {}_I r_{OB}\\
+                    0 & 1
+                \end{bmatrix}
+                \begin{pmatrix}
+                    {}_B r_{BP}\\
+                    1
+                \end{pmatrix}$
+            \item Full motion: ${}_I v_P = {}_I \dot r_{OP} = {}_I \dot r_{OB} + {}_I \omega_{IB} \times {}_I r_{BP}$
+        \end{itemize}
+    \ides{Vector Differentiation}
+        \begin{description}
+            \item[Non-moving system:] ${}_I r \implies {}_I \dot r = \frac{d {}_I r}{dt}$
+            \item[Moving (translating or rotating) system:] ${}_B r \implies {}_B \dot r = \frac{d {}_B r}{dt} + {}_B \omega_{IB} \times {}_B r$
+        \end{description}
+    \ides{Generalized Coordinated}
+        \begin{itemize}
+            \item Set of independent variables that uniquely describe the robot's configuration
+            \item $q = (q_1, q_2, \dots q_n)^\transpose$
+            \item ${}_I r_{OP} = {}_I r_{OP}(q)$
+        \end{itemize}
+    \ides{Jacobians}
+        \begin{itemize}
+            \item $J_P = \frac{\partial r_{OP}(q)}{\partial q} =
+                \begin{bmatrix}
+                    \frac{\partial r_1}{\partial q_1} & \dots & \frac{\partial r_1}{\partial q_n}\\
+                    \vdots & \ddots & \vdots\\
+                    \frac{\partial r_m}{\partial q_1} & \dots & \frac{\partial r_1}{\partial q_n}\\
+                \end{bmatrix}$
+            \item Cartesian velocity to generalized velocity: $\dot r_P = J \dot q$
+            \item Change in generalized coordinates to Cartesian space: $\bigtriangleup r_P = J \bigtriangleup q$
+        \end{itemize}
+\end{itemize}
+
+\subsection{Inverse Kinematics}
+\begin{itemize}
+    \item Given desired endeffector position $r_{OF}(q) = r^{\text{goal}}_{OF}$, determine generalized coordinates $q$
+    \item $r_{OF}(q)$ not easily invertible
+    \ides{Iterative Method:}
+        \begin{itemize}
+            \item[1)] Initialize $q = q^0$ to initial guess and set $r = r(q)$
+            \item[2)] Evaluate Jacobian $J_P = \left.\frac{\partial r_{OF}}{\partial q} \right|_{q = q^i}$
+                \item[3)] Invert Jacobian to obtain $\bigtriangleup q = J^+ \bigtriangleup r_{OF}$
+                \item[4)] Update generalized coordinates $q^{i+1} = q^i + J^+(r^\text{goal}_{OF} - r^j_{OF}$
+                \item[5)] Repeat from $2$ till converge
+        \end{itemize}
+\end{itemize}
+
+\subsection{Inverse Differential Kinematics}
+\begin{itemize}
+    \item Given desired endeffector velocity $\dot r_{F} = J_P \dot q = r^\text{goal}_F$, determine generalized velocity $q = J^+_P \dot r^\text{goal}_F$
+\end{itemize}
+
+\subsection{Redundancy and Singularity}
+\begin{itemize}
+    \ides{Redundancy:} Jacobian is column-rank deficient
+        \begin{itemize}
+            \item Pseudo inverse minimizes $\norm{\dot q}_2$
+            \item Can have multiple solutions $\dot q = J^+ \dot r^\text{goal} + \underbrace{(I - J^+ J)}_{N} \dot q_0$
+            \item $q_0$ is chosen solution
+        \end{itemize}
+    \ides{Singularity:} Jacobian is row-rand deficient
+        \begin{itemize}
+            \item Pseude inverse minimizes error $\norm{\dot r^\text{goal} - \dot r}_2$
+        \end{itemize}
+\end{itemize}
+
+\subsection{Mobile Robot Kinematics}
+\begin{itemize}
+    \ides{Legged Robot:} Quadropad
+        \begin{itemize}
+            \item $q =
+                \begin{bmatrix}
+                    q_B\\
+                    q_r
+                \end{bmatrix}
+                \begin{matrix}
+                    \text{Un-actuated base}\\
+                    \text{Actuated joints}
+                \end{matrix}$
+            \ides{Contact Constraint:} $\dot r_F = J_F \dot q = 0 \Rightarrow \dot q = \cancel{J^+_F \dot r_F}^{=0} + N_F \dot q_0$
+            \ides{Body Move:} $\dot r_B = J_B \dot q = J_B N_F \dot q_0$
+        \item $\dot q = \cancel{J^+_F \dot r_F}^{=0} + N_F \dot q_0 = N_F(J_B N_F)^+ \dot r_B$
+        \end{itemize}
+    \ides{Wheeled Robot:} Planar car
+        \begin{itemize}
+            \item $q =
+                \begin{bmatrix}
+                    x\\
+                    \varphi
+                \end{bmatrix}$
+            \item Point on wheel: ${}_I r_{OP} =
+                \begin{bmatrix}
+                    x + r \sin(\varphi)\\
+                    r + r \cos(\varphi)\\
+                        0
+                \end{bmatrix}$
+            \item ${}_I J_P =
+                \begin{bmatrix}
+                    1 & r \cos(\varphi)\\
+                    0 & -r \sin(\varphi)\\
+                    0 & 0
+                \end{bmatrix}$
+        \ides{Contact Constraint:} $\left. {}_I \dot x_P \right|_{\varphi = \pi} = \left. {}_I J_P \right|_{\varphi = \pi} \dot q =
+                    \begin{bmatrix}
+                        1 & -r\\
+                        0 & 0\\
+                        0 & 0
+                    \end{bmatrix}
+                    \begin{bmatrix}
+                        \dot x\\
+                        \dot \varphi
+                    \end{bmatrix} = 0$
+            \ides{Rolling Constraint:} $\dot x - r \dot \varphi = 0$
+        \end{itemize}
+\end{itemize}
+
+\subsection{Mobile Robots}
+\begin{itemize}
+    \ides{Holonomic:}
+        \begin{itemize*}
+            \item Can move instantaneously in any direction of its DoF
+            \item Differential constraints are integrable
+        \end{itemize*}
+    \ides{Non-Holonomic:}
+        \begin{itemize*}
+            \item Cannot move instantaneously in any direction of its DoF
+            \item Differential constraints are not integrable
+        \end{itemize*}
+    \ides{Differential Forward Kinematics:} Given set of actuator speeds, determine its corresponding velocity
+    \ides{Differential Inverse Kinematics:} given a desired velocity, determine the corresponding actuator speeds
+\end{itemize}
+
+\subsubsection{Kinematic Constraint}
+\includegraphics[width=\linewidth]{./Figures/03_WheelEquation.png}
+\includegraphics[width=\linewidth]{./Figures/03_StandardWheel.png}
+\begin{itemize*}
+    \item Robot state: $\xi_I = [x, y, \theta]^\transpose$ 
+    \item $\dot \xi_I = [\dot x, \dot y, \dot \theta]^\transpose$ 
+    \item $\dot \xi_R = R_{RI}(\theta) \dot \xi_I$
+    \item $R(\theta) = R^\transpose_z(\theta)$
+\end{itemize*}
+\begin{itemize}
+    \item ${}_W v_{IW} = 
+        \begin{bmatrix}
+            0\\
+            -r \dot \varphi\\
+            0
+        \end{bmatrix}
+        \begin{matrix}
+            \text{no-sliding constraint}\\
+            \text{rolling constraint}\\
+            \text{planar assumption}
+        \end{matrix}$
+    \ides{General Wheel Equation:} $v_{IW} = v_{IR} + \omega_{IR} \times r_{RS} + \omega_{IR} \times r_{SW} + \omega_{RS} \times r_{SW}$
+    \ides{Standard Wheel Equation} ($r_{SW} = 0$): $v_{IW} = v_{IR} + \omega_{IR} \times r_{RS}$
+        \begin{itemize}
+            \item ${}_W v_{IR} = R(\alpha + \beta) R(\theta)[\dot x, \dot y, 0]^\transpose$
+            \item ${}_W \omega_{IR} \times {}_W r_{RS} = [l \dot \theta \sin(\beta), l \dot \theta \cos(\beta), 0]^\transpose$
+            \ides{Rolling Constraint:} $J_1(\beta_s) R(\theta) \dot \xi_I - \dot \varphi r = 0$ 
+                \begin{itemize}
+                    \item  $J_1(\beta_s) = [-\sin(\alpha + \beta_s), \cos(\alpha + \beta_s), l \cos(\beta)]$
+                \end{itemize}
+            \ides{No-Sliding Constraint:} $C_1(\beta_s) R(\theta) \dot \xi_I = 0$
+                \begin{itemize}
+                    \item $C_1(\beta_s) = [\cos(\alpha + \beta_s), \sin(\alpha + \beta_s), -l \sin(\beta)]$
+                \end{itemize}
+        \end{itemize}
+    \item For $N = (N_f + N_s)$ wheeled robot:
+        \\ \begin{itemize*}
+            \item $J_1(\beta_s) =
+                \begin{bmatrix}
+                    J_{1f}\\
+                    J_{1S}(\beta_s)
+                \end{bmatrix}$
+            \item $C_1(\beta_s) =
+                \begin{bmatrix}
+                    C_{1f}\\
+                    C_{1S}(\beta_s)
+                \end{bmatrix}$
+            \item $J_2 = \mathrm{diag}(r_1, \dots, r_N)$
+            \item $\dot \varphi = [\dot \varphi_1, \dots, \dot \varphi_N]^\transpose$
+        \end{itemize*}
+        \begin{itemize}
+            \ides{Rolling Constraint:} $J_1(\beta_s) R(\theta) \dot \xi_I - J_2 \dot \varphi = 0$
+            \ides{No-Sliding Constraint:} $C_1(\beta_s) R(\theta) \dot \xi_I = 0$
+            \item $
+                \begin{bmatrix}
+                    J_1(\beta_s)\\
+                    C_1(\beta_s)
+                \end{bmatrix} R(\theta) \dot \xi_I =
+                \begin{bmatrix}
+                    J_2\\
+                    0
+                \end{bmatrix} \dot \varphi$
+                \begin{itemize}
+                    \ides{Solve for $\mathbf{\dot \xi_I}$:} Forward differential kinematics
+                    \ides{Solve for $\mathbf{\dot \varphi}$:} Inverse differential kinematics
+                \end{itemize}
+        \end{itemize}
+\end{itemize}
+
+\subsubsection{Maneuverability}
+\begin{itemize}
+    \ides{Degree of Maneuverability $\mathbf{\delta_M}$:} $\delta_M = \delta_m + \delta_s$ 
+    \ides{$\mathbf{\delta_m}$:} Deg. of mobility
+    \ides{$\mathbf{\delta_s}$:} Def. of steerability
+    \item \todo{Expand}
+\end{itemize}
+
+\subsubsection{Differential Drive Robot}
+\begin{itemize}
+    \item 
+\end{itemize}
