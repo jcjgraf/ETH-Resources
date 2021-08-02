@@ -167,11 +167,11 @@ b = \text{Distance between wheels}
                     \item New position: $\hat x_t = f(x_{t-1}, u_t)$
                     \item Position uncertainty: $\hat P_t = F_x P_{t-1} F_x^\transpose + F_u Q_t F_u^\transpose$
                     \item
-                        \begin{itemize*}
+                        \begin{itemize}
                             \ides{$\mathbf{P_{t - 1}}$:} Covariance of the previous state $x - 1$
                             \ides{$\mathbf{Q_t}$:} Covariance of motion model noise
                             \ides{$\mathbf{F_{x/u}}$:} Jacobian w.r.t. $x/u$
-                        \end{itemize*}
+                        \end{itemize}
                 \end{itemize}
             \item[S2)] \textbf{Measurement Update}
                 \begin{itemize}

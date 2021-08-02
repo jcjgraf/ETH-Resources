@@ -24,11 +24,11 @@
             \ides{Visibility Graph}
                 \begin{itemize}
                     \item
-                        \begin{itemize*}
+                        \begin{itemize}
                             \item Polygonal configuration space
                             \item Robot is a point $\implies$ enlarge obstacles
                             \item Connect corners which ``see'' each other
-                        \end{itemize*}
+                        \end{itemize}
                     \ipro Gives shortest path
                     \icon Complexity depends on number of obstacles
                     \icon Path is close to obstacles
@@ -37,10 +37,10 @@
             \ides{Voroni Diagram}
                 \begin{itemize}
                     \item
-                        \begin{itemize*}
+                        \begin{itemize}
                             \item For each point in free space compute the distance to the nearest obstacle
                             \item Points which are equidistant to two obstacles for edges
-                        \end{itemize*}
+                        \end{itemize}
                     \ipro Maximizes distance to obstacles
                     \ipro Can do the process in reverse. Robot in unknown environment creates diagram by moving on unknown veroni edges
                     \icon Not optimal
@@ -49,22 +49,22 @@
             \ides{Exact Cell Decomposition}
                 \begin{itemize}
                     \item
-                        \begin{itemize*}
+                        \begin{itemize}
                             \item Draw lines according to obstacle geometry
                             \item Each filed is in either $F$ or $O$
                             \item Create connectivity graph from cells in $F$
-                        \end{itemize*}
+                        \end{itemize}
                     \item Assumes: precise position in $F$ does not matter
                         \icon Complexity depends on number and complexity of obstacles
                 \end{itemize}
             \ides{Approximate Cell Decomposition}
                 \begin{itemize}
                     \item
-                        \begin{itemize*}
+                        \begin{itemize}
                             \item Put grid over map
                             \item Each cell is either in $O$ or $F$
                             \item Create connectivity graph from cells in $F$
-                        \end{itemize*}
+                        \end{itemize}
                         \ides{Fixed-Size:} Grid has fixed size
                         \ides{Variable-Size:} Recursively split partially occupied cells into $4$ new cells
                         \icon Loss of narrow passages
