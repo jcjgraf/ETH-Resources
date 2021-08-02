@@ -1,0 +1,130 @@
+%! TEX root = ./main.tex
+
+\section{Locomotion}
+\begin{itemize}
+    \item Physical interaction between vehicle and environment
+    \ides{Stability:} characterized by
+        \begin{itemize*}
+            \item Number of contact pts
+            \item CoG
+            \item Static/dynamic stabilization
+            \item Inclination of terrain
+        \end{itemize*}
+    \ides{Contact:} characterized by
+        \begin{itemize*}
+            \item Contact pt size and shape
+            \item Angle of contact
+            \item Friction
+        \end{itemize*}
+    \ides{Environment:} characterized by
+        \begin{itemize*}
+            \item Structure
+            \item Medium
+        \end{itemize*}
+    \ides{Implementation Aspects:}
+        \begin{itemize*}
+            \item Number of actuators
+            \item Structural complexity
+            \item control complexity
+            \item Energy consumption
+        \end{itemize*}
+\end{itemize}
+
+\subsection{Legged Locomotion}
+\begin{itemize*}
+    \ipro Mobility
+    \ipro Adaptability
+    \ipro Ability to manipulate environment
+    \icon Mechanical complexity
+    \icon Control complexity
+    \icon Energy Consumption
+\end{itemize*}
+\begin{itemize}
+    \ides{Static Gaits:}
+        \begin{itemize*}
+            \item System is statically sable
+            \item Requires $\ge 4$ legs
+            \ipro Safe
+            \icon Slow
+            \icon Energetically inefficient
+        \end{itemize*}
+    \ides{Dynamic Gaits:}
+        \begin{itemize*}
+            \item System is stabilized on a limited cycle
+            \item Falls over if stopped
+            \ipro Fast
+            \ipro Energetically efficient
+            \icon Demanding for actuators
+            \icon Demanding for control
+        \end{itemize*}
+    \ides{Locomotion Control}
+        \begin{itemize}
+            \item[1)] Stepping sequence defined by gait pattern
+            \item[2)] Stepping location
+            \item[3)] Contact forces
+        \end{itemize}
+\end{itemize}
+
+\subsection{Wheeled Locomotion}
+\begin{itemize*}
+    \ipro Highly efficient on flat surface
+\end{itemize*}
+
+\subsubsection{Wheel Types}
+\begin{itemize}
+    \ides{Standard Wheel:}
+        \begin{itemize*}
+            \item $2$ DoF
+                (\begin{itemize*}
+                    \item wheel axle
+                    \item wheel contact point
+                \end{itemize*})
+            \item Can be steered or fixed
+            \item Steering without side effects on the body
+        \end{itemize*}
+    \ides{Castor Wheel:}
+        \begin{itemize*}
+            \item $3$ DoF
+                (\begin{itemize*}
+                    \item wheel axle
+                    \item wheel contact point
+                    \item offset steering joint
+                \end{itemize*})
+            \item Steering must be compensated by the body
+        \end{itemize*}
+    \ides{Swedish Wheel:}
+        \begin{itemize*}
+            \item $3$ DoF
+                (\begin{itemize*}
+                    \item Rotation around the wheel axle
+                    \item Rotation around the contact point
+                    \item Rotation around the rollers
+                \end{itemize*})
+            \item Similar to standard wheel but provides low resistance in another direction
+        \end{itemize*}
+    \ides{Spherical Wheel:}
+        \begin{itemize*}
+            \item $3$ DoF
+            \icon Difficult to realize
+        \end{itemize*}
+\end{itemize}
+
+\subsubsection{Wheel Arrangements}
+\begin{itemize}
+    \item Influences manoeuvrability, controllability and stability
+    \item No optimal arrangement
+    \ides{Stability:}
+        \begin{itemize*}
+            \item $\ge 3$ wheels required for static stability
+            \item Improved by adding more wheels
+        \end{itemize*}
+    \ides{Manoeuvrability:}
+        \begin{itemize*}
+            \item Number of DoF
+        \end{itemize*}
+    \ides{Controllability:}
+        \begin{itemize*}
+            \item Inverse correlation between controllability and manoeuvrability
+            \item Less manoeuvrability robots can be controlled more accurately
+        \end{itemize*}
+\end{itemize}
