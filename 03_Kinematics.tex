@@ -45,7 +45,7 @@
                 \begin{pmatrix}
                     {}_I r_{OP}\\
                     1
-                \end{pmatrix} = 
+                \end{pmatrix} =
                 \begin{bmatrix}
                     R_{IB} & {}_I r_{OB}\\
                     0 & 1
@@ -179,17 +179,17 @@
     \ides{Differential Inverse Kinematics:} given a desired velocity, determine the corresponding actuator speeds
 \end{itemize}
 
-\subsubsection{Kinematic Constraint}
+\subsubsection{Wheel Kinematic}
 \includegraphics[width=\linewidth]{./Figures/03_WheelEquation.png}
 \includegraphics[width=\linewidth]{./Figures/03_StandardWheel.png}
 \begin{itemize*}
-    \item Robot state: $\xi_I = [x, y, \theta]^\transpose$ 
-    \item $\dot \xi_I = [\dot x, \dot y, \dot \theta]^\transpose$ 
-    \item $\dot \xi_R = R_{RI}(\theta) \dot \xi_I$
+    \item Robot state: $\xi_I = [x, y, \theta]^\transpose$
+    \item $\dot \xi_I = [\dot x, \dot y, \dot \theta]^\transpose$
+    \item $\dot \xi_R = R(\theta) \dot \xi_I$
     \item $R(\theta) = R^\transpose_z(\theta)$
 \end{itemize*}
 \begin{itemize}
-    \item ${}_W v_{IW} = 
+    \item ${}_W v_{IW} =
         \begin{bmatrix}
             0\\
             -r \dot \varphi\\
@@ -200,63 +200,140 @@
             \text{rolling constraint}\\
             \text{planar assumption}
         \end{matrix}$
+    \ides{Rolling Constraint:} $J_1(\beta_s) R(\theta) \dot \xi_I - \dot \varphi r = 0$
+    \ides{No-Sliding Constraint:} $C_1(\beta_s) R(\theta) \dot \xi_I = 0$
     \ides{General Wheel Equation:} $v_{IW} = v_{IR} + \omega_{IR} \times r_{RS} + \omega_{IR} \times r_{SW} + \omega_{RS} \times r_{SW}$
-    \ides{Standard Wheel Equation} ($r_{SW} = 0$): $v_{IW} = v_{IR} + \omega_{IR} \times r_{RS}$
+    \ides{Standard (Steered \& Fixes) Wheel:} $r_{SW} = 0$
         \begin{itemize}
-            \item ${}_W v_{IR} = R(\alpha + \beta) R(\theta)[\dot x, \dot y, 0]^\transpose$
-            \item ${}_W \omega_{IR} \times {}_W r_{RS} = [l \dot \theta \sin(\beta), l \dot \theta \cos(\beta), 0]^\transpose$
-            \ides{Rolling Constraint:} $J_1(\beta_s) R(\theta) \dot \xi_I - \dot \varphi r = 0$ 
+            \ides{Wheel Equation:} $v_{IW} = v_{IR} + \omega_{IR} \times r_{RS}$
                 \begin{itemize}
-                    \item  $J_1(\beta_s) = [-\sin(\alpha + \beta_s), \cos(\alpha + \beta_s), l \cos(\beta)]$
+                    \item ${}_W v_{IR} = R(\alpha + \beta) R(\theta)[\dot x, \dot y, 0]^\transpose$
+                    \item ${}_W \omega_{IR} \times {}_W r_{RS} = [l \dot \theta \sin(\beta), l \dot \theta \cos(\beta), 0]^\transpose$
                 \end{itemize}
-            \ides{No-Sliding Constraint:} $C_1(\beta_s) R(\theta) \dot \xi_I = 0$
-                \begin{itemize}
-                    \item $C_1(\beta_s) = [\cos(\alpha + \beta_s), \sin(\alpha + \beta_s), -l \sin(\beta)]$
-                \end{itemize}
+            \item $J_1(\beta_s) = [\sin(\alpha + \beta_s), -\cos(\alpha + \beta_s), -l \cos(\beta_s)]$
+            \item $C_1(\beta_s) = [\cos(\alpha + \beta_s), \sin(\alpha + \beta_s), l \sin(\beta_s)]$
+            \item If fixed, $J_1(\beta_s) = J_1, C_1(\beta_s) = C_1$
+            \item Only wheel which imposes constraints
         \end{itemize}
-    \item For $N = (N_f + N_s)$ wheeled robot:
-        \\ \begin{itemize*}
-            \item $J_1(\beta_s) =
-                \begin{bmatrix}
-                    J_{1f}\\
-                    J_{1S}(\beta_s)
-                \end{bmatrix}$
-            \item $C_1(\beta_s) =
-                \begin{bmatrix}
-                    C_{1f}\\
-                    C_{1S}(\beta_s)
-                \end{bmatrix}$
-            \item $J_2 = \mathrm{diag}(r_1, \dots, r_N)$
-            \item $\dot \varphi = [\dot \varphi_1, \dots, \dot \varphi_N]^\transpose$
-        \end{itemize*}
+    \ides{Castor Wheel:}
         \begin{itemize}
-            \ides{Rolling Constraint:} $J_1(\beta_s) R(\theta) \dot \xi_I - J_2 \dot \varphi = 0$
-            \ides{No-Sliding Constraint:} $C_1(\beta_s) R(\theta) \dot \xi_I = 0$
+            \item $J_1(\beta_s)$ same as standard wheel
+            \item $C_1(\beta_s) = [\cos(\alpha + \beta_s), \sin(\alpha + \beta_s), d + l \sin(\beta)]$
+        \end{itemize}
+    \ides{Swedish Wheel:}
+        \begin{itemize}
+            \item $J_1(\beta_s) = [\sin(\alpha + \beta_s + \gamma), -\cos(\alpha + \beta_s + \gamma), -l \cos(\beta_s + \gamma)]$
+            \item $C_1(\beta_s) = [\cos(\alpha + \beta_s + \gamma), \sin(\alpha + \beta_s + \gamma), l \sin(\beta_s + \gamma)]$
+        \end{itemize}
+\end{itemize}
+
+\subsubsection{Mobile Robot Kinematic}
+\begin{itemize}
+    \item $N = (N_f + N_s)$ wheeled robot
+\end{itemize}
+\begin{itemize*}
+    \item $J_1(\beta_s) =
+        \begin{bmatrix}
+            J_{1f}\\
+            J_{1S}(\beta_s)
+        \end{bmatrix}$
+    \item $C_1(\beta_s) =
+        \begin{bmatrix}
+            C_{1f}\\
+            C_{1S}(\beta_s)
+        \end{bmatrix}$
+    \item $J_2 = \mathrm{diag}(r_1, \dots, r_N)$
+    \item $\dot \varphi =
+        \begin{bmatrix}
+            \dot \varphi_f\\
+            \dot \varphi_s
+        \end{bmatrix}$
+\end{itemize*}
+\begin{itemize}
+    \ides{Rolling Constraint:} $J_1(\beta_s) R(\theta) \dot \xi_I - J_2 \dot \varphi = 0$
+    \ides{No-Sliding Constraint:} $C_1(\beta_s) R(\theta) \dot \xi_I = 0$
+    \item $
+        \underbrace{\begin{bmatrix}
+            J_1(\beta_s)\\
+            C_1(\beta_s)
+        \end{bmatrix}}_{A} \underbrace{R(\theta) \dot \xi_I}_{\dot \xi_R} =
+        \underbrace{\begin{bmatrix}
+            J_2\\
+            0
+        \end{bmatrix}}_{B} \dot \varphi$
+    \ides{Forward Kinematics:} $\dot \xi_R = (A^\transpose A)^{-1} A^\transpose B \dot \varphi = A^+ B \dot \varphi$
+    \ides{Inverse Kinematics:} $\dot \varphi = (B^\transpose B)^{-1} B^\transpose A \dot \xi_R = B^+ A \dot \varphi$
+    \ides{Differential Drive:}
+        \begin{itemize*}
+            \item $\alpha_r = -\pi / 2$
+            \item $\beta_r = \pi$
+            \item $l_r = b$
+            \item $r_r = r$
+            \item $\alpha_r = \pi / 2$
+            \item $\beta_r = 0$
+            \item $l_l = -b$
+            \item $r_l = r$
             \item $
                 \begin{bmatrix}
-                    J_1(\beta_s)\\
-                    C_1(\beta_s)
-                \end{bmatrix} R(\theta) \dot \xi_I =
+                    \dot x\\
+                    \dot y\\
+                    \dot \theta
+                \end{bmatrix}_R =
                 \begin{bmatrix}
-                    J_2\\
-                    0
-                \end{bmatrix} \dot \varphi$
-                \begin{itemize}
-                    \ides{Solve for $\mathbf{\dot \xi_I}$:} Forward differential kinematics
-                    \ides{Solve for $\mathbf{\dot \varphi}$:} Inverse differential kinematics
-                \end{itemize}
-        \end{itemize}
+                    r / 2 & r / 2\\
+                    0 & 0\\
+                    r / 2b & -r / 2b
+                \end{bmatrix}
+                \begin{bmatrix}
+                    \dot \varphi_r\\
+                    \dot \varphi_l
+                \end{bmatrix}$
+            \item $
+                \begin{bmatrix}
+                    \dot \varphi_r\\
+                    \dot \varphi_l
+                \end{bmatrix} =
+                \begin{bmatrix}
+                    1 / r & 0 & b / r\\
+                    1 / r & 0 & -b / r
+                \end{bmatrix}
+                \begin{bmatrix}
+                    \dot x\\
+                    \dot y\\
+                    \dot \theta
+                \end{bmatrix}_R$
+        \end{itemize*}
 \end{itemize}
 
 \subsubsection{Maneuverability}
 \begin{itemize}
-    \ides{Degree of Maneuverability $\mathbf{\delta_M}$:} $\delta_M = \delta_m + \delta_s$ 
-    \ides{$\mathbf{\delta_m}$:} Deg. of mobility
-    \ides{$\mathbf{\delta_s}$:} Def. of steerability
-    \item \todo{Expand}
-\end{itemize}
-
-\subsubsection{Differential Drive Robot}
-\begin{itemize}
-    \item 
+    \ides{Degree of Maneuverability $\mathbf{\delta_M}$} $= \delta_m + \delta_s$
+    \ides{Degree of Mobility $\mathbf{\delta_m}$:} $= \mathrm{dim} \; N(C_1(\beta_S)) = 3 - \mathrm{rank}(C_1(\beta_s))$
+        \begin{itemize*}
+            \item $0 \le \delta_m \le 3$
+            \item $\delta_m = 0 \Rightarrow N_f = N_s = 0$
+            \item $\delta_m = 3 \Rightarrow$ motion not possible
+        \end{itemize*}
+    \ides{Degree of Steerability $\mathbf{\delta_s}$:} $= \mathrm{rank}(C_{1s}(\beta_s))$
+        \begin{itemize*}
+            \item $0 \le \delta_s \le 2$
+            \item $\delta_s = 0 \Rightarrow N_s = 0$
+            \item $\delta_s = 1 \Rightarrow N_s \ge 1$
+            \item $\delta_s = 2 \Rightarrow N_f = 0$
+        \end{itemize*}
+    \ides{Examples:}\\
+        \begin{tabular}{l | l | l | l | l | l | l | l | l | l}
+            & \rotatebox{90}{Omnidirectional}
+            & \rotatebox{90}{Differential}
+            & \rotatebox{90}{Omni-Steer}
+            & \rotatebox{90}{Tricyle}
+            & \rotatebox{90}{Two-Steer}
+            & \rotatebox{90}{Ackerman Steer}
+            & \rotatebox{90}{Bicycle}
+            & \rotatebox{90}{Synchro Drive}
+            & \rotatebox{90}{Onmi Drive}\\\hline
+            $\delta_M$ & 3 & 2 & 3 & 2 & 3 & 2 & 2 & 2 & 3\\
+            $\delta_m$ & 3 & 2 & 2 & 1 & 1 & 1 & 1 & 1 & 3\\
+            $\delta_s$ & 0 & 0 & 1 & 1 & 2 & 1 & 1 & 1 & 0
+        \end{tabular}
 \end{itemize}
