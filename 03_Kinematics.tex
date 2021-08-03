@@ -337,3 +337,86 @@
             $\delta_s$ & 0 & 0 & 1 & 1 & 2 & 1 & 1 & 1 & 0
         \end{tabular}
 \end{itemize}
+
+\subsection{Motion Control - Feedback Control}
+\includegraphics[width=\linewidth]{./Figures/03_MotionControl.png}
+\begin{itemize}
+    \item Drive robot from ${}_I[x, y, \delta]$ to ${}_I[0, 0, 0]$
+    \ides{Error:} $e = [x, y, \delta]^\transpose$
+    \item Get control inputs as $
+        \begin{bmatrix}
+            v(t)\\
+            \omega(t)
+        \end{bmatrix} = K \cdot e = K
+        \begin{bmatrix}
+            x\\
+            y\\
+            \theta
+        \end{bmatrix}$
+    \item Find $K$ such that $lim_{t \to \infty} e(t) = 0$
+    \item $
+        \begin{bmatrix}
+            \dot x\\
+            \dot y\\
+            \dot \theta
+        \end{bmatrix}_I =
+        \begin{bmatrix}
+            \cos \theta & 0\\
+            \sin \theta & 0\\
+            0 & 1
+        \end{bmatrix}
+        \begin{bmatrix}
+            v\\
+            \omega
+        \end{bmatrix}$
+    \item Polar Coordinate Transformation:
+        \begin{itemize*}
+            \item $\rho = \sqrt{\bigtriangleup x^2 + \bigtriangleup y ^2}$
+            \item $\alpha = -\theta + \mathrm{atan2}(\bigtriangleup y, \bigtriangleup x)$
+            \item $\beta = -\theta - \alpha$
+            \item $\alpha, \beta \in [-\pi, \pi]$
+        \end{itemize*}
+    \item If $\alpha \in (-\frac{\pi}{2}, \frac{\pi}{2})$: $
+        \begin{bmatrix}
+            \dot \rho\\
+            \dot \alpha\\
+            \dot \beta
+        \end{bmatrix} =
+        \begin{bmatrix}
+            -\cos \alpha & 0\\
+            \frac{\sin \alpha}{\rho} & -1\\
+            -\frac{\sin \alpha}{\rho} & 0
+        \end{bmatrix}
+        \begin{bmatrix}
+            v\\
+            \omega
+        \end{bmatrix}$
+    \item Otherwise: $
+        \begin{bmatrix}
+            \dot \rho\\
+            \dot \alpha\\
+            \dot \beta
+        \end{bmatrix} =
+        \begin{bmatrix}
+            \cos \alpha & 0\\
+            -\frac{\sin \alpha}{\rho} & 1\\
+            \frac{\sin \alpha}{\rho} & 0
+        \end{bmatrix}
+        \begin{bmatrix}
+            v\\
+            \omega
+        \end{bmatrix}$
+    \item Control Law: $
+        \begin{bmatrix}
+            \dot \rho\\
+            \dot \alpha\\
+            \dot \beta
+        \end{bmatrix} =
+        \begin{bmatrix}
+            -k_\rho \rho \cos(\alpha)\\
+            k_\rho \sin(\alpha - k_\alpha \alpha - k_\beta \beta)\\
+            -k_\rho \sin(\alpha)
+        \end{bmatrix}$
+    \item $v$ has a constant sign for one run
+    \item Stable if $k_\rho > 0, k_\beta < 0, k_\alpha - k_\rho > 0$
+\end{itemize}
