@@ -23,8 +23,14 @@
 \newcommand{\argmax}{\mathop{\mathrm{argmax}}}
 \newcommand{\mx}{\mathop{\mathrm{max}}}
 \newcommand{\bigcupdot}{\bigcup \hspace{-0.35cm} \cdot}
+\newcommand{\transpose}{\mathsf{T}}
 
 \newcommand{\notimplies}{\;\not\!\!\!\implies}
+
+\DeclareMathOperator\arcsinh{arcsinh}
+\DeclareMathOperator\arccosh{arccosh}
+\DeclareMathOperator\arctanh{arctanh}
+
 
 % stuff for integrals
 \newcommand{\intl}{\int\limits}
@@ -65,3 +71,123 @@
 }
 
 \def\doubleunderline#1{\underline{\underline{#1}}}
+
+\usepackage{xcolor}
+
+% theorem package
+\usepackage{amsthm}
+\usepackage{thmtools}
+\newtheoremstyle{my-thm-style}% name
+{6pt}% Space above
+{5pt}% Space below
+{}% Body font
+{}% Indent amount
+{\bfseries}% Theorem head font
+{}% Punctuation after theorem head
+{8pt}% Space after theorem head
+%{}% Theorem head spec (can be left empty, meaning `normal')
+%{\colorbox{red!40}{\parbox[t][0em]{\dimexpr\columnwidth-2\fboxsep}{\thesection\ #1}}}
+{\colorbox{\thmbgcolor}{\color{\thmheadcolor}\thmname{#1}%
+  \thmnumber{\@ifnotempty{#1}{ }\@upn{#2}}}%
+  \thmnote{ {--- \the\thm@notefont#3.}}%
+}   %Theorem head spec
+
+%\makeatletter
+%\newtheoremstyle{Coloredtheo}%
+%{3pt}    %Space above
+%{3pt}    %Space below
+%{}   %Body font
+%{}   %Indent amount
+%{\bfseries}    %Theorem head font
+%{}   %Punctuation after theorem head
+%{0.25em} %Space after theorem head
+%{\colorbox{\thmbgcolor}{\color{\thmheadcolor}\thmname{#1}%
+%  \thmnumber{\@ifnotempty{#1}{ }\@upn{#2}}}%
+%  \thmnote{ {--- \the\thm@notefont#3.}}%
+%}   %Theorem head spec
+%\makeatother
+%\theoremstyle{Coloredtheo}
+%\newtheorem{genericcolorthm}{\generichead}
+%\newenvironment{colorthm}
+%  {\def\generichead{Theorem}%
+%   \def\thmbgcolor{blue}%
+%   \def\thmheadcolor{red}%
+%   \begin{genericcolorthm}}
+%  {\end{genericcolorthm}}
+%\newenvironment{colorlemma}
+%  {\def\generichead{Lemma}%
+%   \def\thmbgcolor{green}%
+%   \def\thmheadcolor{black}%
+%   \begin{genericcolorthm}}
+%  {\end{genericcolorthm}}
+
+
+
+\definecolor{orange}{rgb}{1,0.5,0}
+\definecolor{blue}{RGB}{135,206,250}
+
+\declaretheoremstyle[
+headfont=\normalfont\bfseries,
+notefont=\mdseries, notebraces={(}{)},
+bodyfont=\normalfont,
+postheadspace=8pt,
+spaceabove=1pt,
+mdframed={
+  skipabove=2pt,
+  skipbelow=2pt,
+  hidealllines=false,
+  backgroundcolor={orange!15},
+  innerleftmargin=2pt,
+  innerrightmargin=2pt}
+]{def}
+
+\declaretheoremstyle[
+headfont=\normalfont\bfseries,
+notefont=\mdseries, notebraces={(}{)},
+bodyfont=\normalfont,
+postheadspace=8pt,
+spaceabove=1pt,
+mdframed={
+  skipabove=2pt,
+  skipbelow=2pt,
+  hidealllines=false,
+  backgroundcolor={purple!10},
+  innerleftmargin=2pt,
+  innerrightmargin=2pt}
+]{sat}
+
+\declaretheoremstyle[
+headfont=\normalfont\bfseries,
+notefont=\mdseries, notebraces={(}{)},
+bodyfont=\normalfont,
+postheadspace=8pt,
+spaceabove=1pt,
+mdframed={
+  skipabove=2pt,
+  skipbelow=2pt,
+  hidealllines=false,
+  backgroundcolor={green!10},
+  innerleftmargin=2pt,
+  innerrightmargin=2pt}
+]{lem}
+
+\declaretheoremstyle[
+headfont=\normalfont\bfseries,
+notefont=\mdseries, notebraces={(}{)},
+bodyfont=\normalfont,
+postheadspace=8pt,
+spaceabove=1pt,
+mdframed={
+  skipabove=2pt,
+  skipbelow=2pt,
+  hidealllines=false,
+  backgroundcolor={green!0},
+  innerleftmargin=2pt,
+  innerrightmargin=2pt}
+]{kor}
+
+\declaretheorem[style=def, name=Def. , numberwithin=section]{definition}
+\declaretheorem[style=sat, name=Satz, numberwithin=section]{satz}
+\declaretheorem[style=lem, name=Lemma, numberwithin=section]{lemma}
+\declaretheorem[style=kor, name=Korollar, numberwithin=section]{korollar}
+
