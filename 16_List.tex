@@ -1,0 +1,45 @@
+%! TEX root = ./main.tex
+
+\section{Data.List}
+\begin{itemize}
+    \item \verb+intersperse :: a -> [a] -> [a]+
+        \begin{itemize}
+            \item Example: \verb+intersperse ',', "abcdef" = "a,b,c,d,e,f"+
+        \end{itemize}
+    \item \verb+tranpose :: [[a]] -> [[a]]+
+        \begin{itemize}
+            \item Can be useful in concussion with infinite list
+        \end{itemize}
+    \item \verb+subsequences :: [a] -> [[a]]+
+        \begin{itemize}
+            \item Powerset of given set (/list)
+            \item Example: \verb+subsequences "abc" = ["", "a", "b", "c", "ab" "ac", "cd", "abc"+
+        \end{itemize}
+    \item \verb+permutations :: [a] -> [[a]]+
+        \begin{itemize}
+            \item Example: \verb+permutations "abc" = ["abc, "bac", "cba", "cab", "acb"]+
+        \end{itemize}
+    \item \verb+group :: Eq a => [a] -> [[a]]+
+        \begin{itemize}
+            \item Split list into sublist where each elements contains only the same element
+            \item Example: \verb+group "Mississippi" = ["M", "i", "ss", "i", "ss", "i", "pp", "i"]+
+        \end{itemize}
+    \item \verb+isPrefixOf :: Eq a => [a] -> [a] -> Bool+
+    \item \verb+isSuffixOf :: Eq a => [a] -> [a] -> Bool+
+    \item \verb+isInfixOf :: Eq a => [a] -> [a] -> Bool+
+    \item \verb+isSubsequenceOf :: Eq a => [a] -> [a] -> Bool+
+        \begin{itemize}
+            \item If all elements of the first list are present in the second
+        \end{itemize}
+    \item \verb+nub :: Eq a => [a] -> [a]+
+        \begin{itemize}
+            \item Convert list into set by removing duplicates
+        \end{itemize}
+    \item \verb+(\\)) :: Eq a => [a] -> [a] -> [a]+
+        \begin{itemize}
+            \item Set difference
+        \end{itemize}
+    \item \verb+union :: Eq a => [a] -> [a] -> [a]+
+    \item \verb+intersect :: Eq a => [a] -> [a] -> [a]+
+    \item \verb+sort :: Ord a => [a] -> [a]+
+\end{itemize}
