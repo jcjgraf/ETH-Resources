@@ -18,7 +18,8 @@
             \icon May affect the characteristic one wants to measure
         \end{itemize*}
     \ides{Common Sensors}
-        \\ \begin{tabular}{l l l}
+        {\scriptsize
+        \begin{tabular}{l l l}
             Sensor Type & System & Class\\\hline
             Tactile & Bumpers & EC, P \\
             Wheel/motor & Brush encoders & PC, P \\
@@ -34,7 +35,7 @@
             Range & Ultrasound, laser, & EC, A \\
                 & struct. light, ToF \\
             Vision & CCD/CMOS & EC, P
-        \end{tabular}
+        \end{tabular}}
     \ides{Encoders:}
         \begin{itemize*}
             \item Convert linear/angular motion of a shaft to digital
@@ -56,6 +57,13 @@
             \item $d=ct$
             \item Sound: $c = 0.3\,\mathrm m / \mathrm{ms}$
             \item Light: $c = 0.3\,\mathrm m / \mathrm{ns}$
+        \end{itemize*}
+    \ides{GPS:}
+        \begin{itemize*}
+            \item Satellites send their position and time to the device
+            \item Device computes location based on ToF
+            \item Time synchronisation and measurement is critical
+            \ides{RTK:} Measure of carrier wave phase - up to centimeter-level accuracy
         \end{itemize*}
     \todo{More Sensors?}
 \end{itemize}
@@ -83,7 +91,7 @@
             \item Error propagation in system with $n$ inputs and $m$ outputs $f: \R^n \to \R^m$, $f: X_1, \dots X_n \mapsto f(X_1, \dots, X_n) = Y_j$
             \item Uncertainty of $X_i$ is known
             \item Mapping between input covariance $C_X$ and output covariance $C_Y$: $C_Y = F_X C_X F_X^\transpose$
-            \\\item $F_X = \bigtriangledown f_X =
+            \item $F_X = \bigtriangledown f_X =
                 \begin{bmatrix}
                     \frac{\partial f_1}{\partial X_1} & \dots & \frac{\partial f_1}{\partial X_n}\\
                     \vdots & \ddots & \vdots\\
@@ -94,9 +102,6 @@
 \end{itemize}
 
 \subsection{Computer Vision}
-\begin{itemize}
-    \item
-\end{itemize}
 
 \subsubsection{Camera Model}
 \begin{itemize}
@@ -112,13 +117,19 @@
             \item All rays parallel to the \textbf{optical axis} converge at the \textbf{focal point}
             \item Rays passing through the \textbf{optical center} are not diverged
         \end{itemize*}
+    \\ \begin{minipage}[b]{0.49\linewidth}
+        \includegraphics[width=\linewidth]{./Figures/04_Lens1.png}
+    \end{minipage}
+    \begin{minipage}[b]{0.49\linewidth}
+        \includegraphics[width=\linewidth]{./Figures/04_Lens2.png}
+    \end{minipage}
     \ides{Thin Lens equation:} $\frac{1}{f} = \frac{1}{z} + \frac{1}{e}$
-    \\ \includegraphics[width=\linewidth]{./Figures/04_ThinLensEquation.png}
     \ides{Pinhole Approximation:} $z \gg f \implies f \approx e$
         \begin{itemize}
             \item I.e. lens is approximated as pinhole at distance $f$ from image plane
             \item If follows that $B = \frac{f}{z}B$
         \end{itemize}
+    \includegraphics[width=\linewidth]{./Figures/04_ThinLensEquation.png}
 \end{itemize}
 
 \subsubsection{Perspective Camera}
@@ -135,6 +146,7 @@
             \item $u = u_0 + k x$
             \item $v = v_0 + k y$
             \ides{Scale factor $k$} $[\text{pixels}/\text{meter}]$
+            \ides{Focal length in pixels:} $kf = \alpha$
         \end{itemize*}
         \begin{itemize}
             \item $\implies \tilde p =
@@ -185,6 +197,14 @@
             Z_W\\
             1
         \end{bmatrix}$
+\end{itemize}
+\begin{minipage}[b]{0.49\linewidth}
+    \includegraphics[width=\linewidth]{./Figures/04_PerspectiveProjection1.png}
+\end{minipage}
+\begin{minipage}[b]{0.49\linewidth}
+    \includegraphics[width=\linewidth]{./Figures/04_PerspectiveProjection2.png}
+\end{minipage}
+\begin{itemize}
     \ides{Extrinsic Parameter $[R \mid T]$:} depending on transformation
     \ides{Perspective Projection:} $K[R \mid T]$
     \item $\implies \tilde p =
@@ -254,17 +274,53 @@
 \end{itemize}
 
 \subsubsection{Camera Calibration}
-\begin{itemize}
+\begin{itemize*}
     \item Determine intrinsic (and extrinsic) camera parameters
+    \item $\lambda
+        \begin{bmatrix}
+            u\\
+            v\\
+            1
+        \end{bmatrix} = K [R|T]
+        \begin{bmatrix}
+            X_W\\
+            Y_W\\
+            Z_W\\
+            1
+        \end{bmatrix} \overset{!}{=} \linebreak
+        \begin{bmatrix}
+            m_{11} & \dots & m_{14}\\
+            \vdots & \ddots & \vdots\\
+            m_{31} & \dots & m_{34}
+        \end{bmatrix}
+        \begin{bmatrix}
+            X_W\\
+            Y_W\\
+            Z_W\\
+            1
+        \end{bmatrix}$
+    \item Find all $m_{ij}$
+    \item Requires $\ge 6$ pts
     \item Done using least-square method
-\end{itemize}
+    \item Need to decompose the found matrix into $K, R, T$
+    \item QR factorize $3 \times 3$ submatrix $m_{11}:m_{33} \Rightarrow K := R, R := R$
+    \item Calculate $T = K^{-1}[m_14, m_{24}, m_{34}]^\transpose$
+\end{itemize*}
 
 \subsubsection{Stereo Vision}
+\begin{minipage}[b]{0.49\linewidth}
+    \includegraphics[width=\linewidth]{./Figures/04_StereoVision.png}
+\end{minipage}
+\begin{minipage}[b]{0.49\linewidth}
+    \raggedright
+    \begin{itemize}
+        \item Obtain depth information from two cameras with know relative position
+        \item Cameras need to be calibrated
+        \item Calculating depth $Z_P$ of point $P_W$ (distance to $P_W$)
+        \ides{Baseline $\mathbf{b}$:} Distance between the two cameras
+    \end{itemize}
+\end{minipage}
 \begin{itemize}
-    \item Obtain depth information from two cameras with know relative position
-    \item Cameras need to be calibrated
-    \item Calculating depth $Z_P$ of point $P_W$ (distance to $P_W$)
-    \ides{Baseline $\mathbf{b}$:} Distance between the two cameras
     \ides{Disparity:} Difference in image location of the projection of a 3D point on the two image panes: $u_l - u_r$
     \item Two identical cameras aligned on $x$
         \begin{itemize}
@@ -307,6 +363,7 @@
 \end{itemize}
 
 \subsubsection{Correspondence Search}
+\includegraphics[width=\linewidth]{./Figures/04_EpopolarPlan.png}
 \begin{itemize}
     \item Identify corresponding points in two images of the same scene
     \item Measure similarity of two pts using a similarity measurement
@@ -322,6 +379,52 @@
             \item[1)] Remove radial distortion
             \item[2)] \textbf{Warping:} Reprojection of both images to same plane
         \end{itemize*}
+\end{itemize}
+
+\subsubsection{Triangulation}
+\includegraphics[width=\linewidth]{./Figures/04_Triangulation.png}
+\begin{itemize}
+    \item Find 3D coordinate of a point given the projections on multiple image planes
+    \item $R_i, T_i, K_i$ are known
+    \item
+        \begin{itemize*}
+            \item $\lambda_1
+                \underbrace{\begin{bmatrix}
+                    u_1\\
+                    v_1\\
+                    1
+            \end{bmatrix}}_{p_1} = \underbrace{K_1[I \mid 0]}_{M_1}
+                \underbrace{\begin{bmatrix}
+                    X_x\\
+                    Y_w\\
+                    Z_w\\
+                    1
+                \end{bmatrix}}_{P}$
+            \item $\lambda_2
+                \begin{bmatrix}
+                    u_2\\
+                    v_2\\
+                    1
+                \end{bmatrix} = K_2[R \mid T]
+                \begin{bmatrix}
+                    X_x\\
+                    Y_w\\
+                    Z_w\\
+                    1
+                \end{bmatrix}$
+        \end{itemize*}
+    \item No unique solution du to noise and errors
+    \ides{Linear Approach:} Solved using SVD
+    \ides{Reprojection Approach:} Minimize Sum of Square Reprojection Error $\mathrm{SSRE} = \norm{P_1 - M_1 P}^2 + \norm{p_2 - M_2 P}^2$
+    \item Baseline is important:
+        \begin{itemize}
+            \ides{Too Small:} Large depth error
+            \ides{Too Large:}
+                \begin{itemize*}
+                    \item Objects may be visible only from one camera
+                    \item Difficult search problem for close objects
+                \end{itemize*}
+        \end{itemize}
 \end{itemize}
 
 \subsubsection{Structure from Motion (SfM)}
@@ -371,7 +474,7 @@
                     \bar v_1\\
                     1
                 \end{bmatrix} = 0$
-            \item $\underbrace{[u_2u_1, u_2v_1, u_2, v_2u_1, v_2v_1, v_2, u_1, v_1, 1]}_{Q: \text{known}}\underbrace{[e_{11}, e_{12}, \dots, e_{33}]}_{\text{unknown}} = 0$
+            \item $\underbrace{[u_2u_1, u_2v_1, u_2, v_2u_1, v_2v_1, v_2, u_1, v_1, 1]}_{Q: \text{known}} \cdot \linebreak \underbrace{[e_{11}, e_{12}, \dots, e_{33}]}_{\text{unknown}} = 0$
             \item For $8$ non-coplanar pts, unique solution is given by the EV of $Q$ corresponding to the smallest Eigenvalue
         \end{itemize}
 \end{itemize}
@@ -466,6 +569,49 @@
             \ides{Laplacian of Gaussian:} $\mathrm{LoG} = G_\sigma^{\prime\prime}(x, y) = \frac{\partial^2 G_\sigma(x, y)}{\partial x^2} + \frac{\partial^2 G_\sigma(x, y)}{\partial y^2}$
                 \begin{itemize*}
                     \item Edges at zero crossing
+                \end{itemize*}
+            \ides{Prewitt:}
+                \\ \begin{itemize*}
+                    \item $F_x = \left[
+                        \begin{array}{c | c | c}
+                            -1 & 0 & 1\\
+                            -1 & 0 & 1\\
+                            -1 & 0 & 1
+                    \end{array} \right]$
+                    \item $F_x = \left[
+                        \begin{array}{c | c | c}
+                            1 & 1 & 1\\
+                            0 & 0 & 0\\
+                            -1 & -1 & -1
+                    \end{array} \right]$
+                \end{itemize*}
+            \ides{Sobel:}
+                \\ \begin{itemize*}
+                    \item $F_x = \left[
+                        \begin{array}{c | c | c}
+                            -1 & 0 & 1\\
+                            -2 & 0 & 2\\
+                            -1 & 0 & 1
+                    \end{array} \right]$
+                    \item $F_x = \left[
+                        \begin{array}{c | c | c}
+                            1 & 2 & 1\\
+                            0 & 0 & 0\\
+                            -1 & -2 & -1
+                    \end{array} \right]$
+                \end{itemize*}
+            \ides{Roberts:}
+                \begin{itemize*}
+                    \item $F_x = \left[
+                        \begin{array}{c | c}
+                            0 & 1\\
+                            1 & 0\\
+                    \end{array} \right]$
+                    \item $F_x = \left[
+                        \begin{array}{c | c}
+                            1 & 0\\
+                            0 & 1\\
+                    \end{array} \right]$
                 \end{itemize*}
         \end{itemize}
 \end{itemize}
