@@ -91,7 +91,22 @@
                     \item $\bigO(|V| + |E|)$
                     \ipro First solution found is optional
                     \item Greedy backtracking of solution
-                    \item \todo{Pseudo Code}
+                    \ides{BF(Graph G, Node Start, Node Goal)}
+                        \begin{algorithmic}
+                            \STATE FIFO.push(Start)
+                            \WHILE{FIFO not empty}
+                                \STATE Node current $\leftarrow$ FIFO.pop()
+                                \IF{current $==$ Goal}
+                                    \RETURN SUCCESS
+                                \ENDIF
+                                \STATE visited.push(current)
+                                \STATE Nodes next = getNeighbours(current)
+                                \FORALL{next $\notin$ visited}
+                                    \STATE FIFO.push(next)
+                                \ENDFOR
+                            \ENDWHILE
+                            \RETURN FAILURE
+                        \end{algorithmic}
                 \end{itemize}
             \ides{Depth-First Search (DFS)}
                 \begin{itemize}
@@ -100,7 +115,7 @@
                     \item $\bigO(|V| + |E|)$
                     \icon First solution found may not be optional
                     \item Greedy backtracking of solution
-                    \item \todo{Pseudo Code}
+                    \ides{DF:} Same as BF but using LIFO
                 \end{itemize}
             \ides{Dijkstra's Algorithm}
                 \begin{itemize}
@@ -110,7 +125,22 @@
                     \item Often computed from the goal position to get all distances to the goal
                     \ipro First solution found is optional
                     \item Greedy backtracking of solution
-                    \item \todo{Pseudo Code}
+                    \ides{Dijkstra(Graph G, Node Start, Node Goal)}
+                        \begin{algorithmic}
+                            \STATE MIN-HEAP.push(Start)
+                            \WHILE{MIN-HEAP not empty}
+                                \STATE Node current $\leftarrow$ MIN-HEAP.pop()
+                                \IF{current $==$ Goal}
+                                    \RETURN SUCCESS
+                                \ENDIF
+                                \STATE visited.push(current)
+                                \STATE Nodes next = getNeighbours(current)
+                                \FORALL{next $\notin$ visited}
+                                    \STATE MIN-HEAP.push(next)
+                                \ENDFOR
+                            \ENDWHILE
+                            \RETURN FAILURE
+                        \end{algorithmic}
                 \end{itemize}
             \ides{$\mathbf{A^*}$}
                 \begin{itemize}
@@ -129,7 +159,22 @@
                             \item Done if $\epsilon > 1$
                         \end{itemize}
                     \item Greedy backtracking of solution
-                    \item \todo{Pseudo Code!}
+                    \ides{A-Star(Graph G, Heur H, Node Start, Node Goal)}
+                        \begin{algorithmic}
+                            \STATE HEUR-MIN-HEAP.push(Start)
+                            \WHILE{HEUR-MIN-HEAP not empty}
+                                \STATE Node current $\leftarrow$ HEUR-MIN-HEAP.pop()
+                                \IF{current $==$ Goal}
+                                    \RETURN SUCCESS
+                                \ENDIF
+                                \STATE visited.push(current)
+                                \STATE Nodes next = getNeighbours(current)
+                                \FORALL{next $\notin$ visited}
+                                    \STATE HEUR-MIN-HEAP.push(next)
+                                \ENDFOR
+                            \ENDWHILE
+                            \RETURN FAILURE
+                        \end{algorithmic}
                 \end{itemize}
             \ides{Rapidly Exploring Random Trees (RRTs)}
                 \begin{itemize}
@@ -137,7 +182,20 @@
                     \item Selects random points and connects it to closest point of the tree using a new branch
                     \item Most likely returns suboptimal solution
                     \item Probabilistically complete
-                    \item \todo{Pseudo Code!}
+                    \ides{RRT(Node Start, Node Goal, System Sys, Environment Env)}
+                        \begin{algorithmic}
+                            \STATE Graph.init(Start)
+                            \WHILE{Graph.size() $\le$ threshold}
+                                \STATE Node rand = random()
+                                \STATE Node near = Graph.nearest(rand)
+                                \STATE \textbf{try}
+                                \STATE $\quad$ Node new = Sys.propagate(near, rand)
+                                \STATE $\quad$ Graph.addNode(new)
+                                \STATE $\quad$ Graph.addEdge(near, new)
+                                \STATE \textbf{end try}
+                            \ENDWHILE
+                            \RETURN FAILURE
+                        \end{algorithmic}
                 \end{itemize}
         \end{itemize}
 \end{itemize}
@@ -172,20 +230,20 @@
             \item Boundary is specified according to:
                 \begin{itemize}
                     \ides{Neumann:}
-                        \begin{itemize}
+                        \begin{itemize*}
                             \item Equidistant lines parallel to the obstacles
                             \icon Potentially small distance to the obstacle
                             \item $\frac{\partial U(q)}{\partial q} = g(q) = 0$
-                        \end{itemize}
+                        \end{itemize*}
                     \ides{Dirchlet:}
-                        \begin{itemize}
+                        \begin{itemize*}
                             \item Obstacle boundaries have constant high potential
                             \item Goal has constant low potential
                             \item Close to obstacles, robot moves perpendicularly away from obstacle
                             \item $U(q) = f(q) = \text{const}$
                             \ipro Safe paths
                             \icon Long paths
-                        \end{itemize}
+                        \end{itemize*}
                 \end{itemize}
             \ipro Absence of local minima
             \item Solved via discretization of the workspace into cells
@@ -195,7 +253,7 @@
                     \ides{$\mathbf{n}$:} \# dimensions
                     \ides{$\mathbf{e_i}$:} unit vector
                 \end{itemize*}
-            \item Steps from iteration $i$ to $i+1$ \todo{Recipe formatting}
+            \item Steps from iteration $i$ to $i+1$
                 \begin{itemize}
                     \item[1)] Initialize cell values
                         \begin{itemize}
@@ -203,7 +261,7 @@
                         \end{itemize}
                     \item[2)] Update all cells except goal and obstacles
                         \begin{itemize}
-                            \item[a)] Add up values of neighbouring cells
+                            \item[a)] Add up values of $4$ neighbouring cells
                             \item[b)] Scale sum by $2n$
                             \item[c)] Update cell values
                         \end{itemize}
@@ -219,9 +277,17 @@
     \icon Prone to local minima
     \ipro Incorporate system model
     \ides{Dynamic Window Approach (DWA)}
+        \begin{minipage}[b]{0.5\linewidth}
+            \raggedright
+            \begin{itemize}
+                \item Assume: robot moves on circular arcs $(\nu, \omega)$
+                \ides{Obstacle space $\mathbf{V_o}$:} Transformation of obstacles from workspace to input space
+            \end{itemize}
+        \end{minipage}
+        \begin{minipage}[b]{0.45\linewidth}
+            \includegraphics[width=0.97\linewidth]{./Figures/06_DWA.png}
+        \end{minipage}
         \begin{itemize}
-            \item Assume: robot moves on circular arcs $(\nu, \omega)$
-            \ides{Obstacle space $\mathbf{V_o}$:} Transformation of obstacles from workspace to input space
             \ides{Admissible space $\mathbf{V_a}$:} complement of $V_o$
             \ides{Static Window $\mathbf{V_s}$:} Configuration which are allowed by robot limits
             \ides{Dynamic Window $\mathbf{V_d}$:} Configuration which can be reached in one step
@@ -235,15 +301,23 @@
             \icon Not safe when obstacles are dynamic
         \end{itemize}
     \ides{Velocity Obstacles (VO)}
+        \begin{minipage}[b]{0.5\linewidth}
+            \raggedright
+            \begin{itemize}
+                \item Assume:
+                    \begin{itemize*}
+                        \item Robot moves on piece-wise linear curves
+                        \item Robot is omnidirectional
+                        \item Robot and obstacles are circular
+                        \item Obstacles move at constant speed
+                    \end{itemize*}
+                \item Collision of robot and obstacle if $\lVert p_\text{RO} + \nu_R t \rVert < r_\text{R} + r_\text{O}$
+            \end{itemize}
+        \end{minipage}
+        \begin{minipage}[b]{0.45\linewidth}
+            \includegraphics[width=0.97\linewidth]{./Figures/06_VO.png}
+        \end{minipage}
         \begin{itemize}
-            \item Assume:
-                \begin{itemize*}
-                    \item Robot moves on piece-wise linear curves
-                    \item Robot is omnidirectional
-                    \item Robot and obstacles are circular
-                    \item Obstacles move at constant speed
-                \end{itemize*}
-            \item Collision of robot and obstacle if $\lVert p_\text{RO} + \nu_R t \rVert < r_\text{R} + r_\text{O}$
             \ides{Velocity Obstacle:} Velocities in velocity space which lead to collisions in less than $\tau$ time
         \item $\text{VO}_\text{RO}^\tau = \bigcup_{0 \le t \le \tau} D(-\frac{p_\text{RO}}{t}, \frac{r_\text{RO}}{t})$
                 \begin{itemize*}
@@ -255,17 +329,25 @@
             \item Multiple objects lead to multiple velocity obstacle regions
             \item Robot selects any velocity outside of the complement of VOs
             \icon Does not model interaction effects
-        \end{itemize}
+    \end{itemize}
     \ides{Reciprocal Velocity Obstacles (RVO)}
-        \begin{itemize}
-            \item Assume:
-                \begin{itemize*}
-                    \item Robot moves on piece-wise linear curves
-                    \item Robot is omnidirectional
-                    \item Robot and obstacles are circular
-                    \item Fair behaviour of all agents
-                \end{itemize*}
+        \begin{minipage}[b]{0.5\linewidth}
+            \raggedright
+            \begin{itemize}
+                \item Assume:
+                    \begin{itemize*}
+                        \item Robot moves on piece-wise linear curves
+                        \item Robot is omnidirectional
+                        \item Robot and obstacles are circular
+                        \item Fair behaviour of all agents
+                    \end{itemize*}
             \item Identical to CO, but collision avoidance is shared between interaction agents
+            \end{itemize}
+        \end{minipage}
+        \begin{minipage}[b]{0.45\linewidth}
+            \includegraphics[width=\linewidth]{./Figures/06_RVO.png}
+        \end{minipage}
+        \begin{itemize}
             \item Operate in relative velocity space
             \item Linear constraints decides if obstacles are avoided to the left or right
                 \begin{itemize}
