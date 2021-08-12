@@ -2,16 +2,20 @@
 
 % Scalable font
 \usepackage{lmodern}
-\usepackage[fontsize=8pt]{scrextend}
+\usepackage[fontsize=6pt]{scrextend}
 
 \usepackage{cancel}
+
+% Make arrays compacter
+\addtolength{\arraycolsep}{-4pt}
 
 \usepackage{cheatsheet}
 \usepackage{math}
 
+\raggedright
 
 \begin{document}
-\begin{multicols*}{4}
+\begin{multicols*}{5}
     \input{01_Introduction.tex}
     \input{02_Locomotion.tex}
     \input{03_Kinematics.tex}
