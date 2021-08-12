@@ -1,0 +1,31 @@
+%! TEX root = ./main.tex
+
+\section{General}
+\begin{itemize}
+    \item $\mathrm{cov}(X, Y) = E((X - E(X))(Y - E(Y)))$
+    \ides{Covariance $\mathbf{C}$:} $C_{X_i,X_j} = \mathrm{cov}(X_i, X_j)$
+        \\ \begin{itemize*}
+            \item Square
+            \item Diagonal is variance
+        \end{itemize*}
+    \ides{Cond. P.:} $P[B | A] := \frac{P[B \cap A]}{P[A]}$
+    \ides{Tot. P.:} $P[B] = \sum_{i=1}^n P[B \mid A_i] \cdot P[A_i]$
+    \ides{Bayes:} $P[A \mid B] = \frac{P[B \mid A]\cdot P[A]}{P[B]}$
+    \ides{Indep.:} $P[A \cap B] = P[A] \cdot P[B]$
+    \item $E[X] = \int_{-\infty}^{\infty} x f_X(x) \mathrm{d}x$
+    \item $Var[X] = E[(X - E[X])^2]$
+    \item Cartesian $(x, y) \Leftrightarrow$ Polar $(r, \varphi)$
+        \begin{itemize}
+            \item
+                \begin{itemize*}
+                    \item $x = r \cos(\varphi)$
+                    \item $y = r \sin(\varphi)$
+                \end{itemize*}
+            \item
+                \begin{itemize*}
+                    \item $r = \sqrt{x^2 + y^2}$
+                    \item $\cos(\varphi) = \frac{x}{r}$
+                    \item $\sin(\varphi) = \frac{y}{r}$
+                \end{itemize*}
+        \end{itemize}
+\end{itemize}
