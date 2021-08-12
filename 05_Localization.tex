@@ -34,22 +34,18 @@
                     \item Typically multiple hypotheses
                     \item High resource demands
                 \end{itemize*}
-            \ides{Types}
-                \begin{itemize}
+            \ides{Types:}
+                \begin{itemize*}
                     \item Continuous map with single hypotheses prob. dist. $p(x)$
                     \item Continuous map with multiple hypotheses prob. dist. $p(x)$
                     \item Discretized metric map (grid $k$) with prob. dist. $p(x)$
                     \item Discretized topological map (nodes $n$) with prog. dist. $p(x)$
-                \end{itemize}
+                \end{itemize*}
         \end{itemize}
     \ides{Odometry}
         \begin{itemize}
             \item Process of calculating current position by using previous position and measured motion of last time step
-            \ides{Differential Drive Robot:} \todo{Equation Formatting}
-\[
-    p_t = f(p_{t - 1}, u_t) =
-\]
-\[
+            \ides{Differential Drive Robot:} $p_t = f(p_{t - 1}, u_t) =
     \begin{bmatrix}
         x_{t - 1}\\
         y_{t - 1}\\
@@ -59,11 +55,7 @@
         \frac{\Delta S_r + \Delta S_l}{2} \cos(\theta_{t - 1} + \frac{\Delta S_r - \Delta S_l}{2b})\\
         \frac{\Delta S_r + \Delta S_l}{2} \sin(\theta_{t - 1} + \frac{\Delta S_r - \Delta S_l}{2b})\\
         \frac{\Delta S_r - \Delta S_l}{b}
-    \end{bmatrix}
-\]
-\[
-b = \text{Distance between wheels}
-\]
+    \end{bmatrix}, \linebreak b = \text{Distance between wheels}$
             \ides{Error Model:}
                 \begin{itemize}
                     \ides{Error Propagation:} $\Sigma_{p_t} = F_{p_{t-1}} \Sigma_{p_{t-1}} F_{p_{t-1}}^\transpose + F_{\Delta S} \Sigma_{\Delta S} F_{\Delta S}^\transpose$
@@ -79,7 +71,6 @@ b = \text{Distance between wheels}
 
 \subsection{Map-Based Localization}
 \begin{itemize}
-    \item \todo{Add ACT SEE Cycle}
     \item Estimate position using perceived information and a map
     \ides{Terminology:}
         \begin{itemize*}
@@ -117,6 +108,7 @@ b = \text{Distance between wheels}
                 \end{itemize}
         \end{itemize}
 \end{itemize}
+\includegraphics[width=\linewidth]{./Figures/05_LocalisationCycle.png}
 
 \subsubsection{Markov Localization}
 \begin{itemize}
@@ -132,14 +124,15 @@ b = \text{Distance between wheels}
             \item Multiple hypotheses
         \end{itemize}
     \ides{Markov Assumption:} $\text{bel}(x_t) = p(x_t \mid x_0, u_{0 \to t}, z_{0 \to t}) = p(x_t \mid x_{t - 1}, u_t, z_t)$
-    \ides{Steps:} Repeat for all $x_t$ \todo{Write as algorithm}
-        \begin{itemize}
-            \item[S1)] \textbf{ACT:} $\overline{\text{bel}}(x_t) = \sum_{x_{t-1}} p(x_t \mid u_t, x_{t - 1}) \text{bel}(x_{t-1})$
-            \item[S2)] \textbf{SEE:} $\text{bel}(x_t) = \eta p(z_t \mid x_t, M) \overline{\text{bel}}(x_t)$
-                \begin{itemize}
-                    \item $\eta = \frac{1}{p(y)}$
-                \end{itemize}
-        \end{itemize}
+    \ides{Steps:}
+\end{itemize}
+\begin{algorithmic}
+    \FORALL{$x_t$}
+        \STATE \textit{S1)} \textbf{ACT:} $\overline{\text{bel}}(x_t) = \sum_{x_{t-1}} p(x_t \mid u_t, x_{t - 1}) \text{bel}(x_{t-1})$
+        \STATE \textit{S2)} \textbf{SEE:} $\text{bel}(x_t) = \eta p(z_t \mid x_t, M) \overline{\text{bel}}(x_t)$ with $\eta = \frac{1}{p(y)}$
+    \ENDFOR
+\end{algorithmic}
+\begin{itemize}
     \icon Huge state space
     \icon Inefficient
     \ides{Improvements:}
@@ -297,7 +290,6 @@ b = \text{Distance between wheels}
         \end{itemize}
     \item Initially, the covariance matrix is sparse (features are uncorrolated)
     \item After some time the covariance matrix becomes more dense
-    \item 
     \ides{MonoSLAM}
         \begin{itemize}
             \item EKF SLAM implementation
