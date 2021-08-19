@@ -16,7 +16,7 @@
         \begin{itemize}
             \item $\text{MSE}_\vartheta[T] = E_\vartheta[(T - \vartheta)^2] = \text{Var}_\vartheta[T] + (E_\vartheta[T] - \vartheta)^2$
         \end{itemize}
-    \ides{Konsistent:} Folge von Schätzern $T^{(n)}, n \in \R,$ heisst konsistent für $\vartheta$, falls $T^{(n)}$ für $n \to \infty$ gegen $\vartheta$ konvergiert. D.h. $\forall \vartheta \in Theta$ gilt: $\lim_{n \to \infty} P_\vartheta[|T^{(n)} - \vartheta| > \epsilon] = 0$
+    \ides{Konsistent:} Folge von Schätzern $T^{(n)}, n \in \R,$ heisst konsistent für $\vartheta$, falls $T^{(n)}$ für $n \to \infty$ gegen $\vartheta$ konvergiert. D.h. $\forall \vartheta \in \Theta$ gilt: $\lim_{n \to \infty} P_\vartheta[|T^{(n)} - \vartheta| > \varepsilon] = 0$
 \end{itemize}
 
 \subsection{Maximum-Likelihood-Methode (ML-Methode)}
@@ -32,6 +32,9 @@
         \ides{Maximum-Likelihood-Schätzer (ML-Schätzer) $T_{ML}$} für $\vartheta$ maximiert $\vartheta \mapsto L(X_1, \dots, X_n;\vartheta)$ als Funktion von $\vartheta$.
         \begin{itemize}
             \item Statt zu maximieren sucht man meistens nur Nullstellen der Ableitung nach $\vartheta$.
+                \begin{itemize}
+                    \item Falls $\vartheta$ hochdimensional ist, leiten wir für jeden Parameter $\vartheta_i$ einzeln ab um das Resultat für $\vartheta_i$ zu erhalten
+                \end{itemize}
             \item Falls Funktion nicht differenzierbar muss man anders vorgehen
         \end{itemize}
 \end{itemize}
@@ -66,11 +69,16 @@
         \begin{itemize}
             \item $\Gamma(z) := \int_{0}^{\infty} t^{z - 1} e^{-t}\mathrm{d}t$  \quad -- $\Gamma(z) := (z - 1)!$
         \end{itemize}
-    \item $E[\mc{X}_n^2] = n$ \quad -- $var[\mc{X}_n^2] = 2n$
+    \item 
+        \begin{itemize*}
+            \item $E[\mc{X}_n^2] = n$
+            \item $var[\mc{X}_n^2] = 2n$
+        \end{itemize*} 
     \item Entsteht wie folgt: Sind die ZV $X_1, \dots, X_n$ i.i.d. und $\sim \mc{N}(0, 1)$, so ist die Summe $Y := \sum_{i=1}^{n} X_i^2 \sim \mc{X}_n^2$
-        \begin{itemize}
-            \item $E[Y] = n$ \quad -- $Var[Y] = 2n$
-        \end{itemize}
+        \\ \begin{itemize*}
+            \item $E[Y] = n$
+            \item $Var[Y] = 2n$
+        \end{itemize*}
     \item Für $n = 2$ erhält man $\sim Exp(\frac{1}{2})$
 \end{itemize}
 

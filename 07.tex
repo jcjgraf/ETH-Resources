@@ -3,7 +3,11 @@
 \section{Tests}
 \subsection{Grundbegriffe}
 \begin{itemize}
-    \item Wir haben eine Vermutung wo in $\Theta$ der richtige (aber unbekannte) Parameter $\vartheta$ liegen könnte, und wollten diese mit Hilfe der Daten überprüfen (``testen''). Das Grundproblem ist, eine Entscheidung zwischen zwei konkurrierenden Modellklassen zu treffen: Der \textbf{Hypothese} ($H_0$) $\Theta_0 \subseteq \Theta$ und der \textbf{Alternative} ($H_A$) $\Theta_A \subseteq \Theta$ wobei $\Theta_0 \cap \Theta_A = \emptyset$
+    \item Wir haben eine Vermutung wo in $\Theta$ der richtige (aber unbekannte) Parameter $\vartheta$ liegen könnte, und wollten diese mit Hilfe der Daten überprüfen (``testen''). Das Grundproblem ist, eine Entscheidung zwischen zwei konkurrierenden Modellklassen zu treffen: 
+        \begin{itemize*}
+            \ides{Hypothese} ($H_0$) $\Theta_0 \subseteq \Theta$
+            \ides{Alternative} ($H_A$) $\Theta_A \subseteq \Theta$
+        \end{itemize*}, wobei $\Theta_0 \cap \Theta_A = \emptyset$
     \item Hypothese/Alternative heissen:
         \begin{itemize}
             \ides{Einfach:} falls $\Theta_0/\Theta_A$ aus einzelnem Wert $\vartheta_0/\vartheta_A$ bestehen
@@ -21,8 +25,8 @@
         \begin{itemize}
             \item[1)] Wähle \textbf{Signifikanzniveau} $\alpha \in (0, 1)$ und sorge für $\sup_{\vartheta \in \Theta_0} P_\vartheta[T \in K] \le \alpha$ (d.h. man kontrolliere WS für Fehler 1. Art durch $\alpha$).
             \item[2)] Versuche \textbf{Macht} des Tests $\beta: \Theta_A \to [0, 1], \beta(\vartheta) := P_\vartheta[T \in K]$ möglichst gross zu bekommen, soweit möglich (d.h. WS für Fehler 2. Art möglich klein).
+            \item Dieses asymmetrische Vorgehen macht es schwieriger die Hypothese zu verwerfen als beizubehalten. Ein seriöser Test wird deshalb immer die Negation der gewünschten Aussage benutzen.
         \end{itemize}
-    Obiges, asymmetrisches Vorgehen macht es schwieriger die Hypothese zu verwerfen als beizubehalten. Ein seriöser Test wird deshalb immer die Negation der gewünschten Aussage benutzen.
 \end{itemize}
 
 \subsection{Konstruktion von Tests}
@@ -54,10 +58,10 @@ Der Kritische Bereich hat eine der drei Formen aus dem letzten Beispiel; die kri
 \subsubsection{Gepaarter Zweistichproben-Test bei $\mc{N}$}
 Sind $X_1, \dots, X_n$ i.i.d. $\sim \mc{N}(\mu_X, \sigma^2)$ und $Y_1, \dots, Y_m$ i.i.d $\sim \mc{N}(\mu_Y, \sigma^2)$ unter $P_\vartheta$; insbesondere ist $m = n$ und die Varianz $\sigma^2$ bei beiden Stichproben dieselbe. In dieser Situation kann man Tests über den Vergleich von $\mu_X$ und $\mu_Y$ auf den Fall nur einer Strichprobe zurückführen; die Differenzen $Z_i = X_i - Y_i$ sind nämlich under $P_\vartheta$ i.i.d. $\sim \mc{N}(\mu_X - \mu_Y, 2 \sigma^2)$. Damit kann man t-Test/z-Test in leicht angepasster Form benutzen.
 
-Bemerkung: Wir haben oben angenommen, dass $X_i$ und $Y_i$ unabhängig sind. Allgemeiner wäre $Z_i$ i.i.d. $\sim \mc{N}(\mu_X - \mu_Y, 2 (1 - \rho)\sigma^2$ mit bekannter Korrelation $\rho \in (-1, +1)$.
-    \begin{itemize}
-        \item Der Fall $\rho = 0$ entspricht Unabhängigkeit.
-    \end{itemize}
+\begin{itemize}
+    \item Es reicht zu fordern, dass $Z_i$ i.i.d. $\sim \mc{N}(\mu_X - \mu_Y, 2 (1 - \varrho)\sigma^2$ mit bekannter Korrelation $\varrho \in (-1, +1)$
+    \item Der Fall $\varrho = 0$ entspricht Unabhängigkeit
+\end{itemize}
 
 \subsubsection{Ungepaarter Zweistichproben-Test bei $\mc{N}$}
 Sind $X_1, \dots, X_n$ i.i.d. $\sim \mc{N}(\mu_X, \sigma^2)$ und $Y_1, \dots, Y_m$ i.i.d. $\sim \mc{N}(\mu_Y, \sigma^2)$ under $P_\vartheta$, wobei die Var in beiden Fällen dieselbe ist, aber $m \neq n$ sein kann. Will man einen Vergleich über $\mu_X$ und $\mu_Y$ testen, so kann man nicht mehr paarweise Differenzen bilden. Diesen Test muss man auch benutzen, falls zufällig $m = n$ ist, aber die Daten nicht natürlich gepaart sind. Wie nehmen immer noch an, dass $X_1, \dots, X_n$ und $Y_1, \dots, Y_m$ unabhängig sind.
