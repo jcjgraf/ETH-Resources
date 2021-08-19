@@ -86,8 +86,8 @@
     \item $E[X] = \mu, \ Var[X] = \sigma^2$
     \ides{Standard-Normalverteilung:} Falls $\mc{N}(0, 1)$
         \begin{itemize}
-            \ides{DF:} $\phi(t) = \frac{1}{\sqrt{2 \pi}} e^{-\frac{t^2}{2}}$
-            \ides{VF:} $\Phi(t) = \int_{-\infty}^{t} \phi(s) \mathrm{d}s = \frac{1}{\sqrt{2 \pi}} \int_{-\infty}^{t} e ^{-\frac{s^2}{2}}\mathrm{d}s$
+            \ides{DF:} $\varphi(t) = \frac{1}{\sqrt{2 \pi}} e^{-\frac{t^2}{2}}$
+            \ides{VF:} $\Phi(t) = \int_{-\infty}^{t} \varphi(s) \mathrm{d}s = \frac{1}{\sqrt{2 \pi}} \int_{-\infty}^{t} e ^{-\frac{s^2}{2}}\mathrm{d}s$
         \end{itemize}
     \item $X \sim \mc{N}(\mu, \sigma^2)$, so ist $\frac{X - \mu}{\sigma} \sim \mc{N}(0, 1)$, also: $F_X(t) = P[X \le t] = P[\frac{X - \mu}{\sigma} \le \frac{t - \mu}{\sigma}] = \Phi(\frac{t - \mu}{\sigma})$
     \item Falls $X_1, \dots, X_n$, unabhängig und $X_i \sim \mc{N}(\mu_i, \sigma_i^2)$ dann $\sum_{i=1}^n X_i \sim \mc{N}(\sum_{i=1}^n \mu_i, \sum_{i=1}^n \sigma_i^2)$

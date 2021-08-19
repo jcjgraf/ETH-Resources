@@ -2,47 +2,47 @@
 
 \section{Schätzer}
 \begin{itemize}
-    \item Seien $X_1, \dots, X_n$ eine Stichprobe, für die wir ein Modell suchen. Wir haben also einen Parameterraum $\Theta$ und für jedes $\theta \in \Theta$ einen Wahrscheinlichkeitsraum $(\Omega, \mc{F}, P_\theta)$. Meistens ist $\Omega \in \R^m$, und wir suchen dann für die Parameter $\theta_1, \dots, \theta_n$ Schätzer $T_1, \dots, T_n$ aufgrund unsere Stichprobe. Solche Schätzer sind Zufallsvariablen der Form $T_j = t_j(X_1, \dots, X_n)$, wobei wir die Schätzfunkton $t_j: \R^n \to \R$ noch geeignet wählen/finden müssen. Einsetzen von Daten $x_i = X_i(\omega), i = 1, \dots, n$ liefert dann Schätzwert $T_j(\omega) = t_j(x_1, \dots, x_n)$ für $\omega_j, j = 1, \dots, m$. Der Kürze halber schreiben wir oft auch $T = (T_1, \dots, T_m)$ und $\theta = (\theta_1, \dots, \theta_m)$.
+    \item Seien $X_1, \dots, X_n$ eine Stichprobe, für die wir ein Modell suchen. Wir haben also einen Parameterraum $\Theta$ und für jedes $\vartheta \in \Theta$ einen Wahrscheinlichkeitsraum $(\Omega, \mc{F}, P_\vartheta)$. Meistens ist $\Omega \in \R^m$, und wir suchen dann für die Parameter $\vartheta_1, \dots, \vartheta_n$ Schätzer $T_1, \dots, T_n$ aufgrund unsere Stichprobe. Solche Schätzer sind Zufallsvariablen der Form $T_j = t_j(X_1, \dots, X_n)$, wobei wir die Schätzfunkton $t_j: \R^n \to \R$ noch geeignet wählen/finden müssen. Einsetzen von Daten $x_i = X_i(\omega), i = 1, \dots, n$ liefert dann Schätzwert $T_j(\omega) = t_j(x_1, \dots, x_n)$ für $\omega_j, j = 1, \dots, m$. Der Kürze halber schreiben wir oft auch $T = (T_1, \dots, T_m)$ und $\vartheta = (\vartheta_1, \dots, \vartheta_m)$.
     \item Schätzer: ZV, Schätzwert: Zahl
 \end{itemize}
 
 \subsection{Grundbegriffe}
 \begin{itemize}
-    \ides{Erwartungstreu:} Schätzer $T$ ist erwartungstreu für $\theta$, falls gilt $E_\theta[T] = \theta$
+    \ides{Erwartungstreu:} Schätzer $T$ ist erwartungstreu für $\vartheta$, falls gilt $E_\vartheta[T] = \vartheta$
         \begin{itemize}
-            \ides{Bias:} $E_\theta[T] - \theta$
+            \ides{Bias:} $E_\vartheta[T] - \vartheta$
         \end{itemize}
-    \ides{Mittlere Quadratische Schätzfehler (MSE):} Definiert als $\text{MSE}_\theta[T] := E_\theta[(T - \theta)^2]$
+    \ides{Mittlere Quadratische Schätzfehler (MSE):} Definiert als $\text{MSE}_\vartheta[T] := E_\vartheta[(T - \vartheta)^2]$
         \begin{itemize}
-            \item $\text{MSE}_\theta[T] = E_\theta[(T - \theta)^2] = \text{Var}_\theta[T] + (E_\theta[T] - \theta)^2$
+            \item $\text{MSE}_\vartheta[T] = E_\vartheta[(T - \vartheta)^2] = \text{Var}_\vartheta[T] + (E_\vartheta[T] - \vartheta)^2$
         \end{itemize}
-    \ides{Konsistent:} Folge von Schätzern $T^{(n)}, n \in \R,$ heisst konsistent für $\theta$, falls $T^{(n)}$ für $n \to \infty$ gegen $\theta$ konvergiert. D.h. $\forall \theta \in Theta$ gilt: $\lim_{n \to \infty} P_\theta[|T^{(n)} - \theta| > \epsilon] = 0$
+    \ides{Konsistent:} Folge von Schätzern $T^{(n)}, n \in \R,$ heisst konsistent für $\vartheta$, falls $T^{(n)}$ für $n \to \infty$ gegen $\vartheta$ konvergiert. D.h. $\forall \vartheta \in Theta$ gilt: $\lim_{n \to \infty} P_\vartheta[|T^{(n)} - \vartheta| > \epsilon] = 0$
 \end{itemize}
 
 \subsection{Maximum-Likelihood-Methode (ML-Methode)}
 \begin{itemize}
-    \ides{Likelihood-Funktion:} $L(x_1, \dots, x_n; \theta) :=
+    \ides{Likelihood-Funktion:} $L(x_1, \dots, x_n; \vartheta) :=
 \begin{cases}
-    p(x_1, \dots, x_n; \theta) = \Pi_{i = 1}^n p_X(x_i; \theta) &\text{diskreten Fall}\\
-    f(x_1, \dots, x_n; \theta) = \Pi_{i = 1}^n f_X(x_i; \theta) &\text{stetigen Fall}
+    p(x_1, \dots, x_n; \vartheta) = \Pi_{i = 1}^n p_X(x_i; \vartheta) &\text{diskreten Fall}\\
+    f(x_1, \dots, x_n; \vartheta) = \Pi_{i = 1}^n f_X(x_i; \vartheta) &\text{stetigen Fall}
 \end{cases}$
         \begin{itemize}
-            \ides{Log-Likelihood:} Often brauchen wir $\log L(x_1, \dots, x_n;\theta)$ damit, wenn ZV i.i.d. sind, rechnen wir mit Summen und nicht Produkten.
+            \ides{Log-Likelihood:} Often brauchen wir $\log L(x_1, \dots, x_n;\vartheta)$ damit, wenn ZV i.i.d. sind, rechnen wir mit Summen und nicht Produkten.
         \end{itemize}
-        \ides{Maximum-Likelihood-Schätzer (ML-Schätzer) $T_{ML}$} für $\theta$ maximiert $\theta \mapsto L(X_1, \dots, X_n;\theta)$ als Funktion von $\theta$.
+        \ides{Maximum-Likelihood-Schätzer (ML-Schätzer) $T_{ML}$} für $\vartheta$ maximiert $\vartheta \mapsto L(X_1, \dots, X_n;\vartheta)$ als Funktion von $\vartheta$.
         \begin{itemize}
-            \item Statt zu maximieren sucht man meistens nur Nullstellen der Ableitung nach $\theta$.
+            \item Statt zu maximieren sucht man meistens nur Nullstellen der Ableitung nach $\vartheta$.
             \item Falls Funktion nicht differenzierbar muss man anders vorgehen
         \end{itemize}
 \end{itemize}
 
 \subsection{Momentenschätzer (MM)}
 \begin{itemize}
-    \item Seien $X_1, \dots, X_n$ i.i.d. Für eine Funktion $h: \Theta \to \R^d$ wollen wir die $d$ Grössen $h_j(\theta), j = 1, \dots, d$ schätzen. Um MM $h(\theta)$ zu bestimmen:
+    \item Seien $X_1, \dots, X_n$ i.i.d. Für eine Funktion $h: \Theta \to \R^d$ wollen wir die $d$ Grössen $h_j(\vartheta), j = 1, \dots, d$ schätzen. Um MM $h(\vartheta)$ zu bestimmen:
     \begin{itemize}
-        \item[1)] Für $j = 1, \dots, d$ berechnen wir in jedem Modell $P_\theta$ das $j$-te Moment $m_j(\theta) = E_\theta[X^j]$ als Funktion von $\theta$.
+        \item[1)] Für $j = 1, \dots, d$ berechnen wir in jedem Modell $P_\vartheta$ das $j$-te Moment $m_j(\vartheta) = E_\vartheta[X^j]$ als Funktion von $\vartheta$.
         \item[2)] Für $j = 1, \dots, d$ definieren wir das $j$-Te \textit{empirische Mittel} als $\overset{\sim}{m_j}(x_1, \dots, x_n) := \frac{1}{n} \sum_{i=1}^{n} x_i^j$
-        \item[3)] Betrachten System von $d$ Gleichungen $\overset{\sim}{m_j}(x_1, \dots, x_n) = m_j(\theta), j = 1, \dots, d$ und lösen Gleichungssystem für $d$ Unbekannten $h_1(\theta), \dots h_d(\theta)$.
+        \item[3)] Betrachten System von $d$ Gleichungen $\overset{\sim}{m_j}(x_1, \dots, x_n) = m_j(\vartheta), j = 1, \dots, d$ und lösen Gleichungssystem für $d$ Unbekannten $h_1(\vartheta), \dots h_d(\vartheta)$.
         \item Falls eindeutige Lösung existiert, nennen wir diese $t_{MM}(x_1, \dots, x_n)$, $t_{MM}: \R^n \to \R^d$.
     \end{itemize}
 \end{itemize}
@@ -50,13 +50,13 @@
 \subsection{Verteilungsaussagen}
 \begin{itemize}
     \item Verteilungsaussagen über Schätzer sind nicht einfach.
-    \item Falls Schätzer von der Form $\sum_{i=1}^{n} Y_i$, wobei $Y_i$ i.i.d., kann man ZGS benutzen. Einfaches Bsp: Falls $T = \frac{1}{n} \sum_{i=1}^{n} Y_i$ folgt für grosse $n$, dass $\sum_{i=1}^{n} Y_i \overset{\text{approx}}{\sim} \mc{N}(n E_\theta[Y_i], n \text{Var}_\theta[Y_i])$
+    \item Falls Schätzer von der Form $\sum_{i=1}^{n} Y_i$, wobei $Y_i$ i.i.d., kann man ZGS benutzen. Einfaches Bsp: Falls $T = \frac{1}{n} \sum_{i=1}^{n} Y_i$ folgt für grosse $n$, dass $\sum_{i=1}^{n} Y_i \overset{\text{approx}}{\sim} \mc{N}(n E_\vartheta[Y_i], n \text{Var}_\vartheta[Y_i])$
     \item Seien $X_1, \dots, X_n$ i.i.d. $\sim \mc{N}(\mu, \sigma^2)$ Dann gilt:
         \begin{itemize}
             \item[1)] $\overline{X}_n \sim \mc{N}(\mu, \frac{1}{n} \sigma^2)$, und $\frac{\overline{X}_n - \mu}{\frac{\sigma}{\sqrt{n}}} \sim \mc{N}(0, 1)$
-            \item[2)] $\frac{n - 1}{\sigma^2}S^2 = \frac{1}{\sigma^2}\sum_{i=1}^{n} (X_i - \overline{X}_n)^2 \sim \mc{X}^2$ mit $n - 1$ Freiheitsgraden
+            \item[2)] $\frac{n - 1}{\sigma^2}S^2 = \frac{1}{\sigma^2}\sum_{i=1}^{n} (X_i - \overline{X}_n)^2 \sim \mc{X}^2_{n - 1}$
             \item[3)] $\overline{X}_n$ und $S^2$ sind unabhängig
-            \item[4)] Der Quotient $\frac{\overline{X}_n - \mu}{\frac{S}{\sqrt{n}}} = \frac{\frac{\overline{X}_n - \mu}{\frac{\sigma}{\sqrt{n}}}}{\frac{S}{\sigma}} = \frac{\frac{\overline{X}_n - \mu}{\frac{\sigma}{\sqrt{n}}}}{\sqrt{\frac{1}{n - 1}\frac{n - 1}{\sigma^2}S^2}}$ ist $t$-verteilt mit $n - 1$ Freiheitsgraden
+            \item[4)] $\frac{\overline{X}_n - \mu}{\frac{S}{\sqrt{n}}} = \frac{\frac{\overline{X}_n - \mu}{\frac{\sigma}{\sqrt{n}}}}{\frac{S}{\sigma}} = \frac{\frac{\overline{X}_n - \mu}{\frac{\sigma}{\sqrt{n}}}}{\sqrt{\frac{1}{n - 1}\frac{n - 1}{\sigma^2}S^2}} \sim t_{n-1}$
         \end{itemize}
 \end{itemize}
 
