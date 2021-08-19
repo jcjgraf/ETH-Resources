@@ -9,7 +9,7 @@
 \graphicspath{{Figures/}}
 
 % Listing
-\usepackage{enumitem}
+\usepackage[inline]{enumitem}
 \setlist{nolistsep}
 \setlistdepth{20}
 \renewlist{itemize}{itemize}{20}
@@ -17,10 +17,13 @@
 % initially, use dots for all levels
 \setlist[itemize]{label=$\cdot$}
 
-% customize the first 3 levels
+% customize the first levels
 \setlist[itemize,1]{label=\textbullet}
 \setlist[itemize,2]{label=--}
-\setlist[itemize,3]{label=*}
+\setlist[itemize,3]{label=$\ast$}
+\setlist[itemize,4]{label=$\circ$}
+\setlist[itemize,5]{label=$\triangleright$}
+\setlist[itemize,6]{label=$\diamond$}
 
 \setitemize{leftmargin=0.2cm}
 
