@@ -3,7 +3,7 @@
 \section{Tests}
 \subsection{Grundbegriffe}
 \begin{itemize}
-    \item Wir haben eine Vermutung wo in $\Theta$ der richtige (aber unbekannte) Parameter $\vartheta$ liegen könnte, und wollten diese mit Hilfe der Daten überprüfen (``testen''). Das Grundproblem ist, eine Entscheidung zwischen zwei konkurrierenden Modellklassen zu treffen: 
+    \item Wir haben eine Vermutung wo in $\Theta$ der richtige (aber unbekannte) Parameter $\vartheta$ liegen könnte, und wollten diese mit Hilfe der Daten überprüfen (``testen''). Das Grundproblem ist, eine Entscheidung zwischen zwei konkurrierenden Modellklassen zu treffen:
         \begin{itemize*}
             \ides{Hypothese} ($H_0$) $\Theta_0 \subseteq \Theta$
             \ides{Alternative} ($H_A$) $\Theta_A \subseteq \Theta$
@@ -24,6 +24,9 @@
     \ides{Signifikanzniveau:} Grundsätzlich möchte man $\vartheta \mapsto P_\vartheta[T \in K]$ auf $\Theta_0$ möglichst klein und auf $\Theta_A$ möglichst gross haben. Da diese meist stetig ist und $\Theta_0$ und $\Theta_A$ meist nebeneinander liegen ist ein gleichzeitiges min-/maximieren von $\Theta_0/\Theta_A$ nicht möglich. Deshalb gibt es folgendes zweistufiges Vorgehen:
         \begin{itemize}
             \item[1)] Wähle \textbf{Signifikanzniveau} $\alpha \in (0, 1)$ und sorge für $\sup_{\vartheta \in \Theta_0} P_\vartheta[T \in K] \le \alpha$ (d.h. man kontrolliere WS für Fehler 1. Art durch $\alpha$).
+                \begin{itemize}
+                    \item $1 - \alpha$ ist die Wahrscheinlichkeit, dass $H_0$ beibehalten wird
+                \end{itemize}
             \item[2)] Versuche \textbf{Macht} des Tests $\beta: \Theta_A \to [0, 1], \beta(\vartheta) := P_\vartheta[T \in K]$ möglichst gross zu bekommen, soweit möglich (d.h. WS für Fehler 2. Art möglich klein).
             \item Dieses asymmetrische Vorgehen macht es schwieriger die Hypothese zu verwerfen als beizubehalten. Ein seriöser Test wird deshalb immer die Negation der gewünschten Aussage benutzen.
         \end{itemize}
@@ -77,8 +80,8 @@ Sind $X_1, \dots, X_n$ i.i.d. $\sim \mc{N}(\mu_X, \sigma^2)$ und $Y_1, \dots, Y_
 
 \subsection{Der P-Wert}
 \begin{itemize}
-    \item Sei $X_1, \dots, X_n$ eine Stichprobe. Wir wollen eine Hypothese $H_0$ gegen eine Alternative $H_A$ testen. Bei einem Test zum Niveau $\alpha$ wird die Hypothese abgelehnt, wenn $T(\omega) = t(x_1, \dots, x_n)$ einen Wert in $K$ ergibt, und wir haben $P_{\vartheta_0} [T \in K] \le \alpha$. Alternativ kann man auch den sogenannten \textbf{p-Wert} berechnen. Sei $\overrightarrow{x} = (x_1, \dots, x_n)$ der Vektor unserer Daten und $\overrightarrow{X} = (X_1, \dots, X_n)$ unsere Stichprobe. Wir brauchen zuerst für jedes Niveau $\alpha \in [0, 1]$ einen Test $\phi_\alpha(\overrightarrow{x}) = I_{\{t(\overrightarrow{x}) \in K_\alpha\} }$ mit $T = t(\overrightarrow{X})$ und kritischen Bereich $K_\alpha$ mit $P_\vartheta[T \in K_\alpha] \le \alpha \ \forall \vartheta \in \Theta_0$. Zudem muss gelten, dass diese Tests kompatibel sind in dem Sinn, dass aus $\alpha' < \alpha$ immer folgt, dass $\phi_{\alpha'} \le \phi_\alpha$, d.h. falls man die Hypothese auf einem Niveau $\alpha$ nicht verwirft, so kann man sie auf einem kleineren Niveau $\alpha'$ auch nicht verwerfen. Dann definieren wir $\pi(\overrightarrow{x}) := \inf \{\alpha \in [0, 1] \mid \phi_\alpha(\overrightarrow{x}) = 1\}$, und der p-Wert ist dann gegeben durch; p-Wert $= \pi(\overrightarrow{X})$. Wie die Stichprobe ist der p-Wert eine ZV weil er von den Daten abhängt. \todo{Replace phi with varphi?}
-    \item Ist der Test zweiseitig betrachtet man $|T| < t$ resp. $|T| > t$ 
+    \item Sei $X_1, \dots, X_n$ eine Stichprobe. Wir wollen eine Hypothese $H_0$ gegen eine Alternative $H_A$ testen. Bei einem Test zum Niveau $\alpha$ wird die Hypothese abgelehnt, wenn $T(\omega) = t(x_1, \dots, x_n)$ einen Wert in $K$ ergibt, und wir haben $P_{\vartheta_0} [T \in K] \le \alpha$. Alternativ kann man auch den sogenannten \textbf{p-Wert} berechnen. Sei $\overrightarrow{x} = (x_1, \dots, x_n)$ der Vektor unserer Daten und $\overrightarrow{X} = (X_1, \dots, X_n)$ unsere Stichprobe. Wir brauchen zuerst für jedes Niveau $\alpha \in [0, 1]$ einen Test $\phi_\alpha(\overrightarrow{x}) = I_{\{t(\overrightarrow{x}) \in K_\alpha\} }$ mit $T = t(\overrightarrow{X})$ und kritischen Bereich $K_\alpha$ mit $P_\vartheta[T \in K_\alpha] \le \alpha \ \forall \vartheta \in \Theta_0$. Zudem muss gelten, dass diese Tests kompatibel sind in dem Sinn, dass aus $\alpha' < \alpha$ immer folgt, dass $\phi_{\alpha'} \le \phi_\alpha$, d.h. falls man die Hypothese auf einem Niveau $\alpha$ nicht verwirft, so kann man sie auf einem kleineren Niveau $\alpha'$ auch nicht verwerfen. Dann definieren wir $\pi(\overrightarrow{x}) := \inf \{\alpha \in [0, 1] \mid \phi_\alpha(\overrightarrow{x}) = 1\}$, und der p-Wert ist dann gegeben durch; p-Wert $= \pi(\overrightarrow{X})$. Wie die Stichprobe ist der p-Wert eine ZV weil er von den Daten abhängt.
+    \item Ist der Test zweiseitig betrachtet man $|T| < t$ resp. $|T| > t$
     \item Ist der Test einseitig betrachtet man $T < t$ resp. $T > t$
 \end{itemize}
 
