@@ -1,0 +1,44 @@
+%! TEX root = ./main.tex
+
+\section{Sonstiges}
+\subsection{Umformungen}
+\begin{itemize}
+    \item $P[|X - \mu| \le 1] = P[-1 \le X - \mu \le 1] = P[-1 + \mu \le X \le 1 + \mu] = P[X \le 1 + \mu] - P[X \le -1 + \mu]$
+    \item $\frac{1}{n} \sum_{i=1}^{n} (X_i - \overline X_n)^2 = \frac{1}{n} \sum_{i=1}^n X_i^2 - (\overline X_n)^2$
+\end{itemize}
+
+\subsection{Likelihood Quotient}
+\begin{itemize}
+    \item[1)]
+        \begin{itemize}
+            \ides{Gegeben:} 
+                \begin{align*}
+                    L(x_1, \dots, x_n;\vartheta) &= \Pi_{i=1}^n p_X(x_i;\vartheta)\\
+                                                 &= \vartheta^{\sum_{i=1}^n x_i}(1 - \vartheta)^{n - \sum_{i=1}^n x_i}
+                \end{align*}
+            \ides{Gesucht:} 
+                \begin{align*}
+                    R(x_1, \dots, x_n; \vartheta_0, \vartheta_A) &= \frac{L(x_1, \dots, x_n; \vartheta_A}{L(x_1, \dots, x_n; \vartheta_0}\\
+                                                                 &= \left( \frac{\vartheta_A}{\vartheta_0} \right)^{\sum_{i=1}^n x_i} \left(\frac{1 - \vartheta_A}{1 - \vartheta_0} \right)^{n - \sum_{i = 1}^n x_i}\\
+                                                                 &= \left( \frac{\vartheta_A (1 - \vartheta_0)}{\vartheta_0 (1 - \vartheta_A)} \right)^{\sum_{i=1}^n x_i} \left(\frac{1 - \vartheta_A}{1 - \vartheta_0} \right)^n
+                \end{align*}
+                    \begin{itemize}
+                        \item Sei $\vartheta_0 = \frac{1}{2}, \vartheta_A \ge \frac{1}{2}$, so ist $R$ gross, falls $\sum_{i=1}^n x_i$ gross ist $\implies T := \sum_{i=1}^n X_i = S_n$
+                    \end{itemize}
+        \end{itemize}
+    \item[2)]
+        \begin{itemize}
+            \ides{Gegeben:}
+                \begin{align*}
+                    L(x_1, \dots, x_n;\vartheta) &= \Pi_{i=1}^n f_X(x_i;\vartheta)\\
+                                                 &= (2 \pi \sigma^2)^{\frac{-n}{2}} \exp \left(- \frac{1}{2 \sigma^2} \sum_{i=1}^n (x_i -\vartheta)^2 \right)
+                \end{align*}
+            \ides{Gesucht:}
+                \begin{align*}
+                    R(x_1, \dots, x_n; \vartheta_0, \vartheta_A) &= \frac{L(x_1, \dots, x_n; \vartheta_A}{L(x_1, \dots, x_n; \vartheta_0}\\
+                                                                 &= \exp \left( -\frac{1}{2 \sigma^2} \left( \sum_{i=1}^n (x_i - \vartheta_A)^2 - \sum_{i=1}^n (x_i - \vartheta_0)^2 \right) \right)\\
+                                                                 &= \text{const.}(\sigma, \vartheta_0, \vartheta_A) \exp \left( \frac{1}{2 \sigma^2} (\vartheta_A - \vartheta_0) \sum_{i=1}^n x_i \right)\\
+                \end{align*}
+            \item Für $\vartheta_0, \vartheta_A$ beliebig, $R$ ist gross wenn $(\vartheta_A - \vartheta_0) \sum_{i=1}^n x_i$ gross ist $\implies T := \sum_{i=1}^n X_i$
+        \end{itemize}
+\end{itemize}
