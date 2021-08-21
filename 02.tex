@@ -40,6 +40,11 @@
             \ides{Linearität:} Für bel. $a,b \in \R$ gilt $E[aX + b] = a E[X] + b$
             \item Falls $\mc{W}(X) = \N_0$ so gilt $E[X] = \sum_{j=1}^{\infty} P[X \ge j] = \sum_{l=0}^{\infty} P[X > l]$
         \end{itemize}
+        \ides{Bedingter EW:} $E[X_1 \mid X_2](x_2) = \sum_{x_1 \in \R} x_1 p_{X_1 \mid X_2} (x_1 \mid x_2) =: h(x_2)$
+            \begin{itemize}
+                \item $h : \mc{W}(X_2) \to \R$
+                \item $E[E[X_1 \mid X_2]] = E[X_1]$
+            \end{itemize}
 \end{itemize}
 
 \subsubsection{Varianz}

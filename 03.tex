@@ -26,6 +26,11 @@
             \item ZV $X$ und ZV $Y = g(x)$. Ist $X$ stetig mit DF $f_X(x)$, dann: $E[Y] = E[g(x)] = \int_{-\infty}^{\infty}  g(x) f_X(x) \mathrm{d}x$ sofern das Integral abs. konvergiert.
             \item Für beliebige ZV $X_1, \dots, X_n$ ist $E[X_1 \cdot \dots \cdot X_n] = E[X_1] \cdot \dots \cdot E[X_n]$
             \item Für beliebige ZV $X_1, \dots, X_n$ ist $E[X_1 + \dots + X_n] = E[X_1] + \dots + E[X_n]$
+            \ides{Bedingter EW:} $E[X_1 \mid X_2](x_2) = \int_{-\infty}^\infty x_1 p_{X_1 \mid X_2} (x_1 \mid x_2) \mathrm{d}x_1 =: h(x_2)$
+            \begin{itemize}
+                \item $h : \mc{W}(X_2) \to \R$
+                \item $E[E[X_1 \mid X_2]] = E[X_1]$
+            \end{itemize}
         \end{itemize}
     \ides{i.i.d.:} Haben ZVs $X_1, \dots, X_n$ die selbe VF und sind unabhängig nennt man sie i.i.d.
     \ides{Momente:} Die Momente von $X$ sind definiert als $m_n := E[X^n], n \in \N$ unter der Voraussetzung, dass $E[|X|^n] < \infty$
