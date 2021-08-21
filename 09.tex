@@ -1,6 +1,20 @@
 %! TEX root = ./main.tex
 
 \section{Sonstiges}
+\subsection{Erwartungswert}
+\begin{itemize}
+    \item[1)]
+        \begin{itemize}
+            \ides{Gegeben:} EW von $f(x,y) =
+                \begin{cases}
+                    \frac{1}{2} \quad 0 \le x \le y \le 2\\
+                    0 \quad \text{else}
+                \end{cases}$
+                \ides{Gesucht:}
+                $E[XY] = \int_0^2 \int_0^y \frac{1}{2} x y \ \mathrm{d}x \mathrm{d}y = \int_0^2 \left. \frac{1}{4} x^2 y \right|_0^y = \int_0^2 \frac{1}{4} y^3 \ \mathrm{d}y = \left. \frac{1}{16} y^4 \right|_0^2 = 1$
+        \end{itemize}
+\end{itemize}
+
 \subsection{Umformungen}
 \begin{itemize}
     \item $P[|X - \mu| \le 1] = P[-1 \le X - \mu \le 1] = P[-1 + \mu \le X \le 1 + \mu] = P[X \le 1 + \mu] - P[X \le -1 + \mu]$
@@ -11,12 +25,12 @@
 \begin{itemize}
     \item[1)]
         \begin{itemize}
-            \ides{Gegeben:} 
+            \ides{Gegeben:}
                 \begin{align*}
                     L(x_1, \dots, x_n;\vartheta) &= \Pi_{i=1}^n p_X(x_i;\vartheta)\\
                                                  &= \vartheta^{\sum_{i=1}^n x_i}(1 - \vartheta)^{n - \sum_{i=1}^n x_i}
                 \end{align*}
-            \ides{Gesucht:} 
+            \ides{Gesucht:}
                 \begin{align*}
                     R(x_1, \dots, x_n; \vartheta_0, \vartheta_A) &= \frac{L(x_1, \dots, x_n; \vartheta_A}{L(x_1, \dots, x_n; \vartheta_0}\\
                                                                  &= \left( \frac{\vartheta_A}{\vartheta_0} \right)^{\sum_{i=1}^n x_i} \left(\frac{1 - \vartheta_A}{1 - \vartheta_0} \right)^{n - \sum_{i = 1}^n x_i}\\
@@ -41,4 +55,9 @@
                 \end{align*}
             \item Für $\vartheta_0, \vartheta_A$ beliebig, $R$ ist gross wenn $(\vartheta_A - \vartheta_0) \sum_{i=1}^n x_i$ gross ist $\implies T := \sum_{i=1}^n X_i$
         \end{itemize}
+\end{itemize}
+
+\subsection{Likelihood Schätzer}
+\begin{itemize}
+    \ides{Gesucht:} Maximum-Likelihood Schätzer für $X_1, \dots, X_n, X_i \sim \text{Poisson}(\lambda)$ ist $T = \frac{1}{n} \sum_{i=1}^n X_i$
 \end{itemize}
