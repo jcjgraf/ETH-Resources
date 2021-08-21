@@ -31,5 +31,9 @@
             \item $X \overset{\text{approx}}{\sim} \mc{N}(np, np(1-p))$
             \item $\overline{X}_n \overset{\text{approx}}{\sim} \mc{N}(\mu, \frac{1}{n} \sigma^2)$
             \item Nützliche Umformung: $P[|S_n^*| \le x] \approx \Phi(x) - \Phi(-x) = 2 \Phi(x) - 1$
+            \ides{Kontinuitätskorrektur:} Bietet besser approximation für Normalverteilung durch ``Zentrierung'' der Stäbe des Histogramms durch hinzufügen der Korrektur $+\frac{1}{2}$
+                \begin{itemize}
+                    \item $P[S_n^* \le \frac{b - np}{\sqrt{np(1 - p)}}] \implies P[S_n^* \le \frac{b + \frac{1}{2} - np}{\sqrt{np(1 - p)}}]$
+                \end{itemize}
         \end{itemize}
 \end{itemize}
