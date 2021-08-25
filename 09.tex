@@ -62,3 +62,44 @@
     \ides{Gesucht:} Maximum-Likelihood Schätzer für $\lambda$ für $X_1, \dots, X_n$, i.i.d. $X_i \sim \text{Poisson}(\lambda)$ ist $T = \frac{1}{n} \sum_{i=1}^n X_i$
     \ides{Gesucht:} Maximum-Likelihood Schätzer für $p$ für $X_1, \dots, X_n$, i.i.d. $X_i \sim \text{Be}(p)$ ist $T = \frac{1}{n} \sum_{i=1}^n X_i$
 \end{itemize}
+
+\subsection{Mehrere ZV}
+\begin{itemize}
+    \ides{Gegeben:} $Z \sim \text{Exp}(\lambda), Z \sim \text{Exp}(\mu)$
+\ides{Gesucht:} $P[Z > Y] = \int \int_{\{(y,z) \in \R^2 \mid z > y \}} \lambda e^{-\lambda y} \mu e^{-\mu z} \mathrm{d}z \mathrm{d}y = \int_0^\infty \lambda e^{\lambda y} \int_y^\infty \mu e^{-\mu z} \mathrm{d}z \mathrm{d}y = \int_0^\infty \lambda e^{-\lambda y} e^{-\mu y} \mathrm{d}y = \frac{\lambda}{\lambda + \mu}$
+\end{itemize}
+
+\subsection{Proof Gedächnislos}
+Beweise: $Y \sim Exp(p) \iff P[Y > s] = P[Y > s + t \mid Y > t], \quad s,t \in \R_+$:
+\\ \includegraphics[width=\linewidth]{./Figures/proof_Gedaechnislos.png}
+
+\subsection{Test Nicht Normalverteilt}
+\includegraphics[width=\linewidth]{./Figures/Test_Nicht_Normalverteilt.png}
+
+\subsection{Momenteschätzer}
+Für ein Experiment mit $n=5$ unf $f_T(t) = C^2 e^{-Ct} 1_{[0 \le t]}$, bestimme den Momenteschätzer:
+\\\includegraphics[width=\linewidth]{./Figures/Momente_Schaetzer.png}
+
+\subsection{MinStuff}
+\includegraphics[width=\linewidth]{./Figures/ExampleMinStuff.png}
+
+\subsection{$\chi$ Verteilung}
+Für $Y = \sum_{k=1}^v Z_k^2, \quad Z_i \sim \mc{N}(0,1)$ i.i.d. find $E[Y], Var[Y]$:
+\\ \includegraphics[width=\linewidth]{./Figures/chi_verteilung.png}
+
+\subsection{Grenzwert Überschreitung}
+\includegraphics[width=\linewidth]{./Figures/Test_Ueberschreitung.png}
+
+\subsection{Hypergeometrische Verteilung}
+\includegraphics[width=\linewidth]{./Figures/Hypergeometrische_Verteilung.png}
+
+\subsection{Gemeinsame Dichte und Randdichte}
+$P \sim \text{Uniform}(0,1), H|P \sim \text{Uniform}(0,P)$, finde:
+\begin{itemize*}
+    \item Gemeinsame Dichte
+    \\\includegraphics[width=\linewidth]{./Figures/Gemeinsame_Dichte_Randdichte_A.png}
+    \item Randdichte von $H$
+    \\\includegraphics[width=\linewidth]{./Figures/Gemeinsame_Dichte_Randdichte_B.png}
+    \item $E[H]$
+    \\\includegraphics[width=\linewidth]{./Figures/Gemeinsame_Dichte_Randdichte_C.png}
+\end{itemize*}
