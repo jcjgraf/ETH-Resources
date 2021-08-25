@@ -24,7 +24,7 @@
         \begin{itemize}
             \item Ist ZV $X$ stetig mit DF $f_X(x)$ dann: $E[X] = \int_{-\infty}^{\infty} x f_X(x) \mathrm{d}x$ sofern das Integral absolut konvergiert.
             \item ZV $X$ und ZV $Y = g(x)$. Ist $X$ stetig mit DF $f_X(x)$, dann: $E[Y] = E[g(x)] = \int_{-\infty}^{\infty}  g(x) f_X(x) \mathrm{d}x$ sofern das Integral abs. konvergiert.
-            \item Für beliebige ZV $X_1, \dots, X_n$ ist $E[X_1 \cdot \dots \cdot X_n] = E[X_1] \cdot \dots \cdot E[X_n]$
+            \item Für beliebige unabhängige ZV $X_1, \dots, X_n$ ist $E[X_1 \cdot \dots \cdot X_n] = E[X_1] \cdot \dots \cdot E[X_n]$
             \item Für beliebige ZV $X_1, \dots, X_n$ ist $E[X_1 + \dots + X_n] = E[X_1] + \dots + E[X_n]$
             \ides{Bedingter EW:} $E[X_1 \mid X_2](x_2) = \int_{-\infty}^\infty x_1 f_{X_1 \mid X_2} (x_1 \mid x_2) \mathrm{d}x_1 =: h(x_2)$
             \begin{itemize}
@@ -95,7 +95,7 @@
             \ides{VF:} $\Phi(t) = \int_{-\infty}^{t} \varphi(s) \mathrm{d}s = \frac{1}{\sqrt{2 \pi}} \int_{-\infty}^{t} e ^{-\frac{s^2}{2}}\mathrm{d}s$
         \end{itemize}
     \item $X \sim \mc{N}(\mu, \sigma^2)$, so ist $\frac{X - \mu}{\sigma} \sim \mc{N}(0, 1)$, also: $F_X(t) = P[X \le t] = P[\frac{X - \mu}{\sigma} \le \frac{t - \mu}{\sigma}] = \Phi(\frac{t - \mu}{\sigma})$
-    \item Falls $X_1, \dots, X_n$, unabhängig und $X_i \sim \mc{N}(\mu_i, \sigma_i^2)$ dann $\sum_{i=1}^n X_i \sim \mc{N}(\sum_{i=1}^n \mu_i, \sqrt{\sum_{i=1}^n \sigma_i^2})$
+    \item Falls $X_1, \dots, X_n$, unabhängig und $X_i \sim \mc{N}(\mu_i, \sigma_i^2)$ dann $\sum_{i=1}^n X_i \sim \mc{N}(\sum_{i=1}^n \mu_i, \sum_{i=1}^n \sigma_i^2)$
     \item Fläche zwischen $[\mu - \sigma, \mu + \sigma] \approx \frac{2}{3}$
 \end{itemize}
 
