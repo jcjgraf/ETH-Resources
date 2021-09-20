@@ -16,8 +16,8 @@ The repo contains all sources as well precompiled PDFs. Though, I cannot guarant
 | FS20     | Digital Design and Computer Architectures     | [📈](./20-1_DD-CS)    | Handwritten                                                        |
 | HS20     | Analysis II                                   | [📈](./20-2_ANAII-CS) | Tex                                                                |
 | HS20     | System Programming and Computer Architectures | [📋](./20-2_SPCA-S)   | Complete but long                                                  |
-| FS21     | Formal Methods and Functional Programming     | 📋 ❌                 |                                                                    |
-| FS21     | Data Modelling and Dtabases                   | [📋](./21-1_DMDB-S)                 |                                                                    |
+| FS21     | Formal Methods and Functional Programming     | [📋](./21-1_FMFP-S)   |                                                                    |
+| FS21     | Data Modelling and Dtabases                   | [📋](./21-1_DMDB-S)   |                                                                    |
 | FS21     | Computer Networks                             | [📋](./21-1_CN-S)     |                                                                    |
 | FS21     | Wahrscheinlichkeit und Statistik              | 📈 ❌                 |                                                                    |
 
