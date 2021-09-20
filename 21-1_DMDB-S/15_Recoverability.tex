@@ -1,0 +1,176 @@
+%! TEX root = ./main.tex
+
+\section{Recoverability}
+\subsection{Definition}
+\begin{itemize}
+    \item Important for durability property
+    \item Ensures that the state in the DB is correct
+    \item Need to recover from
+        \begin{itemize}
+            \item Abort of single transaction
+                \begin{itemize}
+                    \item Undo all changes of the aborted transaction
+                \end{itemize}
+            \item System crash (loss of main memory but not disk)
+                \begin{itemize}
+                    \item Redo all committed transaction
+                \end{itemize}
+        \end{itemize}
+    \ides{$\mathbf{T_1}$ reads from $\mathbf{T_2}$:} if $T_1$ reads a value written by $T_2$ at a time when $T_2$ was not aborted
+    \item Different families of schedules
+        \begin{itemize}
+            \item Each family has different recoverability properties
+        \end{itemize}
+    \ides{Recoverable (RC):}
+        \begin{itemize}
+            \item If $T_i$ reads from $T_j$ and commits, then $c_j < c_i$
+            \item If $T_i$ reads from $T_j$ and aborts, or if $T_i$ writes etc. it is also RC
+            \item No need to undo a committed transaction
+            \ides{If not RC:} Loss of data
+        \end{itemize}
+    \ides{Avoids Cascading Aborts (ACA):}
+        \begin{itemize}
+            \item If $T_i$ reads $X$ from $T_j$, then $c_j < r_i[X]$
+            \item If $T_i$ writes $X$ from from $T_j$, it is also ACA
+            \item Aborting a transaction does not cause aborting others
+            \ides{If not ACA:} Thrashing behaviour when transactions abort each other
+        \end{itemize}
+    \ides{Strict (ST):}
+        \begin{itemize}
+            \item If $T_i$ reads from or writes a value written by $T_j$, then
+                \begin{itemize}
+                    \ides{If $\mathbf{T_j}$ commits:} $(c_j < r_i[X] \wedge c_j < w_i[X])$
+                    \ides{If $\mathbf{T_j}$ aborts:} $(a_j < r_i[X] \wedge a_j < w_i[X])$
+                \end{itemize}
+            \item Extends ACA to write
+            \item Undoing a transaction does not undo the changes of other transactions
+            \ides{If not ST:} Recovery is very complex or impossible
+            \item Enforced by Strict 2PL
+        \end{itemize}
+    \item $\text{All Schedules} \subset \text{RC} \subset \text{ACA} \subset \text{ST} \subset \text{Serial}$
+    \ides{Goal:} All allowed schedules lie in the intersection of ST and conflict serializable
+\end{itemize}
+
+\subsection{Write-Ahead Log}
+\begin{itemize}
+    \ides{Assume:}
+        \begin{itemize}
+            \item Disk is save
+            \item \verb+Write(A, v)+ only changes object in memory but not disk
+            \item \verb+OUTPUT(A)+ writes changes from memory to disk
+        \end{itemize}
+    \ides{Idea:} Log changes and restore from log if required
+    \ides{Log:} File which only can be appended to
+        \begin{itemize}
+            \item Stored in memory and periodically flashed to disk
+                \begin{itemize}
+                    \item When to flash?
+                \end{itemize}
+            \item Operation
+                \begin{itemize}
+                    \item Append Record
+                        \begin{itemize}
+                            \item \verb+START T+
+                            \item \verb+COMMIT T+
+                            \item \verb+ABORT T+
+                            \item \verb+Update <T, X, v>+
+                        \end{itemize}
+                    \item Flush to disk
+                        \begin{itemize}
+                            \item \verb+FLUSH+
+                        \end{itemize}
+                    \item Log message do not have to mean that the action was actually done on the DB
+                \end{itemize}
+        \end{itemize}
+    \item Two main strategies
+    \ides{Undo Logging}
+        \begin{itemize}
+            \item If $T$ modified DB element $X$ log \verb+<T, X, old value>+ to disk before change $X$ is written to disk
+                \begin{itemize}
+                    \item I.e. call \verb+FLUSH+ before calling \verb+OUTUT+
+                \end{itemize}
+            \item If a transaction commits, \verb+COMMIT+ record must be logged to disk only after all other changes are written to disk
+                \begin{itemize}
+                    \item I.e. log \verb+COMMIT+ and call \verb+FLUSH+ only after calling \verb+OUTPUT+
+                \end{itemize}
+            \item Recovery
+                \begin{itemize}
+                    \ides{Committed Transaction:} Ones which have \verb+COMMIT+ in the log
+                        \begin{itemize}
+                            \item \verb+COMMIT+ in log guarantees that changes are flushed to disk
+                                \begin{itemize}
+                                    \item Nothing to do
+                                \end{itemize}
+                        \end{itemize}
+                    \ides{Uncommitted Transaction:} Ones which do not have \verb+COMMIT+ in the log
+                        \begin{itemize}
+                            \item We cannot be sure if changes were committed or not
+                                \begin{itemize}
+                                    \item Undo everything
+                                \end{itemize}
+                            \item Steps
+                                \begin{itemize}
+                                    \item Find all transaction $i$ with \verb+Start+ $T_i$ but not \verb+COMMIT+ $T_i$
+                                    \item If there is only a single transaction:
+                                        \begin{itemize}
+                                            \item Scan from the end and undo updates
+                                        \end{itemize}
+                                    \item If there are multiple uncommitted transactions
+                                        \begin{itemize}
+                                            \item Scan from the end (skipping logs from committed transaction) and undo updates
+                                        \end{itemize}
+                                    \item Write \verb+ABORT+ $T_i$ at the end of log
+                                    \item Flush log
+                                \end{itemize}
+                        \end{itemize}
+                \end{itemize}
+            \icon Lots of I/O
+            \icon Log is almost the size of the transaction
+        \end{itemize}
+    \ides{Redo Logging}
+        \begin{itemize}
+            \item If $T$ modifies DB element $X$ log \verb+<T, X, new value>+ to disk
+            \item Log \verb+COMMIT+ and call \verb+FLUSH+, before calling \verb+OUTPUT+
+            \item Recovery
+                \begin{itemize}
+                    \item Scan log from the beginning
+                    \item If \verb+COMMIT+ $T_i$ is not in the log
+                        \begin{itemize}
+                            \item No changes of $T_i$ appears on disk
+                            \item Write \verb+ABORT+ $T_i$
+                            \item Ignore changes if $T_i$ during scanning
+                        \end{itemize}
+                    \item If \verb+COMMIT+ $T_i$ is in the log
+                        \begin{itemize}
+                            \item Does not mean all its changes are already on disk
+                            \item Redo all changes of $T_i$
+                        \end{itemize}
+                    \item Flush log
+                \end{itemize}
+            \ipro Less I/O than undo logging (I guess)
+            \icon The log we need to keep can be very, very long
+                \begin{itemize}
+                    \item After commit we still do not know if the changes are reflected on the DB
+                \end{itemize}
+            \icon Problematic when two transaction update different objects which are stored on the same page
+        \end{itemize}
+    \ides{Undo/Redo Logging}
+        \begin{itemize}
+            \item Combine both to get pro from both
+            \item Before modifying any DB element $X$ on disk, write \verb+<T, X, old value, new value>+
+            \item Flush log before actual changes are made on disk
+            \item Recovery
+                \begin{itemize}
+                    \item If \verb+COMMIT T+ is not in the log
+                        \begin{itemize}
+                            \item $T$ is incomplete
+                            \item Undo changes
+                        \end{itemize}
+                    \item If \verb+COMMIT T+ is in the log
+                        \begin{itemize}
+                            \item $T$ is complete
+                            \item Redo changes
+                        \end{itemize}
+                \end{itemize}
+        \end{itemize}
+\end{itemize}

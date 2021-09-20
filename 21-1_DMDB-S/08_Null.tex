@@ -1,0 +1,33 @@
+%! TEX root = ./main.tex
+
+\section{NULL}
+\begin{itemize}
+    \item \verb+NULL+ is a state and not a value
+        \begin{itemize}
+            \item Check: \verb+some_value IS NULL+
+                \begin{itemize}
+                    \item \verb+(NULL IS NULL) -> TRUE+
+                \end{itemize}
+            \item And not: \verb+some_value = NULL+
+                \begin{itemize}
+                    \item \verb+(NULL = NULL) -> UNKNOWN+
+                \end{itemize}
+            \item We cannot compare \verb+NULL+, but we can check if it is \verb+NULL+
+        \end{itemize}
+    \ides{Arithmetic:} Always gives \verb+NULL+ if an operand is \verb+NULL+
+    \ides{Comparison:} Always gives \verb+UNKNOWN+ if one of the comparators is \verb+NULL+
+    \ides{Logical operator:} Treats \verb+NULL+ as \verb+UNKNOWN+
+        \begin{itemize}
+            \item Returns \verb+UNKNOWN+ when the result depends on the concrete value of the variable assigned to \verb+NULL+
+        \end{itemize}
+    \ides{Aggregation}
+        \begin{itemize}
+            \item If \verb+group by+ a columns containing \verb+NULL+s, \verb+NULL+ will be in one group
+            \item Most aggregation functions ignore the \verb+NULL+
+            \item \verb+Count(*)+ ignores \verb+NULL+ not, \verb+Count(column)+ ignores it
+        \end{itemize}
+    \item Some operators may introduce \verb+NULL+
+        \begin{itemize}
+            \item E.g. (Left/Right) outer join
+        \end{itemize}
+\end{itemize}

@@ -1,0 +1,399 @@
+% ! TEX root = ./main.tex
+
+\section{Transaction}
+\begin{itemize}
+    \ides{Motivation}
+        \begin{itemize}
+            \item Assume:
+                \begin{itemize}
+                    \item DB is a collection of objects
+                        \begin{itemize}
+                            \item I.e. one tuple is one object
+                        \end{itemize}
+                    \item Objects are fixed
+                        \begin{itemize}
+                            \item We cannot create new ones or delete old ones
+                        \end{itemize}
+                    \item System has only a single CPU
+                        \begin{itemize}
+                            \item CPU can only run one instruction at the time
+                        \end{itemize}
+                \end{itemize}
+            \item If not dealt with correctly, simultaneous transactions may get mixed and we get wrong results
+            \ides{Concurrent DB Access}
+                \begin{itemize}
+                    \ides{Schedule:} One way of mixing instructions
+                        \begin{itemize}
+                            \item Different schedules may result in different results
+                        \end{itemize}
+                    \item Result of one query may be overwritten partly or completely
+                    \ides{Attribute-level Inconsistency:} Concurrent change of a single attribute of the same tuple
+                    \ides{Tuple-level Inconsistency:} Concurrent change of different attributes of the same tuple
+                    \ides{Table-level Inconsistency:} Concurrent change of full relation
+                    \ides{Multi-statement Inconsistency:} Interleaving of concurrent queries
+                    \item When multiple groups of SQL statements are running at the same time, we want the effect as if they are executed sequentially
+                \end{itemize}
+            \ides{System Failure}
+                \begin{itemize}
+                    \item Many thing which can break in a real system
+                    \item We want that all or none changes apply, but not partial application
+                \end{itemize}
+        \end{itemize}
+    \ides{Transaction:} Collection of instructions which should not mix with other transactions
+        \begin{itemize}
+            \item Concurrent transactions appear to run in isolation
+            \item On a crash, transaction changes appear entirely or not at all
+            \item \verb+BEGIN; ..... COMMIT+: Encapsulates a transaction
+                \begin{itemize}
+                    \item Transaction has finished, database confirms to client whan all changes of the transaction have been made persistent
+                    \item Transaction may also fail. Database rollback all changes done by the transaction
+                        \begin{itemize}
+                            \item Written as \verb+BEGIN; ..... ABORT;+
+                            \item Can be initiated by the user or DBMS
+                        \end{itemize}
+                \end{itemize}
+            \ides{Autocommit:} If true, turns each SQL statement into own transition
+                \begin{itemize}
+                    \item SQL option
+                    \item Activated by default, can be deactivated
+                \end{itemize}
+        \end{itemize}
+\end{itemize}
+
+\subsection{ACID:}
+\begin{itemize}
+    \item Desired properties of transaction
+    \ides{Atomicity}
+        \begin{itemize}
+            \item Transaction is executed in its entirety or not at all
+        \end{itemize}
+    \ides{Consistency}
+        \begin{itemize}
+            \item A committed transaction goes from one consistent state to another consistent state
+                \begin{itemize}
+                    \item Before and after a transaction all integrity constraints must hold
+                \end{itemize}
+            \item Within a transaction constraints may be violated
+            \item Transaction leads from consistent state to consistent state
+            \item Granularity depends on the integrity constrains
+                \begin{itemize}
+                    \item I.e. some constrains are checked for each tuple, some for each statement and some for a transaction
+                    \item Can be controlled and influenced to some degree
+                \end{itemize}
+        \end{itemize}
+    \ides{Isolation}
+        \begin{itemize}
+            \ides{Ideally:} Transaction executes as if it were alone in the system
+                \begin{itemize}
+                    \item I.e. enforce serializability
+                    \item Much to hard to enforce
+                \end{itemize}
+            \item Implies that integrity constraints always hold if each transaction is correct
+            \item DMDB picks one execution order at random (if there are multiple)
+                \begin{itemize}
+                    \item If not desired, application must enforce this
+                \end{itemize}
+        \end{itemize}
+    \ides{Durability}
+        \begin{itemize}
+            \item If system crashes after a transaction, the changes of the transaction must still remain in the DB
+                \begin{itemize}
+                    \item Or somehow recoverable
+                \end{itemize}
+        \end{itemize}
+\end{itemize}
+
+\subsection{Isolation}
+\begin{itemize}
+    \item One of the key properties
+    \ides{Anomaly:} Misbehaviour of the DB
+        \begin{itemize}
+            \ides{Dirty Read:} Read a value which was updated by another transaction which has not yet committed
+                \begin{itemize}
+                    \item May contain values which were/are never in the DB
+                        \begin{itemize}
+                            \item When the other transaction aborts
+                        \end{itemize}
+                \end{itemize}
+            \ides{Non-repeatable Reads:} Reading the same tuple twice gives give us different values both times
+                \begin{itemize}
+                    \item It was updated by another transaction which committed (difference to dirty read)
+                \end{itemize}
+            \ides{Phantoms:} During a transaction, another transaction added or removed tuples
+                \begin{itemize}
+                    \item Similar to non-repeatable reads
+                \end{itemize}
+        \end{itemize}
+    \ides{Isolation Level:} Defines for each transaction what anomalies we allow to happen
+        \begin{itemize}
+            \item $\left.\left.
+\begin{tabular}{l | c | c | c}
+             & Dirty Reads  & Non-Repeatable Reads & Phantoms\\\hline
+Read Uncommitted     & $\checkmark$ & $\checkmark$        & $\checkmark$\\
+Read Committed       & $\times$     & $\checkmark$        & $\checkmark$\\
+Repeatable Read      & $\times$     & $\times$            & $\checkmark$\\
+Serializable         & $\times$     & $\times$            & $\times$
+\end{tabular} \right\downarrow \rotatebox[origin=c]{90}{overhead}\ \right\uparrow\rotatebox[origin=c]{90}{concurrency}$
+        \end{itemize}
+\end{itemize}
+
+\subsection{More on Serializable}
+\begin{itemize}
+    \ides{Serializable:} Schedule that leads to the same answer as some serial schedule
+        \begin{itemize}
+            \item Only depends on final result and not I/O pattern along
+            \item Not all sequential orders necessarily lead to the same result
+            \icon Hard or impossible to enforce
+        \end{itemize}
+    \ides{Conflicts}
+        \begin{itemize}
+            \ides{Definition}
+                \begin{itemize}
+                    \ides{Same Transaction:}
+                        \begin{itemize}
+                            \item Two operations are always conflicting
+                            \item $\implies$ Reordering within transaction is not allowed
+                        \end{itemize}
+                    \ides{Different Transaction $O_1$ in $T_1$ and $O_2$ in $T_2$:}
+                        \begin{itemize}
+                            \item $O_1$ and $O_2$ are conflicting if one of them is a write to the same location
+                        \end{itemize}
+                \end{itemize}
+            \ides{Types}
+                \begin{itemize}
+                    \ides{Read-Write:}
+                        \begin{itemize}
+                            \item Leads to unrepeatable reads
+                        \end{itemize}
+                    \ides{Write-Read:}
+                        \begin{itemize}
+                            \item Leads to dirty read
+                        \end{itemize}
+                    \ides{Write-Write:}
+                        \begin{itemize}
+                            \item Leads to overwriting of uncommitted data
+                        \end{itemize}
+                \end{itemize}
+        \end{itemize}
+    \ides{Conflict Equivalent} are two schedules iff:
+        \begin{itemize}
+            \item One can be transformed into the other by swapping non-conflicting operations
+        \end{itemize}
+    \ides{Conflict Serializable:} Schedule if it is conflict equivalent to some serial schedule
+        \begin{itemize}
+            \item I.e. schedule which can be translated into a serial schedule with a sequence of non-conflicting swaps of adjacent actions
+            \item Stronger than serializable
+                \begin{itemize}
+                    \item Conflict serializable $\subseteq$ serializable
+                \end{itemize}
+            \item Only depends on the read/write pattern
+                \begin{itemize}
+                    \item And not what we are writing
+                \end{itemize}
+            \item Easier than serializability for DB to handle as it does not require the DB to understand what each operator is doing
+            \item Enforced by most DBMSs
+            \ides{Decide}
+                \begin{itemize}
+                    \item Each transaction is a node
+                    \item $\exists$ edge $T_i$ to $T_j$ if:
+                        \begin{itemize}
+                            \item Operator $o_i$ in $T_i$ is in conflict with operator $o_j$ in $T_j$
+                            \item $o_j$ appears earlier than $o_i$ in same transaction
+                        \end{itemize}
+                    \item Schedule is conflict serializable iff its dependency graph is acyclic
+                \end{itemize}
+        \end{itemize}
+    \item Serializability and conflict serializability only concern committed transactions (and not aborted)
+        \begin{itemize}
+            \item Operations can be in conflict with \verb+ABORT+
+                \begin{itemize}
+                    \item E.g. \verb+READ(X)+/ \verb+WRITE(X)+ before or after \verb+ABORT+ of other transaction may lead to different results (only if the other transaction did \verb+WRITE(X)+)
+                \end{itemize}
+            \item But they are somehow still considered as serializable
+        \end{itemize}
+\end{itemize}
+
+\subsection{Enforce Isolation}
+\begin{itemize}
+    \ides{Goal:} Only allow schedules that are conflict serializable
+    \item Two main approaches
+        \begin{itemize}
+            \ides{Pessimistic:} Assume that conflicts happen all the time
+                \begin{itemize}
+                    \item Use locks
+                \end{itemize}
+            \ides{Optimistic:} Assume that most transaction do not conflicts
+                \begin{itemize}
+                    \item Use snapshot isolation
+                \end{itemize}
+        \end{itemize}
+    \item Need to evaluate which approach is better for our application
+\end{itemize}
+
+\subsubsection{Locking}
+\begin{itemize}
+    \ides{Assume:} Do not know what transactions are going to do in the future
+    \ides{Idea:} Before the system access the data object $X$ it locks $X$
+        \begin{itemize}
+            \item Prevents access of $X$ by other transaction
+        \end{itemize}
+    \item Lock is released only when it is save to
+        \begin{itemize}
+            \item I.e. the execution is guaranteed to be conflict serializable
+        \end{itemize}
+    \item Allows to enforce serializable schedule
+    \item Types
+        \begin{itemize}
+            \ides{Shared Lock (S Lock):}
+                \begin{itemize}
+                    \item For reading
+                \end{itemize}
+            \ides{Exclusive Lock (X Lock):}
+                \begin{itemize}
+                    \item For writing
+                \end{itemize}
+        \end{itemize}
+    \item Does not necessarily enforce conflict serializability
+    \ides{Two-Phase Locking (2PL)}
+        \begin{itemize}
+            \item Consists of two phases
+                \begin{itemize}
+                    \ides{Phase 1: Growing}
+                        \begin{itemize}
+                            \item Acquire required locks
+                            \item Cannot release any locks
+                        \end{itemize}
+                    \ides{Phase 2: Shrinking}
+                        \begin{itemize}
+                            \item Release locks
+                            \item Cannot acquire new locks
+                        \end{itemize}
+                \end{itemize}
+            \ipro Guarantees conflict serializability
+            \icon \textbf{Cascading Abort:} Abort of one transaction leads to abort of another transaction
+                \begin{itemize}
+                    \item Happens when we read from a transaction which gets aborted
+                    \item Really bad if we have already committed
+                        \begin{itemize}
+                            \item Commit must be undone
+                            \item Conflicts with durability property
+                        \end{itemize}
+                \end{itemize}
+        \end{itemize}
+    \ides{Strict Two-Phase Locking (Strict 2PL)}
+        \begin{itemize}
+            \ides{Phase 1:} is similar to 2PL
+            \ides{Phase 2:}
+                \begin{itemize}
+                    \item All looks are kept until end of transaction
+                        \begin{itemize}
+                            \item I.e. \verb+COMMIT+ or \verb+ABBORT+ released all locks
+                        \end{itemize}
+                \end{itemize}
+            \icon Deadlocks possible
+                \begin{itemize}
+                    \ides{Detection}
+                        \begin{itemize}
+                            \item Each transaction is a node
+                            \item $\exists$ edge $T_i$ to $T_j$ if $T_i$ is waiting for a lock currently hold by $T_j$
+                        \end{itemize}
+                    \item Deadlock if we have a cyclic wait-for graph
+                    \item Non-trivial to decide which transaction to kill
+                    \item Prevented by locking in some global order
+                \end{itemize}
+        \end{itemize}
+    \ides{Granularity}
+        \begin{itemize}
+            \item Problems
+                \begin{itemize}
+                    \item We need to lock every single tuple at its own
+                    \item We need to hold locks for whole transaction to prevent phantoms
+                \end{itemize}
+            \item DB is hierarchical structure and hence needs to support hierarchical locking
+            \item New locks
+                \begin{itemize}
+                    \ides{Intention Share (IS):}
+                        \begin{itemize}
+                            \item Some lower nodes are in S
+                        \end{itemize}
+                    \ides{Intention Exclusive (IX):}
+                        \begin{itemize}
+                            \item Some lower node are in X
+                        \end{itemize}
+                    \ides{Share and Intention Exclusive (SIX):}
+                        \begin{itemize}
+                            \item Root is locked in S
+                            \item Some lower node are in X
+                        \end{itemize}
+                \end{itemize}
+            \item Old locks
+                \begin{itemize}
+                    \ides{S:} All lower nodes are in shard
+                    \ides{X:} All lower nodes are in exclusive
+                \end{itemize}
+            \item Full overview\\
+                $\rotatebox[origin=c]{90}{Request}
+\begin{tabular}{c | c c c c c c}
+    & \multicolumn{6}{c}{Current Lock} \\[2ex]
+    Mode & NL & IS & IX & S & SIX & X\\\hline
+    NL & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$\\
+    IS & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\times$\\
+    IX & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\times$ & $\times$ & $\times$\\
+    S & $\checkmark$ & $\checkmark$ & $\times$ & $\checkmark$ & $\times$ & $\times$\\
+    SIX & $\checkmark$ & $\checkmark$ & $\times$ & $\times$ & $\times$ & $\times$\\
+    X & $\checkmark$ & $\times$ & $\times$ & $\times$ & $\times$ & $\times$\\
+\end{tabular}$
+            \item Steps to lock a tuple
+                \begin{itemize}
+                    \item[1)] Acquire $IS$ on database
+                    \item[2)] Acquire $IS$ on table
+                    \item[3)] Acquire $S$ on tuple
+                \end{itemize}
+        \end{itemize}
+\end{itemize}
+
+\subsubsection{Snapshot Isolation}
+\begin{itemize}
+    \ides{Idea:} Assume that transaction are serializable and revert if they are not
+    \item Working
+        \begin{itemize}
+            \item Transaction receives timestamp $TS(T)$ when it starts
+            \item Reads are carried out as of the DB version of $TS(T)$
+            \item Writes are carried out on a separate buffer
+            \item When transaction commits, abort $T_1$ if $\exists T_2$ such that:
+                \begin{itemize}
+                    \item $T_1$ and $T_2$ update the same object and
+                    \item $T_2$ committed after $TS(T_1)$ but before $T_1$ commits
+                \end{itemize}
+            \item Instead of aborting $T_1$, we can also let $T_1$ finish and only then merge $T_2$
+        \end{itemize}
+    \ides{Timestamps}
+        \begin{itemize}
+            \item System clock or monotonically increasing for each transaction
+        \end{itemize}
+    \ipro High concurrency and availability
+        \begin{itemize}
+            \item Only block when transaction commits
+        \end{itemize}
+    \ipro No cascading abort
+    \ipro No deadlock
+    \icon Unnecessary rollbacks
+    \icon \textbf{Write Skew:} Interaction of multiple objects
+        \begin{itemize}
+            \item Checking integrity constrains happens in the snapshots
+            \item Two concurrent transaction update different objects
+            \item Integrity constrains for each is ok but for the combination not
+        \end{itemize}
+    \item Looser version
+        \begin{itemize}
+            \item Idea
+                \begin{itemize}
+                    \item Object themselves have read (last read) and write (last written) timestamps
+                    \item If transaction accesses object from the future (object has higher timestamp than transaction timestamp), transaction is aborted
+                    \item Object timestamps are updated on read/writes
+                \end{itemize}
+            \ipro No unnecessary rollbacks (I guess)
+            \icon Long transaction may starve
+            \icon Cascading aborts
+        \end{itemize}
+\end{itemize}

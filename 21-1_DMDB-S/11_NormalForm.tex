@@ -1,0 +1,171 @@
+%! TEX root = ./main.tex
+
+\section{Normal Form}
+\begin{itemize}
+    \ides{Normalisation:} Process of restructuring a DB to reduce data redundancy and improve data integrity
+        \begin{itemize}
+            \item Done using a series of normal forms
+        \end{itemize}
+    \ides{Normal Forms:} Common way for normalization
+    \ides{First Normal Form (1NF)}
+        \begin{itemize}
+            \item All values are of atomic domains
+                \begin{itemize}
+                    \item I.e. only int, double, char etc. and not tuples, lists etc.
+                \end{itemize}
+        \end{itemize}
+    \ides{Second Normal Form (2NF)}
+        \begin{itemize}
+            \item $R$ is in 2NF iff every non-key attribute is minimally dependent on every key
+                \begin{itemize}
+                    \ides{Minimally Dependant:} No attribute depends on part of a key
+                    \item I.e. none of the non-key attribute depends on part of a key
+                \end{itemize}
+            \item I.e. If $R(a, b, c, d)$ with primary key $\{a, b\}$ then $a \to c$ is not allowed
+            \item Alternative, less strong definition
+            \item $R$ is in 2NF if for all $\alpha \to B$ at least one holds:
+                \begin{itemize}
+                    \item $B \in \alpha$
+                    \item $B$ is an attribute of at least one key
+                    \item $\alpha$ is a superkey of $R$
+                    \item No attribute in $\alpha$ is part of any key
+                \end{itemize}
+            \ipro Improve insert, update and delete anomaly
+            \icon Does not solve update and delete anomaly
+                \begin{itemize}
+                    \item Because we can have $C \to D$ where both are non-keys
+                \end{itemize}
+            \item Enforce 2NF by decomposing the relation into multiple relations
+        \end{itemize}
+    \ides{Third Normal Form (3NF)}
+        \begin{itemize}
+            \item $R$ is in 3NF iff for all $\alpha \to B$ at least one holds:
+                \begin{itemize}
+                    \item $B \in \alpha$
+                    \item $B$ is an attribute of at least one key
+                    \item $\alpha$ is a superkey of $R$
+                \end{itemize}
+            \item I.e. If $\alpha \to \beta$ does not satisfy any of these conditions, $\alpha$ is a concept on its own
+                \begin{itemize}
+                    \item Gets rid of transitive dependency
+                \end{itemize}
+            \icon Does not get rid of all redundant data
+            \ipro Is lossless
+            \ipro Preserves all dependencies
+            \ides{Recipe Synthesis Algorithm:} Decompose $\mc{R}$ into $\mc{R}_1, \dots, \mc{R}_n$ according to 3NF
+                \begin{itemize}
+                    \item[1)] Compute minimal basis $F_c$ of $F$
+                    \item[2)] For all $\alpha \to \beta \in F_c$, create $R_{\alpha \cup \beta}(\alpha \cup \beta)$
+                    \item[3)] If none of the relations contains a superkey, add a relation with a key
+                    \item[4)] Eliminate $R_\alpha$ if there exists $R_{\alpha'}$ such that $\alpha \subseteq \alpha'$
+                \end{itemize}
+        \end{itemize}
+    \ides{Boyce-Cod Normal Form (BCNF)}
+        \begin{itemize}
+            \item $R$ is in BCNF iff for all $\alpha \to \beta$ at least one holds:
+                \begin{itemize}
+                    \item $B \in \alpha$
+                    \item $\alpha$ is a superkey of $R$
+                \end{itemize}
+            \item I.e. Each relation stores the same information only once
+            \icon Does not preserve all FDs
+            \icon Does not get rid of all data redundancies
+                \begin{itemize}
+                    \item Only of all redundancies caused by FD
+                \end{itemize}
+            \ides{Recipe Decomposition Algorithm:} Decompose $\mc{R}$ into $\mc{R}_1, \dots, \mc{R}_n$ according to BCNF
+                \begin{itemize}
+                    \item[1)] Set result to $\{\mc{R}\}$
+                    \item[2)] If there is $\mc{R}_i$ with $\alpha \to \beta$ which is not in BCNF
+                        \begin{itemize}
+                            \item $\mc{R}^1_i = \alpha \cup \beta$
+                            \item $\mc{R}^2_i = \mc{R}_i \setminus \beta$
+                            \item $\text{Result} = (\text{Result} \setminus R_i) \cup \{\mc{R}^1_i, \mc{R}^2_i\}$
+                        \end{itemize}
+                    \item[3)] Repeat $2$ as long as there are $\mc{R}_i$ which are not in BCNF
+                \end{itemize}
+        \end{itemize}
+    \ides{Non-First Normal Form (NFNF)}
+        \begin{itemize}
+            \item Use an array to get rid of data redundancy
+                \begin{itemize}
+                    \item Will not be in 1NF
+                \end{itemize}
+            \item Can be used in SQL
+        \end{itemize}
+    \ides{4th Normal Form}
+        \begin{itemize}
+            \ides{Multi-Value Dependency (MVD)}
+                \begin{itemize}
+                    \item $A$ is MVD on $B$ and $C$ means that the value of $B$ does not have impact on the value of $C$, and that $B$ and $C$ can take multiple values for the same $A$.
+                    \ides{Notation:} $A \to \to B, A \to \to C$
+                    \item $\alpha \to \to \beta$ for $R(\alpha, \beta, \gamma)$ iff
+                        \begin{itemize}
+                            \item $\forall t_1, t_2 \in R, t_1.\alpha = t_2.\alpha \implies \exists t_3,t_4 \in R$:
+                                \begin{itemize}
+                                    \item $t_3.\alpha = t_4.\alpha = t_1.\alpha = t_2.\alpha$
+                                    \item $t_3.\beta = t_1.\beta; t_4.\beta = t_2.\beta$
+                                    \item $t_3.\gamma = t_2.\gamma; t_4.\gamma = t_1.\gamma$
+
+                                \end{itemize}
+                        \end{itemize}
+                    \ides{Intuitively:} Thinks about in terms of joins
+                        \begin{itemize}
+                            \item $R(\alpha, \beta, \gamma)$ with $\alpha \to \to \beta$ can be decomposed into $R = R_1 \bowtie R_2$
+                                \begin{itemize}
+                                    \item $R_1 = \Pi_{\alpha, \beta} R$
+                                    \item $R_2 = \Pi_{\alpha, \gamma} R$
+                                    \item Is lossless if $\alpha \to \to \beta$ or $\alpha \to \to \gamma$
+                                \end{itemize}
+                        \end{itemize}
+                    \item Can result in anomalies and redundancy
+                    \ides{Trivial:}
+                        \begin{itemize}
+                            \item $\mc{R}(\alpha, \theta): \alpha \to \to \alpha \theta$
+                                \begin{itemize}
+                                    \item I.e. $\alpha \to \to \mc{R}$
+                                \end{itemize}
+                            \item $\mc{R}(\alpha, \theta): \alpha \to \to \theta$
+                                \begin{itemize}
+                                    \item I.e. $\alpha \to \to (\mc{R} \setminus \alpha)$
+                                \end{itemize}
+                            \item $\beta \subseteq \alpha \implies \alpha \to \to \beta$
+                        \end{itemize}
+                    \ides{Promotion:} $\alpha \to \beta \implies \alpha \to \to \beta$
+                    \ides{Complement:} $\alpha \to \to \beta \implies \alpha \to \to (\mc{R} \setminus \alpha \setminus \beta)$
+                    \ides{Multi-Value Augmentation:} $\alpha \to \to \beta \wedge (\delta \subseteq \gamma) \implies \alpha \gamma \to \to \beta \delta$
+                    \ides{Multi-Value Transitivity:} $(\alpha \to \to \beta) \wedge (\beta \to \to \gamma) \implies \alpha \to \to \gamma$
+                    \item Not all FD rules apply to MVD
+                        \begin{itemize}
+                            \item Need to distinct between FD and MVD
+                        \end{itemize}
+                \end{itemize}
+            \item Deals with MVD (and not FD)
+            \item $R$ is 4NF iff for all $\alpha \to \to \beta$, at least one condition holds:
+                \begin{itemize}
+                    \item $\alpha \to \to \beta$ is trivial
+                    \item $\alpha$ is a superkey of $R$
+                \end{itemize}
+            \item $R$ in 4NF $\implies R$ in BCNF
+            \ides{Recipe Decomposition Algorithm:} Decompose $\mc{R}$ into $\mc{R}_1, \dots, \mc{R}_n$ according to 4NF
+                \begin{itemize}
+                    \item[1)] Set result to $\{\mc{R}\}$
+                    \item[2)] If there is $\mc{R}_i$ with $\alpha \to\to \beta$ which is not in 4NF
+                        \begin{itemize}
+                            \item $\mc{R}^1_i = \alpha \cup \beta$
+                            \item $\mc{R}^2_i = \mc{R}_i \setminus \beta$
+                            \item $\text{Result} = (\text{Result} \setminus R_i) \cup \{\mc{R}^1_i, \mc{R}^2_i\}$
+                        \end{itemize}
+                    \item[3)] Repeat $2$ as long as there are $\mc{R}_i$ which are not in 4NF
+                \end{itemize}
+        \end{itemize}
+    \item $\overbrace{\underbrace{\overbrace{\text{1NF} \subset \text{2NF} \subset \text{3NF}}^{\text{preserve dependencies}} \subset \text{BCNF}}_{\text{deal with FD}} \subset \underbrace{\text{4NF}}_{\text{deal with MVD}}}^{\text{lossless}}$
+    \item There are many different NF with different properties
+    \ides{Denormalisation}
+        \begin{itemize}
+            \item Higher normalisation is not always better
+            \item Sometimes we deliberately denormalize a DB
+            \ipro Faster due to better locality
+            \icon More redundant data
+        \end{itemize}
+\end{itemize}

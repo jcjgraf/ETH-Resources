@@ -1,0 +1,235 @@
+%! TEX root = ./main.tex
+
+\section{SQL}
+\begin{itemize}
+    \item Consists of three steps
+        \begin{itemize}
+            \item Define the schema of the tables
+            \item Put information into the tables
+            \item Query the tables
+        \end{itemize}
+    \item SQL is a family of standards
+        \begin{itemize}
+            \ides{Data Definition Language (DDL):}
+            \ides{Data Manipulation Language(DML):}
+            \ides{Query Language:}
+        \end{itemize}
+    \item Released in 1974
+    \item Constantly improved and extended
+    \item Different DB engines implement slightly different standards
+        \begin{itemize}
+            \item Important to choose the right engine for a certain project
+        \end{itemize}
+\end{itemize}
+
+\subsection{DDL}
+\begin{itemize}
+    \item Defines schema
+    \item Relation schema requires
+        \begin{itemize}
+            \item Name
+             \item Set of columns
+             \item Type of columns
+        \end{itemize}
+    \item Data Types
+        \begin{itemize}
+            \ides{char (n):} String of length $n$
+                \begin{itemize}
+                    \item Padded with whitespace to match length
+                \end{itemize}
+            \ides{varchar (n):} String of length $\le n$
+            \ides{integer}
+            \ides{blob of raw data}
+            \ides{date}
+            \item etc.
+        \end{itemize}
+
+    \ides{Create Relation:}
+\begin{verbatim}
+CREATE TABLE Professor(
+    PersNr integer,
+    Name varchar (30),
+    Level varchar(2),
+    Room integer,
+    PRIMARY KEY (PersNr));
+\end{verbatim}
+
+    \ides{Delete Relation:}
+\begin{verbatim}
+Drop TABLE Professor;
+\end{verbatim}
+
+    \ides{Add New Column:}
+\begin{verbatim}
+ALTER TABLE Professors ADD COLUMN (age integer);
+\end{verbatim}
+        \begin{itemize}
+            \item Unclear what to insert into preexisting tuples for that relation
+            \item We can set a default value
+                \begin{itemize}
+                    \item If not provided it keeps the entry empty
+                \end{itemize}
+        \end{itemize}
+
+    \ides{Drop Column:}
+\begin{verbatim}
+ALTER TABLE Professor DROP COLUMN age;
+\end{verbatim}
+\end{itemize}
+
+\subsection{DML}
+\begin{itemize}
+    \item
+        Put and manipulation information
+
+    \ides{Extract, Transform, Load (ETL):} Used to populate DB automatically
+        \begin{itemize}
+            \item Technique for populating DB
+            \ides{E:} Get data from somewhere
+            \ides{T:} Bring in right format
+            \ides{L:} Insert into DB
+            \item Manual population is not feasible
+        \end{itemize}
+    \item Manual population of DB
+        \begin{itemize}
+            \icon Error-Prone
+            \icon Slow
+                \begin{itemize}
+                    \item Each query has to be parsed one-by-one
+                        \begin{itemize}
+                            \item Even when all are pretty much equivalent
+                        \end{itemize}
+                    \item Constraints have to be checked for each query
+                \end{itemize}
+        \end{itemize}
+    \ides{Insert:}
+\begin{verbatim}
+INSERT INTO Student (PersNr, Name)
+VALUES (1111, 'Fred');
+\end{verbatim}
+
+    \ides{Delete:}
+\begin{verbatim}
+DELETE Student
+WHERE Semester > 13;
+\end{verbatim}
+
+    \ides{Update:}
+\begin{verbatim}
+UPDATE Student
+SET Semester = Semester + 1;
+\end{verbatim}
+
+    \ides{From CSV:}
+\begin{verbatim}
+COPY Professors FROM '/profs.csv' WITH FORAMT csv;
+\end{verbatim}
+\end{itemize}
+
+\subsection{Query Language}
+\begin{itemize}
+    \ides{SELECT ... FROM ... WHERE ...}
+        \begin{itemize}
+            \ides{FROM:} List of relation whose cross product is taken
+            \ides{WHERE:} Selection condition
+            \ides{SELECT:} Projection
+        \end{itemize}
+    \item Select uses bag semantic
+        \begin{itemize}
+            \ides{SELECT DISTINCT:} Set semantic over all fields
+        \end{itemize}
+    \item Every RA expression can we written in \textit{SQL Subset}
+    \ides{SQL Subset:}
+        \begin{itemize}
+            \ides{Base Query:} $\rho_{a_1, \dots , a_n}(\Pi_{A_1, \dots A_n}(\sigma_{P_1 \wedge \dots \wedge P_m}(R_1 \times \dots \times R_k))) \approx$
+\begin{verbatim}
+SELECT A1 as a1 ... An as an
+FROM R1 ... Rk
+WHERE P1 AND P2 ... AND Pm;
+\end{verbatim}
+            \ides{Union:} $R_1 \cup R_2$
+\begin{verbatim}
+(SQL1) UNION (SQL2);
+\end{verbatim}
+                \begin{itemize}
+                    \item Uses set-like semantic
+                    \ides{UNION ALL:} used bag semantic
+                \end{itemize}
+            \ides{Intersection:} $R_1 \cap R_2$
+\begin{verbatim}
+(SQL1) INTERSECT (SQL2);
+\end{verbatim}
+            \ides{Difference:} $R_1 - R_2$
+\begin{verbatim}
+(SQL1) EXCEPT (SQL2);
+\end{verbatim}
+            \ides{Selection:} $\sigma_c(R)$
+\begin{verbatim}
+SELECT * FROM (SQL1) WHERE c;
+\end{verbatim}
+            \ides{Projection:} $\Pi_{A_1, \dots , A_n} R$
+\begin{verbatim}
+SELECT A1, ..., An FROM (SQL1);
+\end{verbatim}
+            \ides{Cross Product:} $R_1 \times R_2$
+\begin{verbatim}
+SELECT * FROM (SQL1), (SQL2);
+\end{verbatim}
+            \ides{Rename:} $\rho_{a, b, c}R$
+\begin{verbatim}
+SELECT A as a, B as b, C as c FROM (SQL1);
+\end{verbatim}
+        \end{itemize}
+    \ides{Sorting}
+\begin{verbatim}
+SELECT A, B FROM (SQL1) ORDER BY A DESC, B ASC;
+\end{verbatim}
+        \begin{itemize}
+            \item ASC is default
+        \end{itemize}
+    \ides{Grouping, Aggregation}
+\begin{verbatim}
+SELECT A, COUNT(*) FROM (SQL1) GROUP BY A;
+\end{verbatim}
+        \begin{itemize}
+            \item Can only project to aggregated fields and aggregation function
+                \ides{HAVING:} Filter similar to \verb+WHERE+ but for the aggregated field
+        \end{itemize}
+    \ides{EXISTS, ANY, ALL, SOME:}
+        \begin{itemize}
+            \item Useful things
+        \end{itemize}
+    \ides{Snapshot Semantics:}
+        \begin{itemize}
+            \item Problematic when deleting (updating) from a relation which we need in a subquery of that relation
+            \item Would lead to non-determinism
+            \item First all tuples which would get modified are marked
+            \item Then the updates are implemented
+        \end{itemize}
+\end{itemize}
+
+\subsection{Tips}
+\begin{itemize}
+    \item Extract substring by index: \verb+substring(<string>, <base1startindex>, <length>)+
+    \item Operator giving bag:
+        \begin{itemize}
+            \item \verb+SELECT column FROM table+
+            \item \verb+SQL1 UNION ALL SQL2+
+        \end{itemize}
+    \item Operator giving set
+        \begin{itemize}
+            \item \verb+SELECT DISTINCT column FROM table+
+                \begin{itemize}
+                    \item We can also apply this to multiple columns. In that case the entries are combined and then duplicates filtered.
+                \end{itemize}
+            \item \verb+SQL1 UNION SQL2+
+        \end{itemize}
+    \item Get current datetime: \verb+NOW()+
+    \item Extract certain field from datetime: \verb+DATE_PART(<desired_field>, <source>)+
+        \begin{itemize}
+            \item \verb+desired_field+ can be anything like: \verb+day, hour, year+ etc.
+        \end{itemize}
+    \item Data type conversion is done using \verb+<some_field>::<some_type>+
+    \item Casting data type using \verb+CAST(<some_filed> AS <some_type>)+
+    \item Round to $n$ decimal points: \verb+ROUND(<source>, <n>)+
+\end{itemize}

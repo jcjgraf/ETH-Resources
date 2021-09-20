@@ -1,0 +1,238 @@
+%! TEX root = ./main.tex
+
+\section{Graphical Modelling}
+\begin{itemize}
+    \item Models an application
+    \item Graphical way to represent entities and their relation
+    \item Consists of three steps
+        \begin{itemize}
+            \ides{Conceptual Modeling:} Capture of domains to be represented
+                \begin{itemize}
+                    \item Create diagram from ``real world''
+                    \item We consider Entity Relation (ER) Model in this course
+                    \item Specifies all DB instances that are valid/allowed in our application
+                \end{itemize}
+            \ides{Logical Modeling:} Map concepts to a concrete logical representation
+                \begin{itemize}
+                    \item Convert diagram to table schema
+                \end{itemize}
+            \ides{Physical Modeling:} Implementation in Hardware
+                \begin{itemize}
+                    \item Convert table to bits
+                \end{itemize}
+        \end{itemize}
+\end{itemize}
+
+\subsection{Conceptual Modelling (ER-Diagram)}
+\begin{itemize}
+    \ides{Formal Semantics}
+        \begin{itemize}
+            \item Diagram defines valid DB instances
+            \item All values we can take $\mc{D} = \mc{B} \cup \Delta$
+                \begin{itemize}
+                    \ides{$\mathbf{\mc{B}}$:} Concrete values
+                        \begin{itemize}
+                            \item Int, String, Float, etc
+                        \end{itemize}
+                    \ides{$\mathbf{\Delta}$:} Abstract values
+                        \begin{itemize}
+                            \item Correspond to an entity
+                        \end{itemize}
+                \end{itemize}
+            \ides{Entity Set $E$:} $1$-ary Predicate $E(x)$
+                \begin{itemize}
+                    \item $E(x) = \text{True}$ if $x$ is of Entity Type $E$
+                    \item $E^\mc{J} \subseteq \Delta$
+                \end{itemize}
+            \ides{Attribute $A$:} Binary Predicate $A(x, y)$
+                \begin{itemize}
+                    \item $A(e, a) = \text{True}$ if $e$ has attribute $a$
+                    \item $A^\mc{J} \subseteq \Delta \times \mc{B}$
+                \end{itemize}
+            \ides{$n$-ary Relation $R$:} $n$-ary Predicate $R(x_1, \dots, x_n)$
+                \begin{itemize}
+                    \item $R(x_1, \dots, x_n) = \text{True}$ if $(x_1, \dots, x_n)$ participate in $R$
+                    \item $R^\mc{J} \subseteq \Delta^n$
+                \end{itemize}
+            \item Each subgraph introduces a first-order logic sentence
+            \item Entity $E_1$ and $E_2$ linked by relation $R$
+                \begin{itemize}
+                    \item $\forall x_1, x_2 \in \Delta. R(x_1, x_2) \implies E_1(x_1) \wedge E_2(x_2)$
+                \end{itemize}
+            \item Entity $E$ with attribute $A$
+                \begin{itemize}
+                    \item $\forall x, E(x) \implies \underbrace{E^{=1}}_{\text{uniquely exists}} y. A(x, y) \wedge y \in \mc{B}$
+                \end{itemize}
+        \end{itemize}
+    \ides{Building Blocks}
+        \begin{itemize}
+            \ides{Entity:} Instance of an entity set which is distinguishable from other instances of the same set
+            \ides{Entity Set:} Set of entities of the same "type"
+                \begin{itemize}
+                    \item Rectangular box
+                \end{itemize}
+            \ides{Attributes:} Properties of a certain entity set
+                \begin{itemize}
+                    \item Round box
+                \end{itemize}
+            \ides{Relationships:} Connection among $\ge 2$ entity sets
+                \begin{itemize}
+                    \item Rhombus box
+                    \ides{Roles}
+                        \begin{itemize}
+                            \item Each entity set can have a role in a relation
+                            \item Label lines by the role the entity set is
+                        \end{itemize}
+                \end{itemize}
+            \ides{Key:} Minimal set of attributes which uniquely identify an entity in the entity set
+                \begin{itemize}
+                    \ides{Candidate Key:} All possible sets of keys
+                    \ides{Primary Key:} One selected key
+                        \begin{itemize}
+                            \item Every entity set must have one
+                            \item Underlined
+                        \end{itemize}
+                \end{itemize}
+        \end{itemize}
+    \ides{Cardinality}
+        \begin{itemize}
+            \item Two main notations
+            \ides{N/M-Notation}
+                \begin{itemize}
+                    \ides{One to One (1/1):}
+                        \begin{itemize}
+                            \item $A$ is in a one to one relationship with $B$ if:
+                                \begin{itemize}
+                                    \item $1 A$ entity can only have one relation with a $B$ entity and
+                                    \item $1 B$ entity can only have one relation with an $A$ entity
+                                \end{itemize}
+                        \end{itemize}
+                    \ides{One to Many (1/N):}
+                        \begin{itemize}
+                            \item $A$ is in a one to may relation with $B$ if:
+                                \begin{itemize}
+                                    \item $1 A$ can have relationships with multiple $B$ entities and
+                                    \item $1 B$ can only have one relation with an $A$ entity
+                                \end{itemize}
+                        \end{itemize}
+                    \ides{Many to One (N/1):}
+                    \ides{Many to Many (N/M):}
+                        \begin{itemize}
+                            \item $A$ is in a many to many relation with $B$ if:
+                                \begin{itemize}
+                                    \item $1 A$ entity can have relationships with multiple $B$ entities and
+                                    \item $1 B$ entity can have relationships with multiple $A$ entities
+                                \end{itemize}
+                        \end{itemize}
+                \end{itemize}
+            \ides{(min, max)-Notation}
+                \begin{itemize}
+                    \item For a relation we give the min and the max value of relations one entity can have
+                    \item Stronger than N/M-notation
+                    \item \verb+*+ means infinity
+                    \item (min, max) is written in opposite was to N/M
+                \end{itemize}
+        \end{itemize}
+    \ides{Weak Entity}
+        \begin{itemize}
+            \item Some entity relation depends on other entity
+                \begin{itemize}
+                    \item I.e. it is not unique by itself
+                    \item Can only be uniquely identified with the main entity
+                \end{itemize}
+            \item \textit{Weak} entity is the one which depends on another
+            \item Indicated by dotted underline
+            \item Is a $1/M$ relationship
+        \end{itemize}
+    \ides{Generalisation}
+        \begin{itemize}
+            \item Represent that a entity set is is an instance of another entity set
+            \item Entity $A$ \textbf{is\_a} entity of $B$
+                \begin{itemize}
+                    \item $A \subseteq B$
+                    \item Draw an arrow from $A$ to $B$
+                    \item $A$ shares $B$s attributes and primary key
+                    \item Are not enforced
+                        \begin{itemize}
+                            \item I.e. possible that $B \not\in A$
+                        \end{itemize}
+                    \item If $A \textbf{is\_a} B$ and $C \textbf{is\_a} B$ it is possible that $C \in A$ and $C \in B$
+                \end{itemize}
+        \end{itemize}
+    \item There are many other flavours of ER
+    \ides{Design Principles}
+        \begin{itemize}
+            \item Model should reflect the application we want to build
+            \item Avoid redundancy
+            \item Keep it as simple as possible; less entities is better
+            \item Entity if the concept has more than one relationship
+            \item Attribute if the concept has only one 1:1 relationship
+            \item Models are large, partition it
+        \end{itemize}
+\end{itemize}
+
+\subsection{Logical Modelling}
+\begin{itemize}
+    \item Take ER-model and convert to relational model
+    \item Some constraints get lost
+    \ides{Steps}
+        \begin{enumerate}
+            \ides{Entity Sets:} Become relations
+            \ides{Attributes:} Become attributes of the relation
+            \ides{Relationship:}
+                \begin{itemize}
+                    \ides{Without Cardinality Constrain (or N:M):}
+                        \begin{itemize}
+                            \item Become relation containing the attributes of all participating relations
+                            \item The primary key of the relation are all the primary keys together
+                        \end{itemize}
+                    \ides{With Cardinality Constraints:}
+                        \begin{itemize}
+                            \item Very tricky
+                            \item Become relation containing the attributes of all participating relations
+                            \item The primary key of the relation are the keys of the entities with which the relation can be uniquely identified.Or the relation gets merged into the table on the \textit{many} side.
+                        \end{itemize}
+                    \ides{Role:} Can be used to distinguish columns with the same entity type.
+                        \begin{itemize}
+                            \item Done by renaming the two columns appropriately
+                        \end{itemize}
+                \end{itemize}
+            \ides{Weak Entity:}
+                \begin{itemize}
+                    \item Can be omitted
+                    \item The week entity is modeled as a relation on its own with the primary key of the main relation and its own key
+                \end{itemize}
+            \ides{Generalisation:}
+                \begin{itemize}
+                    \item Two ways to represent this
+                    \item Better way depends on application
+                    \item[1)] \textit{Child} has its own relation and the \textit{Parent} relation
+                    \item[2)] Each \textit{Child} is a full blown relation containing all keys of the \textit{parent} relation
+                        \begin{itemize}
+                            \icon Lot of redundant data if entity is multiple child and parent at the same time
+                            \icon Cannot constraint that entity is only on of them
+                        \end{itemize}
+                \end{itemize}
+        \end{enumerate}
+    \ides{Rezept}
+        \begin{enumerate}
+            \item Convert entries to relations
+                \begin{itemize}
+                    \item All attributes of the model get attributes of the relation
+                    \item All keys of the model get keys of the relation
+                \end{itemize}
+            \item Convert relations to relations
+                \begin{itemize}
+                    \item All attributes of the model get attributes of the relation
+                    \item All keys of the participating entries are attributes of the relation
+                    \item Keys are the keys of the entities which uniquely identify the relation
+                    \item Mark alternative keys
+                \end{itemize}
+            \item Merge relation if it is $1:1, 1:N, N:1$ and it has the same key
+            \item Do some other merging
+        \end{enumerate}
+        \begin{itemize}
+            \item Automatically generates at least 3NF
+        \end{itemize}
+    \item Can be done (Semi-) automatically
+\end{itemize}

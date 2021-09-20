@@ -1,0 +1,66 @@
+%! TEX root = ./main.tex
+
+\section{Relational Model}
+\begin{itemize}
+    \item Knowledge is represented as a \textit{collection of facts}
+    \item Inference is done using \textit{mathematical logic}
+\end{itemize}
+
+\subsection{Schema}
+\begin{itemize}
+    \ides{Database Schema:}
+        \begin{itemize}
+            \item Set of relation schema
+        \end{itemize}
+    \ides{Relation Schema:}
+        \begin{itemize}
+            \item ``Represented'' as a table
+            \item Has a name
+            \item Contains a set of fields/attributes
+            \item Sometimes referred to as \textit{Relation}
+            \item Described as $\text{R}(\text{f}_1: \text{D}_1, \dots, \text{f}_n:\text{D}_n)$
+                \begin{itemize}
+                    \ides{$\text{R}$:} relation name
+                    \ides{$\text{f}_i$:} name of field $i$
+                    \ides{$\text{D}_i$:} domain of field $i$
+                \end{itemize}
+        \end{itemize}
+    \ides{Field/Attribute:}
+        \begin{itemize}
+            \item ``Represented'' as a single columns of the table
+            \item Has a name
+            \item Described by a domain (/type)
+        \end{itemize}
+    \item Describes only the header (does not contain any content)
+    \item Is not unique
+        \begin{itemize}
+            \item Different schema have different advantages/disadvantages
+        \end{itemize}
+\end{itemize}
+
+\subsubsection{Instance}
+\begin{itemize}
+    \item ``Represented'' a set of rows in the table
+    \item Set of tuples $\text{I}_R \subseteq \text{D}_1 \times \dots \times \text{D}_n$ for $\text{R}(\text{f}_1: \text{D}_1, \dots, \text{f}_n:\text{D}_n)$
+    \ides{Domain Constraint:} For each filed the domain and the schema domain must match
+    \item In practice a DB is a bag and not a set (allows duplicate entries)
+        \begin{itemize}
+            \item But in theory we assume it is a set
+        \end{itemize}
+    \item Attributes have no ordering principle, but ordering of attributes and tuples has to match
+\end{itemize}
+
+\subsection{Key}
+\begin{itemize}
+    \ides{Candidate Key:} minimal set of fields that uniquely identify a tuple
+    \ides{Primary Key:} one candidate key
+        \begin{itemize}
+            \item Indicated by underlining the field: $\text{R}(\underline{\text{f}_1: \text{D}_1}, \dots, \text{f}_n:\text{D}_n)$
+            \item Every relation must have one (but in a DB this is not required)
+        \end{itemize}
+    \ides{Key Constraint:}
+        \begin{itemize}
+            \item The primary key must be unique in each an instance
+            \item All valid instances $\text{I} \subseteq \text{D}_k \times \text{D}_a \times \text{D}_b \wedge \forall (k, a, b), (k', a', b') \in I, k = k' \implies (a, b) = (a', b')$
+        \end{itemize}
+\end{itemize}

@@ -1,0 +1,231 @@
+%! TEX root = ./main.tex
+
+\section{Distribution}
+\begin{itemize}
+    \ides{Distributed Commit}
+        \begin{itemize}
+            \ides{Problem:} Multiple DBs and a single coordinator which manages them
+                \begin{itemize}
+                    \item Atomcity of a single nodes does not imply atomcity in a distributed setting
+                \end{itemize}
+            \item Two main methods
+            \ides{Two Phase Commit}
+                \begin{itemize}
+                    \item Consists of two phases
+                    \ides{Voting Phase:} Coordinator inquires if all nodes are ready and willing to commit
+                        \begin{itemize}
+                            \item Initiated by coordinator sending \verb+Prepare+
+                            \item If node says \textit{OK} it cannot change its mind anymore
+                        \end{itemize}
+
+                    \ides{Decision Phase:} Coordinator asks all nodes to commit
+                        \begin{itemize}
+                            \item Initiated by coordinator sending \verb+Commit+
+                            \item Coordinator sends \verb+Abort+ if not all workers are ready
+                            \item Only if all said \textit{OK} in voting phase
+                            \item If any worker or coordinator dies we have to rolleback
+                        \end{itemize}
+                    \item If a worker/coordinator is temporarily dead we may continue but let the other know that we were dead
+                \end{itemize}
+            \ides{Linear Two Phase Commit}
+                \begin{itemize}
+                    \item Coordinator only communicates with one workers, which communicates with another worker etc...
+                \end{itemize}
+            \ides{Two Phase Commit vs Linear Two Phase Commit}
+                \begin{itemize}
+                    \item Given $1$ Coordinator and $N$ Workers
+                    \item 
+\begin{tabular}{l | c | c}
+    & Two Phase Commit & Linear Two Phase Commit\\\hline
+    Total Messages & $3N$ & $2N$\\
+    Latency $t$ & $3t$ & $2Nt$
+
+\end{tabular}
+                \end{itemize}
+        \end{itemize}
+    \ides{Distributed Query Processing}
+        \begin{itemize}
+            \item Execute query on multiple machines 
+                \begin{itemize}
+                    \item Desirable for
+                        \begin{itemize}
+                            \item Data too large to fit into one machine
+                            \item Computationally intensive query
+                        \end{itemize}
+                \end{itemize}
+            \item Different ways of construction
+                \begin{itemize}
+                    \item Shared Memory
+                    \item Shard Disk
+                    \item Nothing Shared
+                        \begin{itemize}
+                            \item We consider this one
+                            \item Master received query and distributes to several workers
+                        \end{itemize}
+                \end{itemize}
+            \ides{Goal:} Hide complexity from users
+            \ides{Idea:} Partition DB to each worker and each only deals with own partition
+            \item Examples
+                \begin{itemize}
+                    \ides{Table Partitioning}
+                        \begin{itemize}
+                            \item 
+        \begin{verbatim}
+        SELECT * FROM R(a,b,c), S(a,d)
+        WHERE R.b = 1
+        AND S.d = 2
+        AND R.a = S.a
+        \end{verbatim}
+                            \item Worker 1
+                                \begin{itemize}
+                                    \item Run
+        \begin{verbatim}
+        SELECT * FROM R
+        WHERE R.b = 1
+        \end{verbatim}
+                                    \item Generate table $R'(a, b, c)$
+                                \end{itemize}
+                            \item Worker 2
+                                \begin{itemize}
+                                    \item Run
+        \begin{verbatim}
+        SELECT * FROM S
+        WHERE S.d = 2
+        \end{verbatim}
+                                    \item Generate table $S'(a, d)$
+                                \end{itemize}
+                            \item Combine $R'$ and $S'$
+                                \begin{itemize}
+                                    \item
+        \begin{verbatim}
+        SELECT * FROM R', S'
+        WHERE R'.a = S'.a
+        \end{verbatim}
+                                \end{itemize}
+                            \ipro Worker 1 and 2 can work concurrency
+                            \ipro If $R'$ and $S'$ are small the communication is small
+                            \icon Problematic if one table is too large for a worker
+                            \icon Parallelizability of querries (if available) is not exploited
+                        \end{itemize}
+                    \ides{Horizontal Partitioning}
+                        \begin{itemize}
+                            \item 
+        \begin{verbatim}
+        SELECT * FROM R(a,b,c), S(a,d)
+        AND R.a = S.a
+        \end{verbatim}
+                            \item Worker 1
+                                \begin{itemize}
+                                    \item Run
+        \begin{verbatim}
+        SELECT * FROM R1, S1
+        WHERE R1.a = S1.a
+        \end{verbatim}
+                                    \item Generate table $T1(a, b, c, d)$
+                                \end{itemize}
+                            \item Worker 2
+                                \begin{itemize}
+                                    \item Run
+        \begin{verbatim}
+        SELECT * FROM R2, S2
+        WHERE S2.a = R2.a
+        \end{verbatim}
+                                    \item Generate table $T2(a, b, c, d)$
+                                \end{itemize}
+                            \item Combine $T1$ and $T2$
+                                \begin{itemize}
+                                    \item
+        \begin{verbatim}
+        SELECT * FROM T1
+        UNION
+        SELECT * FROM T2
+        \end{verbatim}
+                                \end{itemize}
+                                \ipro When the result is small this can be fast
+                                \todo{Not sure why this even works}
+                        \end{itemize}
+                    \ides{Distributed QO 1}
+                        \begin{itemize}
+                            \item 
+        \begin{verbatim}
+        SELECT * FROM R(a, b, c), S(a, d)
+        WHERE R.a = S.a
+        \end{verbatim}
+                            \item Replicate one table on both nodes and split the other in two
+                            \item Worker 1: $T_1 = R_1 \bowtie S$
+                            \item Worker 2: $T_2 = R_2 \bowtie S$
+                            \item Combine: $T_1 \cup T_2$
+                        \end{itemize}
+                    \ides{Distributed QO 2}
+                        \begin{itemize}
+                            \item 
+        \begin{verbatim}
+        SELECT * FROM R(a, b, c), S(a, d)
+        WHERE R.a = S.a
+        \end{verbatim}
+                            \item Tables are portioned on the join attribute and each node performs the join locally
+                            \item Worker 1: $T_1 = R_1 \bowtie S_1$
+                            \item Worker 2: $T_2 = R_2 \bowtie S_2$
+                            \item Combine: $T_1 \cup T_2$
+                        \end{itemize}
+                    \ides{Distributed QO 3}
+                        \begin{itemize}
+                            \item 
+        \begin{verbatim}
+        SELECT * FROM R(a, b, c), S(a, d)
+        WHERE R.a = S.a
+        \end{verbatim}
+                            \item Tables are portioned on different keys
+                            \item Worker 1: $T_1 = R_1 \bowtie (S_1 \cup S_2)$
+                            \item Worker 2: $T_2 = R_2 \bowtie (S_2 \cup S_2)$
+                            \item Combine: $T_1 \cup T_2$
+                        \end{itemize}
+                \end{itemize}
+            \ides{Replication}
+                \begin{itemize}
+                    \item Replicate data among several machines
+                    \ides{Group Mirroring}
+                        \begin{itemize}
+                            \item Replicate at machine level
+                            \item Each machine has data blocks which are stored on two other machines
+                            \icon If the two wrong machines die we loose data
+                            \icon Death of a single machine leads to $2x$ slowdown
+                        \end{itemize}
+                    \ides{Spread Mirroring}
+                        \begin{itemize}
+                            \item Each machine contains data available on all other machines
+                            \icon If two die we certainly loose (little) data
+                            \icon Single failure leads to $1/N$ more load on other machines
+                        \end{itemize}
+                \end{itemize}
+        \end{itemize}
+    \ides{Distributed Key-Value Store}
+        \begin{itemize}
+            \item Relational DB is expensive and does not scale well
+            \item Data Model
+                \begin{itemize}
+                    \item Key $+$ Value
+                    \item Indexed on key
+                \end{itemize}
+            \item Distributed Deployment
+                \begin{itemize}
+                    \item Horizontal partitioning
+                    \item Replication of partitions
+                \end{itemize}
+            \item Build
+                \begin{itemize}
+                    \item Build as a simple hash table
+                    \item If distributed, we use consistent hashing
+                \end{itemize}
+            \ipro Very fast lookups
+            \ipro Easy to scale
+                \begin{itemize}
+                    \item Add more copies as we add more machines
+                \end{itemize}
+            \icon Only support point queries
+            \icon Some operations are very expensive
+            \icon Hard to keep data consistent among different copies
+            \icon Complexity is pushed to user/application
+        \end{itemize}
+\end{itemize}
+

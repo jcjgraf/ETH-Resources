@@ -1,0 +1,114 @@
+%! TEX root = ./main.tex
+
+\section{Integrity Constraints}
+\begin{itemize}
+    \item Additional constraint to the key and domain constraint
+    \item Makes sure changes are consistent
+    \item Control the content of the date and its consistency
+    \item Are enforced by the schema
+    \item Can be defined when:
+        \begin{itemize}
+            \item Creating the table (\verb+CREATE table+)
+            \item Later (\verb+ALTER table+)
+        \end{itemize}
+    \item Checked at \verb+INSERT+ as well as \verb+UPDATE+
+        \begin{itemize}
+            \item For foreign key also on \verb+DELETE+
+        \end{itemize}
+    \item Check happen at tuple level and not at the semantic of the command
+        \begin{itemize}
+            \item I.e. try to run it and see what happens instead of analysing the query
+        \end{itemize}
+    \item Some check may fail or succeed depending on the order of the tuples
+        \begin{itemize}
+            \item We have no influence on this
+        \end{itemize}
+\end{itemize}
+
+\subsection{Types}
+\begin{itemize}
+    \ides{NOT NULL}
+        \begin{itemize}
+            \item Prevents attribute from being \verb+NULL+
+            \ides{Syntax:} \verb+some_field any_type not null+
+        \end{itemize}
+    \ides{PRIMARY KEY}
+        \begin{itemize}
+            \item Mark attribute as primary key
+            \item Must not be \verb+NULL+ and not empty
+            \ides{Syntax:} \verb+some_field any_type PRIMARY KEY+
+            \item If applied to a tuple, all field must not be \verb+NULL+
+            \ides{Syntax:} \verb+PRIMARY KEY (field1, fiels2)+
+        \end{itemize}
+    \ides{UNIQUE}
+        \begin{itemize}
+            \item Value must be unique or \verb+NULL+
+                \begin{itemize}
+                    \item In contrast to \verb+PRIMARY KEY+ which cannot be \verb+NULL+
+                \end{itemize}
+            \item Multiple entries may be \verb+NULL+ in the same column
+            \item Multiple fields can be marked as unique
+            \ides{Syntax:} \verb+some_field any_type UNIQUE+
+            \item Tuples of fields can be marked as unique
+            \ides{Syntax:} \verb+UNIQUE (field1, fiels2)+
+        \end{itemize}
+    \ides{CHECK}
+        \begin{itemize}
+            \item Boolean check based on values of a single tuple
+            \item Reject if \verb+False+
+            \item Accept if \verb+True+ or \verb+Unknown+
+            \item Some engines treat check somewhat weirdly
+            \item Some engines allow subqueries to be part of a check
+            \ides{Syntax:} \verb+CHECK(some_expression_evaluation_to_bool)+
+        \end{itemize}
+    \ides{FOREIGN KEY}
+        \begin{itemize}
+            \item Involve two relations
+            \item Field must be \verb+NULL+ or a valid reference to another table
+            \item The reference field is often a \verb+PRIMARY KEY+ or at least \verb+UNIQUE+
+            \ides{Referencing Table:} Table which references a tuple form another table
+            \ides{Referenced Table:} Table being referenced by another table
+            \ides{Syntax:} \verb+FOREIGN KEY some_field any_type REFERENCES some_table(some_field)+
+            \ides{Maintenance}
+                \begin{itemize}
+                    \item Changes to the referenced table influences the referencing table
+                        \begin{itemize}
+                            \item And not the other way around!
+                            \item On \verb+UPDATE+ or \verb+DELETE+
+                        \end{itemize}
+                    \item Different ways of handling changes
+                    \ides{Cascade}
+                        \begin{itemize}
+                            \item Propagate modification or delete
+                        \end{itemize}
+                    \ides{Restrict}
+                        \begin{itemize}
+                            \item Prevent modification or deletion if if violates constraint
+                                \begin{itemize}
+                                    \item By throwing an error
+                                \end{itemize}
+                            \item Check right after each command
+                        \end{itemize}
+                    \ides{No Action}
+                        \begin{itemize}
+                            \item Prevent modification or deletion if if violates constraint
+                                \begin{itemize}
+                                    \item By throwing an error
+                                \end{itemize}
+                            \item Check after a transaction
+                            \item Is the default of PostgreSQL
+                            \item Is equivalent to restrict in mySQL
+                        \end{itemize}
+                    \ides{Set Default/Set Null:}
+                        \begin{itemize}
+                            \item Set reference to default value or \verb+NULL+
+                        \end{itemize}
+                    \ides{Syntax:} \verb+ON UPDATE method+, \verb+ON DELETE method+
+                \end{itemize}
+        \end{itemize}
+    \item Using \verb+CONSTRAINT some_name+ we can give a name to constraints
+        \begin{itemize}
+            \item Useful in practice since it allows easy modification later on
+        \end{itemize}
+\end{itemize}
+

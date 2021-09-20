@@ -1,0 +1,913 @@
+%! TEX root = ./main.tex
+
+\section{DMDB System}
+\begin{itemize}
+    \item Complex application
+    \item Simplification we consider
+        \begin{itemize}
+            \item All data are stored on disk
+            \item Disk is larger than memory
+            \item Disk is slower than memory
+            \item Disk favours different access pattern
+            \item Single CPU
+            \item One relation is stored in a single file
+        \end{itemize}
+    \item Overview
+        \begin{itemize}
+            \ides{Query Optimization:} SQL query to relational algebra converter
+            \ides{Operator Execution:} Execute a relation algebra operation
+            \ides{Access Methods:} Provides different ways of accessing data from a relation
+            \ides{Buffer Pool Management:} Gives illusion that all data is stored on memory
+        \end{itemize}
+\end{itemize}
+
+\subsection{Storage Hierarchy}
+\begin{itemize}
+    \item Storage is a hierarchy
+    \item Challenge: keep CPU busy
+    \item Rapidly changing
+    \item Different hierarchies lead to different DB design
+    \ides{Hard Drive}
+        \begin{itemize}
+            \item Plates spin
+            \item Plate is split into sectors of fixed size
+            \item Arm assembly is moved in or out to position a head on a desired track
+            \item Tracks under head makes a cylinder (kind off)
+            \item Only one head reads/writes at any time
+            \item Block size is a multiple of sector size
+            \item Performance
+                \begin{itemize}
+                    \ides{Seek time $t_s$:} Moving arm to position disk head on track
+                        \begin{itemize}
+                            \item $10 - 20 ms$
+                        \end{itemize}
+                    \ides{Rotate time $t_r$:} waiting for block to rotate under head
+                        \begin{itemize}
+                            \item $10 - 20 ms$
+                        \end{itemize}
+                    \ides{Transfer time $t_{tr}$:} actually moving data to/from disk surface
+                        \begin{itemize}
+                            \item $8KB / 0.1  ms$
+                        \end{itemize}
+                    \ides{Random access $\mathbf{D}$ times:} $D(t_s + t_r + t_{tr})$
+                    \ides{Sequential access $\mathbf{D}$ time:} $t_s + t_r + Dt_{tr}$
+                \end{itemize}
+        \end{itemize}
+    \item We consider abstraction HD $\to$ DRAM $\to$ CPU
+    \item DRAM $\to$ CPU is much faster than HD $\to$ DRAM
+        \begin{itemize}
+            \item We only consider HD $\to$ DRAM optimisation
+        \end{itemize}
+\end{itemize}
+
+\subsection{Disk Manager}
+\begin{itemize}
+    \item Lowest level
+    \item Used by higher levels for
+        \begin{itemize}
+            \item Allocate/de-allocate pages
+            \item Read/Write pages
+        \end{itemize}
+    \item Requests for sequential allocation must be satisfied
+    \item Responsible for maintaining a database's files
+    \item DB content is stored as one or multiple files
+    \item Many DMDBs use the file system provided by the OS
+        \begin{itemize}
+            \item People used to build custom file systems for DMDBs
+        \end{itemize}
+    \ides{Files} contain a collection of pages
+    \ides{Page} is a fixed-size block of data
+        \begin{itemize}
+            \item Contains a collection of tuples
+            \ides{page id:} unique identifier of each page
+        \end{itemize}
+    \item A relation is stored as a collection of pages
+\end{itemize}
+
+\subsubsection{File Layout}
+\begin{itemize}
+    \item How does a file manage all its pages?
+    \item Unordered collection of pages
+    \item Support record level operations
+    \item We must keep track of:
+        \begin{itemize}
+            \item the pages in the file
+            \item the records on each page
+            \item free space on each page
+        \end{itemize}
+    \ides{Heap File:}
+        \begin{itemize}
+            \item Unordered collection of pages
+            \item Need to keep track where tuples are stored and of free space
+            \item Two ways to implement it
+            \ides{Linked List}
+                \begin{itemize}
+                    \ides{Header Page:} One single page
+                        \begin{itemize}
+                            \item Kind of the root
+                            \item Has to pointer to two linked lists
+                                \begin{itemize}
+                                    \item Free pages list
+                                    \item Data pages list
+                                \end{itemize}
+                        \end{itemize}
+                    \icon No global view on data
+                    \item Performance
+                        \begin{itemize}
+                            \item Assume
+                                \begin{itemize}
+                                    \item Directory fits in and is in memory
+                                    \item $\# Pages = D$
+                                    \item Pages are randomly allocated on disk
+                                        \begin{itemize}
+                                            \item Models worst-case
+                                        \end{itemize}
+                                \end{itemize}
+                            \ides{Insert:} $t_{s + r}  + 2 t_{trans}$
+                                \begin{itemize}
+                                    \item If page 1 has slot available
+                                \end{itemize}
+                            \ides{Find Record:} By non-RID value (RID is a pair page, id and slot id)
+                                \begin{itemize}
+                                    \item $\frac{D}{2}(t_{r+s} + t_{trans})$
+                                \end{itemize}
+                            \ides{Scan:}
+                                \begin{itemize}
+                                    \item $D(t_{s+r} + t_{trans})$
+                                \end{itemize}
+                        \end{itemize}
+                \end{itemize}
+            \ides{Page Directory}
+                \begin{itemize}
+                    \ides{Header Page:} Multiple pages
+                        \begin{itemize}
+                            \item Each contains a list of pointer to data pages
+                        \end{itemize}
+                    \item Performance
+                        \begin{itemize}
+                            \item Assume
+                                \begin{itemize}
+                                    \item Directory fits in and is in memory
+                                    \item $\#Pages = D$
+                                    \item Pages are sequentially allocated on disk
+                                        \begin{itemize}
+                                            \item Models best case
+                                        \end{itemize}
+                                \end{itemize}
+                            \ides{Insert:} $t_{s+r} + 2t_{trans}$
+                            \ides{Find Record:} By non-RID value (RID is a pair page, id and slot id)
+                                \begin{itemize}
+                                    \item $t_{s+r} + \frac{D}{2}t_{trans}$
+                                \end{itemize}
+                            \ides{Scan:}
+                                \begin{itemize}
+                                    \item $t_{s+r} + Dt_{trans}$
+                                \end{itemize}
+                        \end{itemize}
+                    \end{itemize}
+        \end{itemize}
+\end{itemize}
+
+\subsubsection{Page Layout}
+\begin{itemize}
+    \item Page consists of
+        \begin{itemize}
+            \ides{Header:} Contains metadata like
+                \begin{itemize}
+                    \item Page size
+                    \item DBMS version
+                    \item Compression information
+                    \item Encryption information
+                    \item Checksum
+                \end{itemize}
+            \ides{Data:} Actual tuples
+        \end{itemize}
+    \item Header is at top of page
+    \item Data starts after header
+    \item Multiple strategies
+    \ides{Naive Strategy}
+        \begin{itemize}
+            \item Page is split into slots of fixed size
+                \begin{itemize}
+                    \item One tuple goes into one slot
+                \end{itemize}
+            \item Header keeps track of occupied/free slots
+            \icon Lots of space wasted when tuples are of different length
+        \end{itemize}
+    \ides{Slotted Page}
+        \begin{itemize}
+            \item Record id = $<\text{page id}, \text{slot \#}>$
+            \ides{Slot array:} Array of pointers and size of occupied slots
+                \begin{itemize}
+                    \item Comes right after the header
+                \end{itemize}
+            \ipro Can move tuples on page without changing record id
+        \end{itemize}
+\end{itemize}
+
+\subsubsection{Tuple layout}
+\begin{itemize}
+    \item Data access methods:
+        \ides{On-line transaction processing (OLTP):}
+            \begin{itemize}
+                \item Simple query
+                \item Reads/writes a small amount of data related to a single entry
+            \end{itemize}
+        \ides{On-line analytical processing (OLAP):}
+            \begin{itemize}
+                \item Complex queries
+                \item Read large portions of the DB spanning multiple entries
+            \end{itemize}
+        \item Multiple implementations
+    \ides{Row Storage}
+        \begin{itemize}
+            \item Store tuple together
+            \item Divided into
+                \begin{itemize}
+                    \ides{Bitmap:} Indicates which attributes are \verb+NULL+ (somehow)
+                    \ides{Fixed-Length:}
+                        \begin{itemize}
+                            \item Contains fixed-length fields
+                            \item Arrangement and sizes are equal for all tuples
+                            \item Can directly access the $i$-th field
+                        \end{itemize}
+                    \ides{Variable-Length:}
+                        \begin{itemize}
+                            \item Contains variable-length fields
+                            \item Two implementation
+                            \ides{Field Delimited:} Special characters mark the end/start of fields
+                                \begin{itemize}
+                                    \icon Access $i$-th fields requires scann of list
+                                \end{itemize}
+                            \ides{Field Offset Array:} Array where $A[i]$ contains the start of the $i$-th field
+                                \begin{itemize}
+                                    \item Stored at the beginning of the tuple
+                                    \ipro Direct access to $i$-th field
+                                \end{itemize}
+                        \end{itemize}
+                \end{itemize}
+            \ipro All tuple information are together
+            \ipro Good for OLTP
+            \icon Bad for OLAP
+                \begin{itemize}
+                    \item Read lots of data we do not care
+                \end{itemize}
+        \end{itemize}
+    \ides{Column Storage}
+        \begin{itemize}
+            \item Store a whole column together
+            \ipro Good for OLAP
+            \icon Slow for point queries (look for a single value), inserts, updates and deletes
+            \icon Bad for OLTP
+            \ipro Easier data compression
+        \end{itemize}
+\end{itemize}
+
+\subsection{Buffer Pool Management}
+\begin{itemize}
+    \item Buffer manager acts like the intermediate layer between the system and disk manager
+    \item On fetch, check if desired page is in RAM. If not, bring to RAM and returns. Else directly return it.
+    \ides{Goal:} Provide illusion that all data in in RAM
+    \item Page Replacement
+        \begin{itemize}
+            \item If RAM is full, we need to evict a page
+            \item Eviction policy is of key importance
+            \ides{Future access pattern known}
+                \begin{itemize}
+                    \ides{Idea:} Evict block whose next access is farthest in the future
+                    \item Called Belady's MIN algorithm
+                    \ipro Optimal under this assumption
+                \end{itemize}
+            \ides{Future access pattern unknown}
+                \begin{itemize}
+                    \item Rarely know about the future access pattern
+                    \item Different strategies
+                    \ides{Least Recently Used (LRU):} Evict the least recently used page
+                        \begin{itemize}
+                            \ipro Works well for repeated access to popular pages
+                            \icon $100\%$ miss under sequential flooding
+                                \begin{itemize}
+                                    \ides{Sequential Flooding:} Access in a repeated pattern but such that not all pages fit into RAM
+                                \end{itemize}
+                            \item At most twice as bad compared to optimal when LRU has twice the memory \todo{What does this mean?}
+                        \end{itemize}
+                    \ides{Most Recently Used (MRU):} Evict the most recently used page
+                        \begin{itemize}
+                            \icon Frequently accessed page has to be fetched often
+                                \begin{itemize}
+                                    \item E.g. Index scan
+                                \end{itemize}
+                        \end{itemize}
+                    \item Access patterns
+                        \begin{itemize}
+                            \ides{Sequential:} Table Scan: $1 \to 2 \to 3 \to 4 \to \dots$
+                            \ides{Hierarchical:} Index Scan: $1 \to 4 \to 11 \to 1 \to 4 \to 12 \to 1 \to 3 \to 8 \dots$
+                            \ides{Random:} Index Lookup: $12 \to 9 \to 4 \to 21 \to 55 \to 6 \to 42 \to \dots$
+                            \ides{Cyclic:} Nested-Loop: $1 \to 2 \to 3 \to 4 \to 1 \to 2 \to 3 \to 4 \to \dots$
+                        \end{itemize}
+                    \item Depending on the pattern different strategies perform differently well
+                    \item If we have some information about pattern, we can select an optimal policy
+                        \begin{itemize}
+                            \item This is the key different from the OS RAM manager
+                        \end{itemize}
+                \end{itemize}
+        \end{itemize}
+    \item OS vs DB
+        \begin{itemize}
+            \item Principles are similar, but in DB we know more what is going on
+            \item Allows for better optimisation
+            \item DB uses own buffer
+            \item DB uses OS's filesystem
+                \begin{itemize}
+                    \item Has own buffer which can cause problems
+                \end{itemize}
+        \end{itemize}
+\end{itemize}
+
+\subsection{Access Methods}
+\begin{itemize}
+    \item Used by upper layer to access information in tables
+    \item Provides different was of accessing data from a relation
+    \item Goal: find a tuple whose attribute $X$ equals $Y$
+    \ides{Sequential Scan:}
+        \begin{itemize}
+            \item Bring page 1 and scan, bring page 2 and scan etc.
+            \item Cost:
+                \begin{itemize}
+                    \item When pages are sequentially allocated: $t_{s+r} + D(t_{tr})$
+                    \item When pages are randomly allocated: $D(t_{s+r} + t_{tr}$
+                    \item When write back on scan pay extra: $t_{tr}$
+                \end{itemize}
+        \end{itemize}
+    \item Improve: build data structure $f$ over relation, which can easily answers our scan
+        \begin{itemize}
+            \item Evaluation of $f$ is usually cheaper than sequential scan
+        \end{itemize}
+    \ides{B-Tree (B+ Tree)}
+        \begin{itemize}
+            \item Self-balancing tree that keeps data sorted
+            \item Properties
+                \begin{itemize}
+                    \item $M$-way search tree
+                        \begin{itemize}
+                            \item Like a binary search tree but each node has up to $M$ children
+                        \end{itemize}
+                    \item Perfectly balanced
+                    \item Every inner node (except root) is at least half-full
+                    \item Every inner node with $k$ keys has $k + 1$ non-null children
+                    \item Each page is represented as a node
+                    \item $\bigO(\log n)$ for search, insertion, deletion
+                \end{itemize}
+            \item Two flavours
+                \begin{itemize}
+                    \ides{Unclustered B+ Tree:} Leaf node contains RID (PageID, SlotID), pointing to the relation
+                    \ides{Clustered B+ Tree:} Lead node contains the actual tuple
+                        \begin{itemize}
+                            \item Can have only one clustered B+ Tree per relation
+                        \end{itemize}
+                \end{itemize}
+            \ides{Point query}
+                \begin{itemize}
+                    \item Find single key
+                    \item Node size $= M$, $\#$ Tuples $= N$
+                    \item Depth $\bigO(\log_M N)$
+                    \item Num I/O
+                        \begin{itemize}
+                            \item Unclustered: $\underbrace{\log_M N}_{\text{search tree}} + \underbrace{1}_{\text{access actual tuple}}$
+                            \item Clustered: $\underbrace{\log_M n}_{\text{search tree}}$
+                        \end{itemize}
+                    \item Much faster than sequential scan
+                \end{itemize}
+            \ides{Range query}
+                \begin{itemize}
+                    \item Find all tuples in range
+                    \item Node size $= M$, $\#$ Tuples $= N$
+                    \item Depth $\bigO(\log_M N)$
+                    \item Num I/O
+                        \begin{itemize}
+                            \item Unclusered: $\underbrace{\log_M N}_{\text{search tree}} + \underbrace{\frac{\text{\#tuples}}{\text{tuples-per-page1}}}_{\#\text{ leafs to read to get all RIDs}} + \underbrace{\# \text{tuples}}_{\text{cost of reading}}$
+                            \item Clustered: $\underbrace{\log_M N}_{\text{search tree}} + \underbrace{\frac{\text{\#tuples}}{\text{tuple-per-page2}}}_{\# \text{ leafs to read to bet all RIDs}}$
+                            \item $\text{tuple-per-page2} < \text{tuple-per-page1}$ since clustered contains the actual tuples (which are larger than RID)
+                        \end{itemize}
+                \end{itemize}
+            \ides{Insert}
+                \begin{itemize}
+                    \item Insert a tuple
+                    \item Algorithm
+                        \begin{itemize}
+                            \item Find the right leaf node $L$
+                            \item Put data in $L$
+                                \begin{itemize}
+                                    \item If $L$ has enough space we are done
+                                    \item Otherwise, split $L$, insert key to the parent of $L$
+                                \end{itemize}
+                        \end{itemize}
+                \end{itemize}
+            \ides{Delete}
+                \begin{itemize}
+                    \item Delete a tuple
+                    \item Algorithm
+                        \begin{itemize}
+                            \item Find the right leaf node $L$
+                            \item Remove data in $L$
+                                \begin{itemize}
+                                    \item If $L$ is at least half full we are done
+                                    \item Otherwise, merge two leaf nodes or borrow one tuple from neighbours, update parents
+                                \end{itemize}
+                        \end{itemize}
+                \end{itemize}
+            \item Heap file vs B+ Tree
+                \begin{itemize}
+                    \ides{Heap file:}
+                        \begin{itemize}
+                            \ipro Lot of sequential scans
+                        \end{itemize}
+                    \ides{B+ Tree:}
+                        \begin{itemize}
+                            \ipro Small number of random access
+                        \end{itemize}
+                    \item Tradeoff, between few expensive, or many cheap accesses
+                \end{itemize}
+            \item Use Btree: \verb+CREATE INDEX name ON table USING btree(column);+
+            \item Bulk build
+                \begin{itemize}
+                    \item Different approaches
+                    \item Insert tuple by tuple
+                        \begin{itemize}
+                            \icon Slow
+                        \end{itemize}
+                    \item Sort and insert tuple bottom-up
+                \end{itemize}
+            \ipro Query time is independent of data distribution
+        \end{itemize}
+    \ides{Hash Table}
+        \begin{itemize}
+            \item Goal: Do better than B+ Trees for point queries
+            \ides{Hash Function $\mathbf{f(x)}$:} Maps each object into an entry in the table
+                \begin{itemize}
+                    \item E.g. For integer: $h(x) = (ax + b) \mod p$
+                    \item E.g. For Strings: $h(s_1, \dots, s_n) = (\sum_{i} s_ia^i) \mod p$
+                    \item Hard to find ideal hash function
+                \end{itemize}
+            \item Ideally $a \neq b \implies f(a) \neq f(b)$
+                \begin{itemize}
+                    \item Else we get a collision
+                \end{itemize}
+            \item Different approaches to prevent collisions
+            \ides{Closed Hashing:} We know how many elements are trying to index
+                \begin{itemize}
+                    \ides{Linear Probe}
+                        \begin{itemize}
+                            \item Working
+                                \begin{itemize}
+                                    \item Compute hash to find right slot
+                                    \item Insert object into next empty slot
+                                        \begin{itemize}
+                                            \icon Deletion is non-trivial
+                                                \begin{itemize}
+                                                    \item We have to insert special marker into delete position to mark that this is a contiguous block
+                                                \end{itemize}
+                                        \end{itemize}
+                                \end{itemize}
+                            \item Search/Insert: $\bigO(\text{size of largest cluster})$
+                                \begin{itemize}
+                                    \ides{Cluster:} Largest consecutive sequence of occupied slots
+                                \end{itemize}
+                            \item For hash table
+                                \begin{itemize}
+                                    \item Size $m$
+                                    \item Contains $n = \lambda m$ keys
+                                    \item Full to $\lambda \%$
+                                \end{itemize}
+                                we have on average:
+                                \begin{itemize}
+                                    \ides{Insert:} $\frac{1}{2} (1 + \frac{1}{(1 - \lambda)^2})$
+                                \ides{(Successful) search:} $\frac{1}{2} (1 + \frac{1}{(1 - \lambda)})$
+                                        \begin{itemize}
+                                            \item Good if $\lambda \approx 50\%$ full
+                                        \end{itemize}
+                                \end{itemize}
+                            \ipro Very cache-efficient
+                            \icon Very sensitive to hash function
+                                \begin{itemize}
+                                    \item Hash function must be ``good''
+                                \end{itemize}
+                        \end{itemize}
+                \end{itemize}
+            \ides{Open Hashing:} We do not know how many elements are there
+                \begin{itemize}
+                    \ides{Chained Hashing}
+                        \begin{itemize}
+                            \item Working
+                                \begin{itemize}
+                                    \item Compute hash to find right slot
+                                    \item Insert if no collision
+                                    \item Else append to linked list
+                                \end{itemize}
+                            \item Expected length of chain for
+                                \begin{itemize}
+                                    \item $h(x)$ is uniformly random
+                                    \item $m = \bigO(N)$
+                                    \item $N$: Number of slots
+                                \end{itemize}
+                            is $\bigO(1)$
+                        \end{itemize}
+                \end{itemize}
+        \end{itemize}
+\end{itemize}
+
+\subsection{Operator Execution}
+\begin{itemize}
+    \item Execute a relational algebra operator
+    \item Used different access methods to implement these operators
+    \ides{Select $\mathbf{\sigma_C(R)}$:}
+        \begin{itemize}
+            \item Input $R$, condition $C$
+            \item Assume
+                \begin{itemize}
+                    \item $R$ has $|R|$ tuples and $B(R)$ pages
+                    \item Buffer size: $M$ pages
+                \end{itemize}
+            \ides{Selectivity:} $\alpha(C, R)$
+                \begin{itemize}
+                    \item Is a constant
+                    \item Number of tuples in $R$ that satisfy condition $C$ divided by $|R|$
+                \end{itemize}
+            \ides{Sequential Scan (Clustered) Heap File}
+                \begin{itemize}
+                    \item Bring pages to RAM one by one
+                    \item Scan each tuple and check for the predicate $C$
+                    \item If true, output tuple
+                    \item Total cost: $\bigO(\underbrace{B(R)}_{\text{read}} + \underbrace{\alpha(C, R)B(R)}_{\text{write}})$
+                    \item Cost is different for each query
+                \end{itemize}
+            \ides{Index Scan}
+                \begin{itemize}
+                    \item If $C \in \{<, >, =\}$
+                    \ides{Unclustered B+ Tree}
+                        \begin{itemize}
+                            \item Steps
+                                \begin{itemize}
+                                    \item Find the right leaf node
+                                    \item Scan the index
+                                    \item Fetch and return corresponding tuple from heap file
+                                \end{itemize}
+                            \item Total Cost: $\bigO(\underbrace{\log |R|}_{\text{find leaf}} + \underbrace{\alpha(C, R) |R|}_{\text{fetch tuple}} + \underbrace{\alpha(C, R)B(R)}_{\text{write}})$
+                        \end{itemize}
+                    \ides{Clustered B+ Tree}
+                        \begin{itemize}
+                            \item Steps
+                                \begin{itemize}
+                                    \item Find the right leaf node
+                                    \item Scan the index
+                                    \item Return tuple
+                                \end{itemize}
+                            \item Total Cost: $\bigO(\underbrace{\log |R|}_{\text{find leaf}} + \underbrace{\alpha(C, R) B(R)}_{\text{fetch tuple}} + \underbrace{\alpha(C, R)B(R)}_{\text{write}})$
+                        \end{itemize}
+                \end{itemize}
+        \end{itemize}
+    \ides{Sort}
+        \begin{itemize}
+            \item \verb+Sort(R, Attribute A)+
+            \ides{Clustered B+ Tree}
+                \begin{itemize}
+                    \item Sorted leaves and constant access time
+                \end{itemize}
+            \ides{Unclustered B+ Tree}
+                \begin{itemize}
+                    \item Sorted leafs but one random access per tuple
+                \end{itemize}
+            \item Different sorting algorithms
+            \item Assume: Data $N$ is much larger than buffer $B$
+            \ides{External Sort}
+                \begin{itemize}
+                    \item If $B = 3$ we can sort $2$ pages
+                    \item Working
+                        \begin{itemize}
+                            \item If $N < B$
+                                \begin{itemize}
+                                    \item Run quicksort
+                                \end{itemize}
+                            \item Otherwise
+                                \begin{itemize}
+                                    \item Phase 1: Sorting
+                                        \begin{itemize}
+                                            \item Partition file into smaller chunks that fit into memory
+                                            \item Sort smaller junks
+                                        \end{itemize}
+                                    \item Phase 2: Merging
+                                        \begin{itemize}
+                                            \item Combine smaller, sorted chunks into large file
+                                        \end{itemize}
+                                \end{itemize}
+                        \end{itemize}
+                    \item \todo{Add Cost}
+                \end{itemize}
+        \end{itemize}
+    \ides{Join $\mathbf{S \bowtie_\theta S}$}
+        \begin{itemize}
+            \ides{Nested Loop Join}
+                \begin{itemize}
+                    \item
+\begin{verbatim}
+foreach tuple r in R:
+    foreach tuple s in S:
+        if Theta(r, s):
+            output r, s
+\end{verbatim}
+                    \item $M = 3$: $\bigO(B(R) + |R| B(S) + \text{print IO})$
+                    \item Order of tables matters
+                        \begin{itemize}
+                            \item Depends on table size, buffer size
+                            \item Small $M$: Better if smaller relation is in outer loop
+                            \item Large $M$ (assume smaller table is fully cached): Better if smaller relation is in the inner loop
+                        \end{itemize}
+                    \ides{Efficient if:} Both relations fit into memory
+                \end{itemize}
+            \ides{Block Nested Loop Join}
+                \begin{itemize}
+                    \item
+\begin{verbatim}
+foreach block BR in R:
+    foreach block BS in S:
+        foreach tuple r in BR:
+            foreach tuple s in BS:
+                if Theta(r, s):
+                    output r, s
+\end{verbatim}
+                    \item $M = 3$: $\bigO(B(R) + B(R) B(S))$
+                    \item $M > 3$: $\bigO(B(S) + B(R) \frac{B(S)}{M - 2})$
+                    \item Partition $S$ into $a = \frac{B(S)}{M - 2}$ junks
+                        \begin{itemize}
+                            \item Fully cache junk
+                            \item Pay $B(R)$ to join this junk with $R$: $(M - 2) + B(R)$
+                            \item Repeat $\frac{B(S)}{M - 2}$ times \todo{Not sure what this means}
+                        \end{itemize}
+                \end{itemize}
+            \ides{Index Nested Loop Join}
+                \begin{itemize}
+                    \item
+\begin{verbatim}
+foreach tuple r in R:
+    foreach tuple s in IndexScan(S, r, Theta):
+        output r, s
+\end{verbatim}
+                    \item $\bigO(B(R) + |R| C)$
+                        \begin{itemize}
+                            \item $C$ is the cost of lookup in the index
+                        \end{itemize}
+                \end{itemize}
+            \ides{Sort Merge Join}
+                \begin{itemize}
+                    \item Assume both relations are sorted
+                    \item Working
+                        \begin{itemize}
+                            \item Scan both relation
+                            \item Compare to head
+                        \end{itemize}
+                    \item Cost $\bigO(B(R) + B(S) + \text{Sort}(R) + \text{Sort}(S))$
+                    \ides{Efficient if:} Index in attribute is present
+                \end{itemize}
+            \ides{Hash Join}
+                \begin{itemize}
+                    \item
+\begin{verbatim}
+build Hash Table HT for R
+foreach tuple s in S:
+    if h(s) in HT:
+        check forall r where h(r) = h(s) if r = s
+            output
+\end{verbatim}
+                    \item Cost $\bigO(B(S) + B(R))$
+                        \begin{itemize}
+                            \item Assumed hash table fits into memory
+                        \end{itemize}
+                    \icon Not good when hash table does not fit into memory
+                    \ides{Efficient if:} Result of join fits into memory
+                \end{itemize}
+            \ides{Grace Hash Join}
+                \begin{itemize}
+                    \ipro Deals with the case where the hash table does not fit into memory
+                    \item Idea
+                        \begin{itemize}
+                            \item Partition $R$ and $S$ by hashing them using $h1$
+                                \begin{itemize}
+                                    \item Matching tuples of $R$ and $S$ are mapped into the same partition
+                                    \item Only one partition of $R$ and $S$ into memory and compare them
+                                \end{itemize}
+                            \item Rehash the hashes using $h2$ and check for equality
+                        \end{itemize}
+                    \item Cost $\bigO(3B(R) + 3B(S))$
+                \end{itemize}
+        \end{itemize}
+\end{itemize}
+
+\subsubsection{Query Optimizer}
+\begin{itemize}
+    \item Given a SQL query generate a good execution plan.
+        \begin{itemize}
+            \ides{Execution Plan:} Tree of relational algebra operators
+        \end{itemize}
+    \item Used query executor to actually execute the relational algebra operators
+    \item Terminology
+        \begin{itemize}
+            \ides{Logical Plan:} What the user logically wants
+            \ides{Physical Plan:} What the DMBS can understand and run
+        \end{itemize}
+    \item Steps
+        \begin{itemize}
+            \item User gives SQL query
+            \item Parse SQL to logical plan
+            \item Convert to physical plan
+            \item Run each operator using the operator execution
+        \end{itemize}
+    \ides{Execution Model:} How different operators are gut together
+        \begin{itemize}
+            \item Different ways to put operators together
+            \ides{Iterator Model}
+                \begin{itemize}
+                    \item Each operator is an iterator
+                        \begin{itemize}
+                            \ides{Input:} Set of streams of tuples
+                            \ides{Output:} Stream of tuples
+                            \item Calling \verb+next()+ on a iterator returns its result
+                        \end{itemize}
+                    \ides{Query Plan:} Is tree of iterators
+                        \begin{itemize}
+                            \item Result s returned by calling \verb+root.next()+ over and over
+                        \end{itemize}
+                    \ides{Volcano Model:} Data flow flow bottom to top
+                    \ipro Generic interface for all operators
+                    \ipro Easy to implement iterators
+                    \ipro No overheads in terms of main memory
+                    \ipro Supports pipelining
+                    \ipro Supports parallelism and distribution
+                    \icon High overhead of method calls
+                    \icon Poor instruction cache locality
+                \end{itemize}
+            \ides{Materialization Model}
+                \begin{itemize}
+                    \item Each operator processes its inputs all at once and then emits its output all at once
+                        \begin{itemize}
+                            \ides{Input:} Full relation
+                            \ides{Output:} Full relation
+                        \end{itemize}
+                    \item Good when the intermediate result is not too much larger than the final result
+                        \begin{itemize}
+                            \ipro Good for OLTP
+                            \icon Bad for OLAP
+                        \end{itemize}
+                \end{itemize}
+            \ides{Vectorization Model:}
+                \begin{itemize}
+                    \item Similar to iterator model
+                    \item Each operator returns a batch of tuples
+                        \begin{itemize}
+                            \item Instead of a single tuple
+                        \end{itemize}
+                    \ipro Good for OLAP
+                    \ipro Allows for vectored instructions to process batches of tuples
+                \end{itemize}
+        \end{itemize}
+    \ides{Cost Model:} How to estimate the cost of each physical plan given our execution model
+        \begin{itemize}
+            \item Cannot be calculated but only estimate
+            \item Estimated based on lower level (operator execution)
+            \item Key variable to estimate is selectivity
+                \begin{itemize}
+                    \item Hard to estimate selectivity
+                \end{itemize}
+            \ides{Cardinality Estimation}
+                \begin{itemize}
+                    \item How many tuples does a query involve?
+                    \ides{Histogram}
+                        \begin{itemize}
+                            \item Create histograms from the data
+                            \item Lookup histograms to get an estimate of the number of tuples
+                            \icon Hard to combine multiple histograms into one
+                                \begin{itemize}
+                                    \item Due to missing correlation
+                                    \item Assume they are independent
+                                \end{itemize}
+                            \item For continuous values use bins
+                            \item We can also create multidimensional histograms
+                        \end{itemize}
+                    \item Can benefit form machine learning
+                \end{itemize}
+        \end{itemize}
+    \ides{Space Space:} What are the logically equivalent sets of physical plans?
+        \begin{itemize}
+            \item Given an input logical plane, there are different ways that one construct a physical plan
+                \begin{itemize}
+                    \item I.e. different orders of operators
+                \end{itemize}
+            \ides{Query rewriting Rules:} Set of transformations
+            \ides{Input:} Relational algebra expression $E$
+            \ides{Output:} Relational algebra expression $E'$
+            \ides{Property:} $E$ is equivalent to $E'$
+                \begin{itemize}
+                    \item $\forall I \in \underbrace{\mathbf{I}}_{\text{Set of possible DB instances}}, E(I) = E'(I)$
+                \end{itemize}
+            \item Many different rules are possible
+                \begin{itemize}
+                    \item[1)] Conjunctive selection operations can be deconstructed into a sequence of individual selections
+                        \begin{itemize}
+                            \item $\sigma_{\theta_1 \wedge \theta_2}(E) = \sigma_{\theta_1}(\sigma_{\theta_2}(E))$
+                        \end{itemize}
+                    \item[2)] Selection operations are commutative
+                        \begin{itemize}
+                            \item $\sigma_{\theta_1}(\sigma_{\theta_2}(E)) = \sigma_{\theta_2}(\sigma_{\theta_1}(E))$
+                        \end{itemize}
+                    \item[3)] Only the last in a sequence of projections operations is needed
+                        \begin{itemize}
+                            \item $\Pi_{t_1}(\Pi_{t_2}(E)) = \Pi_{t_1}(E)$
+                        \end{itemize}
+                    \item[4)] Selections can be combined with Cartesian products and theta joins
+                        \begin{itemize}
+                            \item $\sigma_\theta(E_1 \times E_2) = E_1 \bowtie_\theta E_2$
+                            \item $\sigma_{\theta_1}(E_1 \bowtie_{\theta_2} E_2) = E_1 \bowtie_{\theta_1 \wedge \theta_2} E_2$
+                        \end{itemize}
+                    \item[5)] Theta-join and natural join operations are commutative
+                        \begin{itemize}
+                            \item $E_1 \bowtie_\theta E_2 = E_2 \bowtie_\theta E_1$
+                        \end{itemize}
+                    \item[6)] Natural join operations are associative
+                        \begin{itemize}
+                            \item $(E_1 \bowtie E_2) \bowtie E_3 = E_1 \bowtie (E_2 \bowtie E_3)$
+                        \end{itemize}
+                    \item[6b)] Theta join operators are associative
+                        \begin{itemize}
+                            \item $(E_1 \bowtie_{\theta_1} E_2) \bowtie_{\theta_2 \wedge \theta_3} E_3 = E_1 \bowtie_{\theta_1 \wedge \theta_3}(E_2 \bowtie_{\theta_2} E_3)$ when $\theta_2$ involves only attributes from $E_2$ and $E_3$
+                        \end{itemize}
+                    \item[7)] Pushdown Selection
+                        \begin{itemize}
+                            \item $\sigma_\theta(E_1 \bowtie E_2) = \sigma_\theta(E_1) \bowtie (E_2)$ if $\theta$ only involves attributes in $E_1$
+                        \end{itemize}
+                    \item[8)] The projections operation distributes over the theta join operation
+                        \begin{itemize}
+                            \item $\Pi_{L_1 \cup L_2}(E_1 \bowtie_\theta E_2) = (\Pi_{L_1}(E_1)) \bowtie_\theta(\Pi_{L_2}(E_2))$ if $\theta$ only involves attributes from $L_1 \cup L_2$
+                        \end{itemize}
+                    \item[9)] The set operations union and intersection are commutitive
+                        \begin{itemize}
+                            \item $E_1 \cup E_2 = E_2 \cup E_1$
+                            \item $E_1 \cap E_2 = E_2 \cap E_1$
+                        \end{itemize}
+                    \item[10)] Set union and intersection are associative
+                        \begin{itemize}
+                            \item $(E_1 \cup E_2) \cup E_3 = E_1 \cup (E_2 \cup E_3)$
+                            \item $(E_1 \cap E_2) \cap E_3 = E_1 \cap (E_2 \cap E_3)$
+                        \end{itemize}
+                    \item[11)] Selection operation distrubites over $\cup, \cap$ and $\setminus$
+                        \begin{itemize}
+                            \item $\sigma_\theta(E_1 \setminus E_2) = \sigma_\theta(E_1) \setminus \sigma_\theta(E_2) = \sigma_\theta(E_1) \setminus E_2$
+                            \item $\sigma_\theta(E_1 \cup E_2) = \sigma_\theta(E_1) \cup \sigma_\theta(E_2) = \sigma_\theta(E_1) \cap E_2$
+                            \item $\sigma_\theta(E_1 \cap E_2) = \sigma_\theta(E_1) \cap \sigma_\theta(E_2) \neq \sigma_\theta(E_1) \cup E_2$
+                        \end{itemize}
+                    \item[12)] Projection operation distributes over union
+                        \begin{itemize}
+                            \item $\Pi_L(E_1 \cup E_2) = (\Pi_L(E_1)) \cup (\Pi_L(E_2))$
+                        \end{itemize}
+                \end{itemize}
+        \end{itemize}
+    \ides{Search Algorithm:} How can we search the best physical plan, given cost model?
+        \begin{itemize}
+            \item Searching for the optimal query is hard
+            \ides{Compromise 1:} Constraint search space
+                \begin{itemize}
+                    \item Only consider left-deep join trees
+                    \item Allows fully pipelined plans
+                        \begin{itemize}
+                            \item Intermediate values do not need to be written to temporary files
+                            \item Not all trees are fully pipelined (e.g. Sort Merge Join)
+                        \end{itemize}
+                    \item Process:
+                        \begin{itemize}
+                            \item Enumerate join orders
+                                \begin{itemize}
+                                    \item Only different left deep trees
+                                \end{itemize}
+                            \item Enumerate plans for each operator
+                            \item Enumerate access method for each operator
+                        \end{itemize}
+                    \item Complexity $\bigO(n!), \ n$ is $\#$ relations
+                    \item Can be done with DP
+                \end{itemize}
+            \ides{Compromise 2:} Heuristic-based Optimisation
+                \begin{itemize}
+                    \item Optimize query-tree by applying a set of rules that typically improve execution performance
+                        \begin{itemize}
+                            \item Early selection
+                            \item Early projection
+                            \item Restrictive selections and joins before other similar operators
+                        \end{itemize}
+                    \item Search algorithm that enables pipelining
+                \end{itemize}
+        \end{itemize}
+    \item \verb+EXPLAIN+ gives actual physical model
+\end{itemize}
+
+\subsection{Tuning}
+\begin{itemize}
+    \item DBMS have many internal parameters
+    \item Improve performance
+\end{itemize}
