@@ -20,6 +20,7 @@ The repo contains all sources as well precompiled PDFs. Though, I cannot guarant
 | FS21     | Data Modelling and Dtabases                   | [📋](./21-1_DMDB-S)   |                                                                    |
 | FS21     | Computer Networks                             | [📋](./21-1_CN-S)     |                                                                    |
 | FS21     | Wahrscheinlichkeit und Statistik              | 📈 ❌                 |                                                                    |
+| FS21     | Autonomous Mobile Robots                      | [📈](./21-1_AMR-CS)     |                                                                    |
 
 
 | **Type**         | **Symbol** |
