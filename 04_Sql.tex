@@ -182,10 +182,10 @@ SELECT A as a, B as b, C as c FROM (SQL1);
         \end{itemize}
     \ides{Sorting}
 \begin{verbatim}
-SELECT A, B FROM (SQL1) ORDER BY A DESC, B ASCD;
+SELECT A, B FROM (SQL1) ORDER BY A DESC, B ASC;
 \end{verbatim}
         \begin{itemize}
-            \item ASCD is default
+            \item ASC is default
         \end{itemize}
     \ides{Grouping, Aggregation}
 \begin{verbatim}
@@ -211,7 +211,25 @@ SELECT A, COUNT(*) FROM (SQL1) GROUP BY A;
 \subsection{Tips}
 \begin{itemize}
     \item Extract substring by index: \verb+substring(<string>, <base1startindex>, <length>)+
-    \item \verb+SELECT column FROM table+ gives a bag
-    \item \verb+SELECT DISTINCT column FROM table+ gives a set. We can also apply this to multiple columns. In that case the entries are combined and then duplicates filtered.
-    \item \verb+NOW()+ gives current date
+    \item Operator giving bag:
+        \begin{itemize}
+            \item \verb+SELECT column FROM table+
+            \item \verb+SQL1 UNION ALL SQL2+
+        \end{itemize}
+    \item Operator giving set
+        \begin{itemize}
+            \item \verb+SELECT DISTINCT column FROM table+
+                \begin{itemize}
+                    \item We can also apply this to multiple columns. In that case the entries are combined and then duplicates filtered.
+                \end{itemize}
+            \item \verb+SQL1 UNION SQL2+
+        \end{itemize}
+    \item Get current datetime: \verb+NOW()+
+    \item Extract certain field from datetime: \verb+DATE_PART(<desired_field>, <source>)+
+        \begin{itemize}
+            \item \verb+desired_field+ can be anything like: \verb+day, hour, year+ etc.
+        \end{itemize}
+    \item Data type conversion is done using \verb+<some_field>::<some_type>+
+    \item Casting data type using \verb+CAST(<some_filed> AS <some_type>)+
+    \item Round to $n$ decimal points: \verb+ROUND(<source>, <n>)+
 \end{itemize}

@@ -26,7 +26,7 @@
             \item $R$ is in 2NF if for all $\alpha \to B$ at least one holds:
                 \begin{itemize}
                     \item $B \in \alpha$
-                    \item $B$ contains at least one key
+                    \item $B$ is an attribute of at least one key
                     \item $\alpha$ is a superkey of $R$
                     \item No attribute in $\alpha$ is part of any key
                 \end{itemize}
@@ -42,7 +42,7 @@
             \item $R$ is in 3NF iff for all $\alpha \to B$ at least one holds:
                 \begin{itemize}
                     \item $B \in \alpha$
-                    \item $B$ contains at least one key
+                    \item $B$ is an attribute of at least one key
                     \item $\alpha$ is a superkey of $R$
                 \end{itemize}
             \item I.e. If $\alpha \to \beta$ does not satisfy any of these conditions, $\alpha$ is a concept on its own
