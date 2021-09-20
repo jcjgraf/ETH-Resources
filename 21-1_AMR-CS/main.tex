@@ -1,0 +1,30 @@
+\documentclass{article}
+
+% Scalable font
+\usepackage{lmodern}
+\usepackage[fontsize=6pt]{scrextend}
+
+\usepackage{cancel}
+
+% Make arrays compacter
+\addtolength{\arraycolsep}{-4pt}
+
+\usepackage{cheatsheet}
+\usepackage{math}
+
+% Start section count at 0
+\setcounter{section}{-1}
+
+\raggedright
+
+\begin{document}
+\begin{multicols*}{5}
+    \input{00_General.tex}
+    \input{01_Introduction.tex}
+    \input{02_Locomotion.tex}
+    \input{03_Kinematics.tex}
+    \input{04_Perception.tex}
+    \input{05_Localization.tex}
+    \input{06_Planning.tex}
+\end{multicols*}
+\end{document}
