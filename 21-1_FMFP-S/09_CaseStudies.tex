@@ -1,0 +1,423 @@
+%! TEX root = ./main.tex
+
+\section{Case Study}
+\subsection{Overview Interpreter}
+\begin{itemize}
+    \item Has three basic steps:
+    \ides{Read}
+        \begin{itemize}
+            \ides{Input:} Text
+            \ides{Phases:}
+                \begin{itemize}
+                    \ides{Lexical Analysis}
+                        \begin{itemize}
+                            \item Convert source code to tokens
+                                \begin{itemize}
+                                    \item I.e. tell for each groups of symbols what they are
+                                \end{itemize}
+                            \ides{Tokens:} Identifier (variables), arithmetic symbols, assignment symbol, numbers, etc.
+                            \item White-spaces and comments are removed
+                        \end{itemize}
+                    \ides{Parsing}
+                        \begin{itemize}
+                            \item Build abstract syntax tree
+                            \item Syntax is specified by a given grammar
+                                \begin{itemize}
+                                    \item I.e. a data type in Haskell
+                                \end{itemize}
+                        \end{itemize}
+                    \ides{Outer Phases}
+                        \begin{itemize}
+                            \item Depending on the applications, further phases may come now
+                            \item Things like type conversion, type checking, dependency analysis, etc.
+                        \end{itemize}
+                \end{itemize}
+            \ides{Output:} Abstract Syntax Tree
+            \item Lexical analysis and parsing is required for all systems
+        \end{itemize}
+    \ides{Evaluate}
+        \begin{itemize}
+            \ides{Input:} Abstract Syntax Tree
+            \ides{Semantic Interpretation}
+            \ides{Output:} Abstract Syntax Tree
+        \end{itemize}
+    \ides{Print}
+        \begin{itemize}
+            \ides{Input:} Abstract Syntax Tree
+            \ides{Pretty Print Output}
+            \ides{Output:} Text
+        \end{itemize}
+\end{itemize}
+
+\subsection{Overview Parser}
+\begin{itemize}
+    \item Parser is a function
+    \ides{Input:} String
+    \ides{Output:} Element of type \verb+a+
+        \begin{itemize}
+            \item Typically \verb+a+ is some data type
+        \end{itemize}
+    \item A parser may not necessarily parse the whole input
+        \begin{itemize}
+            \ides{Combinatory Parsing}
+            \item There is a remainder
+            \item \verb+res, rem+
+            \item Remainder may be parsed by a different parser
+        \end{itemize}
+    \item A parser may try to produce different results for the same input
+        \begin{itemize}
+            \item Store \verb+(res_i, rem_i)+ in a list
+            \item If \verb+rem_i = ""+ the parse is complete
+            \item \verb+data Parser a = Prs (String -> [(a, String)]+
+        \end{itemize}
+    \ides{Application}
+        \begin{itemize}
+            \item
+\begin{verbatim}
+parse :: Parser a -> String -> [(a, String)]
+parse (Prs p) inp = p inp
+\end{verbatim}
+        \end{itemize}
+    \ides{Result of (first) Complete Parse}
+        \begin{itemize}
+            \item
+\begin{verbatim}
+completeParse :: Parser a -> String -> a
+completeParse p inp
+| result == [] = error "Parse unsuccessful"
+| otherwise    = head results
+where results  = [res | (res, "") <- parse p inp]
+\end{verbatim}
+        \end{itemize}
+    \ides{Primitive Parsers}
+        \begin{itemize}
+            \item Server as a basic building block
+            \ides{Failure:}
+                \begin{itemize}
+                    \item Fails trivially
+                    \item \verb+[]+ signifies a unsuccessful parse
+                    \item
+\begin{verbatim}
+failure :: Parser a
+failure = Prs (\inp -> [])
+\end{verbatim}
+                    \item Ex.
+\begin{verbatim}
+$ parse failure "3+5"
+[] :: [(a, String)]
+\end{verbatim}
+                \end{itemize}
+            \ides{Return:}
+                \begin{itemize}
+                    \item Succeeds trivially
+                    \item Without progress
+                    \item
+\begin{verbatim}
+return :: a -> Parser a
+return x = Prs (\inp -> [(x, inp)]
+\end{verbatim}
+                    \item Ex.
+\begin{verbatim}
+$ parse (return "foo") "3+5"
+[("foo", "3+5")] :: [([Char], String)]
+\end{verbatim}
+                \end{itemize}
+            \ides{Item:}
+                \begin{itemize}
+                    \item Succeeds trivially
+                    \item With progress
+                    \item
+\begin{verbatim}
+item :: Parser Char
+item = Prs (\inpt -> case inp of
+                    "" -> []
+                    (x:xs) -> [(x, xs)])
+\end{verbatim}
+                    \item Ex.
+\begin{verbatim}
+$ parse item "3+5"
+[('3', "+5")] :: [(Char, String)]
+\end{verbatim}
+                \end{itemize}
+            \ides{Sat:}
+                \begin{itemize}
+                    \item Parse single char with property $p$
+                    \item
+\begin{verbatim}
+sat :: (Char -> Bool) -> Parser Char
+sat p = Prs (\inp -> case inp of
+                    "" -> []
+                    (x:xs) -> if p x then [(x,xs)] else [])
+\end{verbatim}
+                    \item Alternatively
+\begin{verbatim}
+sat :: (Char -> Bool) -> Parser Char
+sat p = item >>= \x -> if p x then return x else failure
+\end{verbatim}
+                    \item Ex. isDigit
+\begin{verbatim}
+$ parse (sat (\x -> '0' <= x && x <= '9')) "3+5"
+[('3', "+5")] :: [(Char, String)]
+\end{verbatim}
+                    \item Ex. isArithOp
+\begin{verbatim}
+$ parse (sat (\x -> x == '+' || x == '-')) "3+5"
+[] :: [(Char, String)]
+\end{verbatim}
+                \end{itemize}
+            \ides{Char:}
+                \begin{itemize}
+                    \item
+\begin{verbatim}
+char :: Char -> Parser Char
+char x = sat (==x)
+\end{verbatim}
+                \end{itemize}
+            \ides{String:}
+                \begin{itemize}
+                    \item
+\begin{verbatim}
+string :: String -> Parser Strin
+string "" = return ""
+string (x:xs) = char x >> string xs >> return (x:xs)
+\end{verbatim}
+                \end{itemize}
+            \ides{Many:}
+                \begin{itemize}
+                    \item $0$ or more repetitions of $p$
+                    \item
+\begin{verbatim}
+many :: Parser a -> Parser [a]
+many p = many1 p ||| return []
+\end{verbatim}
+                \end{itemize}
+            \ides{Many1:}
+                \begin{itemize}
+                    \item $1$ or more repetitions of $p$
+                    \item
+\begin{verbatim}
+many1 :: Parser a -> Parser [a]
+many1 p = p >>= \t -> many p >>= \ts -> return (t:ts)
+\end{verbatim}
+                \end{itemize}
+            \ides{numPos:}
+                \begin{itemize}
+                    \item
+\begin{verbatim}
+numPos :: Parser Int
+numPos = do ts <- many1 (sat isDigit)
+    return (read ts)
+\end{verbatim}
+                \end{itemize}
+            \ides{numNeg}
+                \begin{itemize}
+                    \item
+\begin{verbatim}
+numNeg :: Parser Int
+numNeg = do char '-'
+    t <- numPos
+    return (-t)
+\end{verbatim}
+                \end{itemize}
+            \ides{num}
+                \begin{itemize}
+                    \item
+\begin{verbatim}
+num :: Parser Int
+num = numPos ||| numNeg
+\end{verbatim}
+                    \item
+\begin{verbatim}
+$ parse num "123"
+[(123, ""), (12, "3"), (1, "23")]
+$ parse num "-123"
+[(-123, ""), (-12, "3"), (-1, "23")]
+\end{verbatim}
+                \end{itemize}
+        \end{itemize}
+    \ides{Combining Parsers}
+        \begin{itemize}
+            \ides{Mutual Selection:} Apply both parser and concatenate result
+                \begin{itemize}
+                    \item
+\begin{verbatim}
+(|||) :: Parser a -> Parser a -> Parser a
+p ||| q = Prs (\s -> Parser p s ++ parser q s)
+\end{verbatim}
+                    \item Ex
+\begin{verbatim}
+$ parse (return '!' ||| sat isDigit) "3+5"
+[('!', "3+5"), ('3', "+5")]
+\end{verbatim}
+                \end{itemize}
+            \ides{Alternative Selection:} Apply second parser only of first fail
+                \begin{itemize}
+                    \item
+\begin{verbatim}
+(+++) :: Parser a -> Parser a -> Parser a
+p +++ q = Prs (\s -> case parser p s of
+                [] -> parser q s
+                res -> res)
+\end{verbatim}
+                    \item Ex
+\begin{verbatim}
+$ parse (return '!' +++ sat isDigit) "3+5"
+[('!', "3+5")]
+\end{verbatim}
+                \end{itemize}
+            \ides{Sequencing:} Apply second parser on remainder of first parser. Return result and remainder of second parser
+                \begin{itemize}
+                    \item Result of first parser is lost
+                    \item
+\begin{verbatim}
+(>>) :: Parser a -> Parser b -> Parser b
+p >> q = Prs (\s -> [(u, s'') | (t, s') <- parse p s,
+                        (u, s'') <- parse q s'])
+\end{verbatim}
+                    \item Ex
+\begin{verbatim}
+$ parse (sat isDigit >> sat (== '+')) "3+5"
+[('+', "5")]
+\end{verbatim}
+                \end{itemize}
+                \ides{Sequencing 2:} Apply second parser on result of first parser. Return combined result and remainder of second parser
+                    \begin{itemize}
+                        \item Second parser is a \textbf{parser generator}
+                        \item
+\begin{verbatim}
+(>>=) :: Parser a -> (a -> Parser b) -> Parser b
+p >>= g = Prs (\s -> [(u, s'') | (t, s') <- parser p s
+                        (u, s'') <- parser (g t) s'])
+\end{verbatim}
+                        \item Can improve readability by using syntactic sugar
+                            \begin{itemize}
+                                \item
+\begin{verbatim}
+do t1 <- p1
+t2 <- p2
+...
+tn <- pn
+return (f t1 t2 ... tn)
+\end{verbatim} for
+\begin{verbatim}
+p1 >>= \t1 ->
+p2 >>= \t2 ->
+...
+pn >>= \tn ->
+return (f t1 t2 ... tn)
+\end{verbatim}
+                                \item \verb+Parser+ must be an instance of \verb+Monad+
+                            \end{itemize}
+                        \item Ex
+\begin{verbatim}
+$ parse (sat isDigit >>=
+        \t -> sat isDigit >>=
+        \u -> return (t:u:[])) "31+5"
+[("31", "+5")]
+$ parse (sat isDigit >>=
+        \t -> sat isDigit >>=
+        \u -> return (t:u:[])) "3+5"
+[]
+\end{verbatim}
+                    \end{itemize}
+        \end{itemize}
+\end{itemize}
+
+\subsection{Arithmetic Interpretation}
+\begin{itemize}
+    \ides{Read}
+        \begin{itemize}
+            \ides{Grammar:} \verb/Expr ::= Int | Expr '+' Expr | Expr '-' Expr/
+                \begin{itemize}
+                    \item Resp. \verb+data Expr n Lit Int | Add Expr Expr | Sub Expr Expr+
+                \end{itemize}
+            \ides{Lexical Analysis:} Recognize integers, \verb/'+'/, \verb/'-'/, parentheses and white space
+            \ides{Parsing:} Convert to abstract syntax tree
+        \end{itemize}
+    \ides{Evaluation}
+        \begin{itemize}
+            \item
+\begin{verbatim}
+eval :: Expr -> Int
+eval (Lit n) = n
+eval (Add e1 e2) = (eval e1) + (eval e2)
+eval (Sub e1 e2) = (eval e1) - (eval e2)
+\end{verbatim}
+        \end{itemize}
+    \ides{Print}
+        \begin{itemize}
+            \item Instance of type class show
+            \item
+\begin{verbatim}
+instance Show Expr where
+    show (Lit n) = show n
+    show (Add e1 e2) = "(" ++ show e1 ++ "+" ++ show e2 ++ ")"
+    show (Sub e1 e2) = "(" ++ show e1 ++ "-" ++ show e2 ++ ")"
+\end{verbatim}
+        \end{itemize}
+    \ides{Parser}
+        \begin{itemize}
+            \item Given grammar is ambiguous
+                \begin{itemize}
+                    \item Provide user a way to get rid of ambiguity
+                    \item \verb/Expr ::= Int | Expr '+' Expr | Expr '-' Expr | '(' Expr ')'/
+                \end{itemize}
+            \item Given grammar is left-recursive
+                \begin{itemize}
+                    \item Parsing \verb+Expr+ requires to first parse \verb+Expr+
+                    \item We can get an infinitely non-terminating recursion
+                    \item
+\begin{verbatim}
+Atom ::= Int | '(' Expr ')'
+Expr ::= Atom | Atom '+' Expr | Atom '-' Expr/
+\end{verbatim}
+                \end{itemize}
+            \item Parser
+                \begin{itemize}
+                    \item
+\begin{verbatim}
+data Expr = Lit Int | Add Expr Expr | Sub Expr Expr
+    deriving (Show, Eq)
+
+atom lit ||| pexpr
+expr = atom ||| add ||| sub
+
+lit = do x <- num
+        return (Lit x)
+
+pexpr = do string "("
+            e <- expr
+            string ")"
+            return e
+
+add = do a <- atom
+        string "+"
+        e <- expr
+        return (Add a e)
+
+sub = do a <- atom
+        string "-"
+        e <- expr
+        return (Sub a e)
+\end{verbatim}
+                \end{itemize}
+            \item Evaluator
+                \begin{itemize}
+                    \item
+\begin{verbatim}
+str2expr :: String -> Expr
+str2expr s = completeParse expr s
+
+eval :: Expr -> Int
+eval (Lit n) = n
+eval (Add x y) = eval x + eval y
+eval (Sub x y) = eval x - eval y
+
+calculate :: String -> Int
+calculate = eval . str2expr
+\end{verbatim}
+                \end{itemize}
+        \end{itemize}
+\end{itemize}
+
+\todo{Example 2}

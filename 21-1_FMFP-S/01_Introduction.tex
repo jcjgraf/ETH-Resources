@@ -1,0 +1,152 @@
+%! TEX root = ./main.tex
+
+\section{Introduction}
+\subsection{Functional Programming}
+\begin{itemize}
+    \item Like mathematical expressions
+    \item Consists of functions and values
+    \item Functions are actually values themselves
+    \item There is no state
+    \ides{Referential Transparency:} Not state $\implies$ expression \textbf{always} evaluate to the same value
+    \item No global variables
+    \item Recursion instead of iteration
+    \ipro Easy to parallelize
+    \ipro Easy to analyze
+    \ipro Flexible type system
+\end{itemize}
+
+\subsection{Haskell}
+\begin{itemize}
+    \ides{Lazy Evaluation:} expression evaluates always outermost and leftmost expression
+        \begin{itemize}
+            \item But pattern matching and some other functions force evaluation
+        \end{itemize}
+\end{itemize}
+
+\subsubsection{Syntax}
+\begin{itemize}
+    \ides{Function}
+        \begin{itemize}
+            \item Function name and arguments start with lower-case
+            \item Expression after the equal sign is the return value
+            \ides{Pattern Matching}
+                \begin{itemize}
+                    \item Is used for:
+                        \begin{itemize}
+                            \item Check if argument has proper type
+                            \item Bind values to variables
+                        \end{itemize}
+                    \ides{Pattern}
+                        \begin{itemize}
+                            \item Inductively defined
+                            \item Pattern are
+                                \begin{itemize}
+                                    \item Constants
+                                    \item Variables
+                                    \item Wild Card (\verb+_+)
+                                    \item Tuples $(p_1, p_2, ... , p_k)$ where $p_i$ is a pattern
+                                    \item Non-Empty Lists $(p_1 : p_2)$ where $p_i$ is a pattern
+                                \end{itemize}
+                            \item Must be \textbf{linear}
+                                \begin{itemize}
+                                    \item I.e. each variable cannot occur more than once
+                                    \item Does not count for wild card
+                                \end{itemize}
+                        \end{itemize}
+                    \ides{Pattern Matching}
+                        \begin{itemize}
+                            \item Pattern matching is used to determine right definition
+                            \item Pattern \verb+p+ matches term \verb+a+ by the following recursion on \verb+p+:
+                                \begin{itemize}
+                                    \ides{Constant:} \verb+p = c+ if \verb+c = a+
+                                    \ides{Variable:} \verb+p = x+ always succeeds with binding \verb+x = a+
+                                    \ides{Wild Card:} \verb+p = _+ always success but without binding
+                                    \ides{Tuple:} $p = (p_1, \dots , p_k)$ succeeds if $a = (a_1, \dots , a_k)$ and $p_i$ matches $a_i \quad \forall i \in \{1, \dots , k\} $
+                                    \ides{Non-Empty List:} $p = (p_1 : p_2)$ succeeds if $a = (a_1 : a_2)$ and $p_i$ matches $a_i \quad \forall i \in \{1, 2\}$
+                                \end{itemize}
+                            \item Forces evaluation (no longer lazy evaluation)
+                            \item Can define the same function multiple times but with different patterns
+                        \end{itemize}
+                \end{itemize}
+            \item May Contain several cases (\textit{guards})
+                \begin{itemize}
+                    \item Boolean expression
+                    \item \verb+otherwise+ is the default case
+                \end{itemize}
+            \ides{Scope}
+                \begin{itemize}
+                    \item Functions have a global scope
+                    \item Order of declaration does not matter
+                    \item \verb+let <local func, var, const decl.> in <expr. using these defs>+
+                        \begin{itemize}
+                            \item More powerful than \verb+where+
+                        \end{itemize}
+                    \item \verb+where <local func, var, const decl.>+
+                        \begin{itemize}
+                            \item Follows guard or function return
+                            \item Top-Down development (use and then declare)
+                        \end{itemize}
+                \end{itemize}
+        \end{itemize}
+    \item Constants can be defined outside of functions
+    \item Program consists of multiple function definitions
+    \ides{Indentations}
+        \begin{itemize}
+            \item Determines separation of definitions
+            \item All function definitions start at the same indentation
+            \item The body of a function definition needs to be indented
+            \item If line is split into two, indent new line again
+                \begin{itemize}
+                    \item Can be done recursively
+                \end{itemize}
+            \item Spaces have to be used, not tabs
+        \end{itemize}
+\end{itemize}
+
+\subsubsection{Types}
+\begin{itemize}
+    \item Strongly typed
+    \item Can explicitly define function definition or let Haskell do that
+    \ides{Integral}
+        \begin{itemize}
+            \ides{Int:} Bound
+            \ides{Integer:} Arbitrary precision
+        \end{itemize}
+        \ides{Double}
+    \ides{Char}
+        \begin{itemize}
+            \item Surrounded by \verb+'+
+        \end{itemize}
+    \ides{String}
+        \begin{itemize}
+            \item List of characters
+            \item Surrounded by \verb+"+
+            \item Concatenate using \verb|++|
+        \end{itemize}
+    \ides{Bool}
+    \ides{Function/Operator}
+        \begin{itemize}
+            \ides{Operator:} Binary function which is used infix
+            \item \verb+`func`+ makes function infix
+            \item \verb+(op)+ makes operator prefix
+        \end{itemize}
+    \ides{Tuple}
+        \begin{itemize}
+            \item Compose multiple values of different type
+            \item Composed by a \textit{Type Constructor}
+            \item If $T_1, \dots, T_n$ are Types, then $(T_1, \dots , T_n)$ is a tuple type
+            \item If $v_1 :: T_1, \dots, v_n :: T_n$ are values of matching type, then $(v_1, \dots , v_n) :: (T_1, \dots , T_n)$ is a valid tuple
+            \item Can be nested
+        \end{itemize}
+\end{itemize}
+
+\subsubsection{Input/Output}
+\begin{itemize}
+    \item I/O is not referential transparent (has side effects)
+    \item Wrap by \verb+IO+ to capture side effects
+    \item \verb+getLine :: IO String+ reads a string
+    \item \verb+putStrLn :: String -> IO ()+ prints a string.
+    \item \verb+do+ blocks sequences side effects
+    \item \verb+<-+ extract values from IO
+    \item \verb+return+ wraps values in IO
+\end{itemize}

@@ -1,0 +1,39 @@
+\documentclass{scrartcl}
+
+\usepackage{summary}
+\usepackage{math}
+
+\usepackage{prooftree}
+\usepackage{prooftree_macro}
+
+\begin{document}
+
+    \lhead{FMFP}
+    \rhead{\leftmark}
+
+    \title{Formal Methods and Functional Programming}
+    \subtitle{Spring 2021}
+    \author{Jean-Claude Graf}
+    \maketitle
+
+    \tableofcontents
+    \part{Functional Programming}
+    \include{./01_Introduction.tex}
+    \include{./02_NaturalDeduction.tex}
+    \include{./03_Correctness.tex}
+    \include{./04_Lists.tex}
+    \include{./05_Abstraction.tex}
+    \include{./06_Types.tex}
+    \include{./07_AlgebraicDataTypes.tex}
+    \include{./08_LazyEvaluation.tex}
+    \include{./09_CaseStudies.tex}
+    \part{Formal Methods}
+    \include{./10_Introduction.tex}
+    \include{./11_Imp.tex}
+    \include{./12_OperationalSemantics.tex}
+    \include{./13_AxiomaticSemantics.tex}
+    \include{./14_ModelChecking.tex}
+    \part{Appendix}
+    \include{./15_Prelude.tex}
+    \include{./16_List.tex}
+\end{document}

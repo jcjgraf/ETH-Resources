@@ -1,0 +1,168 @@
+%! TEX root = ./main.tex
+
+\section{Axiomatic Semantics}
+\begin{itemize}
+    \item Expresses specific properties of the effect of executing a program
+    \item Some aspects of the computation may be ignored
+    \item Useful for program verification
+    \ides{Partial Correctness:} Expresses that if a program terminates then there will be a certain relationship between the initial and the final state
+    \ides{Total Correctness:} Expresses that a program will terminate and there will be a certain relationship between the initial and the final state
+        \begin{itemize}
+            \item Total Correctness $=$ Partial Correctness $+$ Termination
+        \end{itemize}
+    \item Proofs are too detailed when using operational semantics
+    \ides{Hoare Triples:} The system we use
+        \begin{itemize}
+            \item $\{ P \} s \{ Q \}$
+                \begin{itemize}
+                    \ides{P:} Precondition (Assertion)
+                    \ides{Q:} Postcondition (Assertion)
+                    \ides{s:} Statement
+                \end{itemize}
+            \item If $P$ evaluates to true in an initial state $\sigma$, and if the execution of $s$ from $\sigma$ terminates in an state $\sigma'$ then $Q$ will evaluate to true in $\sigma'$
+                \begin{itemize}
+                    \item Describes parietal correctness
+                \end{itemize}
+            \ides{Local Variables}
+                \begin{itemize}
+                    \item Can be used to save a value in the inital state so that it can be referenced later
+                    \item Occur only in assertions
+                    \item Are never assigned to and are not used by the program
+                \end{itemize}
+            \ides{Assertions}
+                \begin{itemize}
+                    \item Consists of boolean expression with local variables (optional)
+                        \begin{itemize}
+                            \item Can be extended with other expressions like quantifiers, new operators etc.
+                        \end{itemize}
+                    \item Pre- and postcondition are assertions
+                    \item We use some convenience notations like $\wedge$ for $\mathtt{and}$ etc.
+                \end{itemize}
+            \ides{Derivation System}
+                \begin{itemize}
+                    \ides{Rules}
+                        \begin{itemize}
+                            \ides{Skip}
+                                \begin{itemize}
+                                    \item $\Inf[\text{SKIP}_\text{Ax}]{\{\ub{P}\} \mathtt{skip} \{\ub{P}\}}$
+                                \end{itemize}
+                            \ides{Assignment}
+                                \begin{itemize}
+                                    \item $\Inf[\text{ASS}_\text{Ax}]{\{\ub{P}[\ub{x} \mapsto \ub{e}\} \ub{x} := \ub{e} \{\ub{P}\}}$
+                                \end{itemize}
+                            \ides{Sequential Composition}
+                                \begin{itemize}
+                                    \item $\Inf[\text{SEQ}_\text{AX}]{\{\ub{P}\} \ub{s} \{\ub{Q}\}}{\{\ub{Q}\} \ub{s}' \{\ub{R}\}}{\{\ub{P}\} \ub{s}; \ub{s}' \{\ub{R}\}}$
+                                \end{itemize}
+                            \ides{Conditional Statement}
+                                \begin{itemize}
+                                    \item $\Inf[\text{IF}_\text{AX}]{\{\ub{b} \wedge \ub{P}\} \ub{s} \{\ub{Q}\}}{\{\neg \ub{b} \wedge \ub{P}\} \ub{s}' \{\ub{Q}\}}{\{\ub{P}\} \texttt{if} \ \ub{b} \ \texttt{then} \ \ub{s} \ \texttt{else} \ \ub{s}' \ \texttt{end} \{\ub{Q}\}}$
+                                \end{itemize}
+                            \ides{Loop}
+                                \begin{itemize}
+                                    \item $\Inf[\text{WH}_\text{Ax}]{\{\ub{b} \wedge \ub{P}\} \ub{s} \{\ub{P}\}}{\{\ub{P}\} \texttt{while} \ \ub{b} \ \texttt{do} \ \ub{s} \ \texttt{end} \{\neg \ub{b} \wedge \ub{P}\}}$
+                                    \item The assertion $P$ is the loop invariant
+                                \end{itemize}
+                            \ides{Consequence}
+                                \begin{itemize}
+                                    \item $\Inf[\text{CONS}_\text{Ax}][\mathtt{if} \ \ub{P} \models \ub{P}' \ \texttt{and} \ \ub{Q}' \models \ub{Q}]{\{\ub{P}'\} \ub{s} \{\ub{Q}'\}}{\{\ub{P}\} \ub{s} \{\ub{Q}\}}$
+                                    \ides{Semantic Entailment $\mathbf{\models}$:}  $P \models Q \iff \forall \sigma, \mc{B}[[P]] \sigma = \text{tt} \implies \mc{B}[[Q]]\sigma = \text{tt}$
+                                \item Strengen precondition
+                                \item Weaken postcondition
+                                \end{itemize}
+                        \end{itemize}
+                    \ides{Derivation Tree}
+                        \begin{itemize}
+                            \item As we are used to
+                            \item $\vdash \{P\} s \{Q\} \iff \exists T. \text{root}(T) \equiv \{P\} s \{Q\}$
+                        \end{itemize}
+                    \ides{Proof}
+                        \begin{itemize}
+                            \item Two main methods
+                                \begin{itemize}
+                                    \ides{Proof Trees:}
+                                        \begin{itemize}
+                                            \item Write as derivation trees
+                                                \icon Tend to get very long
+                                            \item Start from the bottom (/end)
+                                        \end{itemize}
+                                    \ides{Proof Outlines:}
+                                        \begin{itemize}
+                                            \item Write proof vertically
+                                            \item Not a proof since there is no unique interpretation
+                                                \begin{itemize}
+                                                    \item But most of the time it is ok since we want to show that there exists a derivation tree
+                                                \end{itemize}
+                                        \end{itemize}
+                                \end{itemize}
+                            \item Loop-invariant is determined by looking how the value changes in consecutive iterations
+                                \begin{itemize}
+                                    \item Could use a table with iteration $0, 1, 2, i, N-1$ on the $x$-axis and the variables we care about on the $y$-axis
+                                    \item Loop invariant is often very similar to the post condition we have
+                                \end{itemize}
+                        \end{itemize}
+                \end{itemize}
+        \end{itemize}
+    \ides{Properties}
+        \begin{itemize}
+            \item Properties are typically proven by induction on the shape of derivation tree
+                \begin{itemize}
+                    \item Structural induction does often not work due to the rule of consequence
+                \end{itemize}
+            \ides{Semantic Equivalence}
+                \begin{itemize}
+                    \ides{Semantically equivalent} are two statements $s_1, s_2$ if $\forall P, Q, \vdash \{P\} s_1 \{Q\} \iff \vdash \{P\} s_2 \{Q\}$
+                \end{itemize}
+        \end{itemize}
+    \ides{Total Correctness (Termination)}
+        \begin{itemize}
+            \ides{Total Correctness:} If $P$ evaluates to true in the initial state $\sigma$ then the execution of $s$ from $\sigma$ terminates and $Q$ will evaluate to true in the final statement
+            \ides{Notation:} $\{P\} s \{\Downarrow Q\}$
+            \ides{Loop Variant:}
+                \begin{itemize}
+                    \item Expression that evaluates to a value in a well-founded set before each iteration
+                            \begin{itemize}
+                                \item Normally we use $\N$
+                            \end{itemize}
+                    \item Each loop iteration must decrease the value of the invariant
+                    \item Loop has to terminate once the minimal value of the well-founded set is reached
+                    \item Used to prove termination
+                \end{itemize}
+            \item This is a separate axiomatic semantic and is not mixed with the previous one
+            \ides{Rules}
+                \begin{itemize}
+                    \ides{Loop}
+                        \begin{itemize}
+                            \item $\Inf[\text{WHTOT}_\text{Ax}][\mathtt{if} \ \ub{b} \wedge \ub{P} \models 0 \le \ub{e} \text{ and } Z \notin \ub{P}]{\{\ub{b} \wedge \ub{P} \wedge \ub{e} = Z\} \ub{s} \{\Downarrow \ub{P} \wedge \ub{e} < Z\}}{\{\ub{P}\} \texttt{while} \ \ub{b} \ \texttt{do} \ \ub{s} \ \texttt{end} \{\Downarrow \neg \ub{b} \wedge \ub{P}\}}$
+                        \end{itemize}
+                    \item All other rules are equivalent to before except that we add $\Downarrow$ to the postcondition
+                \end{itemize}
+            \item In proof schemas asserts are often pre- and postcondition. Therefore, we do not write an arrow there. For asserts which are only postcondition, we write an arrow
+        \end{itemize}
+\end{itemize}
+
+\subsection{Soundness and Completeness}
+\begin{itemize}
+    \ides{Soundness:} If a property can be prove then it does indeed hold
+        \begin{itemize}
+            \item $\vdash \{P\} s \{Q\}  \implies \models \{P\} s \{Q\}$
+        \end{itemize}
+    \ides{Completeness:} If a property does hold then it can be proved
+        \begin{itemize}
+            \item $\models \{P\} s \{Q\} \implies \vdash \{P\} s \{Q\}$
+        \end{itemize}
+    \item Hard to create an axiomatic semantic which is sound and complete
+    \item Soundness and completeness can be proved with respect to an operational semantics
+        \begin{itemize}
+            \item $\{P\} s \{Q\}$ is valid, written as $\models \{P\} s \{Q\}$ iff:\\ $\forall \sigma, \sigma'. \mc{B}[[P]]\sigma = \text{tt} \wedge \vdash \langle s, \sigma \rangle \to \sigma' \implies \mc{B}[[Q]] \sigma' = \text{tt}$
+            \item I.e. $\models \{P\} s \{Q\}$ is ture if, whenever we start execution of $s$ from a state where $P$ holds, if the execution terminates, then $Q$ will hold in the final state
+        \end{itemize}
+    \ides{Theorem:} For all partial correctness triplets $\{P\} s \{Q\}$ of IMP we have $\vdash \{P\} s \{Q\} \iff \models \{P\} s \{Q\}$
+        \begin{itemize}
+            \ides{Proof Idea:}
+                \begin{itemize}
+                    \ides{$\mathbf{\Rightarrow}$:} Induction on the shape of the derivation tree for $\{P\} s \{Q\}$
+                    \ides{$\mathbf{\Leftarrow}$:} Induction but using some weakest precondition stuff
+                \end{itemize}
+        \end{itemize}
+\end{itemize}

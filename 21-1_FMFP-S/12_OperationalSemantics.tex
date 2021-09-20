@@ -1,0 +1,332 @@
+%! TEX root = ./main.tex
+
+\section{Operational Semantics}
+\begin{itemize}
+    \item Describes execution on a abstract machine
+    \item Describes how to effect is achieved
+    \item Describes how the state is modified during the execution of a statement
+    \item Useful for proofs about language design and implementations
+\end{itemize}
+
+\subsection{Big-Step Semantics}
+\begin{itemize}
+    \item Describes how the overall result of the execution are obtained
+    \ides{Natural Semantics (NS):} The system we use
+        \begin{itemize}
+            \ides{Configuration:}
+                \begin{itemize}
+                    \item Two types
+                    \ides{Normal Configuration $\mathbf{\langle s, \sigma \rangle}$:} Statement $s$ is to be executed in state $\sigma$
+                    \ides{Terminal Configuration $\mathbf\sigma$:} Final state
+                \end{itemize}
+            \ides{Transition System:} Tuple $(\Gamma, T, \to)$
+                \begin{itemize}
+                    \ides{$\mathbf{\Gamma}$:} Set of configurations
+                        \begin{itemize}
+                            \item $\Gamma = \{\langle s, \sigma \rangle \mid s \in \text{Stm}, \sigma \in \text{State}\} \cup \text{State}$
+                        \end{itemize}
+                    \ides{$\mathbf{T}$:} Set of terminal configurations
+                        \begin{itemize}
+                            \item $T = \text{State} \subseteq \Gamma$
+                        \end{itemize}
+                    \ides{$\mathbf{\to}$:} Transition relation
+                        \begin{itemize}
+                            \item $\to \subseteq \{\langle s, \sigma \rangle \mid s \in \text{Stm}, \sigma \in \text{State} \} \times \text{State} \subseteq \Gamma \times \Gamma$
+                            \item Described how execution takes place
+                            \item $\langle s, \sigma \rangle \to \sigma'$
+                        \end{itemize}
+                \end{itemize}
+            \ides{Inference Rules:}
+                \begin{itemize}
+                    \ides{Rule Schemas:} Contain meta-variables
+                    \ides{Rule Instance:} Replacing all meta-variables with syntactic elements
+                        \begin{itemize}
+                            \item Only rule instances can be applied
+                        \end{itemize}
+                    \item Meta-variables are written using underline
+                    \ides{Rules}
+                        \begin{itemize}
+                            \ides{Skip}
+                                \begin{itemize}
+                                    \item Does not modify the state
+                                    \item $\Inf[\text{SKIP}_\text{NS}]{\langle \mathtt{skip}, \ub\sigma \rangle \to \ub\sigma}$
+                                \end{itemize}
+                            \ides{Assignment}
+                                \begin{itemize}
+                                    \item Assigns some value to a variable
+                                    \item $\Inf[\text{ASS}_\text{NS}]{\langle \ub{x} := \ub{e},\ub\sigma \rangle \to \ub\sigma [\ub{x} \mapsto \mc{A}[[\ub{e}]]\ub\sigma]}$
+                                \end{itemize}
+                            \ides{Sequential composition}
+                                \begin{itemize}
+                                    \item Execute the first statement in the initial state, then the second statement in the intermediate state, resulting to some new final state
+                                \item $\Inf[\text{SEQ}_\text{NS}]{\langle \ub{s}, \ub\sigma \rangle \to \ub\sigma'}{\langle \ub{s}', \ub\sigma' \rangle \to \ub\sigma''}{\langle \ub{s}; \ub{s}', \ub\sigma \rangle \to \ub\sigma''}$
+                                \end{itemize}
+                            \ides{If}
+                                \begin{itemize}
+                                    \item If the conditional is true, execute the first statement, else the second
+                                    \item $\text{if } \mc{B}[[\ub{b}]]\ub\sigma = \text{tt}$: $\Inf[\text{IFT}_\text{NS}]{\langle \ub{s}, \ub\sigma \rangle \to \ub\sigma'}{\langle \text{if } \ub{b} \text{ then } \ub{s} \text{ else } \ub{s}' \text{ end}, \ub\sigma \rangle \to \ub\sigma'}$
+                                    \item $\text{if } \mc{B}[[\ub{b}]]\ub\sigma = \text{ff}$: $\Inf[\text{IFF}_\text{NS}]{\langle \ub{s}', \ub\sigma \rangle \to \ub\sigma'}{\langle \text{if } \ub{b} \text{ then } \ub{s} \text{ else } \ub{s}' \text{ end}, \ub\sigma \rangle \to \ub\sigma'}$
+                                \end{itemize}
+                            \ides{While}
+                                \begin{itemize}
+                                    \item If the condition hold, execute the body once, leading in a new state
+                                    \item $\text{if } \mc{B}[[\ub{b}]]\ub\sigma = \text{tt}$: $\Inf[\text{WHT}_\text{NS}]{\langle \ub{s}, \ub\sigma \rangle \to \ub\sigma'}{\langle \mathtt{while }\ \ub{b} \texttt{ do } \ub{s} \texttt{ end}, \ub\sigma' \rangle \to \ub\sigma''}{\langle \texttt{while } \ub{b} \texttt{ to } \ub{s} \texttt{ end}, \ub\sigma \rangle \to \ub\sigma''}$
+                                    \item If the condition does not hold, the state is not modified
+                                    \item $\text{if } \mc{B}[[\ub{b}]]\ub\sigma = \text{ff}$: $\Inf[\text{WHF}_\text{NS}]{\langle \texttt{while } \ub{b} \texttt{ to } \ub{s} \texttt{ end}, \ub\sigma \rangle \to \ub\sigma}$
+                                \end{itemize}
+                            \end{itemize}
+                    \ides{Derivation Tree $T$:}
+                        \begin{itemize}
+                            \item Combination of rule instances
+                            \ides{Root} of $T$ is $\text{root}(T)$
+                            \ides{Leaves} are axiom rule instances
+                            \ides{Internal nodes} are conclusion rule instances, having the premises are immediate children
+                            \ides{Side condition} of all instances must be satisfied
+                        \item $\vdash \langle s, \sigma \rangle \to \sigma' \iff \exists T. \text{root}(T) \equiv \langle s, \sigma \rangle \to \sigma'$
+                                \begin{itemize}
+                                    \item I.e. if there exists a valid tree with $\langle s, \sigma \rangle \to \sigma'$ in its root
+                                \end{itemize}
+                        \end{itemize}
+                \end{itemize}
+            \ides{Termination:}
+                \begin{itemize}
+                    \item Execution of statement $s$ in $\sigma$:
+                        \begin{itemize}
+                            \ides{Termination Successful:} Iff there exists a state $\sigma'$ such that $\vdash \langle s, \sigma \rangle \to \sigma'$
+                            \ides{Termination Fails:} Iff there is not state $\sigma'$ such that $\vdash \langle s, \sigma \rangle \to \sigma'$
+                        \end{itemize}
+                \end{itemize}
+        \end{itemize}
+    \ides{Properties}
+        \begin{itemize}
+            \ides{Semantic Equivalence}
+                \begin{itemize}
+                    \ides{Semantically equivalent} are two statements $s_1, s_2$ iff $\forall \sigma, \sigma'. (\vdash \langle s_1, \sigma \rangle \to \sigma' \iff \vdash \langle s_2, \sigma \rangle \to \sigma')$
+                        \begin{itemize}
+                            \ides{Notation:} $s_1 \simeq s_2$
+                        \end{itemize}
+                    \item Loop unrolling is semantically equivalent in IMP
+                        \begin{itemize}
+                            \item $\forall b, s. (\mathtt{while} \ b \ \mathtt{do} \ s \ \mathtt{end} \ \simeq \mathtt{if} \ b \ \mathtt{then} \ s; \mathtt{while} \ b \ \mathtt{do} \ s \ \mathtt{end \ end}$
+                            \item Does not hold for imperative languages
+                            \ides{Proof Idea:}
+                                \begin{itemize}
+                                    \item Show statement in both directions
+                                    \item For each direction, use structural induction
+                                \end{itemize}
+                        \end{itemize}
+                \end{itemize}
+            \ides{Deterministic Semantics}
+                \begin{itemize}
+                    \ides{Lemma:} Big-step semantics of IMP is deterministic
+                        \begin{itemize}
+                            \item $\forall s, \sigma, \sigma', \sigma''. (\vdash \langle s, \sigma \rangle \to \sigma' \wedge \vdash \langle s, \sigma \rangle \to \sigma''  \implies \sigma' = \sigma'')$
+                        \end{itemize}
+                    \ides{Proof Idea:}
+                        \begin{itemize}
+                            \item Structural induction fails if the state does not change
+                                \begin{itemize}
+                                    \item I.e. be have no proper sub-statements
+                                \end{itemize}
+                            \item Use induction on the shape of derivation tree
+                                \begin{itemize}
+                                    \item To prove property $P(T)$ for all derivation trees $T$, prove that $P(T)$ holds for an arbitrary derivation tree $T$ under the assumption that $P(T')$ holds for all sub-trees $T'$ of $T$
+                                    \item $T' \sqsubset T$
+                                    \item Often we do a case distinction on the rule applied at the root of the tree $T$
+                                \end{itemize}
+                        \end{itemize}
+                \end{itemize}
+        \end{itemize}
+    \ides{IMP Extension} \todo{IMP Extension}
+        \begin{itemize}
+            \item
+        %    \item These extension are just temporary
+        %    \ides{Local Variable Declarations}
+        %        \begin{itemize}
+        %            \item We want statement \verb+var x := e in s end+
+        %            \item Semantics
+        %                \begin{itemize}
+        %                    \item Expression e is evaluated in the initial state
+        %                    \item Statemetnt s is executed in a statement in which x has the value of e
+        %                    \item After the execution of s, the initial value of x is restored
+        %                \end{itemize}
+        %            \item Big-step rule
+        %        \end{itemize}
+        %    \ides{Procedure Declarations and Calls}
+        %        \begin{itemize}
+        %        \end{itemize}
+        \end{itemize}
+    \ides{Limitation}
+        \begin{itemize}
+            \item Properties of non-terminating programs cannot be expressed
+            \item Non distinction between aborting and non-termination
+            \item Non-determinism suppresses non-termination
+            \item Parallelism cannot be modeled
+            \item Definition of semantic equivalence is coarse
+        \end{itemize}
+\end{itemize}
+
+\subsection{Small-Step Semantics}
+\begin{itemize}
+    \item Describes how the individual steps of the computation take place
+    \item Allows to express the order of individual steps
+    \ides{Structural Operational Semantics (SOS):} The system we use
+        \begin{itemize}
+            \ides{Configuration:}
+                \begin{itemize}
+                    \item Same as for NS
+                    \item Use $\gamma$ as meta-variables
+                \end{itemize}
+            \ides{Transition System:}
+                \begin{itemize}
+                    \ides{$\mathbf{\Gamma}$:} Set of configurations
+                        \begin{itemize}
+                            \item $\Gamma = \{\langle s, \sigma \rangle \mid s \in \text{Stm}, \sigma \in \text{State}\} \cup \text{State}$
+                            \item Same as for NS
+                            \ides{Stuck} is non-terminal configuration $\langle s, \sigma \rangle$ if $\not\exists \gamma$ such that $\langle s, \sigma \rangle \to_1 \gamma$
+                                \begin{itemize}
+                                    \item Terminal configurations are never stuck
+                                \end{itemize}
+                        \end{itemize}
+                    \ides{$\mathbf{T}$:} Set of terminal configurations
+                        \begin{itemize}
+                            \item $T = \text{State} \subseteq \Gamma$
+                            \item Same as for NS
+                        \end{itemize}
+                    \ides{$\mathbf{\to_1}$:} Transition relation
+                        \begin{itemize}
+                            \item $\to_1 \subseteq \{\langle s, \sigma \rangle \mid s \in \text{Stm}, \sigma \in \text{State} \} \times \Gamma$
+                            \item $\langle s, \sigma \rangle \to_1 \gamma$ describes the \textbf{first step} of executing $s$ in $\sigma$
+                            \item $\gamma$ can have to forms
+                            \ides{$\mathbf{\gamma = \langle s', \sigma' \rangle}$}: Execution is \textbf{not complete} and we get the configuration $\langle s', \sigma' \rangle$
+                            \ides{$\mathbf{\gamma = \sigma'}$}: Execution has \textbf{terminate} and the final state is $\sigma'$
+                            \ides{k-step Execution:} $\gamma \to_1^k \gamma'$
+                                \begin{itemize}
+                                    \item I.e. there $\exists$ execution from $\gamma$ to $\gamma'$ in exactly $k$ steps
+                                    \item Defined inductively over $k$
+                                    \item $\gamma \to_1^* \gamma'$ means $\exists k. \gamma \to_1^5 \gamma'$
+                                        \begin{itemize}
+                                            \item I.e. there is some finite execution
+                                        \end{itemize}
+                                \end{itemize}
+                        \end{itemize}
+                \end{itemize}
+            \ides{Inference Rules:}
+                \begin{itemize}
+                    \ides{Rules}
+                        \begin{itemize}
+                            \ides{Skip}
+                                \begin{itemize}
+                                    \item Same as for NS
+                                    \item $\Inf[\text{SKIP}_\text{SOS}]{\langle \mathtt{skip}, \ub\sigma \rangle \to_1 \ub\sigma}$
+                                    \item Same as for NS
+                                \end{itemize}
+                            \ides{Assignment}
+                                \begin{itemize}
+                                    \item Same as for NS
+                                    \item $\Inf[\text{ASS}_\text{SOS}]{\langle \ub{x} := \ub{e},\ub\sigma \rangle \to_1 \ub\sigma [\ub{x} \mapsto \mc{A}[[\ub{e}]]\ub\sigma]}$
+                                \end{itemize}
+                            \ides{Sequential composition}
+                                \begin{itemize}
+                                    \item First step of executing the composition is executing the first step of the first statement
+                                    \item If the first statement is done after one step
+                                    \item $\Inf[\text{SEQ1}_\text{SOS}]{\langle \ub{s}, \ub\sigma \rangle \to_1 \ub\sigma'}{\langle \ub{s}; \ub{s}', \ub\sigma \rangle \to_1 \langle \ub{s}', \ub\sigma' \rangle}$
+                                    \item If the first statement is not done after one step
+                                    \item $\Inf[\text{SEQ2}_\text{SOS}]{\langle \ub{s}, \ub\sigma \rangle \to_1 \langle \ub{s}'', \ub\sigma' \rangle}{\langle \ub{s}; \ub{s}', \ub\sigma \rangle \to_1 \langle \ub{s}''; \ub{s}', \ub\sigma' \rangle}$
+                                \end{itemize}
+                            \ides{If}
+                                \begin{itemize}
+                                    \item The first step of executing an if statement is determine the boolean value of the condition
+                                    \item $\mathtt{if} \ \mc{B}[[\ub{b}]]\ub\sigma = \mathtt{tt}$: $\Inf[\text{IFT}_\text{SOS}]{\langle \mathtt{if} \ \ub{b} \ \mathtt{then} \ \ub{s} \ \mathtt{else} \ \ub{s}' \ \mathtt{end}, \ub\sigma \rangle \to_1 \langle \ub{s}, \ub\sigma \rangle}$
+                                    \item $\mathtt{if} \ \mc{B}[[\ub{b}]]\ub\sigma = \mathtt{ff}$: $\Inf[\text{IFT}_\text{SOS}]{\langle \mathtt{if} \ \ub{b} \ \mathtt{then} \ \ub{s} \ \mathtt{else} \ \ub{s}' \ \mathtt{end}, \ub\sigma \rangle \to_1 \langle \ub{s}', \ub\sigma \rangle}$
+                                \end{itemize}
+                            \ides{While}
+                                \begin{itemize}
+                                    \item The first step is to unroll the loop
+                                    \item $\Inf[\text{WH}_\text{SOS}]{\langle \texttt{while} \ \ub{b} \ \texttt{to} \ \ub{s} \ \texttt{end}, \ub\sigma \rangle \to_1 \langle \texttt{if} \ \ub{b} \ \texttt{then} \ \ub{s}; \texttt{while} \ \ub{b} \ \texttt{do} \ \ub{s} \ \texttt{end \ else \ skip \ end}, \sigma \rangle}$
+                                \end{itemize}
+                            \end{itemize}
+                    \ides{Derivation Sequence}
+                        \begin{itemize}
+                            \item Sequence of transitions which cannot be extended with further transitions
+                            \item Non-empty
+                            \item Finite or infinite
+                            \item Sequence of configuration $\gamma_0, \gamma_1, \dots$ for which
+                                \begin{itemize}
+                                    \item $\gamma_i \to_1^1 \gamma_{i + 1}$ for each $0 \le i$ such that $i + 1$ is in the range of sequence
+                                    \item If the derivation sequence is finite, then the last configuration is either a terminal or a stuck configuration
+                                \end{itemize}
+                            \ides{Length:} Number of transitions
+                        \end{itemize}
+                    \ides{Derivation Tree $T$:}
+                        \begin{itemize}
+                            \item Justify a single step in a derivation sequence
+                            \item Combination of rule instances
+                        \item $\vdash \langle s, \sigma \rangle \to_1 \sigma' \iff \exists T. \text{root}(T) \equiv \langle s, \sigma \rangle \to_1 \sigma'$
+                        \end{itemize}
+                \end{itemize}
+            \ides{Termination:}
+                \begin{itemize}
+                    \item Execution of statement $s$ in $\sigma$:
+                        \begin{itemize}
+                            \ides{Terminates:} Iff there exists a finite derivation sequence starting with $\langle s, \sigma \rangle$
+                            \ides{Runs Forever:} Iff there exists a infinite derivation sequence starting with $\langle s, \sigma \rangle$
+                        \end{itemize}
+                \end{itemize}
+        \end{itemize}
+    \ides{Properties}
+        \begin{itemize}
+            \item Proofs over a multi-step execution $\gamma \to_1^k \gamma'$ are done using strong induction on the number of steps $k$
+                \begin{itemize}
+                    \item Proof the $0$-step execution
+                    \item Proof all other steps using strong mathematical induction
+                        \begin{itemize}
+                            \item Define $P(k)$
+                            \item Prove $P(k)$ for arbitrary $k$ with IH. $\forall k' < k. P(k')$
+                        \end{itemize}
+                \end{itemize}
+            \item Semantic Equivalence
+                \begin{itemize}
+                    \ides{Semantically Equivalent} are two statements $s_1, s_2$ iff $\forall \sigma$ both:
+                        \begin{itemize}
+                            \item for all stuck or terminal configurations $\gamma$ we have $\langle s_1, \sigma \rangle \to_1^* \gamma \iff \langle s_2, \sigma \rangle \to_1^* \gamma$
+                                \begin{itemize}
+                                    \item The length may be different
+                                    \item The intermediate configurations may be different
+                                \end{itemize}
+                            \item there is an infinite derivation sequence starting in $\langle s_1, \sigma \rangle$ iff there is one starting in $\langle s_2, \sigma \rangle$
+                            \ides{Notation:} $s_1 \simeq s_2$
+                        \end{itemize}
+                \end{itemize}
+            \ides{Determinism}
+                \begin{itemize}
+                    \ides{Lemma:} Small-step semantics of IMP is deterministic
+                        \begin{itemize}
+                            \item $\forall s, \sigma, \gamma, \gamma'. \vdash \langle s, \sigma \rangle \to_1 \gamma \ \ \wedge \ \ \vdash \langle s, \sigma \rangle \to_1 \gamma' \implies \gamma = \gamma'$
+                        \end{itemize}
+                    \ides{Corollary:} There is exactly one derivation sequence starting in a configuration $\langle s, \sigma \rangle$
+                    \ides{Proof Idea:}
+                        \begin{itemize}
+                            \item Induction on the spae of the derivation tree for the transition $\langle s, \sigma \rangle \to_1 \gamma$
+                        \end{itemize}
+                \end{itemize}
+        \end{itemize}
+    \ides{IMP Extension} \todo{Imp Extension}
+        \begin{itemize}
+            \item
+        \end{itemize}
+\end{itemize}
+
+\subsection{Equivalence}
+\begin{itemize}
+    \ides{Theorem:} For every statement $s$ in IMP, $\vdash \langle s, \sigma \rangle \to \sigma' \iff \langle s, \sigma \rangle \to_1^* \sigma'$
+        \begin{itemize}
+            \item If a statement terminates successfully in one semantic, then it also does so in the other, and the finial state is equivalent
+            \item The termination fails to terminate in the big-step semantics iff if gets stuck of runs forever in the small-step semantic
+        \end{itemize}
+    \ides{Proof Idea:}
+        \begin{itemize}
+            \ides{$\mathbf{\Rightarrow}$:} Induction in the shape of the derivation tree for $\langle s, \sigma \rangle \to \sigma'$
+            \ides{$\mathbf{\Leftarrow}$:} Induction on the number of steps $k$
+        \end{itemize}
+\end{itemize}

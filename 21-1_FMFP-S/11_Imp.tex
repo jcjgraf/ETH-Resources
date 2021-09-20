@@ -1,0 +1,302 @@
+%! TEX root = ./main.tex
+
+\subsection{IMP}
+\begin{itemize}
+    \item Has boolean and arithmetic expressions
+    \item Expressions have no side effects
+    \item All variables range over integers
+    \item All variables are initialized
+    \item Does not include
+        \begin{itemize}
+            \item Heap allocation and coiners
+            \item Variable declaration
+            \item Procedures
+            \item Concurrency
+        \end{itemize}
+    \item Is very extensible
+    \ides{Syntax}
+        \begin{itemize}
+            \ides{Characters:}
+                \begin{itemize}
+                    \item
+\begin{verbatim}
+Letter = 'A' | ... | 'Z' | 'a' | ... | 'z'
+Digit = '0' | '1' | ... | '9'
+\end{verbatim}
+
+                \end{itemize}
+            \ides{Tokens:}
+                \begin{itemize}
+                    \item
+\begin{verbatim}
+Ident = Letter { Letter | Digit}*
+Numeral = Digit | Numeral Digit
+Var = Ident
+\end{verbatim}
+                \end{itemize}
+            \ides{Arithmetic Expressions:}
+                \begin{itemize}
+                    \item
+\begin{verbatim}
+Aexp = '(' Aexp Or Aexp ')'
+    | Var
+    | Numeral
+
+Op = '+' | '-' | '*'
+\end{verbatim}
+
+                \end{itemize}
+            \ides{Boolean Expressions:}
+                \begin{itemize}
+                    \item
+\begin{verbatim}
+Bexp = '(' Bexp 'or' Bexp ')'
+    | '(' Bexp 'and' Bexp ')'
+    | 'not' Bexp
+    | Aexp Rop Aexp
+
+Rop = '=' | '#' | '<' | '<=' | '>' | '>='
+\end{verbatim}
+                \end{itemize}
+            \ides{Statement:}
+                \begin{itemize}
+                    \item
+\begin{verbatim}
+Stm = 'skip'
+    | Var ':=' Aexp
+    | '(' Stam ';' Stm ')'
+    | 'if' Bexp 'then' Stm 'else 'stm 'end'
+    | 'while' Bexp 'do' Stm 'end'
+\end{verbatim}
+                    \item Parentheses are omitted of possible
+                \end{itemize}
+            \ides{Abbreviations:}
+                \begin{itemize}
+                    \item ``$\text{if } b \text{ then } s \text{ end}$'' for ``$\text{if } b \text{ then } s \text{ else skip end}$''
+                    \item ``true'' for ``$1=1$''
+                    \item ``false'' for $0=1$''
+                \end{itemize}
+        \end{itemize}
+    \ides{Variables}
+        \begin{itemize}
+            \ides{Program Variables:}
+                \begin{itemize}
+                    \item Are concrete variables in a program
+                    \item Written in typewriter font
+                \end{itemize}
+            \ides{Meta Variables:}
+                \begin{itemize}
+                    \item Stand for arbitrary program variables
+                    \item Convention:
+                        \begin{itemize}
+                            \ides{n:} for numerals (\verb+Numeral+)
+                            \ides{x,y,z:} for variables (\verb+Var+)
+                            \ides{$\mathbf{e, e', e_1, e_2}$:} for arithmetic expressions (\verb+Aexp+)
+                            \ides{$\mathbf{b, b', b_1, b_2}$:} for boolean expressions (\verb+Bexp+)
+                            \ides{$\mathbf{s, s', s_1, s_2}$:} for statements (\verb+Stm+)
+                            \ides{$\mathbf{\sigma}$:} for states
+                        \end{itemize}
+                    \item Meta variables stand for arbitrary program variables
+                    \item Written in math font
+                \end{itemize}
+            \ides{Syntactic Equality $\equiv$:}
+                \begin{itemize}
+                    \item $x \equiv y$ (meta variables) may be true
+                        \begin{itemize}
+                            \item I.e. both denote the same program variable
+                        \end{itemize}
+                    \item $\mathtt{x} \equiv \mathtt{y}$ (program variables) is always false
+                        \begin{itemize}
+                            \item But two program variables by have the same value $\mathtt{x} = \mathtt{y}$
+                        \end{itemize}
+                \end{itemize}
+        \end{itemize}
+    \ides{Semantics}
+        \begin{itemize}
+            \ides{States}
+                \begin{itemize}
+                    \item An expression depends on the value bound to the variables that occur in it
+                    \item $\text{State}: \text{Var} \to \text{Val}$
+                        \begin{itemize}
+                            \item Assigns each variable a value
+                            \item Total function
+                        \end{itemize}
+                    \ides{Sigma State $\mathbf{\sigma_{zero}}$:} All variables have the value $0$
+                    \ides{Updating States $\mathbf{\sigma[y \mapsto v]}$:} Assign $v$ to $y$ in the state $\sigma$
+                        \begin{itemize}
+                            \item
+                                \[
+                                    (\sigma[y \mapsto v])(x) =
+\begin{cases}
+    v  & \text{if } x \equiv y\\
+    \sigma(x) & \text{otherwise}
+\end{cases}
+                                \]
+                        \end{itemize}
+                    \ides{Equality} of states $\sigma_1, \sigma_2$ if they are equal as functions $\sigma_1 = \sigma_2 \iff \forall x. (\sigma_1(x) = \sigma_2(x))$
+                \end{itemize}
+            \ides{Semantic Functions} map elements of syntactic categories to elements of semantic categories
+                \begin{itemize}
+                    \item
+                    \ides{Syntactic Category:} E.g. \verb+Numeral+
+                        \begin{itemize}
+                            \item Some ascii symbol
+                        \end{itemize}
+                    \ides{Semantic Category:} E.g. $\Z$
+                        \begin{itemize}
+                            \item Actual value
+                        \end{itemize}
+                \end{itemize}
+            \ides{Numerals:} Syntactic Category \verb+Numeral+
+                \begin{itemize}
+                    \item $\mc{N}: \text{Numeral} \to \text{Val}$
+                    \item Maps numeral $n$ to integer value $\mc N[[n]]$
+                        \begin{itemize}
+                            \item Convention to use double brackets
+                            \item Same as with single bracket
+                        \end{itemize}
+                    \item
+                        \begin{align*}
+                            &\mc{N}[[0]] = 0 \quad &\mc{N}[[n 0]] = \mc{N}[[n]] \times 10 + 0\\
+                            &\mc{N}[[1]] = 1 \quad &\mc{N}[[n 1]] = \mc{N}[[n]] \times 10 + 1\\
+                            &\dots \quad &\dots\\
+                            &\mc{N}[[9]] = 9 \quad &\mc{N}[[n 9]] = \mc{N}[[n]] \times 10 + 9\\
+                        \end{align*}
+                \end{itemize}
+            \ides{Arithmetic Expressions:} Syntactic Category \verb+Aexp+
+                \begin{itemize}
+                    \item $\mc{A}: \text{Aexp} \to \text{State} \to \text{Val}$
+                    \item Maps arithmetic expression $e$ and a state $\sigma$ to a value $\mc{A}[[e]]\sigma$
+                    \item
+                        \begin{align*}
+                            &\mc{A}[[x]]\sigma = \sigma(x)\\
+                            &\mc{A}[[n]]\sigma = \mc{N}[[n]]\\
+                            &\mc{A}[[e_1 \text{ op } e_2]]\sigma = \mc{A}[[e_1]] \sigma \ \overline{\text{op}} \ \mc{A}[[e_2]] \sigma \quad , \text{where op} \in \text{Op}
+                        \end{align*}
+                        \begin{itemize}
+                            \item $\overline{\text{op}}$ is the operation $\text{Val } \times \text{ Val } \to \text{ Val}$ corresponding to $\text{op}$
+                            \item E.g. $\text{op} =$ '+' and $\overline{\text{op}} =$ mathematical addition
+                        \end{itemize}
+                \end{itemize}
+            \ides{Arithmetic Operators:} Syntactic Category \verb+Op+
+            \ides{Boolean Expressions:} Syntactic Category \verb+Bexp+
+                \begin{itemize}
+                    \item $\mc{B}: \text{Bexp} \to \text{State} \to \text{Bool} = \{tt, ff\} $
+                    \item Maps boolean expression $b$ and state $\sigma$ to a truth value $\mc{B}[[b]]\sigma$
+                    \item
+                        \[
+                            \mc{B}[[e_1 \text{ op } e_2]] \sigma =
+\begin{cases}
+    \text{tt} &\text{if } \mc{A}[[e_1]] \sigma \ \overline{\text{op}} \ \mc{A}[[e_2]] \sigma\\
+    \text{ff} &\text{otherwise}
+\end{cases}\quad ,\text{where op} \in \text{Rop}
+                        \]
+                        \begin{itemize}
+                            \item $\overline{\text{op}}$ is the operation $\text{Val } \times \text{ Val}$ corresponding to $\text{op}$
+                        \end{itemize}
+                    \item
+                        \begin{align*}
+                            &\mc{B}[[e_1 \text{ or } e_2]] \sigma =
+\begin{cases}
+    \text{tt} &\text{if } \mc{B}[[e_1]] \sigma = \text{ tt or} \mc{B}[[e_2]] \sigma = \text{ tt}\\
+    \text{ff} &\text{otherwise}
+\end{cases}\\
+                            &\mc{B}[[e_1 \text{ and } e_2]] \sigma =
+\begin{cases}
+    \text{tt} &\text{if } \mc{B}[[e_1]] \sigma = \text{ tt and} \mc{B}[[e_2]] \sigma = \text{ tt}\\
+    \text{ff} &\text{otherwise}
+\end{cases}\\
+                            &\mc{B}[[\text{not } e]] \sigma =
+\begin{cases}
+    \text{tt} &\text{if } \mc{B}[[e]] \sigma = \text{ff}\\
+    \text{ff} &\text{otherwise}
+\end{cases}\\
+                        \end{align*}
+                \end{itemize}
+            \ides{Relational Operators:} Syntactic Category \verb+Rop+
+            \ides{Statements:} Syntactic Category \verb+Stm+
+        \end{itemize}
+\end{itemize}
+
+\subsection{Properties}
+\begin{itemize}
+    \item $\mc{A, B}$ are defined recursively
+    \item Base elements are defined directly
+    \item Composite elements are defined inductively in terms of immediate constitutes
+    \item Definition suggests proof by structural induction
+    \ides{Structural Induction over Programs}
+        \begin{itemize}
+            \item
+        \end{itemize}
+\end{itemize}
+
+\subsection{Free Variables}
+\begin{itemize}
+    \item Free Variables
+        \begin{itemize}
+            \item All variables occurring in an expression
+            \item The naming may be confusing since we do not mean ``free'' in terms of ``bound or free'' but rather if there were replaced by a concrete value
+            \ides{Arithmetic Expressions:}
+                \begin{itemize}
+                    \item
+                        \begin{align*}
+                            &FV(e_1 \text{ op } e_2) = FV(e_1) \cup FV(e_2)\\
+                            &FV(n) = \emptyset\\
+                            &FV(x) = \{x\}
+                        \end{align*}
+                \end{itemize}
+            \ides{Boolean Expressions:}
+                \begin{itemize}
+                    \item
+                        \begin{align*}
+                            &FV(e_1 \text{ op } e_2 = FV(e_1)  \cup FV(e_2)\\
+                            &FV(\text{not } b) = FV(b)\\
+                            &FV(b_1 \text{ or } b_2) = FV(b_1) \cup FV(b_2)\\
+                            &FV(b_1 \text{ and } b_2) = FV(b_1) \cup FV(b_2)
+                        \end{align*}
+                \end{itemize}
+            \ides{Statements:}
+                \begin{itemize}
+                    \item
+                        \begin{align*}
+                            &FV(\text{skip}) = \emptyset\\
+                            &FV(x:= e) = \{x\} \cup FV(e)\\
+                            &FV(s_1; s_2) = FV(s_1) \cup FV(s_2)\\
+                            &FV(\text{if } b \text{ then } s_1 \text{ else } s_2 \text{ end} = FV(b) \cup FV(s_1) \cup FV(s_2)\\
+                            &FV(\text{while } b \text{ do } s \text{ end} = FV(b) \cup FV(s)
+                        \end{align*}
+                \end{itemize}
+        \end{itemize}
+    \item Substitution
+        \begin{itemize}
+            \item $\_[x \mapsto e]$
+                \begin{itemize}
+                    \item Replace free variable $x$ by $e$ in some expression
+                \end{itemize}
+            \ides{Arithmetic Expressions:}
+                \begin{itemize}
+                    \item
+                        \begin{align*}
+                            &(e_1 \text{ op } e_2)[x \mapsto e] \equiv (e_1[x \mapsto e] \text{ op } e_2[x \mapsto e])\\
+                            &n[x \mapsto e] \equiv n\\
+                            &y[x \mapsto e] \equiv
+\begin{cases}
+    e &\text{if } x \equiv y\\
+    y &\text{otherwise}
+\end{cases}
+                        \end{align*}
+                \end{itemize}
+            \ides{Boolean Expressions:}
+                \begin{itemize}
+                    \item
+                        \begin{align*}
+                            &(e_1 \text{ op } e_2)[x \mapsto e] \equiv (e_1[x \mapsto e] \text{ op } e_2[x \mapsto e]\\
+                            &(\text{not } b)[x \mapsto e] \equiv \text{not } (b[x \mapsto e])\\
+                            &(b_1 \text{ or } b_2)[x \mapsto e] \equiv (b_1[x \mapsto e] \text{ or } b_2[x \mapsto e]\\
+                            &(b_1 \text{ and } b_2)[x \mapsto e] \equiv (b_1[x \mapsto e] \text{ and } b_2[x \mapsto e]\\
+                        \end{align*}
+                \end{itemize}
+            \todo{Move lemma to right location}
+            \item Lemma $\mc{B}[[b[x \mapsto e]]] \sigma \iff \mc{B}[[b]]\sigma[x \mapsto \mc{A}[[e]] \sigma]$
+        \end{itemize}
+\end{itemize}

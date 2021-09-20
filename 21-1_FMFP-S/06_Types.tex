@@ -1,0 +1,200 @@
+%! TEX root = ./main.tex
+
+\section{Types}
+\begin{itemize}
+    \item Should prevent dangerous expressions
+        \begin{itemize}
+            \item Which cause a runtime error
+        \end{itemize}
+    \item Classification (good/bad) of expressions is undecidable
+        \begin{itemize}
+            \item Type systems are conservative and only allow what they are sure is good
+        \end{itemize}
+    \item Type checker should offer:
+        \begin{itemize}
+            \item quick, decidable, static analysis
+            \item permit generality/re-usability
+            \item prevent runtime-errors
+        \end{itemize}
+\end{itemize}
+
+\subsection{Mini-Haskell}
+\begin{itemize}
+    \item Typing system
+    \item Subset of Haskell
+    \ides{Syntax}
+        \begin{itemize}
+            \item Programs are terms
+            \item
+\begin{align*}
+    t ::=& \underbrace{\mathcal{V}}_{\text{Variables}} \mid \underbrace{(\lambda x.t)}_{\text{lambda abstraction}} \mid \underbrace{(t_1 \ t_2)}_{\text{functions}} \mid \text{True} \mid \text{False} \mid \\
+         & (\text{iszero } t) \mid \underbrace{\mathcal{Z}}_{\text{Integers}} \mid (t_1 + t_2) \mid (t_1 * t_2) \mid\\
+         & \text{if } t_0 \text{ then } t_1 \text{ else } t_2 \mid \underbrace{(t_1, t_2)}_{\text{Pairing}} \mid (\text{fst } t) \mid (\text{snd } t)
+\end{align*}
+            \item Can easily be extended
+            \item Add syntactic sugar: Can leave out parenthesis when not necessary
+        \end{itemize}
+    \ides{Typing}
+        \begin{itemize}
+            \item Set of types $\tau :: = \underbrace{\mathcal{V}_{\tau}}_{\text{Set of Type Variables } (a, b, \dots)} \mid \text{Bool} \mid \text{Int} \mid \underbrace{(\tau, \tau)}_{\text{Pair Constructor}} \mid \underbrace{(\tau \to \tau)}_{\text{Function Constructor}}$
+            \ides{Typing Judgement:} $\Gamma \vdash t :: \tau$
+                \begin{itemize}
+                    \ides{$\Gamma$:} Set of bindings mappings from variables to types
+                    \ides{$t$:} Term
+                    \ides{$\tau$:} Type
+                    \item ``Given assignments $\Gamma$, term $t$ is of type $\tau$''
+                \end{itemize}
+            \ides{Rules}
+                \begin{itemize}
+                    \ides{Basic:}
+                        \[
+                            \Inf[\text{Var}]{\dots, x : \tau, \hdots \vdash x :: \tau} \quad
+                            \Inf[\text{Abs}]{\Gamma, x : \sigma \vdash t :: \tau}{\Gamma \vdash (\lambda x. t) :: \sigma \to \tau} \quad
+                            \Inf[\text{App}]{\Gamma \vdash t_1 :: \sigma \to \tau}{\Gamma \vdash t_2 :: \sigma}{\Gamma \vdash (t_1 \ t_2) :: \tau}
+                        \]
+                    \ides{Base Types:}
+                        \[
+                            \Inf[\text{int}]{\Gamma \vdash n :: \text{Int}} \quad
+                            \Inf[\text{True}]{\Gamma \vdash \text{True} :: \text{Bool}} \quad
+                            \Inf[\text{False}]{\Gamma \vdash \text{False} :: \text{Bool}} 
+                        \]
+                    \ides{Operations} $\text{op} \in \{+, *\}$
+                        \[
+                            \Inf[\text{iszero}]{\Gamma \vdash t :: \text{Int}}{\Gamma \vdash (\text{iszero } t) :: \text{Bool}}\quad
+                            \Inf[\text{BinOp}]{\Gamma \vdash t_1 :: \text{Int}}{\Gamma \vdash t_2 :: \text{Int}}{\Gamma \vdash (t_1 \text{ op } t_2) :: \text{Int}}
+                        \]
+                    \ides{Conditional:}
+                        \[
+                            \Inf[\text{if}]{\Gamma \vdash t_0 :: \text{Bool}}{\Gamma \vdash t_1 :: \tau}{\Gamma \vdash t_2 :: \tau}{\Gamma \vdash (\text{if } t_0 \text{ then } t_1 \text{ else } t_2) :: \tau}
+                        \]
+                    \ides{Tuples:}
+                        \[
+                            \Inf[\text{Tuple}]{\Gamma \vdash t_1 :: \tau_1}{\Gamma \vdash t_2 :: \tau_2}{\Gamma \vdash (t_1, t_2) :: (\tau_1, \tau_2)} \quad
+                            \Inf[\text{fst}]{\Gamma \vdash t :: (\tau_1, \tau_2)}{\Gamma \vdash (\text{fst } t) :: \tau_1} \quad
+                            \Inf[\text{snd}]{\Gamma \vdash t :: (\tau_1, \tau_2)}{\Gamma \vdash (\text{snd } t) :: \tau_2}
+                        \]
+                \end{itemize}
+        \end{itemize}
+    \ides{Type Inference}
+        \begin{itemize}
+            \item Given term $t$ what is its type?
+            \item Algorithms:
+                \begin{enumerate}
+                    \item Start with judgement $\vdash t :: \tau_0$ where $\tau_0$ is the type variable and $t$ is the expression whose type we want to determine
+                    \item Build derivation tree bottom-up by applying rules and collect constraints. Introduce fresh type variables if need
+                    \item Solve constraints to get possible types
+                \end{enumerate}
+            \item Some terms are untypeable
+                \begin{itemize}
+                    \item Type inference fails to build inference tree or constraints are unsolvable
+                \end{itemize}
+        \end{itemize}
+    \ides{Type Proof}
+        \begin{itemize}
+            \item Given term $t$ and type $\tau$. Prove that $t :: \tau$
+        \end{itemize}
+    \todo{Add Type Proof section}
+    \ides{Self Application}
+        \begin{itemize}
+            \item Apply function $f$ to itself: $\lambda f. f f$
+            \item Is not typeable
+        \end{itemize}
+    \ides{Curry-Howard Isomorphism (not examrelevant)}
+        \begin{itemize}
+            \item Type constructor '$\to$' corresponds to propositional logic connectivity '$\to$'
+            \item Atomic types correspond to propositional variables
+            \item Rules correspond to those minimal propositional logic
+        \end{itemize}
+\end{itemize}
+
+\subsection{Type Classes}
+\begin{itemize}
+    \item Defines
+        \begin{itemize}
+            \item Set of types
+            \item Set of allowed functions on these types
+        \end{itemize}
+    \item Allow restricted for of type generalisation
+    \ides{Monomorphic:} Restricted to a single type (base type)
+    \ides{Polymorphic:} Restricted by the type set (a type class)
+\end{itemize}
+
+\subsubsection{Type Class}
+\begin{itemize}
+    \item Definition
+        \begin{itemize}
+            \ides{Name:} upper-case
+            \ides{Signature:} Function names with their type
+                \begin{itemize}
+                    \item Required to be implemented by instances of this type
+                \end{itemize}
+            \ides{Default Definition:} Definition based on other signatures
+                \begin{itemize}
+                    \item Optional
+                    \item Can be overwritten
+                \end{itemize}
+            \item 
+\begin{verbatim}
+class Eq a where -- Class Name
+    (==) :: a -> a -> Bool -- Signature
+    (/=) :: a -> a -> Bool -- Signature
+
+    x /= y = not (x == y) -- Default definition
+\end{verbatim}
+            \item To indicate that a certain type \verb+t+ if of type class \verb+Eq+ we write \verb+Eq t => t+
+        \end{itemize}
+    \ides{Instance}
+        \begin{itemize}
+            \item Application of a type class to a certain type
+            \item Elements of a class are instances
+            \item Interprets signature functions
+                \begin{itemize}
+                    \item Requires defining all signatures and optionally, overwrite default definitions
+                \end{itemize}
+            \item Done using keyword \verb+instance+
+            \item 
+\begin{verbatim}
+instance Eq Bool where
+    True == True   = True
+    False == False = True
+    _ == _         = False
+\end{verbatim}
+            \item Can be recursive
+                \begin{itemize}
+                    \item If \verb+t+ is of type \verb+Eq+ then so is \verb+[Eq]+
+                    \item I.e. membership depends on membership of other type
+                    \item 
+\begin{verbatim}
+instance Eq t => Eq [t]  where
+    []     == []     = True
+    (x:xs) == (y:ys) = x == y && xs == ys
+    _      == _      = False
+\end{verbatim}
+
+                \end{itemize}
+        \end{itemize}
+\end{itemize}
+
+\subsubsection{Derived Classes and Class Hierarchies}
+\begin{itemize}
+    \item Type classes can build on top of other type classes
+    \item If \verb+a+ belongs to the child type, is must also belong to the parent type
+    \item All function of the parent type are inherited and some new ones (may be) added
+    \item
+\begin{verbatim}
+class Eq a => Ord a where... 
+\end{verbatim}
+    \item Arbitrarily nested classes can be created
+\end{itemize}
+
+\subsection{Overloading}
+\begin{itemize}
+    \item Execution of parametric polymorphic functions independent  of type of arguments
+    \item Classes implements \textit{ad hoc} polymorphism
+    \item Selection of function definition is either
+        \begin{itemize}
+            \item At compile time if types are knows
+            \item else, at runtime 
+        \end{itemize}
+    \todo{I am not sure what this all means}
+\end{itemize}

@@ -1,0 +1,621 @@
+%! TEX root = ./main.tex
+
+\section{Model Checking}
+\begin{itemize}
+    \item With operational/axiomatic semantics:
+        \begin{itemize}
+            \item Hard to specify properties of sequences of states
+            \item Hard to proof interleaving of concurrent systems
+            \item Hard to prove programs with infinite derivation sequences
+        \end{itemize}
+    \ides{Modelling:} Automated technique that, given a finite-state model of a system and a formal property systematically check whether this property holds for (a given state in) that model
+    \item Abstraction of the real world
+    \item Enumerates all possible states of a system
+    \item Mainly used to analyse system designs
+        \begin{itemize}
+            \item And not implementations
+        \end{itemize}
+    \ides{Explicit State Model Checking:} Represent states explicitly through concrete values
+        \begin{itemize}
+            \item Our focus
+        \end{itemize}
+    \ides{Symbolic Model Checking:} Represent state through (boolean) formulas
+    \ides{Model Checking Process}
+        \begin{itemize}
+            \ides{Modelling Phase}
+                \begin{itemize}
+                    \item Model the system under consideration using the description language of the model checker
+                    \item Formalize the properties to be checked
+                \end{itemize}
+            \ides{Running Phase}
+                \begin{itemize}
+                    \item Run the model checker to check the validity of the property in the system model
+                \end{itemize}
+            \ides{Analysis Phase}
+                \begin{itemize}
+                    \item If property the property is violated, analyse the counter example
+                    \item If we run out of memory we have to reduce the model
+                \end{itemize}
+        \end{itemize}
+    \ides{Modeling Concurrent Systems}
+        \begin{itemize}
+            \item Systems are modelled as finite transition systems
+            \item Systems are modelled as communication sequential processes
+            \item Processes can communicate via
+                \begin{itemize}
+                    \item Shared variables
+                    \item Synchronous message passing
+                    \item Asynchronous message passing
+                \end{itemize}
+        \end{itemize}
+\end{itemize}
+
+\subsection{Promela:} Model checking language we use
+\begin{itemize}
+    \item Input language of the Spin model checker
+    \item Main objects are processes, channels and variables
+    \item C-like
+    \ides{Syntax:}
+        \begin{itemize}
+            \item Constant declaration
+                \begin{itemize}
+                    \item
+\begin{verbatim}
+#define N 5
+mytype = {ack, req};
+\end{verbatim}
+                \end{itemize}
+            \item Variable declaration
+                \begin{itemize}
+                    \item
+\begin{verbatim}
+byte a, b = 5, c;
+int d[3], e[4] = 3;
+\end{verbatim}
+                    \item Initialized to zero-equivalent values
+                    \item Are either local to a process or global
+                \end{itemize}
+            \item Structure declaration
+                \begin{itemize}
+                    \item
+\begin{verbatim}
+typedef verctor {int x; int y};
+\end{verbatim}
+                \end{itemize}
+            \item Channel declaration
+                \begin{itemize}
+                    \item
+\begin{verbatim}
+chan c1 = [2] of {mytype, bit, chan};
+chan c2 = [0] of {int};
+chan c3;
+\end{verbatim}
+                    \item \verb+c1+ can store up to two messages and messages sent via \verb+c1+ consists of three parts
+                    \item \verb+c2+ models rendez-vous communication as it has no buffer
+                    \item \verb+c3+ is uninitialized and must be assigned an initialized channel before usage
+                    \item Are either local to a process or global
+                \end{itemize}
+            \item Process declaration
+                \begin{itemize}
+                    \item
+\begin{verbatim}
+proctype myProc(int p) {...}
+\end{verbatim}
+                    \item Body contains of a sequence of variable declarations, channel declarations and statements
+                \end{itemize}
+            \item Activate process
+                \begin{itemize}
+                    \item
+\begin{verbatim}
+active [N] proctype myProc(...) {...}
+\end{verbatim}
+                    \item Start $N$ instances of \verb+myProc+ in the initial state
+                    \item The \verb+init+ process is started in the initial state
+                \end{itemize}
+            \ides{Types}
+                \begin{itemize}
+                    \item Primitive types
+\begin{tabular}{l | l}
+    Type & Value range \\\hline
+    bit or bool & $0 \dots 1$\\
+    byte & $0 \dots 255$\\
+    short & $-2^{15}\dots 2^{15}-1$\\
+    int & $-2^{31}\dots 2^{31} - 1$
+\end{tabular}
+                    \item User-defined types
+                        \begin{itemize}
+                            \item Arrays: \verb+ int name[4]+
+                            \item Structures
+                            \item Type of symbolic contents: \verb+mtype+
+                        \end{itemize}
+                    \item Channel type: \verb+chan+
+                \end{itemize}
+        \end{itemize}
+    \ides{State Space:}
+        \begin{itemize}
+            \ides{Sequential Programs}
+                \begin{itemize}
+                    \item $\#\text{states} = \#\text{program locations} \times \Pi_{\text{variable } x} | \underbrace{\text{dom}(x)}_{\#\text{possible values of } x} |$
+                    \item Exponential growth of states in number of variables
+                    \item State space explosion
+                \end{itemize}
+            \ides{Concurrent Programs}
+                \begin{itemize}
+                    \item Upper bound for $\#$ states of $P \equiv P_1 \parallel \dots \parallel P_N$
+                    \item $\# \text{states of } P_1 \times \dots \times \ \# \text{states of } P_N = \Pi_{i=n}^N ( \#\text{program locations}_i \times \Pi_{\text{variable } x_i} | \text{dom}(x_i)|)$
+                    \item Exponential growth of states in number of processes
+                    \item State space explosion
+                \end{itemize}
+            \ides{Promela Model}
+                \begin{itemize}
+                    \item Number of states of a system with $N$ processes and $K$ channels is bounded by
+                        \begin{align*}
+                            &\Pi_{i=1}^N (\# \text{program locations}_i \times \Pi_{\text{variable } x_i} | \text{dom}(x_i) |) \times\\
+                            &\quad \Pi_{j=1}^K | \underbrace{\text{dom}(c_j)}_{\#\text{possible messages of channel } c} |^{\overbrace{\text{cap}(c_j)}^{\text{capacity/buffer size of channel }c}}
+                        \end{align*}
+                    \item Exponential growth of states in number of channels and the capacity of channels
+                    \item State space explosion
+                \end{itemize}
+        \end{itemize}
+    \ides{State Transitions:}
+        \begin{itemize}
+            \item Statement can be \textbf{executable} or \textbf{blocked}
+                \begin{itemize}
+                    \item Send is blocked if channel is full
+                    \item \verb+s1;s2+ is blocked if \verb+s1+ is blocked
+                    \item \verb+timeout+ is executable if all other statements are blocked
+                \end{itemize}
+            \item Transitions is made in three steps
+                \begin{itemize}
+                    \item Determine all executable statements of all active processes
+                        \begin{itemize}
+                            \item If there are none, transition system gets stuck
+                        \end{itemize}
+                    \item Choose non-deterministically one of the executable statements
+                    \item Change the state according to the chosen statement
+                \end{itemize}
+        \end{itemize}
+    \ides{Expressions}
+        \begin{itemize}
+            \item Variables, constants and literals
+            \item Structure and array accesses
+            \item Unary and binary expression with operators
+                \begin{itemize}
+                    \item \verb@+ - * / % > >= < <= == != ! & || && | ~ >> << ^ ++ --@
+                \end{itemize}
+            \item Function applications
+                \begin{itemize}
+                    \item \verb+len() empty() nempty() nfull() full() run eval() enable() pcvalue()+
+                \end{itemize}
+            \item Conditional expressions \verb+(E1 -> E2 : E3)+
+        \end{itemize}
+    \ides{Statements}
+        \begin{itemize}
+            \ides{skip}
+                \begin{itemize}
+                    \item Does not change the state
+                    \item Always executable
+                \end{itemize}
+            \ides{timeout}
+                \begin{itemize}
+                    \item Does not change the state
+                    \item Executable if all other statements in the system are blocked
+                \end{itemize}
+            \ides{assert(E)}
+                \begin{itemize}
+                    \item Aborts execution if expression \verb+E+ evaluates to zero and otherwise equivalent to \verb+skip+
+                    \item Always executable
+                \end{itemize}
+            \ides{Assignment}
+                \begin{itemize}
+                    \item \verb+x = E+ assigns the value of \verb+E+ to variable \verb+x+
+                    \item \verb+a[n] = E+ assigns the value of \verb+E+ to array element \verb+a[n]+
+                    \item Always executable
+                \end{itemize}
+            \ides{Sequential composition}
+                \begin{itemize}
+                    \item \verb+s1;s2+ is executable if \verb+s1+ is executable
+                \end{itemize}
+            \ides{Expression statement}
+                \begin{itemize}
+                    \item Evaluates expression \verb+E+
+                    \item Executable if \verb+E+ evaluates to a value different form zero
+                    \item \verb+E+ must not change state
+                \end{itemize}
+            \ides{Selection}
+                \begin{itemize}
+                    \item
+\begin{verbatim}
+if
+:: s1
+:: ...
+:: s=
+fi
+\end{verbatim}
+                    \item Executable if at least one of its options is executable
+                    \item Chooses an option non-deterministically and executes it
+                    \item Optional statement \verb+else+ is executed if non of the other options is
+                \end{itemize}
+            \ides{Repetition}
+                \begin{itemize}
+                    \item
+\begin{verbatim}
+do
+:: s1
+:: ...
+:: sn
+od
+\end{verbatim}
+                    \item Executable if at least on of its options is executable
+                    \item Chooses repeatedly an option non-deterministically and executed it
+                    \item Terminates when a \verb+break+ or \verb+goto+ is executed
+                \end{itemize}
+            \ides{Atomic}
+                \begin{itemize}
+                    \item Basic statements are executed atomically
+                        \begin{itemize}
+                            \item Includes \verb+skip, timeout, assert+, assignment, expression statement
+                        \end{itemize}
+                    \item \verb+atomic{s}+ executes \verb+s+ atomically
+                    \item Executable if the first statement of \verb+s+ is executable
+                    \item If any other statement within \verb+s+ blocks once the execution of \verb+s+ has started, atomicity is lost
+                \end{itemize}
+        \end{itemize}
+    \ides{Macros}
+        \begin{itemize}
+            \item Does not contain procedures
+                \begin{itemize}
+                    \item Can most of the time be achieved with macros
+                \end{itemize}
+            \item String replacement as in C
+        \end{itemize}
+    \ides{Channels}
+        \begin{itemize}
+            \item Declare \verb+chan ch = [d] of {t1, ..., tn}+
+            \item Buffer up to $d$ messages
+                \begin{itemize}
+                    \ides{$\mathbf{d > 0}$:} FIFO buffer channel
+                    \ides{$\mathbf{d = 0}$:} Rendez-vous unbuffered channel
+                \end{itemize}
+            \item Each message is a tuple whose elements are of type \verb+t1, ..., tn+
+            \ides{Buffered Channel:}
+                \begin{itemize}
+                    \ides{Send Message}
+                        \begin{itemize}
+                            \item \verb+ch ! e1, ..., en+
+                            \item Type of \verb+ei+ musts match type \verb+ti+ of channel declaration
+                            \item Executable iff buffer is not full
+                        \end{itemize}
+                    \ides{Receive Message}
+                        \begin{itemize}
+                            \item \verb+ch ? a1, ..., an+
+                            \item \verb+ai+ is a variable or constant of type \verb+ti+
+                            \item Executable iff buffer is not empty and oldest message in the buffer matches the constants \verb+ai+
+                            \item Variables \verb+ai+ are assigned values of the message
+                        \end{itemize}
+                \end{itemize}
+            \ides{Unbuffered Channel:}
+                \begin{itemize}
+                    \item Models synchronous communication
+                    \ides{Send Message}
+                        \begin{itemize}
+                            \item \verb+ch ! e1, ..., en+
+                            \item Executable is there is a receive operation that can be executed simultaneously
+                        \end{itemize}
+                    \ides{Receive Message}
+                        \begin{itemize}
+                            \item \verb+ch ? a1, ..., an+
+                            \item Executable if there is a send operation that can be executed simultaneously
+                        \end{itemize}
+                \end{itemize}
+        \end{itemize}
+\end{itemize}
+
+\subsection{Linear Temporal Logic (LTL)}
+\begin{itemize}
+    \item Many interesting properties relate several states
+    \ides{Transition System}
+        \begin{itemize}
+            \item Slightly different from what we are used to
+            \item Tuple $(\Gamma, \sigma_I, \to)$
+                \begin{itemize}
+                    \ides{$\mathbf{\Gamma}$:} Finite set of configurations
+                        \begin{itemize}
+                            \item Different is that now it is finite
+                        \end{itemize}
+                    \ides{$\mathbf{\sigma_I}$:} Internal configuration
+                        \begin{itemize}
+                            \item $\sigma_I \in \Gamma$
+                            \item Different is that we only consider the initial configuration
+                            \item Terminal configuration can be modelled by introducing a special \textbf{sink state} which cannot be left again
+                        \end{itemize}
+                    \ides{$\mathbf{\to}$:} transition relation
+                        \begin{itemize}
+                            \item $\to \subseteq \Gamma \times \Gamma$
+                        \end{itemize}
+                \end{itemize}
+            \ides{Promela Model}
+                \begin{itemize}
+                    \item Configurations are just states
+                        \begin{itemize}
+                            \item We no not need statement since this is appointed by the location counter
+                        \end{itemize}
+                    \item The initial configuration is the initial state
+                        \begin{itemize}
+                            \item Init process is active
+                            \item Everything is initialized to zero-equivalent
+                        \end{itemize}
+                    \item Transition relation is defined by OS statements
+                    \item Promela model has a finite number of states
+                        \begin{itemize}
+                            \item Still very large, but finite
+                        \end{itemize}
+                \end{itemize}
+        \end{itemize}
+    \ides{Computations}
+        \begin{itemize}
+            \item $S^\omega$ is a infinite sequence of elements of the set $S$
+                \begin{itemize}
+                    \item $s_{[i]}$ is the $i$-th element is this sequence
+                    \item Opposed to $S^*$ which is a finite sequence
+                \end{itemize}
+            \ides{Computation:} Infinite sequence $\gamma \in \Gamma^\omega$ of states for which:
+                \begin{itemize}
+                    \item $\gamma_{[0]} = \sigma_I$
+                    \item $\gamma_{[i]} \to \gamma_{[i+1]}, i \ge 0$
+                \end{itemize}
+            \item $\mc{C}(TS)$ is the set of all computations of a transition system TS
+        \end{itemize}
+    \ides{Linear-Time Properties (LT-Properties)}
+        \begin{itemize}
+            \item Limits the permitted computations of a transition system
+            \item $P \subseteq \Gamma^\omega$
+            \item $\text{TS} \models P \iff \mc{C}(\text{TS}) \subseteq P$
+                \begin{itemize}
+                    \item All computations of TS belong to the set $P$
+                \end{itemize}
+            \item LT-properties express properties of computations
+                \begin{itemize}
+                    \item Non-termination is handled by infinite sequences
+                    \item Non-determinism is handled by considering each computation separately
+                \end{itemize}
+            \item Try to simplify it more
+            \ides{Atomic Propositions (AP):} Set of properties we care about
+                \begin{itemize}
+                    \item Called atomic since they contain no logical connectives
+                \end{itemize}
+            \ides{Labeling Function:} Maps configurations to sets of atomic propositions from AP
+                \begin{itemize}
+                    \item $L : \Gamma \to \mc{P}(AP)$
+                    \item $\mc{P}$ is the powerset. Once configuration can be  part of multiple APs
+                    \ides{Abstract State:} $L(\sigma)$ labeled state
+                \end{itemize}
+            \item We consider AP and L as part of the system
+                \begin{itemize}
+                    \item We have a $5$-tuple instead of tripple
+                \end{itemize}
+            \ides{Trace}
+                \begin{itemize}
+                    \item Abstraction of a computation
+                    \item Infinite sequence of abstract states
+                        \begin{itemize}
+                            \item $\mc{P}(\text{AP})^\omega$
+                        \end{itemize}
+                    \item $t \in \mc{P}(AP)^\omega$ is a trace of transition system TS if $t = L(\gamma_{[0]})L_{\gamma_{[1]}} \dots$ and $\gamma$ is a computation of TS
+                    \item $\mc{T}(\text{TS})$ set of all traces of transition system TS
+                \end{itemize}
+            \ides{Safety Properties}
+                \begin{itemize}
+                    \item I.e. something bad is never allowed to happen
+                        \begin{itemize}
+                            \item And once it happened, it cannot be fixed
+                        \end{itemize}
+                    \item LT-property $P$ is a safety property if for all infinite sequences $t \in \mc{P}(\text{AP})^\omega$: if $t \notin P$, then there is a finite prefix $\hat{t}$ of $t$ such that every infinite sequence $t'$ with prefix $\hat{t}, t' \notin P$
+                    \ides{Bad Prefix $\hat{t}$:} Finite sequence which already violates the property
+                        \begin{itemize}
+                            \item Even if the violation only happens after the sequence
+                        \end{itemize}
+                    \item Safety properties are violated in finite time
+                        \begin{itemize}
+                            \item Even if the sequence is infinite
+                            \item Can be tested
+                        \end{itemize}
+                \end{itemize}
+            \ides{Liveness Properties}
+                \begin{itemize}
+                    \item I.e. something good will happen eventually
+                    \item LT-property $P$ is a liveness property if all finite sequences $\hat{t} \in \mc{P}(\text{AP})^*$ are a prefix of an infinite sequence $t \in P$
+                        \begin{itemize}
+                            \item Every finite prefix can be extended to an infinite sequence which is in $P$
+                        \end{itemize}
+                    \item Liveness properties are violated in infinite time
+                        \begin{itemize}
+                            \item Cannot be tested
+                        \end{itemize}
+                \end{itemize}
+        \end{itemize}
+    \ides{Linear Temporal Logic (LTL)}
+        \begin{itemize}
+            \item Logic which makes it easy to reason about LT-properties
+            \item Fully blown logic
+            \ipro Whether or not a trace of a finite transition system satisfies an LTL formula is decidable
+            \item Reasons about traces and not single states
+            \ides{Syntax:}
+                \begin{itemize}
+                    \item $\phi = p \mid \neg \phi \mid \phi \wedge \phi \mid \underbrace{\phi \text{U} \phi}_{\text{until}} \mid \underbrace{\bigcirc \phi}_{\text{next}}$
+                        \begin{itemize}
+                            \item Where $p$ is a proposition from a chosen set of atomic propositions $\text{AT} \neq \emptyset$
+                        \end{itemize}
+                \end{itemize}
+            \ides{Semantics:}
+                \begin{itemize}
+                    \item Trace $t \in \mc{P}(\text{AP})^\omega$ satisfies LTL formula $\phi$: $t \models \phi$
+                    \item $t_{(\ge i)}$ is the suffix of $t$ starting at $t_i$
+                    \item
+\begin{align*}
+    &t \models p &\text{iff }  p \in t_{[0]}\\
+    &t \models \neg \phi &\text{iff not } t \models \phi\\
+    &t \models \phi \wedge \psi &\text{iff } t \models \phi \text{ and } t \models \phi\\
+    &t \models \phi \text{U} \psi &\text{iff } \exists k \ge 0, t_{(\ge k)} \models \psi \text{ and } t_{(\ge j)} \models \phi \ \forall j, 0 \le j < k\\
+    &t \models \bigcirc \phi &\text{iff } t_{(\ge 1)} \models \phi
+\end{align*}
+                \end{itemize}
+            \ides{Derived Operators:}
+                \begin{itemize}
+                    \item $\text{true, false}, \vee, \implies, \iff$ are defined as usual
+                    \ides{Eventually:} $\Diamond \phi \equiv (\text{true U} \phi)$
+                    \ides{Always from now:} $\Box \phi \equiv \neg \Diamond \neg \phi$
+                    \ides{Precedence:} Unary over binary
+                    \ides{Specification Patterns:}
+                        \begin{itemize}
+                            \ides{Strong Invariant:} $\Box \psi$
+                                \begin{itemize}
+                                    \item $\psi$ always holds
+                                    \item Safety property
+                                \end{itemize}
+                            \ides{Monotone Invariant:} $\Box (\psi \implies \Box \psi)$
+                                \begin{itemize}
+                                    \item Once $\psi$ is true, then $\psi$ is always true
+                                    \item Safety property
+                                \end{itemize}
+                            \ides{Establishing an invariant:} $\Diamond \Box \psi$
+                                \begin{itemize}
+                                    \item Eventually $\psi$ will always hold
+                                    \item Liveness property
+                                \end{itemize}
+                            \ides{Responsiveness:} $\Box (\psi \implies \Diamond \phi)$
+                                \begin{itemize}
+                                    \item Every time that $\psi$ holds, $\phi$ will eventually hold
+                                    \item Liveness property
+                                \end{itemize}
+                            \ides{Fairness:} $\Box \Diamond \psi$
+                                \begin{itemize}
+                                    \item $\psi$ holds infinitely often
+                                    \item Liveness property
+                                \end{itemize}
+                        \end{itemize}
+                \end{itemize}
+            \ides{Model Checking}
+                \begin{itemize}
+                    \item Given a finite transition system TS and a LTL formula $\phi$, decide whether $t \models \phi$ for all $t \in \mc{T}(\text{TS})$
+                        \begin{itemize}
+                            \item I.e. $\mc{T}(\text{TS}) \subseteq P(\phi)$
+                        \end{itemize}
+                    \item Hard because traces are in general infinite
+                    \ides{Checking Safety Properties:}
+                        \begin{itemize}
+                            \item Violation is observed in an finite prefix
+                            \ides{Idea:}
+                                \begin{itemize}
+                                    \item Characterize all finite prefixes of the traces of the transition system using a finite automata
+                                        \begin{itemize}
+                                            \item In TS labels are on the states where there are on the transittons for the FA
+                                            \item FA is Tuple $(Q, \sum, \delta, Q_0, F)$
+                                                \begin{itemize}
+                                                    \ides{$Q$:} finite set of states
+                                                    \ides{$\sum$:} finite alphabet
+                                                    \ides{$\delta$:} transition relation
+                                                        \begin{itemize}
+                                                            \item $\delta \subseteq Q \times \sum \times Q$
+                                                        \end{itemize}
+                                                    \ides{$Q_0 \subseteq Q$:} initial state
+                                                    \ides{$F \subseteq Q$:} accepting states
+                                                \end{itemize}
+                                            \item Given transition system $TS = (\Gamma, \sigma_I, \to)$ we define NFA $\mc{F} \ \mc{A}_{\text{TS}}$ characterizing all finite prefixes $\mc{T}_{\text{fin}}(\text{TS})$ of the traces of TS
+                                            \item $\mc{F} \ \mc{A}_{\text{TS}} = (Q, \sum, \delta, Q_0, F)$
+                                                \begin{itemize}
+                                                    \item $Q = \Gamma \cup \{\sigma_0\}, \sigma_0 \notin \Gamma$
+                                                    \item $\sum = \mc{P}(\text{AP})$
+                                                    \item $\delta = \{ (\sigma, p, \sigma') \mid \sigma \to \sigma' \text{ and } p = L(\sigma')\} \cup \{(\sigma_0, p, \sigma_I) \mid p = L(\sigma_I)\}$
+                                                    \item $Q_0 = \{\sigma_0\}$
+                                                    \item $F = Q$
+                                                \end{itemize}
+                                        \end{itemize}
+                                    \item Check whether any of them violates the safety property
+                                        \begin{itemize}
+                                            \item Manual checking possible for simple FA
+                                            \item Automatic checking not possible
+                                        \end{itemize}
+                                \end{itemize}
+                            \ides{Regular Safe Properties:}
+                                \begin{itemize}
+                                    \item Restriction
+                                    \item Safety property is regular if its bad prefixes are described by a regular language over the alphabet $\mc{P}(\text{AP})$
+                                    \item Every invariant over AP is a regular safety property
+                                    \ides{Checking Regular Safety Properties:}
+                                        \begin{itemize}
+                                            \item Describe finite prefixes $\mc{T}_{\text{fin}}(\text{TS})$ by finite automate $\mc{F} \ \mc{A}_{\text{TS}}$
+                                            \item Describe bad prefixes of regular safety property $P$ by finite automata $\mc{F} \ \mc{A}_{\ob{P}}$
+                                            \item Construct finite automata for product of $\mc{F} \ \mc{A}_{\text{TS}}$ and $\mc{F} \ \mc{A}_{\ob{P}}$
+                                                \begin{itemize}
+                                                    \item Product corresponds to the intersection of both FA
+                                                        \todo{describe construction}
+                                                \end{itemize}
+                                            \item Check if resulting automaton has any reachable accepting states
+                                                \begin{itemize}
+                                                    \item If not, property $P$ is never violated in traces of TS
+                                                    \item If yes, the property $P$ is violated
+                                                        \begin{itemize}
+                                                            \item Counterexample is any accepted word by the automata
+                                                        \end{itemize}
+                                                \end{itemize}
+                                        \end{itemize}
+                                \end{itemize}
+                            \item So far we can not check non-regular safety properties and liveness properties
+                        \end{itemize}
+                    \ides{$\omega$-Regular Languages}
+                        \begin{itemize}
+                            \item Denote languages of infinite works
+                            \item Expression $G$ has the form $G = E_1F_1^\omega + \dots + E_nF_n^\omega \ (1 \le n)$
+                                \begin{itemize}
+                                    \item $E_i$ and $F_i$ are regular expression
+                                    \item $+$ means or
+                                \end{itemize}
+                            \ides{Büchi Automata (NBA)}
+                                \begin{itemize}
+                                    \item Very similar to FA
+                                    \item Accept infinite words
+                                    \item Accepted language agrees with the class of $\omega$-regular languages
+                                    \item Non-deterministic
+                                    \item Tuple $(Q, \sum, \delta, Q_0, F)$
+                                        \begin{itemize}
+                                            \ides{$Q$:} finite set of states
+                                            \ides{$\sum$:} finite alphabet
+                                            \ides{$\delta$:} transition relation
+                                                \begin{itemize}
+                                                    \item $\delta \subseteq Q \times \sum \times Q$
+                                                \end{itemize}
+                                            \ides{$Q_0 \subseteq Q$:} initial state
+                                            \ides{$F \subseteq Q$:} accepting states
+                                        \end{itemize}
+                                    \item Accept word if it passes infinitely often through an accepting state
+                                \end{itemize}
+                            \ides{Checking:}
+                                \begin{itemize}
+                                    \item Describe traces $\mc{T}(\text{TS})$ by NBA $\mc{B} \ \mc{A}_{\text{TS}}$
+                                    \item For an LTL formula $\phi$, construct NBA $\mc{B} \ \mc{A}_{\neg \phi}$ that accepts the traces (i.e. the bad traces) characterized by $\neg \phi$
+                                    \item Construct NBA for products of $\mc{B} \ \mc{A}_{\text{TS}}$ and $\mc{B} \ \mc{A}_{\neg \phi}$
+                                    \item Check whether the language accepted by product NBA is empty
+                                        \begin{itemize}
+                                            \item If language is non-empty, property $\phi$ is violated
+                                            \item Each word in the language is a counterexample
+                                        \end{itemize}
+                                \end{itemize}
+                        \end{itemize}
+                    \ides{Complexity}
+                        \begin{itemize}
+                            \item For a finite transition system TS and an LTL formula $\phi$ the model checking problem $\text{TS} \models \phi$ is solvable in $\bigO(| \text{TS} | \times 2^{|\phi|}$
+                                \begin{itemize}
+                                    \item $|\text{TS}|$: size of the transition system
+                                        \begin{itemize}
+                                            \item Grows exponentially in the number of variables, processes and channels
+                                        \end{itemize}
+                                    \item $| \phi |$: size of $\phi$
+                                        \begin{itemize}
+                                            \item Grows exponentially tue to the construction of the $\mc{B} \ \mc{A}_{\neg \phi}$
+                                        \end{itemize}
+                                \end{itemize}
+                        \end{itemize}
+                \end{itemize}
+        \end{itemize}
+\end{itemize}

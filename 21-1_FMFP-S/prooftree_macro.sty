@@ -1,0 +1,31 @@
+% Credits to http://people.inf.ethz.ch/summersa/wiki/doku.php?id=research:public:macros
+% For a rule with no name: \Inf{premise_1}{premise_2}…{premise_n}{conclusion}
+% For a rule with a name: \Inf[rulename]{premise_1}{premise_2}…{premise_n}{conclusion}
+% For a rule with a name and subscript: \Inf[rulename][superscript_text]{premise_1}{premise_2}…{premise_n}{conclusion}
+% For a rule with too many premices: \Inf[name]{p1}{p2}{p3}.{p4}{p5}{c}
+
+\ProvidesPackage{prooftree_macro}
+
+\makeatletter
+
+\newskip \point
+
+\point =1pt
+
+\def \premisespacing{\quad}
+
+\def \RulePremisesNewlineMore[#1]#2.#3#4{\@ifnextchar\bgroup{\RulePremisesNewlineMore[#1]{#2}.{#3\premisespacing#4}}{\@ifnextchar.{\RulePremisesNewline[#1]{{\begin{array}{c}#2\\#3\premisespacing#4\end{array}}}}{\RuleMultiPremise[#1]{{\begin{array}{c}#2\\#3\end{array}}}{#4}}}}
+
+\def \RulePremisesNewline[#1]#2.#3{\@ifnextchar\bgroup{\RulePremisesNewlineMore[#1]{#2}.{#3}}{\@ifnextchar.{\RulePremisesNewline[#1]{{\begin{array}{c}#2\\#3\end{array}}}}{\RuleMultiPremise[#1]{#2}{#3}}}}
+
+\def \RuleMultiPremise[#1]#2#3{\@ifnextchar\bgroup{\RuleMultiPremise[#1]{#2\premisespacing#3}}{\@ifnextchar.{\RulePremisesNewline[#1]{#2\premisespacing#3}}{\prooftree #2\justifies#3 \using{#1}\endprooftree}}}
+
+\def \RuleWithName[#1]#2{\@ifnextchar\bgroup {\RuleMultiPremise[#1]{#2}}{\@ifnextchar.{\RulePremisesNewline[#1]{#2}}{\prooftree \justifies #2 \using{#1} \endprooftree}}}
+
+\def \RuleWithInfo[#1]{\@ifnextchar[{\RuleWithNameAndCondition[#1]}{\RuleWithName[(#1)]}}
+
+\def \RuleWithNameAndCondition[#1][#2]{\RuleWithName[(#1)^{#2}]}
+
+\def \Inf{\proofrulebaseline=2ex \abovedisplayskip12\point\belowdisplayskip12\point \abovedisplayshortskip8\point\belowdisplayshortskip8\point \@ifnextchar[{\RuleWithInfo}{\RuleWithName[ ]}}
+
+\makeatother

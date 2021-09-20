@@ -1,0 +1,104 @@
+%! TEX root = ./main.tex
+
+\section{Lists}
+\subsection{Introduction}
+\begin{itemize}
+    \ides{List Type:} If \verb+T+ is a type then \verb+[T]+ is a type
+        \begin{itemize}
+            \item Is a new type constructor
+        \end{itemize}
+    \ides{Empty List:} \verb+[] :: [T]+
+    \ides{Non-Empty List:} \verb+(x : xs) :: [T]+ iff \verb+x :: T+ and \verb+xs :: [T]+
+        \begin{itemize}
+            \ides{Cons Operator:} \verb+:+ prepends an element to a list
+                \begin{itemize}
+                    \ides{Concatenate:} \verb|++| concatenates two lists
+                \end{itemize}
+            \item \verb+[a, b, c]+ is syntactic sugar for \verb+a : (b : (c : []))+
+        \end{itemize}
+    \item \verb+[n, p .. m]+ constructs a list from \verb+n+ to \verb+m+ with step \verb+p - n+
+        \begin{itemize}
+            \item \verb+p+ is optional; Default step is \verb+1+
+            \item Can be seen as, ``First element is \verb+n+, second element is \verb+p+, continue like this till \verb+m+''
+            \item \verb+m+ is not necessarily included
+        \end{itemize}
+    \item String is a list of chars
+        \begin{itemize}
+            \item \verb+['a', 'b'] == "ab"+
+        \end{itemize}
+\end{itemize}
+
+\subsection{Sorting Algorithms}
+\begin{itemize}
+    \ides{Insertion Sort}
+\begin{verbatim}
+isort :: [Int] -> [Int]
+isort [] = []
+isort (x: xs) = ins x (isort xs)
+
+ins :: Int -> [Int] -> [Int]
+ins a [] = [a]
+ins a (x: xs)
+    | a <= x = a : (x: xs)
+    | otherwise = x : ins a xs
+\end{verbatim}
+    \ides{Quick Sort (long form)}
+\begin{verbatim}
+qsort :: [Int] -> [Int]
+qsort [] = []
+qsort (x: xs) = qsort ( lesseq x xs) ++ [x] ++ qsort (greater x xs)
+where
+    lesseq _ [] = []
+    lesseq x (y: ys)
+        | y <= x = y : lesseq x ys
+        | otherwise = lesseq x ys
+    greater _ [] = []
+    greater x (y: ys)
+    | y >x = y : greater x ys
+    | otherwise = greater x ys
+\end{verbatim}
+    \ides{Quick Sort (short form)}
+\begin{verbatim}
+q :: [Int] -> [Int]
+q [] = []
+q (p:xs) = q [x | x <- xs, x <= p] ++ [p] ++ q [x | x <- xs, x > p]
+\end{verbatim}
+\end{itemize}
+
+\subsection{List Comprehension}
+\begin{itemize}
+    \item Notation for sequential processing of list elements
+    \item Analogous to set comprehension in set theory
+    \item General form: \verb+[func x | <gen_1>, ... , <gen_n>, <pred_1, ..., <pred_m>]+
+    \item Generators can depend on each other
+        \begin{itemize}
+            \item E.g. \verb+[x | n <- [1..10], x <- [1..n]]+
+        \end{itemize}
+    \item Generators can depend on if then else
+        \begin{itemize}
+        \item E.g. \verb+[x | n <- [1..10], if even x then x <- [1,2] else x <- [1]]+
+        \end{itemize}
+    \item \todo{Add more handy dandy examples}
+\end{itemize}
+
+\subsection{Induction Over Lists}
+\begin{itemize}
+    \item Prove $P$ for all $xs$ in $[T]$
+        \begin{itemize}
+            \ides{Base Case:} prove $P[xs/[]]$
+            \ides{Step Case:} prove $\forall y :: T, ys :: [T]. P[xs/ys] \to P[xs/y:ys]$
+                \begin{itemize}
+                    \ides{Fix} arbitrary but non-free $y :: T, ys :: [T]$
+                    \ides{Induction Hypothesis:} Assume $P[xs/ys]$
+                \end{itemize}
+        \end{itemize}
+    \item Sometimes hard to pick right induction variable
+        \begin{itemize}
+            \item Proof may fail depending on the variable
+        \end{itemize}
+    \ides{Generalisation}
+        \begin{itemize}
+            \item Proof a stronger statement as a subproof
+            \item Required for some proofs
+        \end{itemize}
+\end{itemize}
