@@ -18,7 +18,7 @@ The repo contains all sources as well precompiled PDFs. Though, I cannot guarant
 | HS20     | System Programming and Computer Architectures | [📋](./20-2_SPCA-S)   | Complete but long                                                  |
 | FS21     | Formal Methods and Functional Programming     | 📋 ❌                 |                                                                    |
 | FS21     | Data Modelling and Dtabases                   | 📋 ❌                 |                                                                    |
-| FS21     | Computer Networks                             | 📋 ❌                 |                                                                    |
+| FS21     | Computer Networks                             | [📋](./21-1_CN-S)     |                                                                    |
 | FS21     | Wahrscheinlichkeit und Statistik              | 📈 ❌                 |                                                                    |
 
 
