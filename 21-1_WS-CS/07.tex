@@ -1,0 +1,102 @@
+%! TEX root = ./main.tex
+
+\section{Tests}
+\subsection{Grundbegriffe}
+\begin{itemize}
+    \item Wir haben eine Vermutung wo in $\Theta$ der richtige (aber unbekannte) Parameter $\vartheta$ liegen könnte, und wollten diese mit Hilfe der Daten überprüfen (``testen''). Das Grundproblem ist, eine Entscheidung zwischen zwei konkurrierenden Modellklassen zu treffen:
+        \begin{itemize*}
+            \ides{Hypothese} ($H_0$) $\Theta_0 \subseteq \Theta$
+            \ides{Alternative} ($H_A$) $\Theta_A \subseteq \Theta$
+        \end{itemize*}, wobei $\Theta_0 \cap \Theta_A = \emptyset$
+    \item Hypothese/Alternative heissen:
+        \begin{itemize}
+            \ides{Einfach:} falls $\Theta_0/\Theta_A$ aus einzelnem Wert $\vartheta_0/\vartheta_A$ bestehen
+            \ides{Zusammengesetzt:} Ansonsten
+        \end{itemize}
+    \ides{Test:} Eine Entscheidungsregel, die zu Daten $x_1, \dots, x_n \ 0$ oder $1$ zurück gibt
+        \begin{itemize}
+            \ides{$1$:} Hypothese $H_0$ wird abgelehnt
+            \ides{$0$:} Hypothese $H_0$ wird akzeptiert
+        \end{itemize}
+        Konkreter: Man hat eine Abbildung $t: \R^n \to \R$ und einen \textbf{kritischen Bereich} oder \textbf{Verwerfungsbereich} $K \subseteq \R$. Die ZV $T = t(X_1, \dots, X_n)$ heisst \textbf{Teststatistik}. Die Entscheidungsregel ist $I_{\{t(x_1, \dots, x_n) \in K\}}$
+        \ides{Fehler $\mathbf{1.}$ Art:} Hypothese zu unrecht abgelehnt: Passiert für $\vartheta \in \Theta_0$ und $T \in K$. $P_\vartheta[T \in K]$ für $\vartheta \in \Theta_0$ ist die WS für Fehler $1.$ Art.
+        \ides{Fehler $\mathbf{2.}$ Art:} Hypothese zu unrecht nicht verworfen: Passiert für $\vartheta \in \Theta_A$ und $T \notin K$. $P_\vartheta[T \notin K] = 1 - P_\vartheta[T \in K]$ für $\vartheta \in \Theta_A$ ist die WS für Fehler $2.$ Art.
+    \ides{Signifikanzniveau:} Grundsätzlich möchte man $\vartheta \mapsto P_\vartheta[T \in K]$ auf $\Theta_0$ möglichst klein und auf $\Theta_A$ möglichst gross haben. Da diese meist stetig ist und $\Theta_0$ und $\Theta_A$ meist nebeneinander liegen ist ein gleichzeitiges min-/maximieren von $\Theta_0/\Theta_A$ nicht möglich. Deshalb gibt es folgendes zweistufiges Vorgehen:
+        \begin{itemize}
+            \item[1)] Wähle \textbf{Signifikanzniveau} $\alpha \in (0, 1)$ und sorge für $\sup_{\vartheta \in \Theta_0} P_\vartheta[T \in K] \le \alpha$
+                \begin{itemize}
+                    \item D.h. man kontrolliere WS für Fehler 1. Art durch $\alpha$
+                    \item $\alpha$ wird kleiner $\implies$ WS für Fehler 1. Art wird kleiner $\implies$ Verwerfungsbereich wird kleiner $\implies$ Fehler 2. Art wird grösser $\implies$ Macht des Tests wird grösser
+                    \item $1 - \alpha$ ist die Wahrscheinlichkeit, dass $H_0$ unter $P_{\vartheta_0}$ beibehalten wird
+                \end{itemize}
+            \item[2)] Versuche \textbf{Macht} des Tests $\beta: \Theta_A \to [0, 1], \beta(\vartheta) := P_\vartheta[T \in K]$ möglichst gross zu bekommen, soweit möglich
+                \begin{itemize}
+                    \item D.h. WS für Fehler 2. Art möglich klein
+                \end{itemize}
+            \item Dieses asymmetrische Vorgehen macht es schwieriger die Hypothese zu verwerfen als beizubehalten. Ein seriöser Test wird deshalb immer die Negation der gewünschten Aussage benutzen.
+        \end{itemize}
+\end{itemize}
+
+\subsection{Konstruktion von Tests}
+\subsubsection{Likelihood-Quotient (LQ)}
+Sein $L(x_1, \dots, x_n)$ die Likelihood-Funktion. Für $\vartheta_0 \in \Theta_0$ und $\vartheta_A \in \Theta_A$ betrachten wir den LQ: $R(x_1, \dots, x_n; \vartheta_0, \vartheta_A) := \frac{L(x_1, \dots, x_n; \vartheta_A)}{L(x_1, \dots, x_n; \vartheta_0)}$. Ist der LQ gross bedeutet dies, dass die Beobachtungen $x_1, \dots, x_n$ als Resultate im Modell $P_{\vartheta_A}$ deutlich wahrscheinlicher sind als im Modell $P_{\vartheta_0}$. Es liegt deshalb nahe $T:= R(X_1, \dots, X_n; \vartheta_0, \vartheta_A)$ und $K := (c, \infty)$ zu wählen, wenn man $\vartheta_0$ gegen $\vartheta_A$ testen will
+\begin{itemize}
+    \item D.h. $R$ gross $\implies$ wir verwerfen $H_0$
+    \item Häufig nimmt man nicht den ganzen Quotienten als Test, sondern nur den Teil, welcher $R$ gross mach
+    \item Sind Hypothese und Alternative beide einfach, so ist dieser Test optimal.
+\end{itemize}
+
+\subsubsection{Neyman-Pearson-Lemma}
+Seien $\Theta_0 = \{\vartheta_0\}$ und $\Theta_A = \{\vartheta_A\}$. Wie oben sei $T := R(X_1, \dots, X_n; \vartheta_0, \vartheta_A)$ und $K = (c, \infty)$ sowie $\alpha^* := P_{\vartheta_0}[T \in K] = P_{\vartheta_0}[T > c]$. Der LQ-Test mit $T$ und $K$ ist dann im folgenden Sinn optimal: Jeder andere Test mit Signifikanzniveau $\alpha \le \alpha^*$ hat kleiner Macht, bzw. eine grössere WS für Fehler 2. Art.
+\begin{itemize}
+    \ides{Formaler:} Ist $(T', K')$ einer anderer Test mit $P_{\vartheta_0}[T' \in K'] \le \alpha^* = P_{\vartheta_0}[T \in K]$, so gilt auch $P_{\vartheta_A}[P' \in K'] \le P_{\vartheta_A}[T \in K]$
+\end{itemize}
+
+\subsubsection{Test bei zusammengesetzten $\vartheta_0/\vartheta_A$}
+Bei zusammengesetzten $\vartheta_0/\vartheta_A$ betrachtet man den \textbf{verallgemeinterten LQ} $R(x_1, \dots, x_n) := \frac{\sup_{\vartheta \in \Theta_A} L(x_1, \dots, x_n; \vartheta)}{\sup_{\vartheta \in \Theta_0}L(x_1, \dots, x_n; \vartheta)}$ oder auch $\overset{\sim}{R}(x_1, \dots, x_n) := \frac{\sup_{\vartheta \in \Theta_A \cup \Theta_0} L(x_1, \dots, x_n; \vartheta)}{\sup_{\vartheta \in \Theta_0}L(x_1, \dots, x_n; \vartheta)}$. Und wählt als Teststatistik $T_0 := R(X_1, \dots, X_n)$ bzw. $\overset{\sim}{T} := \overset{\sim}{R}(X_1, \dots, X_n)$ mit $K_0 = (c_0, \infty)$. $c_0$ bzw. $K_0$ wählt man so, dass das gewünschte Signifikanzniveau $\alpha$ eingehalten wird.
+
+\subsection{Beispiele}
+\subsubsection{z-Test (Test für EW bei bekannter Var)}
+Sind $X_1, \dots, X_n$ i.i.d. $\sim \mc{N}(\mu, \sigma^2)$ unter $P_\vartheta$ mit bekannter Var $\sigma^2$, und wir wollen die Hypothese $H_0: \vartheta = \vartheta_0$ testen. Mögliche Alternativen $H_A$ sind $\vartheta > \vartheta_0$ oder $\vartheta < \vartheta_0$ (\textbf{einseitig}) oder $\vartheta \neq \vartheta_0$ (\textbf{zweiseitig}). Die Teststatistik ist $T := \frac{\overline{X}_n - \vartheta_0}{\frac{\sigma}{\sqrt{n}}} \sim \mc{N}(0, 1)$ unter $P_{\vartheta_0}$. Der kritische Bereich $K$ ist von der Form $(c_>, \infty)$, $(-\infty, c_<)$, bzw. $(-\infty, -c_{\neq}) \cup (c_{\neq}, + \infty)$. Die Konstanten $c_>, c_<, c_{\neq}$ bestimmt man zum gewählten Niveau mit Hilfe der Verteilung von $T$ unter $P_{\vartheta_0}$. Zum Beispiel liefert die Bedingung $\alpha = P_{\vartheta_0}[T \in K_>] = P_{\vartheta_0}[T > c_>] = 1 - P_{\vartheta_0}[T \le c_>] = 1 - \Phi(c_>)$, dass $c_> = \Phi^{-1}(1 - \alpha) =: z_{1 - \alpha}$ das sogenannte $(1 - \alpha)$-\textbf{Quantil} der $\mc{N}(0, 1)$ Verteilung sein muss; Für $\vartheta > \vartheta_0$ verwirft man $H_0$, falls $\overline{X}_n > \vartheta_0 + z_{1 - \alpha} \frac{\sigma}{\sqrt{n}}$ ist. Analog ist $c_< = z_\alpha = -z_{1 - \alpha}$ und $c_{\neq} = z_{1 - \frac{\alpha}{2}}$, wobei wir die Symmetrie der $\mc{N}(0, 1)$ Verteilung ausnutzen; Es gilt nämlich $\alpha = P_{\vartheta_0}[t < c_<] = P_{\vartheta_0}[T > -c_<]$ für $-c_< = z_{1 - \alpha}$ und $\alpha = P_{\vartheta_0}[T \in K_{\neq}] = P_{\vartheta_0} [T < -c_{\neq}] + P_{\vartheta_0}[T > c_{\neq}] = \Phi(-c_{\neq}) + 1 - \Phi(c_{\neq}) = 2 - 2\Phi(c_{\neq}))$
+
+\subsubsection{t-Test (Test für EW bei unbekannter Var)}
+Sind $X_1, \dots, X_n$ i.i.d. $\sim \mc{N}(\mu, \sigma^2)$ unter $P_{\overrightarrow{\vartheta}}$ wobei $\overrightarrow{\vartheta} = (\mu, \sigma^2)$ und die Var $\sigma^2$ ist unbekannt. Wir wollen die Hypothese $\mu = \mu_0$ testen. Explizit: $\Theta_0 = \{\mu_0\} \times (0, \infty) = \{\overrightarrow{\vartheta} = (\mu, \sigma^2) \mid \mu = \mu_0\}$. Die Teststatistik ist $T := \frac{\overline{X}_n - \mu_0}{\frac{S}{\sqrt{n}}} \sim t_{n - 1}$ unter $P_{\vartheta_0}$. Wir ersetzen unbekannte Var durch Schätzer $S^2 = \frac{1}{n - 1} \sum_{i=1}^{n} (X_i - \overline{X}_n)^2$ für $\sigma^2$.
+Der Kritische Bereich hat eine der drei Formen aus dem letzten Beispiel; die kritischen Werte hier sind $c_> = t_{n - 1, 1 - \alpha}$, bzw. $c_< = t_{n - 1, \alpha} = -t_{n - 1, 1 - \alpha}$, bzw $c_{\neq} = t_{n - 1, 1 - \frac{\alpha}{2}}$. Hier bezeichnen wir mit $t_{m, \gamma}$ das $\gamma$-\textbf{Quantil} einer $t_m$-Verteilung, d.h. denjenigen Wert $t_{m, \gamma}$, für den gilt $P[X \le t_{m, \gamma}] = \gamma$ für $X \sim t_m$. Diese Werte findet man in Tabellen.
+
+\subsubsection{Gepaarter Zweistichproben-Test bei $\mc{N}$}
+Sind $X_1, \dots, X_n$ i.i.d. $\sim \mc{N}(\mu_X, \sigma^2)$ und $Y_1, \dots, Y_m$ i.i.d $\sim \mc{N}(\mu_Y, \sigma^2)$ unter $P_\vartheta$; insbesondere ist $m = n$ und die Varianz $\sigma^2$ bei beiden Stichproben dieselbe. In dieser Situation kann man Tests über den Vergleich von $\mu_X$ und $\mu_Y$ auf den Fall nur einer Strichprobe zurückführen; die Differenzen $Z_i = X_i - Y_i$ sind nämlich under $P_\vartheta$ i.i.d. $\sim \mc{N}(\mu_X - \mu_Y, 2 \sigma^2)$. Damit kann man t-Test/z-Test in leicht angepasster Form benutzen.
+
+\begin{itemize}
+    \item Es reicht zu fordern, dass $Z_i$ i.i.d. $\sim \mc{N}(\mu_X - \mu_Y, 2 (1 - \varrho)\sigma^2$ mit bekannter Korrelation $\varrho \in (-1, +1)$
+    \item Der Fall $\varrho = 0$ entspricht Unabhängigkeit
+\end{itemize}
+
+\subsubsection{Ungepaarter Zweistichproben-Test bei $\mc{N}$}
+Sind $X_1, \dots, X_n$ i.i.d. $\sim \mc{N}(\mu_X, \sigma^2)$ und $Y_1, \dots, Y_m$ i.i.d. $\sim \mc{N}(\mu_Y, \sigma^2)$ under $P_\vartheta$, wobei die Var in beiden Fällen dieselbe ist, aber $m \neq n$ sein kann. Will man einen Vergleich über $\mu_X$ und $\mu_Y$ testen, so kann man nicht mehr paarweise Differenzen bilden. Diesen Test muss man auch benutzen, falls zufällig $m = n$ ist, aber die Daten nicht natürlich gepaart sind. Wie nehmen immer noch an, dass $X_1, \dots, X_n$ und $Y_1, \dots, Y_m$ unabhängig sind.
+\begin{itemize}
+    \ides{Ungepaarter Zweistrichproblen-z-Test:} Ist $\sigma^2$ bekannt, so ist $T := \frac{(\overline{X}_n - \overline{Y}_m) - (\mu_X - \mu_Y)}{\sigma \sqrt{\frac{1}{n} + \frac{1}{m}}} \sim \mc{N}(0, 1)$ under jedem $P_\vartheta$. $\mu_X - \mu_Y$ ist durch Hypothese $H_0$ bekannt. Die kritischen Werte für den Verwerfungsbereich sind, wie oben, geeignete Quantile der $\mc{N}(0, 1)$-Verteilung.
+    \ides{Ungepaarter Zweistichproben-t-Test:} Ist $\sigma^2$ unbekannt, brauchen wir: \\
+    $S_X^2:= \frac{1}{n - 1} \sum_{i=1}^{n}(X_i - \overline{X}_n)^2$,
+    $S_Y^2:= \frac{1}{m - 1} \sum_{j=1}^{m}(Y_j - \overline{Y}_n)^2$. \\
+    Mit $S^2 := \frac{1}{m + n - 2}((n - 1)S_X^2 + (m - 1)S_Y^2) = \frac{1}{m + n - 2} (\sum_{i=1}^{n} (X_i - \overline{X}_n)^2 + \sum_{j=1}^{m}(Y_j - \overline{Y}_m)^2)$\\
+   Ist dann die Teststatistik\\
+   $T := \frac{(\overline{X}_n - \overline{Y}_m) - (\mu_X - \mu_Y)}{S \sqrt{\frac{1}{n} + \frac{1}{m}}} \sim t_{n + m - 2}$ unter jedem $P_\vartheta$. Der Rest geht analog wie oben.
+\end{itemize}
+
+\subsection{Der P-Wert}
+\begin{itemize}
+    \item Sei $X_1, \dots, X_n$ eine Stichprobe. Wir wollen eine Hypothese $H_0$ gegen eine Alternative $H_A$ testen. Bei einem Test zum Niveau $\alpha$ wird die Hypothese abgelehnt, wenn $T(\omega) = t(x_1, \dots, x_n)$ einen Wert in $K$ ergibt, und wir haben $P_{\vartheta_0} [T \in K] \le \alpha$. Alternativ kann man auch den sogenannten \textbf{p-Wert} berechnen. Sei $\overrightarrow{x} = (x_1, \dots, x_n)$ der Vektor unserer Daten und $\overrightarrow{X} = (X_1, \dots, X_n)$ unsere Stichprobe. Wir brauchen zuerst für jedes Niveau $\alpha \in [0, 1]$ einen Test $\phi_\alpha(\overrightarrow{x}) = I_{\{t(\overrightarrow{x}) \in K_\alpha\} }$ mit $T = t(\overrightarrow{X})$ und kritischen Bereich $K_\alpha$ mit $P_\vartheta[T \in K_\alpha] \le \alpha \ \forall \vartheta \in \Theta_0$. Zudem muss gelten, dass diese Tests kompatibel sind in dem Sinn, dass aus $\alpha' < \alpha$ immer folgt, dass $\phi_{\alpha'} \le \phi_\alpha$, d.h. falls man die Hypothese auf einem Niveau $\alpha$ nicht verwirft, so kann man sie auf einem kleineren Niveau $\alpha'$ auch nicht verwerfen. Dann definieren wir $\pi(\overrightarrow{x}) := \inf \{\alpha \in [0, 1] \mid \phi_\alpha(\overrightarrow{x}) = 1\}$, und der p-Wert ist dann gegeben durch; p-Wert $= \pi(\overrightarrow{X})$. Wie die Stichprobe ist der p-Wert eine ZV weil er von den Daten abhängt.
+    \item Ist der Test zweiseitig betrachtet man $|T| \le t$ resp. $|T| \ge t$
+    \item Ist der Test einseitig betrachtet man $T \le t$ resp. $T \ge t$
+    \item $t$ ist dabei der realisierte Wert der Stichprobe
+\end{itemize}
+
+\subsection{Test Rezept}
+\begin{itemize}[leftmargin=0.35cm]
+    \item[1)] Wahl des Modells
+    \item[2)] Formulierung von Hypothese und Alternativ
+    \item[3)] Bestimmung der Teststatistik $T$ und der Form des kritischen Bereichs $K$; das kann aus einer Herleitung via verallgemeinerten LQ-Test oder direkt aus einem Statistikbuch stammen.
+    \item[4)] Festlegung des Niveaus $\alpha$ liefert die Grenze für den kritische Bereich $K$; dazu braucht man die Verteilung von $T$ unter $P_\vartheta$ für alle $\vartheta \in \Theta_0$ (exakt oder approximativ).
+    \item[5)] Berechnen der Teststatistik $T(\omega)$ aus den Daten; ist $T(\omega) \in K$, so wird die Hypothese abgelehnt, andernfalls wird die Hypothese nicht verworfen.
+    \item[5')] Berechnen von Teststatistik $T(\omega)$ und entsprechendem realisiertem $\text{p-Wert}(\omega)$ aus den Daten; ist letzterer $\le \alpha$, so wird die Hypothese abgelehnt, andernfalls nicht.
+\end{itemize}

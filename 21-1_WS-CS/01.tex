@@ -1,0 +1,125 @@
+%! TEX root = ./main.tex
+
+\section{Wahrscheinlichkeit}
+\subsection{Grundbegriffe}
+\begin{itemize}
+    \ides{Ereignisraum $\bs{\Omega}$:} Menge aller möglichen Ergebnisse des Zufallsexperiments
+        \begin{itemize}
+            \item $\Omega \neq \emptyset$
+        \end{itemize}
+    \ides{Elementarereignisse $w \in \Omega$:} Element aus Ereignisraum
+    \ides{Potenzmenge $2^\Omega$:} von $\Omega$ ist die Menge aller Teilmengen von $\Omega$
+    \ides{Prinzipielles Ereignis $A \subseteq \Omega$:} Set von Elementarereignissen
+        \begin{itemize}
+            \item $A$ tritt ein, falls das realisierte Elementarereignis $w \in A$
+        \end{itemize}
+    \ides{Beobachtbare Ereignisse $\mathcal{F}$:} Teilmenge der Potenzmenge
+        \begin{itemize}
+            \ides{Diskreter Fall:} Dann ist oft $\mathcal{F} = 2^\Omega$
+            \ides{$\Omega$ überabzählbar:}
+                \begin{itemize}
+                    \item $\mathcal{F} \subset 2^\Omega$ und
+                    \item $\mathcal{F}$ ist eine $\sigma$-Algebra
+                \end{itemize}
+        \end{itemize}
+    \ides{$\bs{\sigma}$-Algebra} ist $\mathcal{F}$ falls
+        \begin{itemize}
+            \item[(i)] $\Omega \in \mathcal{F}$
+            \item[(ii)] $\forall A \in \mathcal{F}$ ist auch Komplement $A^\complement \in \mathcal{F}$
+            \item[(iii)] $\forall$ Folge $(A_n)_{n \in \N}$ mit $A_n \in \mathcal{F}$ für alle $n \in \N$ ist auch $\bigcup_{n=1}^\infty A_n \in \mathcal{F}$
+        \end{itemize}
+    \ides{Wahrscheinlichkeitsmass $P$:} Abbildung $P: \mathcal{F} \to [0,1]$ mit folgenden Axiomen:
+        \begin{itemize}
+            \item[A0)] $P[A] \geq 0 \quad \forall A \in \mathcal{F}$
+            \item[A1)] $P[\Omega] = 1$
+            \item[A2)] $P\left[ \bigcup_{i=1}^\infty A_i \right] = \sum_{i=1}^\infty P[A_i]$ für disjunkte Ereignisse $A_i$
+        \end{itemize}
+        Daraus folgt
+        \begin{itemize}
+            \item $P[A^\complement] = 1 - P[A]$
+            \item $P[\emptyset] = 0$
+            \item $A \subseteq B \implies P[A] \leq P[B]$
+            \ides{Additionsregel:} $P[A \cup B] = P[A] + P[B] - P[A\cap B]$
+        \end{itemize}
+\end{itemize}
+
+\subsection{Diskrete Wahrscheinlichkeitsräume}
+\begin{itemize}
+    \item $\Omega$ endlich oder abzählbar und $\mc{F} = 2^\Omega$
+\end{itemize}
+
+\subsubsection{Laplace Raum}
+\begin{itemize}
+    \item Falls:
+        \begin{itemize}
+            \item $\Omega = \{\omega_1, \dots, \omega_N\}$ endlich mit $|\Omega| = N$ und
+            \item Alle $\omega_i$ gleich wahrscheinlich, also $p_i = 1/N$
+        \end{itemize}
+    dann:
+        \begin{itemize}
+            \item $\Omega$ einen \textbf{Laplace Raum} und
+            \item $P$ ist die \textit{diskrete Gleichverteilung}
+        \end{itemize}
+    \item $ P[A] = \frac{\mbox{Anz. Elementarereignisse in } A}{\mbox{Anz. Elementarereignisse in } \Omega} = \frac{|A|}{|\Omega|}$
+\end{itemize}
+
+\subsection{Bedingte Wahrscheinlichkeit}
+\begin{itemize}
+    \item Falls für $A,B$ Ereignisse und $P[A] > 0$\\
+    Dann $P[B | A] := \frac{P[B \cap A]}{P[A]}$
+     \item Bei fixierter Bedingung $A$ ist $P[\cdot | A]$ wieder ein Wahrscheinlichkeitsmass auf $(\Omega, \mathcal{F})$
+        \begin{itemize}
+            \item I.e. $P[\cdot | A]$ erfüllt die Axiome A0), A1), A2
+        \end{itemize}
+    \ides{Multiplikationsregel:} $P[A \cap B] = P[B \mid A] \cdot P[A]$
+\end{itemize}
+
+\subsubsection{Satz der totalen Wahrscheinlichkeit}
+\begin{itemize}
+    \item Falls: $A_1,\dots,A_n$ eine Zerlegung von $\Omega$ in paarweise disjunkte Ereignisse
+        \begin{itemize}
+            \item D.h. $\bigcup_{i=1}^n A_i = \Omega$ und $A_i \cap A_k = \emptyset \: \forall i\neq k$
+        \end{itemize}
+    Dann: $ P[B] = \sum_{i=1}^n P[B \mid A_i] \cdot P[A_i]$
+\end{itemize}
+
+\subsubsection{Satz von Bayes:}
+\begin{itemize}
+    \item Falls
+        \begin{itemize}
+            \item $A_1,\dots, A_n$ eine Zerlegung von $\Omega$ mit $P[A_i] > 0$ für $i = 1 \dots n$ und
+            \item $B$ ein Ereignis mit $P[B] > 0$
+        \end{itemize}
+    Dann gilt für jedes $k$
+        \begin{itemize}
+            \item $ P[A_k \mid B] = \frac{P[B \mid A_k]\cdot P[A_k]}{\sum_{i=1}^n P[B \mid A_i] \cdot P[A_i]}$
+            \item $P[A\mid B] =
+                \frac{P[A \cap B]}{P[B]} =
+	            \frac{P[B\mid A]\cdot P[A]}{P[B\mid A]\cdot P[A] + P[B \mid A^C]\cdot P[A^C]}$
+        \end{itemize}
+\end{itemize}
+
+\subsection{Unabhängigkeit von Ereignissen}
+\subsubsection{Unabhängigkeit von 2 Ereignissen}
+\begin{itemize}
+    \item $A$ und $B$ sind stochastisch unabhängig, falls eins von:
+        \begin{itemize}
+            \item $P[A \cap B] = P[A] \cdot P[B]$
+            \item $P[A]=0$ oder $P[B] = 0$
+            \item $P[A] \neq 0, P[B \mid A] = P[B]$
+            \item $P[B] \neq 0, P[A \mid B] = P[A]$
+        \end{itemize}
+\end{itemize}
+
+\subsubsection{Allgemeine Unabhängigkeit}
+\begin{itemize}
+    \item Falls für jede endliche Teilfamilie die Produktformel gilt
+        \begin{itemize}
+            \item D.h. für ein $m \in \N$ und $\{k_1,\dots, k_m\} \subseteq \{1, \dots, n\}$ gilt immer $ P \left[ \bigcap_{i=1}^m A_{k_i} \right] = \prod_{i=1}^m P[A_{k_i}]$
+        \end{itemize}
+    Dann sind $A_1, \dots, A_n$ stochastisch unabhängig
+    \ides{Paarweise Unabhängig:} Falls die definition nur für alle paare gilt
+        \begin{itemize}
+            \item Allgemeine Unabhängigkeit $\implies$ Paarweise Unabhängigkeit
+        \end{itemize}
+\end{itemize}

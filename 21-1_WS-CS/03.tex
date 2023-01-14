@@ -1,0 +1,141 @@
+% ! TEX root = ./main.tex
+
+\section{Allgemeine Zufallsvariablen}
+\subsection{Grundbegriffe}
+\begin{itemize}
+    \item VF $F_X$ hat Eigenschaften:
+        \begin{itemize}
+            \item Wachsend: $F_X(s) \le F_X(t)$ für $s \le t$
+            \item Rechtsstetig: $F_X(u) \to F_X(t)$ für $u \to t$ mit $u > t$
+            \item $\lim_{t \to -\infty} F_X(t) = 0$, $\lim_{t \to \infty} F_X(t) = 1$
+        \end{itemize}
+    \ides{Dichtefunktion (DF):} Eine ZV $X$ mit VF $F_X(t)$ heisst (absolut)stetig mit Dichte(funktion) $f_X: \R \to [0, \infty)$, falls: $F_X(t) = \int_{-\infty}^{t} f_X(s) \mathrm{d}s \ \forall t \in \R$
+        \begin{itemize}
+            \item DF $f_X$ hat Eigenschaften:
+                \begin{itemize}
+                    \item $f_X \ge 0$ und $f_X = 0$ ausserhalb von $\mc{W}(X)$
+                    \item $\int_{-\infty}^{\infty} f_X(s) \mathrm{d}s = 1$
+                \end{itemize}
+        \end{itemize}
+    \item $P[a < X \le b] = P[X \le b] - P[X \le a] = F_X(b) - F_X(a) = \int_{a}^{b} f_X(s) \mathrm{d}s$.
+    \item Allgemeiner für Mengen $B \subseteq \R$:  $P[X \in B] = \int_{B} f_X(s) \mathrm{d}s$
+    \item Dichtefunktion $=$ Ableitung der Verteilungsfunktion
+    \ides{Erwartungswert:}
+        \begin{itemize}
+            \item Ist ZV $X$ stetig mit DF $f_X(x)$ dann: $E[X] = \int_{-\infty}^{\infty} x f_X(x) \mathrm{d}x$ sofern das Integral absolut konvergiert.
+            \item ZV $X$ und ZV $Y = g(x)$. Ist $X$ stetig mit DF $f_X(x)$, dann: $E[Y] = E[g(x)] = \int_{-\infty}^{\infty}  g(x) f_X(x) \mathrm{d}x$ sofern das Integral abs. konvergiert.
+            \item Für beliebige unabhängige ZV $X_1, \dots, X_n$ ist $E[X_1 \cdot \dots \cdot X_n] = E[X_1] \cdot \dots \cdot E[X_n]$
+            \item Für beliebige ZV $X_1, \dots, X_n$ ist $E[X_1 + \dots + X_n] = E[X_1] + \dots + E[X_n]$
+            \ides{Bedingter EW:} $E[X_1 \mid X_2](x_2) = \int_{-\infty}^\infty x_1 f_{X_1 \mid X_2} (x_1 \mid x_2) \mathrm{d}x_1 =: h(x_2)$
+            \begin{itemize}
+                \item $h : \mc{W}(X_2) \to \R$
+                \item $E[E[X_1 \mid X_2]] = E[X_1]$
+            \end{itemize}
+        \end{itemize}
+    \ides{i.i.d.:} Haben ZVs $X_1, \dots, X_n$ die selbe VF und sind unabhängig nennt man sie i.i.d.
+    \ides{Momente:} Die Momente von $X$ sind definiert als $m_n := E[X^n], n \in \N$ unter der Voraussetzung, dass $E[|X|^n] < \infty$
+        \begin{itemize}
+            \item $m_1 = E[X]$
+        \end{itemize}
+    \ides{Zentralmomente:} Für $n \in \N$ und falls $E[|X|^n] < \infty$ ist, kann man das $n$-te Zentralmoment von $X$ definieren als $\mu_n := E[(X - E[X])^n]$.
+        \begin{itemize}
+            \item $\mu_2 = E[(X - E[X])^2] = Var[X]$
+        \end{itemize}
+    \ides{Momenterzeugende Funktion} einer ZV $X$ ist $M_X(t) := E[e^{tX}], t \in \R$
+        \begin{itemize}
+            \item Wohldefiniert in $[0, \infty]$, kann aber $+\infty$ werden
+        \end{itemize}
+\end{itemize}
+
+\subsection{Wichtige stetige Verteilungen}
+\subsubsection{Gleichverteilung}
+\begin{itemize}
+    \item ZV $X \sim \mc{U}(a,b)$ hat $\mc{W}(X) = [a,b]$
+    \item DF $f_X(t) =
+\begin{cases}
+    \frac{1}{b - a} &\text{für } a \le t \le b\\
+    0 & \text{sonst}
+\end{cases}$
+    \item VF $F_X(t) =
+\begin{cases}
+    0 &\text{für } t < a\\
+    \frac{t - a}{b - a} &\text{für } a \le t \le b\\
+    1 &\text{ für } t > b
+\end{cases}$
+    \item $E[X] = \int_{a}^{b} x \frac{1}{b - a} \mathrm{d}x = \frac{a + b}{2}$
+    \item $Var[X] = E[X^2] - (E[X])^2 = \frac{1}{12}(b - a)^2$
+\end{itemize}
+
+\subsubsection{Exponentialfunktion}
+\begin{itemize}
+    \item ZV $X \sim Exp(\lambda)$ für $\lambda > 0$ und $\mc{W}(X) = [0, \infty)$
+    \item DF $f_X(t) =
+\begin{cases}
+    \lambda e ^{-\lambda t} &\text{für } t \ge 0\\
+    0 & \text{für } t < 0
+\end{cases}$
+    \item VF $F_X(t) = \int_{-\infty}^{t} f_X(s) \mathrm{d}s =
+\begin{cases}
+    1 - e^{- \lambda t} &\text{für } t \ge 0\\
+    0 &\text{für } t < 0
+\end{cases}$
+    \item $E[X] = \int_{0}^{\infty} \lambda x e^{-\lambda x} \mathrm{d}x = \frac{1}{\lambda}$
+    \item $Var[X] = \int_{0}^{\infty} (x - \frac{1}{\lambda})^2 \lambda e^{-\lambda x} \mathrm{d}x = \frac{1}{\lambda^2}$
+    \ides{Gedächtnislosigkeit:} $P[X > t + s \mid X > s] = P[X > t]$
+\end{itemize}
+
+\subsubsection{Normalverteilung}
+\begin{itemize}
+    \item ZV $X \sim \mc{N}(\mu, \sigma^2), \mu \in \R, \sigma^2 > 0$ hat $\mc{W}(X) = \R$, 
+    \item DF $f_X(t) = \frac{1}{\sigma \sqrt{2 \pi}} e^{- \frac{(t - \mu)^2}{2 \sigma^2}}, \ t \in \R$
+    \item $E[X] = \mu, \ Var[X] = \sigma^2$
+    \ides{Standard-Normalverteilung:} Falls $\mc{N}(0, 1)$
+        \begin{itemize}
+            \ides{DF:} $\varphi(t) = \frac{1}{\sqrt{2 \pi}} e^{-\frac{t^2}{2}}$
+            \ides{VF:} $\Phi(t) = \int_{-\infty}^{t} \varphi(s) \mathrm{d}s = \frac{1}{\sqrt{2 \pi}} \int_{-\infty}^{t} e ^{-\frac{s^2}{2}}\mathrm{d}s$
+        \end{itemize}
+    \item $X \sim \mc{N}(\mu, \sigma^2)$, so ist $\frac{X - \mu}{\sigma} \sim \mc{N}(0, 1)$, also: $F_X(t) = P[X \le t] = P[\frac{X - \mu}{\sigma} \le \frac{t - \mu}{\sigma}] = \Phi(\frac{t - \mu}{\sigma})$
+    \item Falls $X_1, \dots, X_n$, unabhängig und $X_i \sim \mc{N}(\mu_i, \sigma_i^2)$ dann $\sum_{i=1}^n X_i \sim \mc{N}(\sum_{i=1}^n \mu_i, \sum_{i=1}^n \sigma_i^2)$
+    \item Fläche zwischen $[\mu - \sigma, \mu + \sigma] \approx \frac{2}{3}$
+\end{itemize}
+
+\subsection{Gemeinsame Verteilungen, unabhängige ZV}
+\begin{itemize}
+    \ides{Gemeinsame VF:} Analog zu diskret
+    \ides{Gemeinsame DF:} Falls die gemeinsame VF $F$ von $X_1, \dots, X_n$ sich schreiben lässt als $F(x_1, \dots, x_n) = \int_{-\infty}^{x_1} \dots \int_{-\infty}^{x_n} f(t_1, \dots, t_n) \mathrm{d}t_n \dots \mathrm{d}t_1$ für eine Funktion $f: \R^n \to [0, \infty)$, so heisst $f(x_1, \dots, x_n)$ die gemeinsame Dichte von $X_1, \dots, X_n$. Es gilt:
+        \begin{itemize}
+            \item $f(x_1, \dots, x_n) \ge 0$ und $=0$ ausserhalb von $\mc{W}(X_1, \dots, X_n)$
+            \item $\int_{-\infty}^{\infty} \dots \int_{-\infty}^{\infty} f(x_1, \dots, x_n) \mathrm{d}x_n \dots \mathrm{d}x_1 = 1$
+            \item $P[(X_1, \dots, X_n) \in A] = \int_{A} f(x_1, \dots, x_n) \mathrm{d}x_n \dots \mathrm{d}x_1$ für $A \subseteq \R^n$
+        \end{itemize}
+    \ides{Randverteilung:} Analog zu diskret
+    \ides{Randverteilungsdichte:} Falls $X$ und $Y$ gemeinsame Dichte $f(x,y)$, so haben auch die Randverteilungen von $X$ und $Y$ Dichten $f_X, f_Y: \R \to [0, \infty)$. $f_X(x) = \int_{-\infty}^{\infty} f(x, y) \mathrm{d}y$
+\end{itemize}
+
+\subsubsection{Unabhängigkeit}
+\begin{itemize}
+    \item Die ZV $X_1, \dots, X_n$ heissen Unabhängig falls: $F(x_1, \dots, x_n) = F_{X_1}(x_1) \dots F_{X_n}(x_n)$ bzw. $f(x_1, \dots, x_n) = f_{X_1}(x_1) \dots f_{X_n}(x_n)$
+\end{itemize}
+
+\subsection{Funktionen und Transformationen von ZV}
+\begin{itemize}
+    \item Sei $Z = X + Y$ dann $F_Z(z) = P[Z \le z] = P[X + Y \le z]$. Setzen wir $A_z := \{(x, y) \in \R^2 \mid x + y \le z\}$ so ist $F_Z(z) = P[(X,Y) \in A_z] = \int_{A_z} \int  f(x,y) \mathrm{d}y\mathrm{d}x = \int_{-\infty}^{\infty} \int_{-\infty}^{z - x} f(x,y) \mathrm{d}y\mathrm{d}x$. Mit der Variablentransformation $v = x + y$ wird $y = v - x, \mathrm{d}y = \mathrm{d}v$ und $F_Z(z) = \int_{-\infty}^{\infty} \int_{-\infty}^{z} f(x, v - x) \mathrm{d}v \mathrm{d}x = \int_{-\infty}^{z} \int_{-\infty}^{\infty} f(x, v - x) \mathrm{d}x\mathrm{d}v$. Also hat $Z$ auch eine DF: $f_Z(z) = \frac{d}{dz} F_Z(z) = \int_{-\infty}^{\infty} f(x, z-x) \mathrm{d}x = \int_{-\infty}^{\infty} f(z - y,y) \mathrm{d}y$.
+        \begin{itemize}
+            \item Sind zusätzlich $X$ und $Y$ unabhängig, so ist $f(x,y) = f_X(x) f_Y(y)$, sprich: $f_Z(z) = \int_{-\infty}^{\infty} f_x(x) f_Y(z - x) \mathrm{d}x = \int_{-\infty}^{\infty} f_X(z - y)f_Y(y) \mathrm{d}y =: (f_X * f_Y)(z)$.
+        \end{itemize}
+\end{itemize}
+
+\subsubsection{ZV Transformationen}
+\begin{itemize}
+    \item Sei $X$ ZV mit $F_X$ und $f_X$. Für eine Funktion $g: \R \to \R$ betrachten wir die neue ZV $Y = g(X)$. Wie sehen dann VF und DF von $Y$ aus?
+        \ides{Allgemeiner Ansatz:} $F_Y(t) = P[Y \le t] = P[g(X) \le t] = \int_{A_g} f_X(s) \mathrm{d}x$ mit Menge $A_g := \{s \in \R \mid g(s) \le t\}$. Dann versuchen rechte Seite auszurechnen.
+    \item z.B. für Affine Transformationen $g(x) = ax + b, a > 0, b \in \R$: $F_Y(t) = P[Y \le t] = P[aX + b \le t] = P[X \le \frac{t - b}{a}] = F_X( \frac{t - b}{a} )$ und damit nach der Kettenregel $f_Y(t) = \frac{d}{dt} F_Y(t) = \frac{1}{a} f_X (\frac{t - b}{a})$.
+    \item Analog bis auf Vorzeichen geht das auch mit $a < 0$
+\end{itemize}
+
+\begin{itemize}
+    \item Sei ZV $F$ stetige und streng monoton wachsende VF, mit Umkehrfunktion $F^{-1}$. Falls $X \sim \mc{U}(0, 1)$ und $Y = F^{-1}(X)$ dann hat $Y$ die VF $F$.
+        \begin{itemize}
+            \item Dieser Satz erlaubt die explizite Konstruktion einer ZV $Y$ mit gewünschter VF $F$.
+        \end{itemize}
+\end{itemize}

@@ -1,0 +1,81 @@
+\ProvidesPackage{cheatsheet}
+
+\usepackage{multicol}
+\setlength{\columnseprule}{0.4pt}
+\raggedcolumns
+
+\usepackage{xcolor}
+\usepackage{amsmath, amssymb}
+\usepackage{graphicx}
+\graphicspath{{Figures/}}
+\setkeys{Gin}{width=\linewidth}
+
+% Listing
+\usepackage[inline]{enumitem}
+\setlist{nolistsep}
+\setlistdepth{20}
+\renewlist{itemize}{itemize}{20}
+
+% initially, use dots for all levels
+\setlist[itemize]{label=$\cdot$}
+
+% customize the first levels
+\setlist[itemize,1]{label=\textbullet}
+\setlist[itemize,2]{label=$\star$}
+\setlist[itemize,3]{label=$\ast$}
+\setlist[itemize,4]{label=$\circ$}
+\setlist[itemize,5]{label=$\triangleright$}
+\setlist[itemize,6]{label=$\diamond$}
+\setlist[itemize,7]{label=$\oplus$}
+\setlist[itemize,8]{label=$\ominus$}
+\setlist[itemize,9]{label=$\otimes$}
+\setlist[itemize,10]{label=$\oslash$}
+\setlist[itemize,11]{label=$\odot$}
+
+\setitemize{leftmargin=0.2cm}
+
+% List commands
+\newcommand{\ipro}{\item[+]}
+\newcommand{\icon}{\item[-]}
+\newcommand{\ides}[1]{\item \textbf{#1}}
+\newcommand{\iexa}[1]{\item \textbf{Example:} #1}
+
+\usepackage{extsizes}
+
+\usepackage{geometry}
+\geometry{paper=a4paper,left=4.5mm, right=4.5mm, top=4.5mm, bottom=6mm, landscape, nohead, nofoot}
+
+% Header Styling
+\usepackage{parskip}
+\usepackage{tcolorbox}
+\usepackage[small,compact]{titlesec}
+
+\titleformat{name=\section}[block]
+  {\sffamily}
+  {}
+  {0pt}
+  {\colorsection}
+\newcommand{\colorsection}[1]{%
+	\colorbox{red!40}{\parbox[t][0em]{\dimexpr\columnwidth-2\fboxsep}{\thesection\ #1}}}
+
+\titleformat{name=\subsection}[block]
+  {\sffamily}
+  {}
+  {0pt}
+  {\subcolorsection}
+\newcommand{\subcolorsection}[1]{%
+	\colorbox{orange!40}{\parbox[t][0em]{\dimexpr\columnwidth-2\fboxsep}{\thesubsection\ #1}}}
+
+\titleformat{name=\subsubsection}[block]
+  {\sffamily}
+  {}
+  {0pt}
+  {\subsubcolorsection}
+\newcommand{\subsubcolorsection}[1]{%
+	\colorbox{blue!40}{\parbox[t][0em]{\dimexpr\columnwidth-2\fboxsep}{\thesubsubsection\ #1}}}
+
+\newcommand{\recipe}[1]{%
+	\colorbox{green!60}{\parbox[t][0em]{\dimexpr\linewidth-2\fboxsep}{R: #1}}}
+
+% Todo
+\newcommand{\todo}[1]{\textcolor{red}{TODO: #1}\PackageWarning{TODO:}{#1!}}

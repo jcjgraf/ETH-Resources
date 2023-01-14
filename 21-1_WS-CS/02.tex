@@ -1,0 +1,167 @@
+%! TEX root = ./main.tex
+
+\section{Diskrete Zufallsvariablen und Verteilungen}
+\subsection{Grundbegriffe}
+\begin{itemize}
+    \ides{Zufallsvariable (ZV):} $X: \Omega \to \R$
+        \begin{itemize}
+            \item Falls $\Sigma$ endlich/abzählbar dann ist Wertebereich $\mc{W}(X)$ auch endlich
+        \end{itemize}
+    \ides{Verteilungsfunktion (VF)} von $X$: $F_X : \R \to [0,1]$
+        \begin{itemize}
+            \item $F_X(t) := P[X \le t] := P[\{\omega \mid X(\omega) \le t\}]$
+        \end{itemize}
+    \ides{Gewichtsfunktion} von $X$: $p_X: \mc{W}(X) \to [0,1]$
+        \begin{itemize}
+            \item $p_X(x_k) := P[X = x_k] = P[\{\omega \mid X(\omega) = x_k\}], k = 1, 2, \dots$
+            \item $0 \le p_X(x_k) \le 1, \forall x_k \in \mc{W}(X)$
+            \item $\sum_{x_k \in \mc{W}(X)}p_X(x_k) = 1$
+        \end{itemize}
+        \ides{Indikatorfunktion:} Sein $A$ eine Ereignis, dann ist $Y = I_A$ die Indikatorfunktion von $A$: $Y(\omega)=
+\begin{cases}
+    1 & \text{für } \omega \in A\\
+    0 & \text{für } \omega \notin A
+\end{cases}$
+            \begin{itemize}
+                \item Es gilt $P[Y = 1] = P[A]$
+            \end{itemize}
+\end{itemize}
+
+\subsubsection{Erwartungswert}
+\begin{itemize}
+    \ides{Erwartungswert (EW):} $E[X] := \sum_{x_k \in \mc{W}(X)} x_k p_X(x_k)$
+        \begin{itemize}
+            \item Definiert falls $\sum_{x_k \in \mc{W}(X)} |x_k| p_X(x_k) < \infty$
+        \end{itemize}
+    \item Sei $Y = g(X), g: \R \to \R$, dann: $E[Y] = E[g(X)] = \sum_{x_k \in \mc{W}(X)} g(x_k) p_X(x_k)$
+    \item $X$, $Y$ ZV und EW existieren, dann:
+        \begin{itemize}
+            \ides{Monotonie:} $\forall \omega \ X(\omega) \le Y(\omega) \implies E[X] \le E[Y]$
+            \ides{Linearität:} Für bel. $a,b \in \R$ gilt $E[aX + b] = a E[X] + b$
+            \item Falls $\mc{W}(X) = \N_0$ so gilt $E[X] = \sum_{j=1}^{\infty} P[X \ge j] = \sum_{l=0}^{\infty} P[X > l]$
+        \end{itemize}
+        \ides{Bedingter EW:} $E[X_1 \mid X_2](x_2) = \sum_{x_1 \in \R} x_1 p_{X_1 \mid X_2} (x_1 \mid x_2) =: h(x_2)$
+            \begin{itemize}
+                \item $h : \mc{W}(X_2) \to \R$
+                \item $E[E[X_1 \mid X_2]] = E[X_1]$
+            \end{itemize}
+\end{itemize}
+
+\subsubsection{Varianz}
+\begin{itemize}
+    \ides{Varianz:} $Var[X] := E[(X - E[X])^2]$
+        \begin{itemize}
+            \item Definiert falls $E[X^2] < \infty$
+            \item $Var[X] = \sum_{x_k \in \mc{W}(X)} (x_k - E[X])^2 p_X(x_k)$
+            \item Alternative definition $Var[X] = E[X^2] - (E[X])^2$
+            \item $Var[aX + b] = a^2 Var[X]$
+        \end{itemize}
+    \ides{Standardabweichung:} $\sigma(X) := \sqrt{Var[X]}$
+    \ides{Kovarianz:} $Cov(X,Y) := E[XY] - E[X] E[Y] = E[(X - E[X])(Y - E[Y])]$
+    \item $Var[X + Y] = Var[X] + Var[Y] + 2 Cov(X, Y)$
+    \item $Cov(X, X) = Var[X]$
+    \ides{Unkorreliert:} Falls $Cov(X, Y) = 0$
+    \ides{Paarweise Unkorreliert:} Falls alle Paare $X_i, X_j$ mit $i \neq j$ unkorreliert sind
+\end{itemize}
+
+\subsection{Mehrere Zufallsvariable}
+\begin{itemize}
+    \ides{Gemeinsame Verteilungsfunktion:}
+        \begin{itemize}
+            \item $F: \R^n \to [0,1]$
+            \item $F(x_1, \dots, x_n) := P[X_1 \le x_1, \dots, X_n \le x_n]$ für $X_1, \dots, X_n$ ZV
+        \end{itemize}
+    \ides{Gemeinsame Gewichtsfunktion:} 
+        \begin{itemize}
+            \item $p: \R^n \to [0,1]$
+            \item $p(x_1, \dots, x_n) := P[X_1 = x_1, \dots, X_n = x_n]$ für $X_1, \dots, X_n$ diskrete ZV
+        \end{itemize}
+    \ides{(Verteilungsfunktion der) Randverteilung:}
+        \begin{itemize}
+            \item Sofern $X$ und $Y$ gemeinsame VF $F$ haben
+            \item $F_X: \R \to [0,1]$
+            \item $F_X(x) := P[X \le x] = \lim_{y \to \infty} P[X \le x, Y < y] = \lim_{y \to \infty} F(x, y)$
+        \end{itemize}
+    \ides{Gewichtsfunktion der Randverteilung:}
+        \begin{itemize}
+            \item $p_X: \mc{W}(X) \to [0,1]$
+            \item $p_x(x) = P[X = x] = \sum_{y_j \in \mc{W}(Y)} P[X = x, Y = y_j] = \sum_{y_j \in \mc{W}(Y)} p(x, y_j)$
+        \end{itemize}
+    \item ZV $X_1, \dots, X_n$ heissen \textbf{unabhängig}, falls $F(x_1, \dots, x_n) = F_{X_1}(x_1) \dots F_{X_n}(x_n)$ oder falls ZV diskret $p(x_1, \dots, x_n) = p_{X_1}(x_1) \dots p_{X_n}(x_n)$
+\end{itemize}
+
+\subsection{Funktionen von mehreren ZV}
+\begin{itemize}
+    \item Seien $X_1, \dots, X_n$ diskrete ZV und $g: \R^n \to \R$, dann ist $Y = g(X_1, \dots, X_n)$ eine diskret ZV
+    \item Seien $X_1, \dots, X_n$ diskret ZV mit endlichen EW und $Y = a + \sum_{l=1}^{n} b_l X_l$. Dann ist $E[Y] = a + \sum_{l=1}^{n} b_l E[X_l]$
+    \ides{Summenformel für Varianzen:}\\ $Var [\sum_{i=1}^{n} X_i] = \sum_{i=1}^{n} Var[X_i] + 2 \sum_{i<j} Cov(X_i, X_j)$
+    \item Falls $X_1, \dots, X_n$ paarweise unkorreliert dann $Var[\sum_{i=1}^{n} X_i] = \sum_{i=1}^{n} Var[X_i]$
+    \item Seien $X_1, \dots, X_n$ diskret, unabhängige ZV mit endlichen EW, dann: $E[\Pi_{i=1}^{n} X_i] = \Pi_{i=1}^{n} E[X_i]$
+    \item unabhängig $\implies$ paarweise unabhängig $\implies$ unkorreliert
+\end{itemize}
+
+\subsection{Summe von zwei ZV}
+\begin{itemize}
+    \item Seien $X, Y$ diskret ZV mit gemeinsamer GF $p(x, y)$, dann ist $Z = X + Y$ diskret. GF von $Z$: $p_Z(z) = P[Z = z] = \sum_{x_k \in \mc{W}(X)} P[X = x_k, Y = z - x_k] = \sum_{x_k \in \mc{W}(X)} p(x_k, z - x_k)$
+    \item Sind $X, Y$ unabhängig ZV, so ist $p(x, y) = p_X(x) p_Y(y)$ und damit: $p_Z(z) = \sum_{x_k \in \mc{W}(X)} p_x(x_k) p_Y(z - x_k) = p_X * p_Y$
+\end{itemize}
+
+\subsection{Bedingte Verteilungen}
+\begin{itemize}
+    \item Seien $X, Y$ diskrete ZV mit gemeinsamer GF $p(x, y)$. Die bedingte GF von X, gegeben $Y = y$ ist:\\ $p_{X \mid Y} (x \mid y) := P[X = x \mid Y = y] = \frac{P[X = x, Y = y]}{P[Y = y]} = \frac{p(x,y)}{p_Y(y)}$
+        \begin{itemize}
+            \item Falls $p_Y(y) > 0$ sonst $0$
+        \end{itemize}
+    \item Es gilt $\sum_{x_k \in \mc{W}(X)} p_{X \mid Y} (x_k \mid y) = \frac{1}{p_Y(y)} \sum_{x_k \in \mc{W}(X)} p(x_k, y) = 1$
+    \item Analog für Verteilungsfunktion
+\end{itemize}
+
+\subsection{Wichtige diskrete Verteilungen}
+\subsubsection{Diskrete Gleichverteilung}
+\begin{itemize}
+    \item Sei $X$ eine ZV $\mc{W}(X) = \{x_1, \dots, x_N\}$ dann ist $p_X(x_k) = P[X = x_k] = \frac{1}{N}, \ k = 1,\dots, N$
+\end{itemize}
+
+\subsubsection{Bernoulli Verteilung}
+\begin{itemize}
+    \item $X \sim Be(p)$
+    \item $p_X(x) = p^x(1-p)^{1-x}, \ x \in \{0,1\} = \mc{W}(X)$
+    \item $E[X] = p$
+    \item $Var[X] = p(1 - p)$
+\end{itemize}
+
+\subsubsection{Binomial Verteilung}
+\begin{itemize}
+    \item $X \sim Bin(n, p)$, $\implies Bin(1, p) = Be(p)$
+    \item $p_X(k) = P[X = k] = {n\choose k} p^k (1 - p)^{n - k}, \ k = 0, \dots, n$
+    \item $\mc{W}(X) = \{0, \dots, n\}$
+    \item $E[X] = \sum_{i=1}^{n} E[Y_i] = np$
+    \item $Var[X] = \sum_{n=1}^{n} Var[Y_i] = np(1 - p)$
+    \item $p(k + 1; n) = \frac{p}{1 - p}\frac{n - k}{k + 1} p(k; n)$
+\end{itemize}
+
+\subsubsection{Geometrische Verteilung}
+\begin{itemize}
+    \item $X \sim Geom(p)$
+    \item $X = \inf \{i \in \N \mid A_i \text{ tritt ein}\} = \inf \{i \in \N \mid Y_i = 1\}$
+    \item $p_X(k) = P[X = k] = p(1 - p)^{k - 1}, \ k = 1, 2, \dots$
+    \item $P[X > k] = (1 - p)^k$
+    \ides{Gedächtnislosigkeit:} $P[X > k + n | X > n] = P[X > k]$
+    \item $\mc{W}(X) = \N$
+    \item $E[X] = \sum_{l=0}^{\infty} P[X > l] = \sum_{l=0}^{\infty} (1 - p)^l = \frac{1}{p}$
+    \item $Var[X] = \frac{1 - p}{p^2}$
+\end{itemize}
+
+\subsubsection{Poisson Verteilung}
+\begin{itemize}
+    \item $X \sim \mc{P}(\lambda), \ \lambda \in (0, \infty)$
+    \item $p_X(k) = e^{-\lambda} \frac{\lambda^k}{k!}, \ k = 0, 1, \dots$
+    \item Sein $X_n \sim Bin(n, p_n)$ und $np_n = \lambda$. Lassen wir $n \to \infty$, so geht $p_n = \frac{\lambda}{n} = 0$. Weiter ist $\lim_{n \to \infty} P[X_n = k] = e^{-\lambda} \frac{\lambda^k}{k!} = P[X = k]$, wenn $X \sim \mc{P}(\lambda)$
+        \begin{itemize}
+            \item Gilt auch für $np_n \to \lambda$ für $n \to \infty$
+            \ides{Faustregel:} Approximation ist brauchbar für $np^2 \le 0.05$
+        \end{itemize}
+    \item $E[X] = \sum_{k=0}^{\infty} kp_X(k) = \sum_{k=1}^{\infty} ke^{-\lambda} \frac{\lambda^k}{k!} = \lambda \sum_{k=1}^{\infty} e^{-\lambda} \frac{\lambda^{k - 1}}{(k - 1)!} = \lambda \sum_{j=1}^{\infty} e^{-\lambda} \frac{\lambda^j}{j!} = \lambda$
+    \item $Var[X] = \lambda$
+    \item Für unabhängige ZV $X \sim \mc{P}(\lambda), Y \sim \mc{P}(\mu)$ is $X + Y \sim \mc{P}(\lambda + \mu)$
+\end{itemize}
