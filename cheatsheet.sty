@@ -2,11 +2,13 @@
 
 \usepackage{multicol}
 \setlength{\columnseprule}{0.4pt}
+\raggedcolumns
 
 \usepackage{xcolor}
 \usepackage{amsmath, amssymb}
 \usepackage{graphicx}
 \graphicspath{{Figures/}}
+\setkeys{Gin}{width=\linewidth}
 
 % Listing
 \usepackage[inline]{enumitem}
@@ -19,11 +21,16 @@
 
 % customize the first levels
 \setlist[itemize,1]{label=\textbullet}
-\setlist[itemize,2]{label=--}
+\setlist[itemize,2]{label=$\star$}
 \setlist[itemize,3]{label=$\ast$}
 \setlist[itemize,4]{label=$\circ$}
 \setlist[itemize,5]{label=$\triangleright$}
 \setlist[itemize,6]{label=$\diamond$}
+\setlist[itemize,7]{label=$\oplus$}
+\setlist[itemize,8]{label=$\ominus$}
+\setlist[itemize,9]{label=$\otimes$}
+\setlist[itemize,10]{label=$\oslash$}
+\setlist[itemize,11]{label=$\odot$}
 
 \setitemize{leftmargin=0.2cm}
 
@@ -31,6 +38,7 @@
 \newcommand{\ipro}{\item[+]}
 \newcommand{\icon}{\item[-]}
 \newcommand{\ides}[1]{\item \textbf{#1}}
+\newcommand{\iexa}[1]{\item \textbf{Example:} #1}
 
 \usepackage{extsizes}
 
@@ -67,7 +75,7 @@
 	\colorbox{blue!40}{\parbox[t][0em]{\dimexpr\columnwidth-2\fboxsep}{\thesubsubsection\ #1}}}
 
 \newcommand{\recipe}[1]{%
-	\colorbox{green!60}{\parbox[t][0em]{\dimexpr\columnwidth-2\fboxsep}{R: #1}}}
+	\colorbox{green!60}{\parbox[t][0em]{\dimexpr\linewidth-2\fboxsep}{R: #1}}}
 
 % Todo
 \newcommand{\todo}[1]{\textcolor{red}{TODO: #1}\PackageWarning{TODO:}{#1!}}

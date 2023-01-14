@@ -3,27 +3,25 @@
 \section{Sonstiges}
 \subsection{Erwartungswert}
 \begin{itemize}
-    \item[1)]
-        \begin{itemize}
-            \ides{Gegeben:} EW von $f(x,y) =
-                \begin{cases}
-                    \frac{1}{2} \quad 0 \le x \le y \le 2\\
-                    0 \quad \text{else}
-                \end{cases}$
-                \ides{Gesucht:}
-                $E[XY] = \int_0^2 \int_0^y \frac{1}{2} x y \ \mathrm{d}x \mathrm{d}y = \int_0^2 \left. \frac{1}{4} x^2 y \right|_0^y = \int_0^2 \frac{1}{4} y^3 \ \mathrm{d}y = \left. \frac{1}{16} y^4 \right|_0^2 = 1$
-        \end{itemize}
+    \ides{Gegeben:} EW von $f(x,y) =
+        \begin{cases}
+            \frac{1}{2} \quad 0 \le x \le y \le 2\\
+            0 \quad \text{else}
+        \end{cases}$
+        \ides{Gesucht:}
+        $E[XY] = \int_0^2 \int_0^y \frac{1}{2} x y \ \mathrm{d}x \mathrm{d}y = \int_0^2 \left. \frac{1}{4} x^2 y \right|_0^y = \int_0^2 \frac{1}{4} y^3 \ \mathrm{d}y = \left. \frac{1}{16} y^4 \right|_0^2 = 1$
 \end{itemize}
 
 \subsection{Umformungen}
 \begin{itemize}
     \item $P[|X - \mu| \le 1] = P[-1 \le X - \mu \le 1] = P[-1 + \mu \le X \le 1 + \mu] = P[X \le 1 + \mu] - P[X \le -1 + \mu]$
     \item $\frac{1}{n} \sum_{i=1}^{n} (X_i - \overline X_n)^2 = \frac{1}{n} \sum_{i=1}^n X_i^2 - (\overline X_n)^2$
+    \item \includegraphics[width=\linewidth]{./Figures/Umformung.jpg}
 \end{itemize}
 
 \subsection{Likelihood Quotient}
 \begin{itemize}
-    \item[1)]
+    \item
         \begin{itemize}
             \ides{Gegeben:}
                 \begin{align*}
@@ -40,7 +38,7 @@
                         \item Sei $\vartheta_0 = \frac{1}{2}, \vartheta_A \ge \frac{1}{2}$, so ist $R$ gross, falls $\sum_{i=1}^n x_i$ gross ist $\implies T := \sum_{i=1}^n X_i = S_n$
                     \end{itemize}
         \end{itemize}
-    \item[2)]
+    \item
         \begin{itemize}
             \ides{Gegeben:}
                 \begin{align*}
@@ -73,12 +71,19 @@
 Beweise: $Y \sim Exp(p) \iff P[Y > s] = P[Y > s + t \mid Y > t], \quad s,t \in \R_+$:
 \\ \includegraphics[width=\linewidth]{./Figures/proof_Gedaechnislos.png}
 
-\subsection{Test Nicht Normalverteilt}
-\includegraphics[width=\linewidth]{./Figures/Test_Nicht_Normalverteilt.png}
+\subsection{Hypergeometrische Verteilung}
+\includegraphics[width=\linewidth]{./Figures/Hypergeometrische_Verteilung.png}
 
 \subsection{Momenteschätzer}
-Für ein Experiment mit $n=5$ unf $f_T(t) = C^2 e^{-Ct} 1_{[0 \le t]}$, bestimme den Momenteschätzer:
-\\\includegraphics[width=\linewidth]{./Figures/Momente_Schaetzer.png}
+\begin{itemize}
+    \item Für ein Experiment mit $n=5$ unf $f_T(t) = C^2 e^{-Ct} 1_{[0 \le t]}$, bestimme den Momenteschätzer:
+        \\\includegraphics[width=\linewidth]{./Figures/Momente_Schaetzer.png}
+    \item More MM:
+        \\\includegraphics[width=\linewidth]{./Figures/MomenteschaetzerII.jpg}
+\end{itemize}
+
+\subsection{Test Nicht Normalverteilt}
+\includegraphics[width=\linewidth]{./Figures/Test_Nicht_Normalverteilt.png}
 
 \subsection{MinStuff}
 \includegraphics[width=\linewidth]{./Figures/ExampleMinStuff.png}
@@ -89,9 +94,6 @@ Für $Y = \sum_{k=1}^v Z_k^2, \quad Z_i \sim \mc{N}(0,1)$ i.i.d. find $E[Y], Var
 
 \subsection{Grenzwert Überschreitung}
 \includegraphics[width=\linewidth]{./Figures/Test_Ueberschreitung.png}
-
-\subsection{Hypergeometrische Verteilung}
-\includegraphics[width=\linewidth]{./Figures/Hypergeometrische_Verteilung.png}
 
 \subsection{Gemeinsame Dichte und Randdichte}
 $P \sim \text{Uniform}(0,1), H|P \sim \text{Uniform}(0,P)$, finde:
