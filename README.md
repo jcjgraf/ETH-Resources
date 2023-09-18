@@ -19,8 +19,10 @@ The repo contains all sources as well precompiled PDFs. Though, I cannot guarant
 | FS21     | Formal Methods and Functional Programming     | [📋](./21-1_FMFP-S)   | Tex                                                                |
 | FS21     | Data Modelling and Dtabases                   | [📋](./21-1_DMDB-S)   | Tex                                                                |
 | FS21     | Computer Networks                             | [📋](./21-1_CN-S)     | Tex                                                                |
-| FS21     | Wahrscheinlichkeit und Statistik              | [📈](./21-1_WS-CS)   | Tex                                                                |
+| FS21     | Wahrscheinlichkeit und Statistik              | [📈](./21-1_WS-CS)    | Tex                                                                |
 | FS21     | Autonomous Mobile Robots                      | [📈](./21-1_AMR-CS)   | Tex                                                                |
+| HS21     | Compiler Design                               | [📈](./21-2_CD-CS)    | Handwritten                                                        |
+| HS21     | Visual Computing                               | [📈](./21-2_VC-CS)    | Handwritten                                                        |
 
 
 | **Type**         | **Symbol** |
